@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "plre-listviewer-webpart": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/tableViewer/TableViewerWebPart.js",
+          "manifest": "./src/webparts/tableViewer/TableViewerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "handlebars": "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js",
+    "camljs": "https://unpkg.com/camljs@2.12.0/dist/camljs.js",
+    "@microsoft/sp-client-base": "node_modules/@microsoft/sp-client-base/dist/sp-client-base.js",
+    "@microsoft/sp-client-preview": "node_modules/@microsoft/sp-client-preview/dist/sp-client-preview.js"
+  },
+  "localizedResources": {
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}
