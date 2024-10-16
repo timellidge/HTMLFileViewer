@@ -1,0 +1,1 @@
+{"version":3,"file":"TableViewer.d.ts","sourceRoot":"","sources":["../../../../src/webparts/tableViewer/components/TableViewer.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAG/B,UAAU,iBAAiB;IACzB,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,QAAQ,CAAC,EAAE,KAAK,CAAC,SAAS,CAAC;CAC5B;AAED,QAAA,MAAM,WAAW,EAAE,KAAK,CAAC,iBAAiB,CAAC,iBAAiB,CAI3D,CAAC;AAEF,eAAe,WAAW,CAAC"}
