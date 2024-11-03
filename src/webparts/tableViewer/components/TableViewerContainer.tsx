@@ -292,8 +292,7 @@ async parseColumns() {
           name: column.name,
           minWidth,
           maxWidth,
-          columnType:column.type,
-          isMultiline: column.isMultiline,
+          columnType:column.type,         
           className: column.class || '', // Apply the CSS class from the JSON
           isSortable: column.isSortable === 'true',// Add sortable property
           isSorted: false, // Initialize sorting state
@@ -310,8 +309,8 @@ async parseColumns() {
 }
 // Separate field rendering to simplify the parseColumns method
 renderField = (column: any, key: string, item: any,columnsObject:any) => {
-  const prefix = column.Prefix || '';
-  const suffix = column.Suffix || '';
+  const prefix = column.prefix || '';
+  const suffix = column.suffix || '';
   const fieldValue = item[key];
 
   switch (column.type) {
