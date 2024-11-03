@@ -1,67 +1,4 @@
-/*import * as React from 'react';
-import * as moment from 'moment';
 
-interface StackFieldRenderProps {
-  fields: string[];          // List of field names to stack
-  columnsObject: any;       // Column configurations
-  item: any;                // The item from which to extract values
-}
-
-const StackFieldRender: React.FC<StackFieldRenderProps> = ({ fields, columnsObject, item }) => {
-  if (!Array.isArray(fields)) {
-    return null;
-  }
-
-  const stackValues = fields.map((field: string) => {
-    const fieldConfig = columnsObject[field]; // Get the column configuration
-    let value = item[field];
-    
-    if (fieldConfig) {
-      const prefix = fieldConfig.Prefix || '';
-      const suffix = fieldConfig.Suffix || '';
-      const format = fieldConfig.format;
-
-      // Handle complex object value
-      if (value && typeof value === 'object' && Array.isArray(value)) {
-        if (value[0]?.title) {
-          value = value[0].title;
-        }
-      }
-
-      // Format date fields if applicable
-      if (fieldConfig.type === 'date' && value) {
-        try {
-          const formatString = format || 'DD MMM YYYY (HH:mm)';
-          value = moment(new Date(value)).format(formatString);
-        } catch (error) {
-          console.error('Error formatting date:', error);
-          value = moment(new Date(value)).format('DD MMM YYYY (HH:mm)');
-        }
-      }
-
-      // Apply prefix and suffix
-      value = value ? `${prefix}${value}${suffix}` : '';
-    } else {
-      value = '';
-    }
-
-    return value;
-  }).join(', ');
-
-  return (
-    <span style={{ whiteSpace: 'pre-wrap' }}>
-      {stackValues.split(', ').map((value: string, index: number) => (
-        <span key={index}>
-          {value}
-          {index < stackValues.split(', ').length - 1 && <br />}
-        </span>
-      ))}
-    </span>
-  );
-};
-
-export default StackFieldRender;
-*/
 import * as React from 'react';
 import * as moment from 'moment';
 import styles from '../TableViewer.module.scss';
@@ -124,11 +61,12 @@ const StackFieldRender: React.FC<StackFieldRenderProps> = ({ fields, columnsObje
           break;
         default:
           // Check if the text field is multiline
-          if (fieldConfig.isMultiline) {
+          /*if (fieldConfig.isMultiline) {
             displayValue = value ? value.split('\n').join('<br/>') : ''; // Handle multiline text
           } else {
             displayValue = value || ''; // Default text field handling
-          }
+          }*/
+           displayValue = value ? value.split('\n').join('<br/>') : ''; // Handle multiline text
           break;
       }
 
