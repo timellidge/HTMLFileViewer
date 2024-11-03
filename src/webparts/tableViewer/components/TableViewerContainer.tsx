@@ -267,10 +267,11 @@ async parseColumns() {
       })
       .forEach(({ key, column }) => {
         const width = column.width || '100px';
-        let minWidth, maxWidth;
+        let minWidth:number, maxWidth:number;
 
-        if (width === '0%' || width === '0px') {
-          return; // Skip this column
+        // Check if the column type is 'stack' to bypass width check
+        if ((width === '0%' || width === '0px' || width === '0fr') && column.type !== 'stack') {
+          return; // Skip this column if it's not 'stack' and width is zero
         }
 
         if (width.endsWith('px')) {
@@ -284,21 +285,39 @@ async parseColumns() {
         } else {
           minWidth = maxWidth = parseInt(width);
         }
-         // Determine if column is sortable
-         //const isSortable = column.IsSortable === 'true';
+        
+         // For stacked columns, use specified fields only
+         if (column.type === 'stack' && Array.isArray(column.fields)) {
+          column.fields.forEach((field:any) => {
+            columnsArray.push({
+              key: key,
+              fieldName: column.name,
+              name: column.name,
+              minWidth:minWidth,
+              maxWidth:maxWidth,
+              columnType:column.type,
+              className: column.class || '', // Apply the CSS class from the JSON
+              isSortable: column.isSortable === 'true',// Add sortable property
+              isSorted: false, // Initialize sorting state
+              isSortedDescending: false, // Initialize sorting direction 
+              onRender: (item: any) => this.renderField(column, field, item, columnsObject) // Handle field rendering separately
+            } as IExtendedColumn);
+          });
+        } else {
          columnsArray.push({
           key: key,
           fieldName: column.name,
           name: column.name,
-          minWidth,
-          maxWidth,
-          columnType:column.type,         
+          minWidth:minWidth,
+          maxWidth:maxWidth,
+          columnType:column.type,
           className: column.class || '', // Apply the CSS class from the JSON
           isSortable: column.isSortable === 'true',// Add sortable property
           isSorted: false, // Initialize sorting state
           isSortedDescending: false, // Initialize sorting direction          
           onRender: (item: any) => this.renderField(column, key, item,columnsObject) // Handle field rendering separately
         } as IExtendedColumn);
+      }
       });
 
     this.setState({ columnsArray });
