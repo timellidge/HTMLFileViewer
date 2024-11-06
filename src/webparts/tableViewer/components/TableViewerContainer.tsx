@@ -286,23 +286,21 @@ async parseColumns() {
           minWidth = maxWidth = parseInt(width);
         }
         
-         // For stacked columns, use specified fields only
+        // For stacked columns, use specified fields only
          if (column.type === 'stack' && Array.isArray(column.fields)) {
-          column.fields.forEach((field:any) => {
-            columnsArray.push({
-              key: key,
-              fieldName: column.name,
-              name: column.name,
-              minWidth:minWidth,
-              maxWidth:maxWidth,
-              columnType:column.type,
-              className: column.class || '', // Apply the CSS class from the JSON
-              isSortable: column.isSortable === 'true',// Add sortable property
-              isSorted: false, // Initialize sorting state
-              isSortedDescending: false, // Initialize sorting direction 
-              onRender: (item: any) => this.renderField(column, field, item, columnsObject) // Handle field rendering separately
-            } as IExtendedColumn);
-          });
+          columnsArray.push({
+            key: key,
+            fieldName: column.name,
+            name: column.name,
+            minWidth:minWidth,
+            maxWidth:maxWidth,
+            columnType:column.type,
+            className: column.class || '', // Apply the CSS class from the JSON
+            isSortable: column.isSortable === 'true',// Add sortable property
+            isSorted: false, // Initialize sorting state
+            isSortedDescending: false, // Initialize sorting direction 
+            onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
+          } as IExtendedColumn);
         } else {
          columnsArray.push({
           key: key,
