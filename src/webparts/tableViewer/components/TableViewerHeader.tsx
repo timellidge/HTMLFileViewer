@@ -5,7 +5,7 @@ export interface ITableViewerHeaderProps {
   className?: string;
   children?: React.ReactNode[];
 }
-// what the fuck is this? NO COMMENTS !!!
+// what the fuck is this? NO COMMENTS and i think poorly named !!!
 const TableViewerHeader: React.FunctionComponent<ITableViewerHeaderProps> = ({ children }) => (
   <Stack
     horizontal

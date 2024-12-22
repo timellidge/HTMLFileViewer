@@ -52290,8 +52290,11 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     }
     renderTabs() {
         const { tabs, selectedTab, tabCounts } = this.state;
+        console.log(">> Tabs", tabs);
+        console.log(">> SelectedTab", selectedTab);
+        console.log(">> TabCounts", tabCounts);
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } },
-            tabs.map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => this.handleTabChange(tab), style: {
+            Object.keys(tabCounts).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => this.handleTabChange(tab), style: {
                     marginRight: '10px',
                     backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
                     color: selectedTab === tab ? '#fff' : '#000',
@@ -59999,7 +60002,7 @@ function findElementRecursive(element, matchFunction) {
 /* harmony import */ var _fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Stack */ "kaos");
 
 
-// what the fuck is this? NO COMMENTS !!!
+// what the fuck is this? NO COMMENTS and i think poorly named !!!
 const TableViewerHeader = ({ children }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_1__[/* Stack */ "a"], { horizontal: true, disableShrink: true, horizontalAlign: "space-between", verticalAlign: "start", style: { width: '100%' } },
     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__[/* StackItem */ "a"], { align: "start" }, children && children[0]),
     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__[/* StackItem */ "a"], { align: "end" }, children && children[1])));

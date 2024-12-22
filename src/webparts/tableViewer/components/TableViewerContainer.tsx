@@ -90,7 +90,6 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       selectedTab: null,
       columnsArray: [],
       tabs: [],
-
       selectedChoiceFieldName:'',
       tabCounts:{},
       NewJSON:  {}
@@ -445,10 +444,13 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
   }
   renderTabs() {
     const { tabs, selectedTab , tabCounts } = this.state;
+    console.log(">> Tabs",tabs);
+    console.log(">> SelectedTab",selectedTab);
+    console.log(">> TabCounts",tabCounts);
 
     return (
       <div style={{ marginBottom: '10px' }}>
-        {tabs.map(tab => (
+        {Object.keys(tabCounts).map(tab => (
           <button
             key={tab}
             onClick={() => this.handleTabChange(tab)}
