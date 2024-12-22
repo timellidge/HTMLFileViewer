@@ -52057,10 +52057,11 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             console.error('Error during component initialization:', error);
         }
     }
-    calculateTabCounts(items, filterColumnName) {
+    getUniqueValues(items, columnName) {
+        // this gets a list of the unique values in a column 
         const tabCounts = {};
         items.forEach((item) => {
-            const tabValue = item[filterColumnName];
+            const tabValue = item[columnName];
             if (tabValue) {
                 // If the tabValue exists, increase the count
                 if (tabCounts[tabValue]) {
@@ -52073,6 +52074,21 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
         });
         return tabCounts;
     }
+    // calculateTabCounts(items: any[], filterColumnName: string) {
+    //   const tabCounts: { [key: string]: number } = {};
+    //   items.forEach((item) => {
+    //     const tabValue = item[filterColumnName];
+    //     if (tabValue) {
+    //       // If the tabValue exists, increase the count
+    //       if (tabCounts[tabValue]) {
+    //         tabCounts[tabValue]++;
+    //       } else {
+    //         tabCounts[tabValue] = 1;
+    //       }
+    //     }
+    //   });
+    //   return tabCounts;
+    // }
     // generateTabsFromChoices(choices: any): string[] {
     //   const tabs: string[] = [];
     //   Object.values(choices).forEach((options: string[]) => {
@@ -52097,23 +52113,6 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     //   }
     // });
     // return tabCounts;
-    getUniqueValues(items, columnName) {
-        // this gets a list of the unique values in a column 
-        const tabCounts = {};
-        items.forEach((item) => {
-            const tabValue = item[columnName];
-            if (tabValue) {
-                // If the tabValue exists, increase the count
-                if (tabCounts[tabValue]) {
-                    tabCounts[tabValue]++;
-                }
-                else {
-                    tabCounts[tabValue] = 1;
-                }
-            }
-        });
-        return tabCounts;
-    }
     //  // Function to parse columns and return choices for columns where tab is true
     //  async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
     //   try {

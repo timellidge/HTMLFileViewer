@@ -45,9 +45,6 @@ export interface ITableViewerContainerState {
 declare class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
     constructor(props: ITableViewerContainerProps);
     componentDidMount(): Promise<void>;
-    calculateTabCounts(items: any[], filterColumnName: string): {
-        [key: string]: number;
-    };
     getUniqueValues(items: any[], columnName: string): {
         [key: string]: number;
     };

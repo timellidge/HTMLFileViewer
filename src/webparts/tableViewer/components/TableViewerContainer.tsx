@@ -444,7 +444,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
     });
   }
   renderTabs() {
-    const { tabs, selectedTab,tabCounts } = this.state;
+    const { tabs, selectedTab , tabCounts } = this.state;
 
     return (
       <div style={{ marginBottom: '10px' }}>
