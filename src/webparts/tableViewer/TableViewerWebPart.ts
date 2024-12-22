@@ -24,11 +24,13 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 // Container Component Import
 import { IPropertyPaneConfiguration, IPropertyPanePage } from '@microsoft/sp-property-pane';
 import TableViewerContainer, { ITableViewerContainerProps } from './components/TableViewerContainer';
+import { IColumnConfig } from '../../helpers/Interfaces';
 
 // Utilities Import
 import {
   getListFields, getListViewXml, validateSiteExists,
 } from '../../helpers/Utilities';
+
 
 
 export interface ITableViewerWebPartProps {
@@ -62,15 +64,35 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private editorProp: any;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private listProp: any;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private viewProp: any;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private msProps: any;
+
+  private tableConfig: IColumnConfig = {
+    "id": {
+      "name": "ident",
+      "width": "40px",
+      "calculatedPX": 0
+    },
+    "LinkTitle": {
+      "name": "title",
+      "width": "14%",
+      "calculatedPX": 0
+    },
+    "BSAStrapline": {
+      "name": "StrapLine",
+      "width": "1fr",
+      "calculatedPX": 0
+    },
+    "BSADescription": {
+      "name": "desc",
+      "width": "2fr",
+      "calculatedPX": 0
+    }
+  }
 
   
   protected async onInit(): Promise<void> {
@@ -89,12 +111,13 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
 
     this.themeSetup();
 
-    if (this.properties.siteUrl && this.properties.list) {
-      const fields = await getListFields(this.properties.siteUrl, this.properties.list);
-      this.updateFieldListPickerOptions(fields);
-    }
+    // if (this.properties.siteUrl && this.properties.list) {
+    //   const fields = await getListFields(this.properties.siteUrl, this.properties.list);
+    //   this.updateFieldListPickerOptions(fields);
+    // }
 
     await super.onInit();
+    this.properties.JSONCode =  this.properties.JSONCode || JSON.stringify(this.tableConfig);
   }
   protected onPropertyPaneConfigurationComplete(): void {
     super.onPropertyPaneConfigurationComplete();
@@ -106,7 +129,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.render();
   }
   public render(): void {
-    console.log("Rendering TableViewerWebPart");
+  console.log("Rendering TableViewerWebPart");
   console.log("Display Mode:", this.displayMode);
   console.log("Properties:", this.properties);
 
@@ -138,13 +161,11 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
         contextUser: this.context.pageContext.user.loginName,
         webPartTag: this.properties.webPartTag,
-        
       },
     );
     ReactDom.render(element, this.domElement);
   }
 
-  
 
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
@@ -169,21 +190,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.render();
   };
 
-  // private onPropertyFieldViewPickerChanged(
-  //   targetProperty: keyof ITableViewerWebPartProps,
-  //   oldValue: unknown,
-  //   newValue: unknown,
-  // ) {
-  //   const oldViewValue = this.properties[targetProperty];
-  //   this.onPropertyPaneFieldChanged(targetProperty as string, oldViewValue, newValue);
-  
-  //   if (newValue !== '') {
-  //     getListViewXml(this.properties.siteUrl, this.properties.list, this.properties.view)
-  //       .then(this.updateFieldViewPickerValue.bind(this));
-  //   } else {
-  //     this.updateFieldViewPickerValue();
-  //   }
-  // }
+
 
   private onPropertyFieldViewPickerChanged(
     targetProperty: keyof ITableViewerWebPartProps,
@@ -203,11 +210,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     // Call render to immediately reflect changes
     this.render();
   }
-  // private updateFieldViewPickerValue(value?: IViewInfo) {
-  //   this.properties.viewXmlCode = value ? value.ListViewXml : '';
-  //   this.context.propertyPane.refresh();
-  //   this.render();
-  // }
+
 
   private updateFieldViewPickerValue(value?: IViewInfo) {
     this.properties.viewXmlCode = value ? value.ListViewXml : '';
@@ -215,26 +218,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.render(); // Re-render the web part when view picker value is updated
   }
 
-  // private onPropertyFieldListPickerChanged(
-  //   targetProperty: keyof ITableViewerWebPartProps,
-  //   oldValue: unknown,
-  //   newValue: unknown,
-  // ) {
-  //   const oldViewValue = this.properties[targetProperty];
-  //   this.onPropertyPaneFieldChanged(targetProperty as string, oldViewValue, newValue);
-  
-  //   if (newValue !== '') {
-  //     getListFields(this.properties.siteUrl, this.properties.list)
-  //       .then(this.updateFieldListPickerOptions.bind(this));
-  //   } else {
-  //     this.properties.view = '';
-  //     //this.context.propertyPane.refresh();
 
-      
-        
-  //     this.render();
-  //   }
-  // }
   private onPropertyFieldListPickerChanged(
     targetProperty: keyof ITableViewerWebPartProps,
     oldValue: unknown,
@@ -252,24 +236,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
       this.render(); // Render the web part to reflect the list change
     }
   }
-  // private updateFieldListPickerOptions(result: IFieldInfo[]) {
-  //   const visibleFields: IFieldInfo[] = result.filter(
-  //     (field: IFieldInfo) => field.Hidden === false,
-  //   );
-
-  //   const options: IDropdownOption[] = visibleFields.map((field: IFieldInfo, index: number) => ({
-  //     key: index,
-  //     text: `${field.Title} (${field.InternalName})`,
-  //     title: `${field.Title} (${field.InternalName})`,
-  //     data: field,
-  //   }));
-
-  //   this.linkFieldOptions = options;
-  //   // Only refresh the property pane in edit mode
-   
-  //   //this.context.propertyPane.refresh();
-  //   this.render();
-  // }
+  
   private updateFieldListPickerOptions(result: IFieldInfo[]) {
     const visibleFields: IFieldInfo[] = result.filter(
       (field: IFieldInfo) => field.Hidden === false,
