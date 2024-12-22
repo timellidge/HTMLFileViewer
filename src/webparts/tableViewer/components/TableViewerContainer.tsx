@@ -14,7 +14,7 @@ import TableViewerRender from './TableViewerRender';
 import { convertWidthToPx, getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
 import { sp } from '@pnp/sp/presets/all';
 
-
+import TabBarRender from './TabsRender/TabBarRender';
 import TextFieldRender from './FieldRender/TextFieldRender';
 import NumberFieldRender from './FieldRender/NumberFieldRender';
 import SingleChoiceFieldRender from './FieldRender/SingleChoiceFieldRender';
@@ -442,46 +442,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
       filteredItems 
     });
   }
-  renderTabs() {
-    const { tabs, selectedTab , tabCounts } = this.state;
-    console.log(">> Tabs",tabs);
-    console.log(">> SelectedTab",selectedTab);
-    console.log(">> TabCounts",tabCounts);
-
-    return (
-      <div style={{ marginBottom: '10px' }}>
-        {Object.keys(tabCounts).map(tab => (
-          <button
-            key={tab}
-            onClick={() => this.handleTabChange(tab)}
-            style={{
-              marginRight: '10px',
-              backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
-              color: selectedTab === tab ? '#fff' : '#000',
-              padding: '5px 10px',
-              border: 'none',
-              cursor: 'pointer',
-            }}>
-            {`${tab} (${tabCounts[tab] || 0})`}
-          </button>
-        ))}
-        {selectedTab && (
-          <button
-            onClick={() => this.handleTabChange(null)}
-            style={{
-              marginRight: '10px',
-              backgroundColor: '#eaeaea',
-              color: '#000',
-              padding: '5px 10px',
-              border: 'none',
-              cursor: 'pointer',
-            }}>
-            Clear Filter
-          </button>
-        )}
-      </div>
-    );
-  }
+  
   
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
@@ -509,9 +470,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
                 )}
               </TableViewerHeader>
               <TableViewerBody>
-                <>
-                {this.renderTabs()}
-                </>
+                <TabBarRender TabName={tabs[0]} Tabs = {this.state.tabCounts} selectedTab={this.state.selectedTab} handleTabChange={this.handleTabChange}/>
                 <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} onScrollEnd={this.onScrollEnd} contentHeight={this.state.contentHeight} />
               </TableViewerBody>
             </TableViewer>

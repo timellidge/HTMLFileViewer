@@ -51949,13 +51949,15 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 /* harmony import */ var _TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableViewerErrorMessage */ "VvtR");
 /* harmony import */ var _TableViewerRender__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TableViewerRender */ "erON");
 /* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
-/* harmony import */ var _FieldRender_TextFieldRender__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./FieldRender/TextFieldRender */ "X5iI");
-/* harmony import */ var _FieldRender_NumberFieldRender__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./FieldRender/NumberFieldRender */ "+x+B");
-/* harmony import */ var _FieldRender_SingleChoiceFieldRender__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./FieldRender/SingleChoiceFieldRender */ "8+TY");
-/* harmony import */ var _FieldRender_MultiChoiceFieldRender__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./FieldRender/MultiChoiceFieldRender */ "DV2N");
-/* harmony import */ var _FieldRender_PersonFieldRender__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./FieldRender/PersonFieldRender */ "LGqR");
-/* harmony import */ var _FieldRender_DateFieldRender__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./FieldRender/DateFieldRender */ "vlYh");
-/* harmony import */ var _FieldRender_StackFieldRender__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./FieldRender/StackFieldRender */ "HDvN");
+/* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
+/* harmony import */ var _FieldRender_TextFieldRender__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./FieldRender/TextFieldRender */ "X5iI");
+/* harmony import */ var _FieldRender_NumberFieldRender__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./FieldRender/NumberFieldRender */ "+x+B");
+/* harmony import */ var _FieldRender_SingleChoiceFieldRender__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./FieldRender/SingleChoiceFieldRender */ "8+TY");
+/* harmony import */ var _FieldRender_MultiChoiceFieldRender__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./FieldRender/MultiChoiceFieldRender */ "DV2N");
+/* harmony import */ var _FieldRender_PersonFieldRender__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./FieldRender/PersonFieldRender */ "LGqR");
+/* harmony import */ var _FieldRender_DateFieldRender__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./FieldRender/DateFieldRender */ "vlYh");
+/* harmony import */ var _FieldRender_StackFieldRender__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./FieldRender/StackFieldRender */ "HDvN");
+
 
 
 
@@ -51987,31 +51989,31 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             const fieldValue = item[key];
             switch (column.type) {
                 case 'number': {
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_NumberFieldRender__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_NumberFieldRender__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
                 }
                 case 'singlechoice': {
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_SingleChoiceFieldRender__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_SingleChoiceFieldRender__WEBPACK_IMPORTED_MODULE_14__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
                 }
                 case 'multichoice': {
                     const values = Array.isArray(item[key]) ? item[key] : [item[key]];
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_MultiChoiceFieldRender__WEBPACK_IMPORTED_MODULE_14__[/* default */ "a"], { values: values, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_MultiChoiceFieldRender__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"], { values: values, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
                 }
                 case 'person': {
                     const person = item[key];
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_PersonFieldRender__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"], { person: person, format: column.format, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_PersonFieldRender__WEBPACK_IMPORTED_MODULE_16__[/* default */ "a"], { person: person, format: column.format, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
                 }
                 case 'date': {
                     const dateValue = item[key];
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_DateFieldRender__WEBPACK_IMPORTED_MODULE_16__[/* default */ "a"], { dateValue: dateValue, format: column.format, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_DateFieldRender__WEBPACK_IMPORTED_MODULE_17__[/* default */ "a"], { dateValue: dateValue, format: column.format, prefix: prefix, suffix: suffix, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
                 }
                 case 'stack': {
                     if (Array.isArray(column.Fields)) {
-                        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_StackFieldRender__WEBPACK_IMPORTED_MODULE_17__[/* default */ "a"], { fields: column.Fields, columnsObject: columnsObject, item: item });
+                        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_StackFieldRender__WEBPACK_IMPORTED_MODULE_18__[/* default */ "a"], { fields: column.Fields, columnsObject: columnsObject, item: item });
                     }
                     break;
                 }
                 default:
-                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_TextFieldRender__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, isMultiline: column.isMultiline, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
+                    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_FieldRender_TextFieldRender__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"], { fieldValue: fieldValue, prefix: prefix, suffix: suffix, isMultiline: column.isMultiline, className: column.class ? _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"][column.class] : undefined });
             }
         };
         this.state = {
@@ -52288,29 +52290,6 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             filteredItems
         });
     }
-    renderTabs() {
-        const { tabs, selectedTab, tabCounts } = this.state;
-        console.log(">> Tabs", tabs);
-        console.log(">> SelectedTab", selectedTab);
-        console.log(">> TabCounts", tabCounts);
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } },
-            Object.keys(tabCounts).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => this.handleTabChange(tab), style: {
-                    marginRight: '10px',
-                    backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
-                    color: selectedTab === tab ? '#fff' : '#000',
-                    padding: '5px 10px',
-                    border: 'none',
-                    cursor: 'pointer',
-                } }, `${tab} (${tabCounts[tab] || 0})`))),
-            selectedTab && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => this.handleTabChange(null), style: {
-                    marginRight: '10px',
-                    backgroundColor: '#eaeaea',
-                    color: '#000',
-                    padding: '5px 10px',
-                    border: 'none',
-                    cursor: 'pointer',
-                } }, "Clear Filter"))));
-    }
     render() {
         const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
         const { filteredItems, globalError, columnsArray, tabs } = this.state;
@@ -52321,7 +52300,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                     showFind && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_TextField__WEBPACK_IMPORTED_MODULE_2__[/* TextField */ "a"], { placeholder: "Search...", value: this.state.searchQuery, onChange: this.handleSearch, styles: { root: { marginBottom: 20 } } })))),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerBody__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], null,
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, this.renderTabs()),
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], { TabName: tabs[0], Tabs: this.state.tabCounts, selectedTab: this.state.selectedTab, handleTabChange: this.handleTabChange }),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { columns: columnsArray, items: filteredItems, showFind: showFind, onScrollEnd: this.onScrollEnd, contentHeight: this.state.contentHeight }))),
             globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { message: globalError, onDismiss: () => this.setState({ globalError: null }) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
     }
@@ -66647,6 +66626,42 @@ function _warnDuplicateIcon(iconName) {
     return deAt;
 
 })));
+
+
+/***/ }),
+
+/***/ "s8/t":
+/*!************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TabsRender/TabBarRender.js ***!
+  \************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabBarRender; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function TabBarRender({ TabName, Tabs, selectedTab, handleTabChange }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } },
+        Object.keys(Tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(tab), style: {
+                marginRight: '10px',
+                backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
+                color: selectedTab === tab ? '#fff' : '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, `${tab} (${Tabs[tab] || 0})`))),
+        selectedTab && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(null), style: {
+                marginRight: '10px',
+                backgroundColor: '#eaeaea',
+                color: '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, "Clear Filter"))));
+}
 
 
 /***/ }),
