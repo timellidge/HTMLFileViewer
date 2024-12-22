@@ -64,8 +64,8 @@ export interface ITableViewerContainerState {
   selectedChoiceFieldName: string | null;
   columnsArray: IExtendedColumn[];
   tabs: string[];
-  choices: { [key: string]: string[] };
   tabCounts: { [key: string]: number };
+  NewJSON: IColumnConfig;
   
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -90,9 +90,10 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       selectedTab: null,
       columnsArray: [],
       tabs: [],
-      choices: {},
+
       selectedChoiceFieldName:'',
-      tabCounts:{}
+      tabCounts:{},
+      NewJSON:  {}
     };
 
     this.getItems = this.getItems.bind(this);
@@ -103,93 +104,122 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
 
   async componentDidMount() {
     try {
-      const choices = await this.parseChoiceColumns(this.props.JSONCode);
-     
-
-      const tabs = this.generateTabsFromChoices(choices);
+     // const choices = await this.parseChoiceColumns(this.props.JSONCode);
       
       await Promise.all([this.parseColumns(), this.getItems()]);
-      
-      // If items are fetched, set the initial tab and calculate counts
+
       if (this.state.items.length > 0) {
-        this.setState({ selectedTab: this.state.selectedTab || tabs[0] });
+        const tabs = Object.keys(this.state.NewJSON).filter(key => this.state.NewJSON[key].tab === true);
+        console.log("TabFields",tabs);
+        let tabCounts: { [key: string]: number } = {};
+        tabs.forEach((field) => {
+          tabCounts = this.getUniqueValues(this.state.items, field);
+          console.log("field:", field, "TabValues:",tabCounts);
+        });
+        this.setState({
+          selectedTab: this.state.selectedTab || (tabs.length > 0 ? tabs[0] : null),
+          tabs,
+          tabCounts
+        });
       }
-      
-      const tabCounts = this.calculateTabCounts(this.state.filteredItems, this.state.selectedChoiceFieldName);
-      this.setState({ choices, tabs, tabCounts });
+
     } catch (error) {
       console.error('Error during component initialization:', error);
     }
   }
-  calculateTabCounts(items: any[], filterColumnName: string) {
+
+  getUniqueValues(items: any[], columnName: string):  { [key: string]: number } {
+    // this gets a list of the unique values in a column 
     const tabCounts: { [key: string]: number } = {};
-  
     items.forEach((item) => {
-      const tabValue = item[filterColumnName];
-      if (tabValue) {
-        // If the tabValue exists, increase the count
-        if (tabCounts[tabValue]) {
-          tabCounts[tabValue]++;
-        } else {
-          tabCounts[tabValue] = 1;
-        }
-      }
+        const tabValue = item[columnName];
+         if (tabValue) {
+           // If the tabValue exists, increase the count
+           if (tabCounts[tabValue]) {
+              tabCounts[tabValue]++;
+            } else {
+              tabCounts[tabValue] = 1;
+            }
+       }
     });
-  
-    return tabCounts;
+      return tabCounts;
   }
 
-  generateTabsFromChoices(choices: any): string[] {
-    const tabs: string[] = [];
+  // calculateTabCounts(items: any[], filterColumnName: string) {
+  //   const tabCounts: { [key: string]: number } = {};
   
-    Object.values(choices).forEach((options: string[]) => {
-      options.forEach((option: string) => {
-        if (!tabs.includes(option)) {
-          tabs.push(option);  // Add unique options to the tabs array
-        }
-      });
-    });
+  //   items.forEach((item) => {
+  //     const tabValue = item[filterColumnName];
+  //     if (tabValue) {
+  //       // If the tabValue exists, increase the count
+  //       if (tabCounts[tabValue]) {
+  //         tabCounts[tabValue]++;
+  //       } else {
+  //         tabCounts[tabValue] = 1;
+  //       }
+  //     }
+  //   });
   
-    return tabs;
-  }
+  //   return tabCounts;
+  // }
 
-  getUniqueValues(items: any[], columnName: string): string[] {
-    // thsi gets a list of the unique values in a column 
-    return items.reduce((uniqueValues, item) => {
-      const value = item[columnName];
-      if (value && !uniqueValues.includes(value)) {
-        uniqueValues.push(value);
-      }
-      console.log("ColumnValues", uniqueValues);
-      return uniqueValues;
-    }, []);
-  }
+  // generateTabsFromChoices(choices: any): string[] {
+  //   const tabs: string[] = [];
   
- // Function to parse columns and return choices for columns where tab is true
- async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
-  try {
-    const columnsObject = JSON.parse(json);
-    const choicesMap: { [key: string]: string[] } = {};
+  //   Object.values(choices).forEach((options: string[]) => {
+  //     options.forEach((option: string) => {
+  //       if (!tabs.includes(option)) {
+  //         tabs.push(option);  // Add unique options to the tabs array
+  //       }
+  //     });
+  //   });
+  
+  //   return tabs;
+  // }
 
-    // Iterate over each column in the JSON object
-    for (const key in columnsObject) {
-      const column = columnsObject[key];
+  // const tabCounts: { [key: string]: number } = {};
+  
+  // items.forEach((item) => {
+  //   const tabValue = item[filterColumnName];
+  //   if (tabValue) {
+  //     // If the tabValue exists, increase the count
+  //     if (tabCounts[tabValue]) {
+  //       tabCounts[tabValue]++;
+  //     } else {
+  //       tabCounts[tabValue] = 1;
+  //     }
+  //   }
+  // });
+
+  // return tabCounts;
+
+
+  
+//  // Function to parse columns and return choices for columns where tab is true
+//  async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
+//   try {
+//     const columnsObject = JSON.parse(json);
+//     const choicesMap: { [key: string]: string[] } = {};
+
+//     // Iterate over each column in the JSON object
+//     for (const key in columnsObject) {
+//       const column = columnsObject[key];
       
-      // Check if the column has tab set to true and its type is choice
-      if (column.tab === 'true') {
-          this.setState({selectedChoiceFieldName:column.name});
-          const choices = await this.fetchChoiceOptions(column.name);
-          choicesMap[column.name] = choices;
+//       // Check if the column has tab set to true and its type is choice
+//       if (column.tab === 'true') {
+//           this.setState({selectedChoiceFieldName:column.name});
+//           const choices = await this.fetchChoiceOptions(column.name);
+//           choicesMap[column.name] = choices;
        
-      }
-    }
+//       }
+//     }
 
-    return choicesMap;
-  } catch (error) {
-    console.error('Error parsing columns:', error);
-    throw error;
-  }
-}
+//     return choicesMap;
+//   } catch (error) {
+//     console.error('Error parsing columns:', error);
+//     throw error;
+//   }
+// }
 
   async getItems() {
     try {
@@ -198,7 +228,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   
       if (result) {
         const { Row, NextHref } = result;
-        
+
         // Apply filtering based on the selected tab
         const { selectedTab, selectedChoiceFieldName } = this.state; // `filterColumnName` is the dynamic column name
         let filteredItems = Row;
@@ -252,22 +282,22 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
   // Function to fetch choice field options using PnPjs
-async fetchChoiceOptions(name: string): Promise<string[]> {
-  try {
-    // Fetch the field schema
-    const field:IFieldChoice = await sp.web.lists.getById(this.props.listId).fields.getByInternalNameOrTitle(name)();
+// async fetchChoiceOptions(name: string): Promise<string[]> {
+//   try {
+//     // Fetch the field schema
+//     const field:IFieldChoice = await sp.web.lists.getById(this.props.listId).fields.getByInternalNameOrTitle(name)();
 
-    // Check if the field type is 'Choice'
-    if (field.TypeAsString === 'Choice' && Array.isArray(field.Choices)) {
-      return field.Choices;
-    }
+//     // Check if the field type is 'Choice'
+//     if (field.TypeAsString === 'Choice' && Array.isArray(field.Choices)) {
+//       return field.Choices;
+//     }
 
-    throw new Error(`Field ${name} is not a choice field or does not have choices.`);
-  } catch (error) {
-    console.error(`Error fetching choice options for ${name}:`, error);
-    throw error;
-  }
-}
+//     throw new Error(`Field ${name} is not a choice field or does not have choices.`);
+//   } catch (error) {
+//     console.error(`Error fetching choice options for ${name}:`, error);
+//     throw error;
+//   }
+// }
 
 
 async parseColumns() {
@@ -281,13 +311,7 @@ async parseColumns() {
     const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
     console.log("NewJSON",NewJSON);
 
-    const tabFields = Object.keys(NewJSON).filter(key => NewJSON[key].tab === true);
-    console.log("TabFields",tabFields);
-
-    tabFields.forEach((field) => {
-      const tabvalues = this.getUniqueValues(this.state.items, tabFields[0]);
-       console.log("TabValues",tabvalues);
-    });
+    this.setState({NewJSON});
 
     Object.keys(columnsObject)
       .map((key) => {

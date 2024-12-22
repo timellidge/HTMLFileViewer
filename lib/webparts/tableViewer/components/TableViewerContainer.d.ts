@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
+import { IColumnConfig } from '../../../helpers/Interfaces';
 interface IExtendedColumn extends IColumn {
     columnType: 'string' | 'number';
 }
@@ -36,12 +37,10 @@ export interface ITableViewerContainerState {
     selectedChoiceFieldName: string | null;
     columnsArray: IExtendedColumn[];
     tabs: string[];
-    choices: {
-        [key: string]: string[];
-    };
     tabCounts: {
         [key: string]: number;
     };
+    NewJSON: IColumnConfig;
 }
 declare class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
     constructor(props: ITableViewerContainerProps);
@@ -49,14 +48,11 @@ declare class TableViewerContainer extends React.Component<ITableViewerContainer
     calculateTabCounts(items: any[], filterColumnName: string): {
         [key: string]: number;
     };
-    generateTabsFromChoices(choices: any): string[];
-    getUniqueValues(items: any[], columnName: string): any[];
-    parseChoiceColumns(json: string): Promise<{
-        [key: string]: string[];
-    }>;
+    getUniqueValues(items: any[], columnName: string): {
+        [key: string]: number;
+    };
     getItems(): Promise<void>;
     onScrollEnd(): Promise<void>;
-    fetchChoiceOptions(name: string): Promise<string[]>;
     parseColumns(): Promise<void>;
     renderField: (column: any, key: string, item: any, columnsObject: any) => JSX.Element;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;

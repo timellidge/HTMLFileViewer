@@ -75,22 +75,25 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     "id": {
       "name": "ident",
       "width": "40px",
+      "tab": false,
       "calculatedPX": 0
     },
     "LinkTitle": {
       "name": "title",
       "width": "14%",
-      "calculatedPX": 0
     },
     "BSAStrapline": {
       "name": "StrapLine",
       "width": "1fr",
-      "calculatedPX": 0
     },
     "BSADescription": {
       "name": "desc",
       "width": "2fr",
-      "calculatedPX": 0
+    },
+    "BSAColor": {
+      "name": "Color",
+      "width": "0.5fr",
+      "tab": true
     }
   }
 
