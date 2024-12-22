@@ -68,6 +68,11 @@ export interface ITableViewerContainerState {
   tabCounts: { [key: string]: number };
   
 }
+///////////////////////////////////////////////////////////////////////////
+
+// we will convert this old class pattern but first i NEED to understand the code
+
+///////////////////////////////////////////////////////////////////////////
 
 class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
 
@@ -99,6 +104,8 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   async componentDidMount() {
     try {
       const choices = await this.parseChoiceColumns(this.props.JSONCode);
+     
+
       const tabs = this.generateTabsFromChoices(choices);
       
       await Promise.all([this.parseColumns(), this.getItems()]);
@@ -131,6 +138,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   
     return tabCounts;
   }
+
   generateTabsFromChoices(choices: any): string[] {
     const tabs: string[] = [];
   
@@ -145,7 +153,8 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     return tabs;
   }
 
-  getUniqueValues(items: any[], columnName: string): any[] {
+  getUniqueValues(items: any[], columnName: string): string[] {
+    // thsi gets a list of the unique values in a column 
     return items.reduce((uniqueValues, item) => {
       const value = item[columnName];
       if (value && !uniqueValues.includes(value)) {
@@ -272,6 +281,14 @@ async parseColumns() {
     const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
     console.log("NewJSON",NewJSON);
 
+    const tabFields = Object.keys(NewJSON).filter(key => NewJSON[key].tab === true);
+    console.log("TabFields",tabFields);
+
+    tabFields.forEach((field) => {
+      const tabvalues = this.getUniqueValues(this.state.items, tabFields[0]);
+       console.log("TabValues",tabvalues);
+    });
+
     Object.keys(columnsObject)
       .map((key) => {
         const column = columnsObject[key];
@@ -299,7 +316,7 @@ async parseColumns() {
             key: key,
             fieldName: column.name,
             name: column.name,
-            minWidth: width -20,
+            minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
             maxWidth:width,
             columnType:column.type,
             className: column.class || '', // Apply the CSS class from the JSON
@@ -313,7 +330,7 @@ async parseColumns() {
           key: key,
           fieldName: column.name,
           name: column.name,
-          minWidth:width - 20,
+          minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
           maxWidth:width,
           columnType:column.type,
           className: column.class || '', // Apply the CSS class from the JSON
