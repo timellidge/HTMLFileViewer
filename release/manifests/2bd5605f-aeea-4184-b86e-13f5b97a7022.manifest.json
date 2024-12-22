@@ -21,7 +21,7 @@
       "description": {
         "default": "The Table Viewer web part is used to query data in SharePoint Lists using View XML based queries and combine that data with a Handlebars template, render the resulting HTML to the page. It included People hover Table, Openign in the side panel and Action Logging"
       },
-      "officeFabricIconFontName": "PublicContactTable",
+      "officeFabricIconFontName": "TableComputed",
       "properties": {
         "siteUrl": "",
         "JSONCode": "",

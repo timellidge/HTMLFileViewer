@@ -34004,33 +34004,33 @@ __webpack_require__.r(__webpack_exports__);
 
 // Utilities Import
 
-const tableConfig = {
-    "id": {
-        "name": "ident",
-        "width": "40px",
-        "calculatedPX": 0
-    },
-    "LinkTitle": {
-        "name": "title",
-        "width": "14%",
-        "calculatedPX": 0
-    },
-    "BSAStrapline": {
-        "name": "StrapLine",
-        "width": "1fr",
-        "calculatedPX": 0
-    },
-    "BSADescription": {
-        "name": "desc",
-        "width": "2fr",
-        "calculatedPX": 0
-    }
-};
 class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MODULE_2__["BaseClientSideWebPart"] {
     constructor() {
         super(...arguments);
         //@typescript-eslint/no-unused-vars
         this.shouldRerender = false;
+        this.tableConfig = {
+            "id": {
+                "name": "ident",
+                "width": "40px",
+                "calculatedPX": 0
+            },
+            "LinkTitle": {
+                "name": "title",
+                "width": "14%",
+                "calculatedPX": 0
+            },
+            "BSAStrapline": {
+                "name": "StrapLine",
+                "width": "1fr",
+                "calculatedPX": 0
+            },
+            "BSADescription": {
+                "name": "desc",
+                "width": "2fr",
+                "calculatedPX": 0
+            }
+        };
         this.hasAllValues = (strings) => strings.filter((i) => (i === '' || i === null)).length > 0;
         this.onConfigure = () => {
             this.context.propertyPane.open();
@@ -34053,11 +34053,12 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             spfxContext: spfxContext,
         });
         this.themeSetup();
-        if (this.properties.siteUrl && this.properties.list) {
-            const fields = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "c"])(this.properties.siteUrl, this.properties.list);
-            this.updateFieldListPickerOptions(fields);
-        }
+        // if (this.properties.siteUrl && this.properties.list) {
+        //   const fields = await getListFields(this.properties.siteUrl, this.properties.list);
+        //   this.updateFieldListPickerOptions(fields);
+        // }
         await super.onInit();
+        this.properties.JSONCode = this.properties.JSONCode || JSON.stringify(this.tableConfig);
     }
     onPropertyPaneConfigurationComplete() {
         super.onPropertyPaneConfigurationComplete();
@@ -34108,20 +34109,6 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         this.themeVariant = this.themeProvider.tryGetTheme();
         this.themeProvider.themeChangedEvent.add(this, this.handleThemeChangedEvent);
     }
-    // private onPropertyFieldViewPickerChanged(
-    //   targetProperty: keyof ITableViewerWebPartProps,
-    //   oldValue: unknown,
-    //   newValue: unknown,
-    // ) {
-    //   const oldViewValue = this.properties[targetProperty];
-    //   this.onPropertyPaneFieldChanged(targetProperty as string, oldViewValue, newValue);
-    //   if (newValue !== '') {
-    //     getListViewXml(this.properties.siteUrl, this.properties.list, this.properties.view)
-    //       .then(this.updateFieldViewPickerValue.bind(this));
-    //   } else {
-    //     this.updateFieldViewPickerValue();
-    //   }
-    // }
     onPropertyFieldViewPickerChanged(targetProperty, oldValue, newValue) {
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
@@ -34135,32 +34122,11 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         // Call render to immediately reflect changes
         this.render();
     }
-    // private updateFieldViewPickerValue(value?: IViewInfo) {
-    //   this.properties.viewXmlCode = value ? value.ListViewXml : '';
-    //   this.context.propertyPane.refresh();
-    //   this.render();
-    // }
     updateFieldViewPickerValue(value) {
         this.properties.viewXmlCode = value ? value.ListViewXml : '';
         this.context.propertyPane.refresh();
         this.render(); // Re-render the web part when view picker value is updated
     }
-    // private onPropertyFieldListPickerChanged(
-    //   targetProperty: keyof ITableViewerWebPartProps,
-    //   oldValue: unknown,
-    //   newValue: unknown,
-    // ) {
-    //   const oldViewValue = this.properties[targetProperty];
-    //   this.onPropertyPaneFieldChanged(targetProperty as string, oldViewValue, newValue);
-    //   if (newValue !== '') {
-    //     getListFields(this.properties.siteUrl, this.properties.list)
-    //       .then(this.updateFieldListPickerOptions.bind(this));
-    //   } else {
-    //     this.properties.view = '';
-    //     //this.context.propertyPane.refresh();
-    //     this.render();
-    //   }
-    // }
     onPropertyFieldListPickerChanged(targetProperty, oldValue, newValue) {
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
@@ -68705,6 +68671,7 @@ _webs_types_js__WEBPACK_IMPORTED_MODULE_1__[/* _Web */ "b"].prototype.addFullPag
 /* harmony import */ var _fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Stack */ "kaos");
 
 
+// what the fuck is this? NO COMMENTS !!!
 const TableViewerHeader = ({ children }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_1__[/* Stack */ "a"], { horizontal: true, disableShrink: true, horizontalAlign: "space-between", verticalAlign: "start", style: { width: '100%' } },
     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__[/* StackItem */ "a"], { align: "start" }, children && children[0]),
     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_2__[/* StackItem */ "a"], { align: "end" }, children && children[1])));

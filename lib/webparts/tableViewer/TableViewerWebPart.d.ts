@@ -29,6 +29,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     private listProp;
     private viewProp;
     private msProps;
+    private tableConfig;
     protected onInit(): Promise<void>;
     protected onPropertyPaneConfigurationComplete(): void;
     render(): void;
