@@ -10,7 +10,7 @@
     },
     "name": "TableViewer",
     "id": "3344637a-673b-4949-b90a-8285254f9755",
-    "version": "1.0.1.10",
+    "version": "1.0.1.11",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -29,7 +29,7 @@
         "title": "Table Viewer Table Viewer Feature",
         "description": "The feature that activates Table Viewer from the Table Viewer solution.",
         "id": "2bd5605f-aeea-4184-b86e-13f5b97a7022",
-        "version": "1.0.1.10",
+        "version": "1.0.1.11",
         "componentIds": [
           "2bd5605f-aeea-4184-b86e-13f5b97a7022"
         ]

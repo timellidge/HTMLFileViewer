@@ -50,6 +50,7 @@ declare class TableViewerContainer extends React.Component<ITableViewerContainer
         [key: string]: number;
     };
     generateTabsFromChoices(choices: any): string[];
+    getUniqueValues(items: any[], columnName: string): any[];
     parseChoiceColumns(json: string): Promise<{
         [key: string]: string[];
     }>;

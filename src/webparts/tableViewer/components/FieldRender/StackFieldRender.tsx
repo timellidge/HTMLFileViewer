@@ -54,19 +54,17 @@ const StackFieldRender: React.FC<StackFieldRenderProps> = ({ fields, columnsObje
 
         case 'multichoice':
           if (Array.isArray(value)) {
-            displayValue = value.join(', '); // Join multi-choice options by commas
+            if (fieldConfig.isMultiline) {
+              displayValue = value ? value.join('<br/>') : ''; // Handle multiline text
+            } else {
+              displayValue = value.join(', '); // Join multi-choice options by commas
+            }
           } else {
             displayValue = value || '';
           }
           break;
         default:
-          // Check if the text field is multiline
-          /*if (fieldConfig.isMultiline) {
-            displayValue = value ? value.split('\n').join('<br/>') : ''; // Handle multiline text
-          } else {
-            displayValue = value || ''; // Default text field handling
-          }*/
-           displayValue = value ? value.split('\n').join('<br/>') : ''; // Handle multiline text
+           displayValue = value ; // fall through to nothign much 
           break;
       }
 

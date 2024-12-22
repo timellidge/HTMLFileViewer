@@ -6,9 +6,11 @@ import {
   ConstrainMode,
   SelectionMode,
 } from '@fluentui/react/lib/DetailsList';
+
 interface IExtendedColumn extends IColumn {
   columnType: 'string' | 'number'; 
 }
+
 interface ITableViewerRenderProps {
   columns: IExtendedColumn[];
   items: any[];

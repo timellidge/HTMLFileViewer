@@ -11,7 +11,7 @@ import TableViewerTitle from './TableViewerTitle';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
-import { getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
+import { convertWidthToPx, getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
 import { sp } from '@pnp/sp/presets/all';
 
 
@@ -22,6 +22,7 @@ import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
 import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
+import { IColumnConfig } from '../../../helpers/Interfaces';
 // Define an interface for choice field schema
 interface IFieldChoice {
   TypeAsString: string;
@@ -143,6 +144,17 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   
     return tabs;
   }
+
+  getUniqueValues(items: any[], columnName: string): any[] {
+    return items.reduce((uniqueValues, item) => {
+      const value = item[columnName];
+      if (value && !uniqueValues.includes(value)) {
+        uniqueValues.push(value);
+      }
+      console.log("ColumnValues", uniqueValues);
+      return uniqueValues;
+    }, []);
+  }
   
  // Function to parse columns and return choices for columns where tab is true
  async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
@@ -254,6 +266,11 @@ async parseColumns() {
     const { JSONCode } = this.props;
     const columnsObject = JSON.parse(JSONCode);
     const columnsArray: IExtendedColumn[] = [];
+
+    console.log("ColumnsObject",columnsObject);
+
+    const NewJSON:IColumnConfig = convertWidthToPx( 1000, columnsObject );
+    console.log("NewJSON",NewJSON);
 
     Object.keys(columnsObject)
       .map((key) => {
