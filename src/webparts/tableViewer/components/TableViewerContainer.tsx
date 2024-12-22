@@ -269,7 +269,7 @@ async parseColumns() {
 
     console.log("ColumnsObject",columnsObject);
 
-    const NewJSON:IColumnConfig = convertWidthToPx( 1000, columnsObject );
+    const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
     console.log("NewJSON",NewJSON);
 
     Object.keys(columnsObject)
@@ -283,25 +283,15 @@ async parseColumns() {
         return seqA - seqB;
       })
       .forEach(({ key, column }) => {
-        const width = column.width || '100px';
-        let minWidth:number, maxWidth:number;
+        const width = column.calculatedPX || 0;
+
 
         // Check if the column type is 'stack' to bypass width check
-        if ((width === '0%' || width === '0px' || width === '0fr') && column.type !== 'stack') {
+        if (width === '0%' && column.type !== 'stack') {
           return; // Skip this column if it's not 'stack' and width is zero
         }
 
-        if (width.endsWith('px')) {
-          minWidth = maxWidth = parseInt(width);
-        } else if (width.endsWith('%')) {
-          const percentage = parseFloat(width);
-          const totalWidth = 1000; // Base width
-          minWidth = maxWidth = (totalWidth * percentage) / 100;
-        } else if (width.endsWith('fr')) {
-          minWidth = maxWidth = parseInt(width) * 100; // Proportional width
-        } else {
-          minWidth = maxWidth = parseInt(width);
-        }
+
         
         // For stacked columns, use specified fields only
          if (column.type === 'stack' && Array.isArray(column.fields)) {
@@ -309,8 +299,8 @@ async parseColumns() {
             key: key,
             fieldName: column.name,
             name: column.name,
-            minWidth:minWidth,
-            maxWidth:maxWidth,
+            minWidth: width -20,
+            maxWidth:width,
             columnType:column.type,
             className: column.class || '', // Apply the CSS class from the JSON
             isSortable: column.isSortable === 'true',// Add sortable property
@@ -323,8 +313,8 @@ async parseColumns() {
           key: key,
           fieldName: column.name,
           name: column.name,
-          minWidth:minWidth,
-          maxWidth:maxWidth,
+          minWidth:width - 20,
+          maxWidth:width,
           columnType:column.type,
           className: column.class || '', // Apply the CSS class from the JSON
           isSortable: column.isSortable === 'true',// Add sortable property
