@@ -458,15 +458,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
                   <TableViewerTitle displayMode={displayMode} title={title} updateProperty={updateProperty} />
                 )}
                 {showFind && (
-                  <>
-                    <TextField
-                      placeholder="Search..."
-                      value={this.state.searchQuery}
-                      onChange={this.handleSearch} // Correct usage here
-                      styles={{ root: { marginBottom: 20 } }}
-                    />
-                   
-                  </>
+                    <TextField placeholder="Search..." value={this.state.searchQuery} onChange={this.handleSearch} styles={{ root: { marginBottom: 20 } }} />
                 )}
               </TableViewerHeader>
               <TableViewerBody>
