@@ -22,7 +22,7 @@ import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
 import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
-import { IColumnConfig } from '../../../helpers/Interfaces';
+import { IColumnConfig, ITabData } from '../../../helpers/Interfaces';
 // Define an interface for choice field schema
 interface IFieldChoice {
   TypeAsString: string;
@@ -127,98 +127,23 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
 
-  getUniqueValues(items: any[], columnName: string):  { [key: string]: number } {
-    // this gets a list of the unique values in a column 
-    const tabCounts: { [key: string]: number } = {};
+  getFilterValues(items: any[], columnName: string):  ITabData {
+    // this gets a list of the unique values id  data structure and indicates how many items have that value, and sets selected to false
+    const tabData: ITabData = {};
     items.forEach((item) => {
-        const tabValue = item[columnName];
-         if (tabValue) {
-           // If the tabValue exists, increase the count
-           if (tabCounts[tabValue]) {
-              tabCounts[tabValue]++;
-            } else {
-              tabCounts[tabValue] = 1;
-            }
-       }
+      const tabValue = item[columnName];
+      if (tabValue) {
+        // If the tabValue exists, increase the count
+        if (tabData[tabValue]) {
+          tabData[tabValue].count++;
+        } else {
+          tabData[tabValue].count = 1;
+          tabData[tabValue].selected = false;
+        }
+      }
     });
-      return tabCounts;
+      return tabData;
   }
-
-  // calculateTabCounts(items: any[], filterColumnName: string) {
-  //   const tabCounts: { [key: string]: number } = {};
-  
-  //   items.forEach((item) => {
-  //     const tabValue = item[filterColumnName];
-  //     if (tabValue) {
-  //       // If the tabValue exists, increase the count
-  //       if (tabCounts[tabValue]) {
-  //         tabCounts[tabValue]++;
-  //       } else {
-  //         tabCounts[tabValue] = 1;
-  //       }
-  //     }
-  //   });
-  
-  //   return tabCounts;
-  // }
-
-  // generateTabsFromChoices(choices: any): string[] {
-  //   const tabs: string[] = [];
-  
-  //   Object.values(choices).forEach((options: string[]) => {
-  //     options.forEach((option: string) => {
-  //       if (!tabs.includes(option)) {
-  //         tabs.push(option);  // Add unique options to the tabs array
-  //       }
-  //     });
-  //   });
-  
-  //   return tabs;
-  // }
-
-  // const tabCounts: { [key: string]: number } = {};
-  
-  // items.forEach((item) => {
-  //   const tabValue = item[filterColumnName];
-  //   if (tabValue) {
-  //     // If the tabValue exists, increase the count
-  //     if (tabCounts[tabValue]) {
-  //       tabCounts[tabValue]++;
-  //     } else {
-  //       tabCounts[tabValue] = 1;
-  //     }
-  //   }
-  // });
-
-  // return tabCounts;
-
-
-  
-//  // Function to parse columns and return choices for columns where tab is true
-//  async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
-//   try {
-//     const columnsObject = JSON.parse(json);
-//     const choicesMap: { [key: string]: string[] } = {};
-
-//     // Iterate over each column in the JSON object
-//     for (const key in columnsObject) {
-//       const column = columnsObject[key];
-      
-//       // Check if the column has tab set to true and its type is choice
-//       if (column.tab === 'true') {
-//           this.setState({selectedChoiceFieldName:column.name});
-//           const choices = await this.fetchChoiceOptions(column.name);
-//           choicesMap[column.name] = choices;
-       
-//       }
-//     }
-
-//     return choicesMap;
-//   } catch (error) {
-//     console.error('Error parsing columns:', error);
-//     throw error;
-//   }
-// }
 
   async getItems() {
     try {
@@ -280,61 +205,54 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       }
     }
   }
-  // Function to fetch choice field options using PnPjs
-// async fetchChoiceOptions(name: string): Promise<string[]> {
-//   try {
-//     // Fetch the field schema
-//     const field:IFieldChoice = await sp.web.lists.getById(this.props.listId).fields.getByInternalNameOrTitle(name)();
 
-//     // Check if the field type is 'Choice'
-//     if (field.TypeAsString === 'Choice' && Array.isArray(field.Choices)) {
-//       return field.Choices;
-//     }
+  async parseColumns() {
+    try {
+      const { JSONCode } = this.props;
+      const columnsObject = JSON.parse(JSONCode);
+      const columnsArray: IExtendedColumn[] = [];
 
-//     throw new Error(`Field ${name} is not a choice field or does not have choices.`);
-//   } catch (error) {
-//     console.error(`Error fetching choice options for ${name}:`, error);
-//     throw error;
-//   }
-// }
+      console.log("ColumnsObject",columnsObject);
 
+      const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
+      console.log("NewJSON",NewJSON);
 
-async parseColumns() {
-  try {
-    const { JSONCode } = this.props;
-    const columnsObject = JSON.parse(JSONCode);
-    const columnsArray: IExtendedColumn[] = [];
+      this.setState({NewJSON});
 
-    console.log("ColumnsObject",columnsObject);
+      Object.keys(columnsObject)
+        .map((key) => {
+          const column = columnsObject[key];
+          return { key, column };
+        })
+        .sort((a, b) => {
+          const seqA = parseInt(a.column.sequence || '0', 10);
+          const seqB = parseInt(b.column.sequence || '0', 10);
+          return seqA - seqB;
+        })
+        .forEach(({ key, column }) => {
+          const width = column.calculatedPX || 0;
 
-    const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
-    console.log("NewJSON",NewJSON);
+          // Check if the column type is 'stack' to bypass width check
+          if (width === '0%' && column.type !== 'stack') {
+            return; // Skip this column if it's not 'stack' and width is zero
+          }
 
-    this.setState({NewJSON});
-
-    Object.keys(columnsObject)
-      .map((key) => {
-        const column = columnsObject[key];
-        return { key, column };
-      })
-      .sort((a, b) => {
-        const seqA = parseInt(a.column.sequence || '0', 10);
-        const seqB = parseInt(b.column.sequence || '0', 10);
-        return seqA - seqB;
-      })
-      .forEach(({ key, column }) => {
-        const width = column.calculatedPX || 0;
-
-
-        // Check if the column type is 'stack' to bypass width check
-        if (width === '0%' && column.type !== 'stack') {
-          return; // Skip this column if it's not 'stack' and width is zero
-        }
-
-
-        
-        // For stacked columns, use specified fields only
-         if (column.type === 'stack' && Array.isArray(column.fields)) {
+          // For stacked columns, use specified fields only
+          if (column.type === 'stack' && Array.isArray(column.fields)) {
+            columnsArray.push({
+              key: key,
+              fieldName: column.name,
+              name: column.name,
+              minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
+              maxWidth:width,
+              columnType:column.type,
+              className: column.class || '', // Apply the CSS class from the JSON
+              isSortable: column.isSortable === 'true',// Add sortable property
+              isSorted: false, // Initialize sorting state
+              isSortedDescending: false, // Initialize sorting direction 
+              onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
+            } as IExtendedColumn);
+          } else {
           columnsArray.push({
             key: key,
             fieldName: column.name,
@@ -345,67 +263,54 @@ async parseColumns() {
             className: column.class || '', // Apply the CSS class from the JSON
             isSortable: column.isSortable === 'true',// Add sortable property
             isSorted: false, // Initialize sorting state
-            isSortedDescending: false, // Initialize sorting direction 
-            onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
+            isSortedDescending: false, // Initialize sorting direction          
+            onRender: (item: any) => this.renderField(column, key, item,columnsObject) // Handle field rendering separately
           } as IExtendedColumn);
-        } else {
-         columnsArray.push({
-          key: key,
-          fieldName: column.name,
-          name: column.name,
-          minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
-          maxWidth:width,
-          columnType:column.type,
-          className: column.class || '', // Apply the CSS class from the JSON
-          isSortable: column.isSortable === 'true',// Add sortable property
-          isSorted: false, // Initialize sorting state
-          isSortedDescending: false, // Initialize sorting direction          
-          onRender: (item: any) => this.renderField(column, key, item,columnsObject) // Handle field rendering separately
-        } as IExtendedColumn);
-      }
-      });
+        }
+        });
 
-    this.setState({ columnsArray });
-  } catch (error) {
-    console.error('Error parsing columns:', error);
-    if (!this.props.hideErrorEmpty) this.setState({ globalError: 'Error parsing columns configuration' });
+      this.setState({ columnsArray });
+    } catch (error) {
+      console.error('Error parsing columns:', error);
+      if (!this.props.hideErrorEmpty) this.setState({ globalError: 'Error parsing columns configuration' });
+    }
   }
-}
-// Separate field rendering to simplify the parseColumns method
-renderField = (column: any, key: string, item: any,columnsObject:any) => {
-  const prefix = column.prefix || '';
-  const suffix = column.suffix || '';
-  const fieldValue = item[key];
 
-  switch (column.type) {
-    case 'number': {
-      return <NumberFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-    }
-    case 'singlechoice': {
-      return <SingleChoiceFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-    }
-    case 'multichoice': {
-      const values = Array.isArray(item[key]) ? item[key] : [item[key]];
-      return <MultiChoiceFieldRender values={values}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-    }
-    case 'person': {
-      const person = item[key];
-      return <PersonFieldRender person={person} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-    }
-    case 'date': {
-      const dateValue = item[key];
-      return <DateFieldRender dateValue={dateValue} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-    }
-    case 'stack': {
-      if (Array.isArray(column.Fields)) {
-        return <StackFieldRender fields={column.Fields} columnsObject={columnsObject} item={item} />;
+  // Separate field rendering to simplify the parseColumns method
+  renderField = (column: any, key: string, item: any,columnsObject:any) => {
+    const prefix = column.prefix || '';
+    const suffix = column.suffix || '';
+    const fieldValue = item[key];
+
+    switch (column.type) {
+      case 'number': {
+        return <NumberFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
       }
-      break;
+      case 'singlechoice': {
+        return <SingleChoiceFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
+      }
+      case 'multichoice': {
+        const values = Array.isArray(item[key]) ? item[key] : [item[key]];
+        return <MultiChoiceFieldRender values={values}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
+      }
+      case 'person': {
+        const person = item[key];
+        return <PersonFieldRender person={person} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
+      }
+      case 'date': {
+        const dateValue = item[key];
+        return <DateFieldRender dateValue={dateValue} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
+      }
+      case 'stack': {
+        if (Array.isArray(column.Fields)) {
+          return <StackFieldRender fields={column.Fields} columnsObject={columnsObject} item={item} />;
+        }
+        break;
+      }
+      default:
+        return <TextFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix} isMultiline={column.isMultiline} className={column.class ? styles[column.class as keyof typeof styles] : undefined}  />;
     }
-    default:
-      return <TextFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix} isMultiline={column.isMultiline} className={column.class ? styles[column.class as keyof typeof styles] : undefined}  />;
   }
-}
 
   handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchQuery = event.target.value.toLowerCase();
@@ -425,7 +330,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
     this.setState({ searchQuery, filteredItems });
   }
 
-  handleTabChange(tab: string) {
+  handleTabChange(FieldName: string, tab: string) {
     const { items } = this.state; // Original items
     const { selectedChoiceFieldName } = this.state; // Column to filter by
   
@@ -462,7 +367,7 @@ renderField = (column: any, key: string, item: any,columnsObject:any) => {
                 )}
               </TableViewerHeader>
               <TableViewerBody>
-                <TabBarRender TabName={tabs[0]} Tabs = {this.state.tabCounts} selectedTab={this.state.selectedTab} handleTabChange={this.handleTabChange}/>
+                <TabBarRender FieldName={tabs[0]} Tabs = {this.state.tabCounts} selectedTab={this.state.selectedTab} handleTabChange={this.handleTabChange}/>
                 <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} onScrollEnd={this.onScrollEnd} contentHeight={this.state.contentHeight} />
               </TableViewerBody>
             </TableViewer>

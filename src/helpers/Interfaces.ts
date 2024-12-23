@@ -10,3 +10,6 @@ export interface IColumnConfig {
     [key: string]: IColumnJSON;
 }
   
+export interface ITabData {
+    [key: string]: {count:number, selected:boolean}
+}

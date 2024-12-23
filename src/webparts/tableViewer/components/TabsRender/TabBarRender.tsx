@@ -1,20 +1,21 @@
 import * as React from 'react';
-
+// ther is one tab bar per field that is marked as tab. 
 
 interface ITabBarRenderProps {
-  TabName: string;  // Date value to be formatted
-  Tabs: { [key: string]: number }           // Date format string
-  selectedTab: string;           // Date format string
-  handleTabChange: (tab: string | null) => void;        
+  FieldName: string;  // what field is this tab bar for?
+  Tabs: { [key: string]: number }           // what Tabs are to be rendered and how many items are in each tab
+  selectedTab: string;           // what is the currently selected tab
+  handleTabChange: ( FieldName: string, tab: string | null) => void;        
 }
 
-export default function TabBarRender({ TabName, Tabs, selectedTab, handleTabChange }:ITabBarRenderProps) {
+export default function TabBarRender({ FieldName, Tabs, selectedTab, handleTabChange }:ITabBarRenderProps) {
   return (
       <div style={{ marginBottom: '10px' }}>
+        {FieldName}:
         {Object.keys(Tabs).map(tab => (
           <button
             key={tab}
-            onClick={() => handleTabChange(tab)}
+            onClick={() => handleTabChange(FieldName, tab)}
             style={{
               marginRight: '10px',
               backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
@@ -28,7 +29,7 @@ export default function TabBarRender({ TabName, Tabs, selectedTab, handleTabChan
         ))}
         {selectedTab && (
           <button
-            onClick={() => handleTabChange(null)}
+            onClick={() => handleTabChange(FieldName, null)}
             style={{
               marginRight: '10px',
               backgroundColor: '#eaeaea',
