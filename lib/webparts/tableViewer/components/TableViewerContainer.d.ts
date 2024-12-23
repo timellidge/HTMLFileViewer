@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
-import { IColumnConfig } from '../../../helpers/Interfaces';
+import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 interface IExtendedColumn extends IColumn {
     columnType: 'string' | 'number';
 }
@@ -40,20 +40,19 @@ export interface ITableViewerContainerState {
     tabCounts: {
         [key: string]: number;
     };
+    tabData: ITabData;
     NewJSON: IColumnConfig;
 }
 declare class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
     constructor(props: ITableViewerContainerProps);
     componentDidMount(): Promise<void>;
-    getUniqueValues(items: any[], columnName: string): {
-        [key: string]: number;
-    };
+    getFilterValues(items: any[], columnName: string): ITabDataDetail;
     getItems(): Promise<void>;
     onScrollEnd(): Promise<void>;
     parseColumns(): Promise<void>;
     renderField: (column: any, key: string, item: any, columnsObject: any) => JSX.Element;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;
-    handleTabChange(tab: string): void;
+    handleTabChange(fieldName: string, tab: string): void;
     render(): JSX.Element;
 }
 export default TableViewerContainer;

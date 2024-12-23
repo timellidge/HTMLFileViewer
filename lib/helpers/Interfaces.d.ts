@@ -7,4 +7,13 @@ export interface IColumnJSON {
 export interface IColumnConfig {
     [key: string]: IColumnJSON;
 }
+export interface ITabData {
+    [key: string]: ITabDataDetail;
+}
+export interface ITabDataDetail {
+    [key: string]: {
+        itemCount: number;
+        selected: boolean;
+    };
+}
 //# sourceMappingURL=Interfaces.d.ts.map

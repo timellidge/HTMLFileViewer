@@ -52029,6 +52029,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             tabs: [],
             selectedChoiceFieldName: '',
             tabCounts: {},
+            tabData: {},
             NewJSON: {}
         };
         this.getItems = this.getItems.bind(this);
@@ -52043,99 +52044,39 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             if (this.state.items.length > 0) {
                 const tabs = Object.keys(this.state.NewJSON).filter(key => this.state.NewJSON[key].tab === true);
                 console.log("TabFields", tabs);
-                let tabCounts = {};
+                const tabData = {};
                 tabs.forEach((field) => {
-                    tabCounts = this.getUniqueValues(this.state.items, field);
-                    console.log("field:", field, "TabValues:", tabCounts);
+                    const tabFieldData = this.getFilterValues(this.state.items, field);
+                    // assign the tabFieldData to the tabData object WITH the field name as the key
+                    tabData[field] = tabFieldData;
                 });
-                this.setState({
-                    selectedTab: this.state.selectedTab || (tabs.length > 0 ? tabs[0] : null),
-                    tabs,
-                    tabCounts
-                });
+                console.log("ALL Tab data:", tabData);
+                this.setState({ tabData });
             }
         }
         catch (error) {
             console.error('Error during component initialization:', error);
         }
     }
-    getUniqueValues(items, columnName) {
-        // this gets a list of the unique values in a column 
-        const tabCounts = {};
+    getFilterValues(items, columnName) {
+        // this gets a list of the unique values id  data structure and indicates how many items have that value, and sets selected to false
+        const tabData = {};
         items.forEach((item) => {
             const tabValue = item[columnName];
             if (tabValue) {
                 // If the tabValue exists, increase the count
-                if (tabCounts[tabValue]) {
-                    tabCounts[tabValue]++;
+                if (tabData[tabValue]) {
+                    tabData[tabValue].itemCount++;
                 }
                 else {
-                    tabCounts[tabValue] = 1;
+                    // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected note trying them as strings as they are not defined
+                    // so this defines the structure and initial content of the tabData object
+                    tabData[tabValue] = { "itemCount": 1, "selected": false };
                 }
             }
         });
-        return tabCounts;
+        return tabData;
     }
-    // calculateTabCounts(items: any[], filterColumnName: string) {
-    //   const tabCounts: { [key: string]: number } = {};
-    //   items.forEach((item) => {
-    //     const tabValue = item[filterColumnName];
-    //     if (tabValue) {
-    //       // If the tabValue exists, increase the count
-    //       if (tabCounts[tabValue]) {
-    //         tabCounts[tabValue]++;
-    //       } else {
-    //         tabCounts[tabValue] = 1;
-    //       }
-    //     }
-    //   });
-    //   return tabCounts;
-    // }
-    // generateTabsFromChoices(choices: any): string[] {
-    //   const tabs: string[] = [];
-    //   Object.values(choices).forEach((options: string[]) => {
-    //     options.forEach((option: string) => {
-    //       if (!tabs.includes(option)) {
-    //         tabs.push(option);  // Add unique options to the tabs array
-    //       }
-    //     });
-    //   });
-    //   return tabs;
-    // }
-    // const tabCounts: { [key: string]: number } = {};
-    // items.forEach((item) => {
-    //   const tabValue = item[filterColumnName];
-    //   if (tabValue) {
-    //     // If the tabValue exists, increase the count
-    //     if (tabCounts[tabValue]) {
-    //       tabCounts[tabValue]++;
-    //     } else {
-    //       tabCounts[tabValue] = 1;
-    //     }
-    //   }
-    // });
-    // return tabCounts;
-    //  // Function to parse columns and return choices for columns where tab is true
-    //  async parseChoiceColumns(json: string): Promise<{ [key: string]: string[] }> {
-    //   try {
-    //     const columnsObject = JSON.parse(json);
-    //     const choicesMap: { [key: string]: string[] } = {};
-    //     // Iterate over each column in the JSON object
-    //     for (const key in columnsObject) {
-    //       const column = columnsObject[key];
-    //       // Check if the column has tab set to true and its type is choice
-    //       if (column.tab === 'true') {
-    //           this.setState({selectedChoiceFieldName:column.name});
-    //           const choices = await this.fetchChoiceOptions(column.name);
-    //           choicesMap[column.name] = choices;
-    //       }
-    //     }
-    //     return choicesMap;
-    //   } catch (error) {
-    //     console.error('Error parsing columns:', error);
-    //     throw error;
-    //   }
-    // }
     async getItems() {
         try {
             const { siteUrl, listId, viewXmlCode, hideErrorEmpty } = this.props;
@@ -52187,21 +52128,6 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             }
         }
     }
-    // Function to fetch choice field options using PnPjs
-    // async fetchChoiceOptions(name: string): Promise<string[]> {
-    //   try {
-    //     // Fetch the field schema
-    //     const field:IFieldChoice = await sp.web.lists.getById(this.props.listId).fields.getByInternalNameOrTitle(name)();
-    //     // Check if the field type is 'Choice'
-    //     if (field.TypeAsString === 'Choice' && Array.isArray(field.Choices)) {
-    //       return field.Choices;
-    //     }
-    //     throw new Error(`Field ${name} is not a choice field or does not have choices.`);
-    //   } catch (error) {
-    //     console.error(`Error fetching choice options for ${name}:`, error);
-    //     throw error;
-    //   }
-    // }
     async parseColumns() {
         try {
             const { JSONCode } = this.props;
@@ -52276,17 +52202,32 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
         }
         this.setState({ searchQuery, filteredItems });
     }
-    handleTabChange(tab) {
+    handleTabChange(fieldName, tab) {
         const { items } = this.state; // Original items
-        const { selectedChoiceFieldName } = this.state; // Column to filter by
+        const { tabData } = this.state; // Column to filter by
         let filteredItems = items;
-        // Apply filtering if a tab is selected, otherwise show all items
-        if (tab && selectedChoiceFieldName) {
-            filteredItems = items.filter((item) => item[selectedChoiceFieldName] === tab);
+        // Apply filtering if a tab is selected, otherwise show all items (this is VERY simple filterign it need to go up a notch)
+        // multiple fields multiple values this implements one tab a time ie radio buttons
+        if (tab) {
+            filteredItems = items.filter((item) => item[fieldName] === tab);
+            // now manage the tabData object to show the selected tab and clear the others
+            Object.keys(tabData[fieldName]).forEach((key) => {
+                if (key === tab) {
+                    tabData[fieldName][key].selected = true;
+                }
+                else {
+                    tabData[fieldName][key].selected = false;
+                }
+            });
+        }
+        else {
+            Object.keys(tabData[fieldName]).forEach((key) => {
+                tabData[fieldName][key].selected = false;
+            });
         }
         // Update the state with selectedTab and filtered items
         this.setState({
-            selectedTab: tab,
+            tabData,
             filteredItems
         });
     }
@@ -52299,7 +52240,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                     showTitle && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerTitle__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty })),
                     showFind && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_TextField__WEBPACK_IMPORTED_MODULE_2__[/* TextField */ "a"], { placeholder: "Search...", value: this.state.searchQuery, onChange: this.handleSearch, styles: { root: { marginBottom: 20 } } }))),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerBody__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], null,
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], { TabName: tabs[0], Tabs: this.state.tabCounts, selectedTab: this.state.selectedTab, handleTabChange: this.handleTabChange }),
+                    Object.keys(this.state.tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], { key: field, fieldName: field, tabs: this.state.tabData[field], handleTabChange: this.handleTabChange }))),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { columns: columnsArray, items: filteredItems, showFind: showFind, onScrollEnd: this.onScrollEnd, contentHeight: this.state.contentHeight }))),
             globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { message: globalError, onDismiss: () => this.setState({ globalError: null }) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
     }
@@ -66642,17 +66583,18 @@ function _warnDuplicateIcon(iconName) {
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-function TabBarRender({ TabName, Tabs, selectedTab, handleTabChange }) {
+function TabBarRender({ fieldName, tabs, handleTabChange }) {
+    const isSelected = Object.values(tabs).some(tab => tab.selected === true);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } },
-        Object.keys(Tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(tab), style: {
+        Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
                 marginRight: '10px',
-                backgroundColor: selectedTab === tab ? '#0078d4' : '#eaeaea',
-                color: selectedTab === tab ? '#fff' : '#000',
+                backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
+                color: tabs[tab].selected ? '#fff' : '#000',
                 padding: '5px 10px',
                 border: 'none',
                 cursor: 'pointer',
-            } }, `${tab} (${Tabs[tab] || 0})`))),
-        selectedTab && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(null), style: {
+            } }, `${tab} (${tabs[tab].itemCount || 0})`))),
+        isSelected && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(fieldName, null), title: `Click to clear filter on ${fieldName}`, style: {
                 marginRight: '10px',
                 backgroundColor: '#eaeaea',
                 color: '#000',

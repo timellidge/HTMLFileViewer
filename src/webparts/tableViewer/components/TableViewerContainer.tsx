@@ -22,7 +22,7 @@ import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
 import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
-import { IColumnConfig, ITabData } from '../../../helpers/Interfaces';
+import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 // Define an interface for choice field schema
 interface IFieldChoice {
   TypeAsString: string;
@@ -65,6 +65,7 @@ export interface ITableViewerContainerState {
   columnsArray: IExtendedColumn[];
   tabs: string[];
   tabCounts: { [key: string]: number };
+  tabData: ITabData;
   NewJSON: IColumnConfig;
   
 }
@@ -92,6 +93,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       tabs: [],
       selectedChoiceFieldName:'',
       tabCounts:{},
+      tabData: {},
       NewJSON:  {}
     };
 
@@ -110,39 +112,37 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       if (this.state.items.length > 0) {
         const tabs = Object.keys(this.state.NewJSON).filter(key => this.state.NewJSON[key].tab === true);
         console.log("TabFields",tabs);
-        let tabCounts: { [key: string]: number } = {};
+        const tabData: ITabData = {};
         tabs.forEach((field) => {
-          tabCounts = this.getUniqueValues(this.state.items, field);
-          console.log("field:", field, "TabValues:",tabCounts);
+          const tabFieldData = this.getFilterValues(this.state.items, field);
+          // assign the tabFieldData to the tabData object WITH the field name as the key
+          tabData[field] = tabFieldData;
         });
-        this.setState({
-          selectedTab: this.state.selectedTab || (tabs.length > 0 ? tabs[0] : null),
-          tabs,
-          tabCounts
-        });
+        console.log("ALL Tab data:",tabData);
+        this.setState({tabData});
       }
-
     } catch (error) {
       console.error('Error during component initialization:', error);
     }
   }
 
-  getFilterValues(items: any[], columnName: string):  ITabData {
+  getFilterValues(items: any[], columnName: string):  ITabDataDetail {
     // this gets a list of the unique values id  data structure and indicates how many items have that value, and sets selected to false
-    const tabData: ITabData = {};
+    const tabData: ITabDataDetail = {};
     items.forEach((item) => {
       const tabValue = item[columnName];
       if (tabValue) {
         // If the tabValue exists, increase the count
         if (tabData[tabValue]) {
-          tabData[tabValue].count++;
+          tabData[tabValue].itemCount++;
         } else {
-          tabData[tabValue].count = 1;
-          tabData[tabValue].selected = false;
+          // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected note trying them as strings as they are not defined
+          // so this defines the structure and initial content of the tabData object
+          tabData[tabValue] = {"itemCount": 1, "selected": false};
         }
       }
     });
-      return tabData;
+    return tabData;
   }
 
   async getItems() {
@@ -330,24 +330,35 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     this.setState({ searchQuery, filteredItems });
   }
 
-  handleTabChange(FieldName: string, tab: string) {
+  handleTabChange(fieldName: string, tab: string) {
     const { items } = this.state; // Original items
-    const { selectedChoiceFieldName } = this.state; // Column to filter by
+    const { tabData } = this.state; // Column to filter by
   
     let filteredItems = items;
-  
-    // Apply filtering if a tab is selected, otherwise show all items
-    if (tab && selectedChoiceFieldName) {
-      filteredItems = items.filter((item: any) => item[selectedChoiceFieldName] === tab);
-    }
-  
+    // Apply filtering if a tab is selected, otherwise show all items (this is VERY simple filterign it need to go up a notch)
+    // multiple fields multiple values this implements one tab a time ie radio buttons
+    if (tab) {
+      filteredItems = items.filter((item: any) => item[fieldName] === tab);
+      // now manage the tabData object to show the selected tab and clear the others
+      Object.keys(tabData[fieldName]).forEach((key) => {
+        if (key === tab) {
+          tabData[fieldName][key].selected = true;
+        } else{
+          tabData[fieldName][key].selected = false;
+        }
+      });
+    } else {
+      Object.keys(tabData[fieldName]).forEach((key) => {
+        tabData[fieldName][key].selected = false;
+      });
+    }  
+
     // Update the state with selectedTab and filtered items
     this.setState({ 
-      selectedTab: tab, 
+      tabData, 
       filteredItems 
-    });
+    }); 
   }
-  
   
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
@@ -367,7 +378,11 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
                 )}
               </TableViewerHeader>
               <TableViewerBody>
-                <TabBarRender FieldName={tabs[0]} Tabs = {this.state.tabCounts} selectedTab={this.state.selectedTab} handleTabChange={this.handleTabChange}/>
+                {Object.keys(this.state.tabData).map((field) => (
+                  <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange}
+                  />
+                ))}
+
                 <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} onScrollEnd={this.onScrollEnd} contentHeight={this.state.contentHeight} />
               </TableViewerBody>
             </TableViewer>

@@ -9,7 +9,14 @@ export interface IColumnJSON {
 export interface IColumnConfig {
     [key: string]: IColumnJSON;
 }
-  
+
+
+// the infro to draw and manage the tabs and state of the tabs
+// one tab bar per field that is marked as tab.
 export interface ITabData {
-    [key: string]: {count:number, selected:boolean}
+    [key: string]: ITabDataDetail;
+}
+
+export interface ITabDataDetail{
+    [key: string]: {itemCount:number, selected:boolean}
 }

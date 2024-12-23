@@ -1,11 +1,9 @@
+import { ITabDataDetail } from '../../../../helpers/Interfaces';
 interface ITabBarRenderProps {
-    TabName: string;
-    Tabs: {
-        [key: string]: number;
-    };
-    selectedTab: string;
-    handleTabChange: (tab: string | null) => void;
+    fieldName: string;
+    tabs: ITabDataDetail;
+    handleTabChange: (FieldName: string, tab: string | null) => void;
 }
-export default function TabBarRender({ TabName, Tabs, selectedTab, handleTabChange }: ITabBarRenderProps): JSX.Element;
+export default function TabBarRender({ fieldName, tabs, handleTabChange }: ITabBarRenderProps): JSX.Element;
 export {};
 //# sourceMappingURL=TabBarRender.d.ts.map
