@@ -48,7 +48,6 @@ declare class TableViewerContainer extends React.Component<ITableViewerContainer
     componentDidMount(): Promise<void>;
     getFilterValues(items: any[], columnName: string): ITabDataDetail;
     getItems(): Promise<void>;
-    onScrollEnd(): Promise<void>;
     parseColumns(): Promise<void>;
     renderField: (column: any, key: string, item: any, columnsObject: any) => JSX.Element;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;

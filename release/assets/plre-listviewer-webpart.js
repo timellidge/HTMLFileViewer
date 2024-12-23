@@ -51631,17 +51631,6 @@ class TableViewerRender extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] 
     constructor(props) {
         super(props);
         this.listRef = react__WEBPACK_IMPORTED_MODULE_0__["createRef"]();
-        this.handleScroll = () => {
-            const listDiv = this.listRef.current;
-            if (listDiv) {
-                const { scrollTop, scrollHeight, clientHeight } = listDiv;
-                if (scrollTop + clientHeight >= scrollHeight - 10) {
-                    // Call onScrollEnd if defined and we're near the bottom
-                    if (this.props.onScrollEnd)
-                        this.props.onScrollEnd();
-                }
-            }
-        };
         this.onRenderItemColumn = (item, index, column) => {
             const fieldContent = item[column.fieldName];
             return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldContent);
@@ -51683,18 +51672,6 @@ class TableViewerRender extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] 
             this.setState({
                 sortedItems: this.props.items
             });
-        }
-    }
-    componentDidMount() {
-        const listDiv = this.listRef.current;
-        if (listDiv) {
-            listDiv.addEventListener('scroll', this.handleScroll);
-        }
-    }
-    componentWillUnmount() {
-        const listDiv = this.listRef.current;
-        if (listDiv) {
-            listDiv.removeEventListener('scroll', this.handleScroll);
         }
     }
     // Function to sort items based on column type and sort order
@@ -52033,7 +52010,6 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             NewJSON: {}
         };
         this.getItems = this.getItems.bind(this);
-        this.onScrollEnd = this.onScrollEnd.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
     }
@@ -52106,28 +52082,32 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                 this.setState({ globalError: e });
         }
     }
-    async onScrollEnd() {
-        const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
-        const { siteUrl, listId, viewXmlCode } = this.props;
-        if (lastNextHref) {
-            try {
-                const { Row, NextHref } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_10__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode, lastNextHref.split('?')[1]);
-                // Update items and filteredItems
-                const newItems = [...items, ...Row];
-                const filteredItems = selectedTab && selectedChoiceFieldName
-                    ? newItems.filter((item) => item[selectedChoiceFieldName] === selectedTab)
-                    : newItems;
-                this.setState({
-                    items: newItems,
-                    filteredItems,
-                    lastNextHref: NextHref,
-                });
-            }
-            catch (e) {
-                this.setState({ globalError: e });
-            }
-        }
-    }
+    // async onScrollEnd() {
+    //   const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
+    //   const { siteUrl, listId, viewXmlCode } = this.props;
+    //   if (lastNextHref) {
+    //     try {
+    //       const { Row, NextHref } = await getItemsUsingRenderListDataAsStream(
+    //         siteUrl,
+    //         listId,
+    //         viewXmlCode,
+    //         lastNextHref.split('?')[1]
+    //       );
+    //       // Update items and filteredItems
+    //       const newItems = [...items, ...Row];
+    //       const filteredItems = selectedTab && selectedChoiceFieldName 
+    //         ? newItems.filter((item: any) => item[selectedChoiceFieldName] === selectedTab) 
+    //         : newItems;
+    //       this.setState({
+    //         items: newItems,
+    //         filteredItems,
+    //         lastNextHref: NextHref,
+    //       });
+    //     } catch (e) {
+    //       this.setState({ globalError: e });
+    //     }
+    //   }
+    // }
     async parseColumns() {
         try {
             const { JSONCode } = this.props;
@@ -52241,7 +52221,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                     showFind && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_TextField__WEBPACK_IMPORTED_MODULE_2__[/* TextField */ "a"], { placeholder: "Search...", value: this.state.searchQuery, onChange: this.handleSearch, styles: { root: { marginBottom: 20 } } }))),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerBody__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], null,
                     Object.keys(this.state.tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], { key: field, fieldName: field, tabs: this.state.tabData[field], handleTabChange: this.handleTabChange }))),
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { columns: columnsArray, items: filteredItems, showFind: showFind, onScrollEnd: this.onScrollEnd, contentHeight: this.state.contentHeight }))),
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { columns: columnsArray, items: filteredItems, showFind: showFind, contentHeight: this.state.contentHeight }))),
             globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { message: globalError, onDismiss: () => this.setState({ globalError: null }) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
     }
 }

@@ -14,7 +14,6 @@ interface IExtendedColumn extends IColumn {
 interface ITableViewerRenderProps {
   columns: IExtendedColumn[];
   items: any[];
-  onScrollEnd?: () => void; // Add a new prop for handling scroll end
   showFind: boolean;
   contentHeight: string;
 }
@@ -49,30 +48,9 @@ class TableViewerRender extends React.Component<ITableViewerRenderProps, ITableV
     });
   }
 }
-  componentDidMount() {
-    const listDiv = this.listRef.current;
-    if (listDiv) {
-      listDiv.addEventListener('scroll', this.handleScroll);
-    }
-  }
 
-  componentWillUnmount() {
-    const listDiv = this.listRef.current;
-    if (listDiv) {
-      listDiv.removeEventListener('scroll', this.handleScroll);
-    }
-  }
 
-  handleScroll = () => {
-    const listDiv = this.listRef.current;
-    if (listDiv) {
-      const { scrollTop, scrollHeight, clientHeight } = listDiv;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        // Call onScrollEnd if defined and we're near the bottom
-        if (this.props.onScrollEnd) this.props.onScrollEnd();
-      }
-    }
-  };
+
 
   onRenderItemColumn = (item: any, index: number, column: IColumn) => {
     const fieldContent = item[column.fieldName as keyof any] as string;

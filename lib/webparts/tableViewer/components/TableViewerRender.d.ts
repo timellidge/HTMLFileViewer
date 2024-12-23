@@ -6,7 +6,6 @@ interface IExtendedColumn extends IColumn {
 interface ITableViewerRenderProps {
     columns: IExtendedColumn[];
     items: any[];
-    onScrollEnd?: () => void;
     showFind: boolean;
     contentHeight: string;
 }
@@ -19,9 +18,6 @@ declare class TableViewerRender extends React.Component<ITableViewerRenderProps,
     private listRef;
     constructor(props: ITableViewerRenderProps);
     componentDidUpdate(prevProps: ITableViewerRenderProps): void;
-    componentDidMount(): void;
-    componentWillUnmount(): void;
-    handleScroll: () => void;
     onRenderItemColumn: (item: any, index: number, column: IColumn) => JSX.Element;
     private onColumnClick;
     private sortItems;

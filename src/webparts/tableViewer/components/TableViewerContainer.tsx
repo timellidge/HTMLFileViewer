@@ -98,7 +98,6 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     };
 
     this.getItems = this.getItems.bind(this);
-    this.onScrollEnd = this.onScrollEnd.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
   }
@@ -176,35 +175,35 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
 
-  async onScrollEnd() {
-    const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
-    const { siteUrl, listId, viewXmlCode } = this.props;
+  // async onScrollEnd() {
+  //   const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
+  //   const { siteUrl, listId, viewXmlCode } = this.props;
   
-    if (lastNextHref) {
-      try {
-        const { Row, NextHref } = await getItemsUsingRenderListDataAsStream(
-          siteUrl,
-          listId,
-          viewXmlCode,
-          lastNextHref.split('?')[1]
-        );
+  //   if (lastNextHref) {
+  //     try {
+  //       const { Row, NextHref } = await getItemsUsingRenderListDataAsStream(
+  //         siteUrl,
+  //         listId,
+  //         viewXmlCode,
+  //         lastNextHref.split('?')[1]
+  //       );
   
-        // Update items and filteredItems
-        const newItems = [...items, ...Row];
-        const filteredItems = selectedTab && selectedChoiceFieldName 
-          ? newItems.filter((item: any) => item[selectedChoiceFieldName] === selectedTab) 
-          : newItems;
+  //       // Update items and filteredItems
+  //       const newItems = [...items, ...Row];
+  //       const filteredItems = selectedTab && selectedChoiceFieldName 
+  //         ? newItems.filter((item: any) => item[selectedChoiceFieldName] === selectedTab) 
+  //         : newItems;
   
-        this.setState({
-          items: newItems,
-          filteredItems,
-          lastNextHref: NextHref,
-        });
-      } catch (e) {
-        this.setState({ globalError: e });
-      }
-    }
-  }
+  //       this.setState({
+  //         items: newItems,
+  //         filteredItems,
+  //         lastNextHref: NextHref,
+  //       });
+  //     } catch (e) {
+  //       this.setState({ globalError: e });
+  //     }
+  //   }
+  // }
 
   async parseColumns() {
     try {
@@ -383,7 +382,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
                   />
                 ))}
 
-                <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} onScrollEnd={this.onScrollEnd} contentHeight={this.state.contentHeight} />
+                <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} contentHeight={this.state.contentHeight} />
               </TableViewerBody>
             </TableViewer>
             {globalError && (
