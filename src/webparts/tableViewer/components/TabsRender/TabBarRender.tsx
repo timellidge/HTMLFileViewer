@@ -9,7 +9,6 @@ interface ITabBarRenderProps {
 }
 
 export default function TabBarRender({ fieldName, tabs, handleTabChange }:ITabBarRenderProps) {
-  const isSelected = Object.values(tabs).some(tab => tab.selected === true);
   return (
       <div style={{ marginBottom: '10px' }}>
         {Object.keys(tabs).map(tab => (
@@ -28,21 +27,6 @@ export default function TabBarRender({ fieldName, tabs, handleTabChange }:ITabBa
             {`${tab} (${tabs[tab].itemCount || 0})`}
           </button>
         ))}
-        {isSelected && (
-          <button
-            onClick={() => handleTabChange(fieldName, null)}
-            title = {`Click to clear filter on ${fieldName}`}
-            style={{
-              marginRight: '10px',
-              backgroundColor: '#eaeaea',
-              color: '#000',
-              padding: '5px 10px',
-              border: 'none',
-              cursor: 'pointer',
-            }}>
-            Clear Filter
-          </button>
-        )}
       </div>
   );
 }

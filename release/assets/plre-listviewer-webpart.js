@@ -52082,32 +52082,6 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                 this.setState({ globalError: e });
         }
     }
-    // async onScrollEnd() {
-    //   const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
-    //   const { siteUrl, listId, viewXmlCode } = this.props;
-    //   if (lastNextHref) {
-    //     try {
-    //       const { Row, NextHref } = await getItemsUsingRenderListDataAsStream(
-    //         siteUrl,
-    //         listId,
-    //         viewXmlCode,
-    //         lastNextHref.split('?')[1]
-    //       );
-    //       // Update items and filteredItems
-    //       const newItems = [...items, ...Row];
-    //       const filteredItems = selectedTab && selectedChoiceFieldName 
-    //         ? newItems.filter((item: any) => item[selectedChoiceFieldName] === selectedTab) 
-    //         : newItems;
-    //       this.setState({
-    //         items: newItems,
-    //         filteredItems,
-    //         lastNextHref: NextHref,
-    //       });
-    //     } catch (e) {
-    //       this.setState({ globalError: e });
-    //     }
-    //   }
-    // }
     async parseColumns() {
         try {
             const { JSONCode } = this.props;
@@ -52185,18 +52159,13 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     handleTabChange(fieldName, tab) {
         const { items } = this.state; // Original items
         const { tabData } = this.state; // Column to filter by
-        let filteredItems = items;
+        let filteredItems;
         // Apply filtering if a tab is selected, otherwise show all items (this is VERY simple filterign it need to go up a notch)
         // multiple fields multiple values this implements one tab a time ie radio buttons
         if (tab) {
-            filteredItems = items.filter((item) => item[fieldName] === tab);
-            // now manage the tabData object to show the selected tab and clear the others
             Object.keys(tabData[fieldName]).forEach((key) => {
-                if (key === tab) {
-                    tabData[fieldName][key].selected = true;
-                }
-                else {
-                    tabData[fieldName][key].selected = false;
+                if (key === tab) { // toggle the selected state 
+                    tabData[fieldName][key].selected = !tabData[fieldName][key].selected;
                 }
             });
         }
@@ -52204,6 +52173,15 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             Object.keys(tabData[fieldName]).forEach((key) => {
                 tabData[fieldName][key].selected = false;
             });
+        }
+        const selectedTabs = Object.keys(tabData[fieldName]).filter(key => tabData[fieldName][key].selected);
+        console.log("SelectedTabs", selectedTabs);
+        if (selectedTabs.length > 0) {
+            // Filter items to include those that match any of the selected tab values
+            filteredItems = items.filter((item) => selectedTabs.includes(item[fieldName]));
+        }
+        else {
+            filteredItems = items;
         }
         // Update the state with selectedTab and filtered items
         this.setState({
@@ -66564,24 +66542,14 @@ function _warnDuplicateIcon(iconName) {
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 function TabBarRender({ fieldName, tabs, handleTabChange }) {
-    const isSelected = Object.values(tabs).some(tab => tab.selected === true);
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } },
-        Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
-                marginRight: '10px',
-                backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
-                color: tabs[tab].selected ? '#fff' : '#000',
-                padding: '5px 10px',
-                border: 'none',
-                cursor: 'pointer',
-            } }, `${tab} (${tabs[tab].itemCount || 0})`))),
-        isSelected && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(fieldName, null), title: `Click to clear filter on ${fieldName}`, style: {
-                marginRight: '10px',
-                backgroundColor: '#eaeaea',
-                color: '#000',
-                padding: '5px 10px',
-                border: 'none',
-                cursor: 'pointer',
-            } }, "Clear Filter"))));
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } }, Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
+            marginRight: '10px',
+            backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
+            color: tabs[tab].selected ? '#fff' : '#000',
+            padding: '5px 10px',
+            border: 'none',
+            cursor: 'pointer',
+        } }, `${tab} (${tabs[tab].itemCount || 0})`)))));
 }
 
 

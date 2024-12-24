@@ -175,36 +175,6 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
 
-  // async onScrollEnd() {
-  //   const { lastNextHref, items, selectedTab, selectedChoiceFieldName } = this.state;
-  //   const { siteUrl, listId, viewXmlCode } = this.props;
-  
-  //   if (lastNextHref) {
-  //     try {
-  //       const { Row, NextHref } = await getItemsUsingRenderListDataAsStream(
-  //         siteUrl,
-  //         listId,
-  //         viewXmlCode,
-  //         lastNextHref.split('?')[1]
-  //       );
-  
-  //       // Update items and filteredItems
-  //       const newItems = [...items, ...Row];
-  //       const filteredItems = selectedTab && selectedChoiceFieldName 
-  //         ? newItems.filter((item: any) => item[selectedChoiceFieldName] === selectedTab) 
-  //         : newItems;
-  
-  //       this.setState({
-  //         items: newItems,
-  //         filteredItems,
-  //         lastNextHref: NextHref,
-  //       });
-  //     } catch (e) {
-  //       this.setState({ globalError: e });
-  //     }
-  //   }
-  // }
-
   async parseColumns() {
     try {
       const { JSONCode } = this.props;
@@ -333,18 +303,15 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     const { items } = this.state; // Original items
     const { tabData } = this.state; // Column to filter by
   
-    let filteredItems = items;
+    let filteredItems;
     // Apply filtering if a tab is selected, otherwise show all items (this is VERY simple filterign it need to go up a notch)
     // multiple fields multiple values this implements one tab a time ie radio buttons
+
     if (tab) {
-      filteredItems = items.filter((item: any) => item[fieldName] === tab);
-      // now manage the tabData object to show the selected tab and clear the others
       Object.keys(tabData[fieldName]).forEach((key) => {
-        if (key === tab) {
-          tabData[fieldName][key].selected = true;
-        } else{
-          tabData[fieldName][key].selected = false;
-        }
+        if (key === tab) { // toggle the selected state 
+          tabData[fieldName][key].selected = !tabData[fieldName][key].selected;
+        } 
       });
     } else {
       Object.keys(tabData[fieldName]).forEach((key) => {
@@ -352,6 +319,15 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       });
     }  
 
+    const selectedTabs = Object.keys(tabData[fieldName]).filter(key => tabData[fieldName][key].selected);
+    console.log("SelectedTabs",selectedTabs);
+    if(selectedTabs.length > 0 ){
+      // Filter items to include those that match any of the selected tab values
+      filteredItems = items.filter((item: any) => selectedTabs.includes(item[fieldName]));
+    } else {
+      filteredItems = items;
+    }  
+    
     // Update the state with selectedTab and filtered items
     this.setState({ 
       tabData, 
