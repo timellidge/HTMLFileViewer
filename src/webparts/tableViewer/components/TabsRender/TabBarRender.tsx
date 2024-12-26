@@ -17,7 +17,7 @@ export default function TabBarRender({ fieldName, tabs, handleTabChange }:ITabBa
             onClick={() => handleTabChange(fieldName, tab)}
             title = {`Click to filter on ${fieldName}: ${tab}`}
             style={{
-              marginRight: '10px',
+              marginRight: '8px',
               backgroundColor: tabs[tab].selected  ? '#0078d4' : '#eaeaea',
               color: tabs[tab].selected  ? '#fff' : '#000',
               padding: '5px 10px',

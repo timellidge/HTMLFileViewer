@@ -52174,14 +52174,23 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                 tabData[fieldName][key].selected = false;
             });
         }
-        const selectedTabs = Object.keys(tabData[fieldName]).filter(key => tabData[fieldName][key].selected);
-        console.log("SelectedTabs", selectedTabs);
-        if (selectedTabs.length > 0) {
-            // Filter items to include those that match any of the selected tab values
-            filteredItems = items.filter((item) => selectedTabs.includes(item[fieldName]));
+        const selectedKeys = Object.keys(tabData).filter(fieldName => Object.values(tabData[fieldName]).some(tab => tab.selected));
+        if (selectedKeys.length === 0) {
+            filteredItems = items;
         }
         else {
-            filteredItems = items;
+            const filteredItemsSet = new Set();
+            selectedKeys.forEach(fieldKey => {
+                const selectedTabs = Object.keys(tabData[fieldKey]).filter(key => tabData[fieldKey][key].selected);
+                console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
+                // Add items to the filteredItemsSet that match any of the selected tab values
+                items.forEach((item) => {
+                    if (selectedTabs.includes(item[fieldKey])) {
+                        filteredItemsSet.add(item);
+                    }
+                });
+            });
+            filteredItems = Array.from(filteredItemsSet);
         }
         // Update the state with selectedTab and filtered items
         this.setState({
@@ -66543,7 +66552,7 @@ function _warnDuplicateIcon(iconName) {
 
 function TabBarRender({ fieldName, tabs, handleTabChange }) {
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '10px' } }, Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
-            marginRight: '10px',
+            marginRight: '8px',
             backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
             color: tabs[tab].selected ? '#fff' : '#000',
             padding: '5px 10px',

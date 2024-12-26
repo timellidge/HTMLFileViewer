@@ -23,6 +23,7 @@ import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
 import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { each } from 'lodash';
 // Define an interface for choice field schema
 interface IFieldChoice {
   TypeAsString: string;
@@ -319,15 +320,26 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       });
     }  
 
-    const selectedTabs = Object.keys(tabData[fieldName]).filter(key => tabData[fieldName][key].selected);
-    console.log("SelectedTabs",selectedTabs);
-    if(selectedTabs.length > 0 ){
-      // Filter items to include those that match any of the selected tab values
-      filteredItems = items.filter((item: any) => selectedTabs.includes(item[fieldName]));
+    const selectedKeys = Object.keys(tabData).filter(fieldName => 
+      Object.values(tabData[fieldName]).some(tab => tab.selected)
+    );
+
+    if (selectedKeys.length === 0) {
+          filteredItems = items;
     } else {
-      filteredItems = items;
-    }  
-    
+      const filteredItemsSet = new Set<any>();
+      selectedKeys.forEach(fieldKey => {
+        const selectedTabs = Object.keys(tabData[fieldKey]).filter(key => tabData[fieldKey][key].selected);
+        console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
+        // Add items to the filteredItemsSet that match any of the selected tab values
+        items.forEach((item: any) => {
+          if (selectedTabs.includes(item[fieldKey])) {
+            filteredItemsSet.add(item);
+          }
+        });
+      });
+      filteredItems = Array.from(filteredItemsSet);
+    }
     // Update the state with selectedTab and filtered items
     this.setState({ 
       tabData, 
