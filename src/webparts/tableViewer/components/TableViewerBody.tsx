@@ -1,6 +1,7 @@
 
 import * as React from 'react';
 import { Stack } from '@fluentui/react/lib/Stack';
+import styles from './TableViewer.module.scss';
 
 export interface ITableViewerBodyProps {
   className?: string;
@@ -8,7 +9,7 @@ export interface ITableViewerBodyProps {
 }
 
 const TableViewerBody: React.FunctionComponent<ITableViewerBodyProps> = ({ children }) => (
-  <Stack>{children}</Stack>
+  <Stack className = {styles.tableContainer}>{children}</Stack>
 );
 
 export default TableViewerBody;

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ITabDataDetail } from '../../../../helpers/Interfaces';
+import styles from '../TableViewer.module.scss';
 // ther is one tab bar per field that is marked as tab. 
 
 interface ITabBarRenderProps {
@@ -10,7 +11,7 @@ interface ITabBarRenderProps {
 
 export default function TabBarRender({ fieldName, tabs, handleTabChange }:ITabBarRenderProps) {
   return (
-      <div style={{ marginBottom: '10px' }}>
+      <div className={styles.tabBar}>
         {Object.keys(tabs).map(tab => (
           <button
             key={tab}

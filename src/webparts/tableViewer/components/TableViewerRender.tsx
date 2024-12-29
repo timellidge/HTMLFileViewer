@@ -15,7 +15,6 @@ interface ITableViewerRenderProps {
   columns: IExtendedColumn[];
   items: any[];
   showFind: boolean;
-  contentHeight: string;
 }
 
 interface ITableViewerRenderState {
@@ -56,6 +55,7 @@ class TableViewerRender extends React.Component<ITableViewerRenderProps, ITableV
     const fieldContent = item[column.fieldName as keyof any] as string;
     return <span>{fieldContent}</span>;
   };
+
   private onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IExtendedColumn): void => {
     const { items,columns } = this.props;
 

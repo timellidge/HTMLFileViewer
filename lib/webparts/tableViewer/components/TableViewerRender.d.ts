@@ -7,7 +7,6 @@ interface ITableViewerRenderProps {
     columns: IExtendedColumn[];
     items: any[];
     showFind: boolean;
-    contentHeight: string;
 }
 interface ITableViewerRenderState {
     sortedItems: any[];

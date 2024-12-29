@@ -1,18 +1,16 @@
 import * as React from 'react';
+import { mergeStyles } from '@fluentui/react';
 import styles from './TableViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-import { TextField } from '@fluentui/react/lib/TextField';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
 import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
 import TableViewerBody from './TableViewerBody';
-import TableViewerTitle from './TableViewerTitle';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
 import { convertWidthToPx, getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
-import { sp } from '@pnp/sp/presets/all';
 
 import TabBarRender from './TabsRender/TabBarRender';
 import TextFieldRender from './FieldRender/TextFieldRender';
@@ -23,16 +21,13 @@ import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
 import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
-import { each } from 'lodash';
-// Define an interface for choice field schema
-interface IFieldChoice {
-  TypeAsString: string;
-  Choices: string[];
-}
+
+
 // Extend the IColumn interface
 interface IExtendedColumn extends IColumn {
   columnType: 'string' | 'number'; 
 }
+
 export interface ITableViewerContainerProps {
   JSONCode: string;
   siteUrl: string;
@@ -346,38 +341,33 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       filteredItems 
     }); 
   }
-  
+
+  //are tehre any css bits we beed to include here 
+  private _containerClass = mergeStyles(styles.tableContainer, { height: this.props.contentHeight});
+
+
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
     const { filteredItems, globalError, columnsArray, tabs } = this.state;
+  
 
     return (
-      <div id={this.state.webPartTag}> 
+      <div id={this.state.webPartTag} className={styles.tableViewer}> 
         {!configured ? (
           <>
-            <TableViewer>
-              <TableViewerHeader>
-                {showTitle && (
-                  <TableViewerTitle displayMode={displayMode} title={title} updateProperty={updateProperty} />
-                )}
-                {showFind && (
-                    <TextField placeholder="Search..." value={this.state.searchQuery} onChange={this.handleSearch} styles={{ root: { marginBottom: 20 } }} />
-                )}
-              </TableViewerHeader>
-              <TableViewerBody>
+            <TableViewer >
+              <TableViewerHeader  displayMode={displayMode} title={title} updateProperty={updateProperty} showTitle={showTitle} showFind={showFind} searchQuery={this.state.searchQuery} handleSearch={this.handleSearch}/>
+
+              <TableViewerBody  className={styles.tableContainer}>
                 {Object.keys(this.state.tabData).map((field) => (
-                  <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange}
-                  />
+                  <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange} />
                 ))}
 
-                <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind} contentHeight={this.state.contentHeight} />
+                <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/>
               </TableViewerBody>
             </TableViewer>
             {globalError && (
-              <TableViewerErrorMessage
-                message={globalError}
-                onDismiss={() => this.setState({ globalError: null })}
-              />
+              <TableViewerErrorMessage message={globalError} onDismiss={() => this.setState({ globalError: null })} />
             )}
           </>
         ) : (

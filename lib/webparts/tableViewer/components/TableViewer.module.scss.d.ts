@@ -1,4 +1,9 @@
 declare const styles: {
+    tableViewer: string;
+    tableViewerHeader: string;
+    searchBox: string;
+    tabBar: string;
+    tableContainer: string;
     ID: string;
     Title: string;
     BSADescription: string;

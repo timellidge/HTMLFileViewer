@@ -1,13 +1,38 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.scrollContainer {
-    //overflow: "scroll";
-    //-ms-overflow-style: none;
+.tableViewer {
+    .tableViewerHeader{
+        display:grid;
+        grid-template-columns: 3fr 1fr;
+        background-color: #00ff15; 
+        width:100%;
+        height:40px;
+        padding: 2px;
 
-   // &::-webkit-scrollbar {
-       // display: none;
-    //}
+        .searchBox{ 
+            margin: 0px;
+        }
+    }
+
+    .tabBar{
+        background-color: #c0f307; 
+        margin-bottom: 10px; 
+        width :100%;
+    }
+
+    .tableContainer {
+        overflow-y: scroll;
+        background-color: #ff7300;
+        width: 100%;
+        margin:0px;
+    }
+
+    .searchBox{ 
+        margin: 0px;
+    }
 }
+
+
 .ID{
     border:1px solid yellow;
 }
@@ -52,3 +77,5 @@
         color: red !important;
     }
 }
+
+

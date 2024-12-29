@@ -52,6 +52,7 @@ declare class TableViewerContainer extends React.Component<ITableViewerContainer
     renderField: (column: any, key: string, item: any, columnsObject: any) => JSX.Element;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;
     handleTabChange(fieldName: string, tab: string): void;
+    private _containerClass;
     render(): JSX.Element;
 }
 export default TableViewerContainer;
