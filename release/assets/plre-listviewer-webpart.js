@@ -59896,6 +59896,7 @@ function findElementRecursive(element, matchFunction) {
 
 
 
+// moved to a simpler functional component that included the search box and the title rather than passign them in as children fo the TableViewerHeader from the parent component
 const TableViewerHeader = ({ displayMode, title, updateProperty, showTitle, showFind, searchQuery, handleSearch }) => {
     if (!showTitle && !showFind) {
         return null;

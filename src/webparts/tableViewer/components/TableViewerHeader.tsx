@@ -12,7 +12,7 @@ export interface ITableViewerHeaderProps {
   searchQuery: string;
   handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
+// moved to a simpler functional component that included the search box and the title rather than passign them in as children fo the TableViewerHeader from the parent component
 const TableViewerHeader: React.FunctionComponent<ITableViewerHeaderProps> = ({
   displayMode,
   title,
