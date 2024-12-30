@@ -357,14 +357,13 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
           <>
             <TableViewer >
               <TableViewerHeader  displayMode={displayMode} title={title} updateProperty={updateProperty} showTitle={showTitle} showFind={showFind} searchQuery={this.state.searchQuery} handleSearch={this.handleSearch}/>
-
-              <TableViewerBody  className={styles.tableContainer}>
+              <div className={styles.tabBar}>
                 {Object.keys(this.state.tabData).map((field) => (
                   <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange} />
                 ))}
+              </div>
+              <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/>
 
-                <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/>
-              </TableViewerBody>
             </TableViewer>
             {globalError && (
               <TableViewerErrorMessage message={globalError} onDismiss={() => this.setState({ globalError: null })} />

@@ -1,22 +1,22 @@
 /* tslint:disable */
 require("./TableViewer.module.css");
 const styles = {
-  tableViewer: 'tableViewer_9e340507',
-  tableViewerHeader: 'tableViewerHeader_9e340507',
-  searchBox: 'searchBox_9e340507',
-  tabBar: 'tabBar_9e340507',
-  tableContainer: 'tableContainer_9e340507',
-  ID: 'ID_9e340507',
-  Title: 'Title_9e340507',
-  BSADescription: 'BSADescription_9e340507',
-  singlechoice: 'singlechoice_9e340507',
-  multichoice: 'multichoice_9e340507',
-  BSAColor: 'BSAColor_9e340507',
-  BSAStart: 'BSAStart_9e340507',
-  BSAEnd: 'BSAEnd_9e340507',
-  PersonField: 'PersonField_9e340507',
-  Stack: 'Stack_9e340507',
-  error: 'error_9e340507'
+  tableViewer: 'tableViewer_60ade2ce',
+  tableViewerHeader: 'tableViewerHeader_60ade2ce',
+  searchBox: 'searchBox_60ade2ce',
+  tabBar: 'tabBar_60ade2ce',
+  tableContainer: 'tableContainer_60ade2ce',
+  ID: 'ID_60ade2ce',
+  Title: 'Title_60ade2ce',
+  BSADescription: 'BSADescription_60ade2ce',
+  singlechoice: 'singlechoice_60ade2ce',
+  multichoice: 'multichoice_60ade2ce',
+  BSAColor: 'BSAColor_60ade2ce',
+  BSAStart: 'BSAStart_60ade2ce',
+  BSAEnd: 'BSAEnd_60ade2ce',
+  PersonField: 'PersonField_60ade2ce',
+  Stack: 'Stack_60ade2ce',
+  error: 'error_60ade2ce'
 };
 
 export default styles;
