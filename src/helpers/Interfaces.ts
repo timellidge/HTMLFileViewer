@@ -4,6 +4,14 @@ export interface IColumnJSON {
     width: string;
     calculatedPX?: number | undefined | null;
     tab?: boolean | undefined | null;
+    type?: string | undefined | null;
+    class?: string | undefined | null;
+    isSortable?: boolean | undefined | null;
+    isMultiline?: boolean | undefined | null;
+    Fields?: string[] | undefined | null;
+    prefix?: string | undefined | null;
+    suffix?: string | undefined | null;
+    format?: string | undefined | null;
 }
   
 export interface IColumnConfig {
@@ -20,3 +28,17 @@ export interface ITabData {
 export interface ITabDataDetail{
     [key: string]: {itemCount:number, selected:boolean}
 }
+
+export interface IExtendedColumn {
+    key: string;
+    fieldName: string;
+    name: string;
+    minWidth: number;
+    maxWidth: number;
+    columnType: string | null;
+    className: string;
+    isSortable: boolean;
+    isSorted: boolean;
+    isSortedDescending: boolean;
+    onRender: (item: any) => JSX.Element;
+  }

@@ -20,7 +20,7 @@ import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
 import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
-import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { IColumnConfig, IColumnJSON, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 
 
 // Extend the IColumn interface
@@ -190,8 +190,8 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
           return { key, column };
         })
         .sort((a, b) => {
-          const seqA = parseInt(a.column.sequence || '0', 10);
-          const seqB = parseInt(b.column.sequence || '0', 10);
+          const seqA = parseInt(a.column.sequence || '99', 10);
+          const seqB = parseInt(b.column.sequence || '99', 10);
           return seqA - seqB;
         })
         .forEach(({ key, column }) => {
@@ -222,14 +222,14 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
             key: key,
             fieldName: column.name,
             name: column.name,
-            minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
+            minWidth: Math.max(width - 20, 0), // Ensure width is at least 0
             maxWidth:width,
             columnType:column.type,
             className: column.class || '', // Apply the CSS class from the JSON
             isSortable: column.isSortable === 'true',// Add sortable property
             isSorted: false, // Initialize sorting state
             isSortedDescending: false, // Initialize sorting direction          
-            onRender: (item: any) => this.renderField(column, key, item,columnsObject) // Handle field rendering separately
+            onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
           } as IExtendedColumn);
         }
         });
@@ -242,7 +242,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   }
 
   // Separate field rendering to simplify the parseColumns method
-  renderField = (column: any, key: string, item: any,columnsObject:any) => {
+  renderField = (column: any, key: string, item: any, columnsObject:IColumnJSON) => {
     const prefix = column.prefix || '';
     const suffix = column.suffix || '';
     const fieldValue = item[key];
@@ -348,9 +348,9 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
 
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
-    const { filteredItems, globalError, columnsArray, tabs } = this.state;
-  
-
+    const { filteredItems, globalError, columnsArray } = this.state;
+    console.log("columnsArray",columnsArray);
+    console.log("Filtered Items",filteredItems);
     return (
       <div id={this.state.webPartTag} className={styles.tableViewer}> 
         {!configured ? (
@@ -362,8 +362,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
                   <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange} />
                 ))}
               </div>
-              <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/>
-
+              <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/> 
             </TableViewer>
             {globalError && (
               <TableViewerErrorMessage message={globalError} onDismiss={() => this.setState({ globalError: null })} />

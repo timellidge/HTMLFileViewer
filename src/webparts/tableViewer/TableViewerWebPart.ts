@@ -76,7 +76,8 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
       "name": "ident",
       "width": "40px",
       "tab": false,
-      "calculatedPX": 0
+      "calculatedPX": 0,
+      "type": "number"
     },
     "LinkTitle": {
       "name": "title",

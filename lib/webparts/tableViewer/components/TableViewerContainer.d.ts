@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
-import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { IColumnConfig, IColumnJSON, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 interface IExtendedColumn extends IColumn {
     columnType: 'string' | 'number';
 }
@@ -49,7 +49,7 @@ declare class TableViewerContainer extends React.Component<ITableViewerContainer
     getFilterValues(items: any[], columnName: string): ITabDataDetail;
     getItems(): Promise<void>;
     parseColumns(): Promise<void>;
-    renderField: (column: any, key: string, item: any, columnsObject: any) => JSX.Element;
+    renderField: (column: any, key: string, item: any, columnsObject: IColumnJSON) => JSX.Element;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;
     handleTabChange(fieldName: string, tab: string): void;
     private _containerClass;

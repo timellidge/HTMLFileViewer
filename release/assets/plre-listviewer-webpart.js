@@ -29339,7 +29339,8 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                 "name": "ident",
                 "width": "40px",
                 "tab": false,
-                "calculatedPX": 0
+                "calculatedPX": 0,
+                "type": "number"
             },
             "LinkTitle": {
                 "name": "title",
@@ -51607,60 +51608,45 @@ function getRTLSafeKeyCode(key) {
 "use strict";
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "DpU2");
-/* harmony import */ var _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "KGq5");
-/* harmony import */ var _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/DetailsList */ "4n4P");
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react */ "DpU2");
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react */ "KGq5");
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react */ "4n4P");
 
 
-class TableViewerRender extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
-    constructor(props) {
-        super(props);
-        this.listRef = react__WEBPACK_IMPORTED_MODULE_0__["createRef"]();
-        this.onRenderItemColumn = (item, index, column) => {
-            const fieldContent = item[column.fieldName];
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldContent);
-        };
-        this.onColumnClick = (ev, column) => {
-            const { items, columns } = this.props;
-            // Toggle sort direction and sort items
-            const newColumns = this.props.columns.map((col) => {
-                if (col.key === column.key) {
-                    col.isSorted = true;
-                    col.isSortedDescending = !col.isSortedDescending;
-                }
-                else {
-                    col.isSorted = false;
-                    col.isSortedDescending = false;
-                }
-                return col;
-            });
-            // Sort the items
-            const newSortedItems = this.sortItems(items, column.key, column.isSortedDescending, column.columnType);
-            // Update state with new sorted items and columns
-            this.setState({
-                sortedItems: newSortedItems,
-                columns: newColumns,
-            });
-        };
-        this.state = {
-            sortedItems: this.props.items,
-            columns: this.props.columns,
-            showFind: this.props.showFind
-        };
-        this.listRef = react__WEBPACK_IMPORTED_MODULE_0__["createRef"]();
-    }
-    // Lifecycle method to handle prop changes
-    componentDidUpdate(prevProps) {
-        // Check if the items prop has changed
-        if (prevProps.items !== this.props.items) {
-            // Sync state with new items if props changed
-            this.setState({
-                sortedItems: this.props.items
-            });
-        }
-    }
-    // Function to sort items based on column type and sort order
-    sortItems(items, fieldName, isSortedDescending, columnType) {
+const TableViewerRender = ({ items, columns, showFind }) => {
+    const [sortedItems, setSortedItems] = react__WEBPACK_IMPORTED_MODULE_0__["useState"](items);
+    const [sortedColumns, setSortedColumns] = react__WEBPACK_IMPORTED_MODULE_0__["useState"](columns);
+    const listRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](null);
+    react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {
+        setSortedItems(items);
+    }, [items]);
+    react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {
+        setSortedColumns(columns);
+    }, [columns]);
+    const onRenderItemColumn = (item, index, column) => {
+        const fieldContent = item[column.fieldName];
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldContent);
+    };
+    const onColumnClick = (ev, column) => {
+        // Toggle sort direction and sort items
+        const newColumns = sortedColumns.map((col) => {
+            if (col.key === column.key) {
+                col.isSorted = true;
+                col.isSortedDescending = !col.isSortedDescending;
+            }
+            else {
+                col.isSorted = false;
+                col.isSortedDescending = false;
+            }
+            return col;
+        });
+        // Sort the items
+        const newSortedItems = sortItems(sortedItems, column.key, column.isSortedDescending, column.columnType);
+        // Update state with new sorted items and columns
+        setSortedItems(newSortedItems);
+        setSortedColumns(newColumns);
+    };
+    const sortItems = (items, fieldName, isSortedDescending, columnType) => {
         const sortedItems = items.slice().sort((a, b) => {
             let aValue = a[fieldName];
             let bValue = b[fieldName];
@@ -51684,14 +51670,10 @@ class TableViewerRender extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] 
             return 0;
         });
         return sortedItems;
-    }
-    render() {
-        const { columns } = this.props;
-        const { sortedItems } = this.state;
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { ref: this.listRef, style: { width: '100%' } },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_1__[/* DetailsList */ "a"], { items: sortedItems, columns: columns.map((col) => (Object.assign(Object.assign({}, col), { onColumnClick: this.onColumnClick }))), selectionMode: _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_2__[/* SelectionMode */ "c"].none, setKey: "set", layoutMode: _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_3__[/* DetailsListLayoutMode */ "e"].justified, selectionPreservedOnEmptyClick: true, onRenderItemColumn: this.onRenderItemColumn, constrainMode: _fluentui_react_lib_DetailsList__WEBPACK_IMPORTED_MODULE_3__[/* ConstrainMode */ "d"].unconstrained })));
-    }
-}
+    };
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { ref: listRef, style: { width: '100%' } },
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* DetailsList */ "a"], { items: sortedItems, columns: sortedColumns.map((col) => (Object.assign(Object.assign({}, col), { onColumnClick: onColumnClick }))), selectionMode: _fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* SelectionMode */ "c"].none, setKey: "set", layoutMode: _fluentui_react__WEBPACK_IMPORTED_MODULE_3__[/* DetailsListLayoutMode */ "e"].justified, selectionPreservedOnEmptyClick: true, onRenderItemColumn: onRenderItemColumn, constrainMode: _fluentui_react__WEBPACK_IMPORTED_MODULE_3__[/* ConstrainMode */ "d"].unconstrained })));
+};
 /* harmony default export */ __webpack_exports__["a"] = (TableViewerRender);
 
 
@@ -52080,8 +52062,8 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                 return { key, column };
             })
                 .sort((a, b) => {
-                const seqA = parseInt(a.column.sequence || '0', 10);
-                const seqB = parseInt(b.column.sequence || '0', 10);
+                const seqA = parseInt(a.column.sequence || '99', 10);
+                const seqB = parseInt(b.column.sequence || '99', 10);
                 return seqA - seqB;
             })
                 .forEach(({ key, column }) => {
@@ -52111,7 +52093,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                         key: key,
                         fieldName: column.name,
                         name: column.name,
-                        minWidth: Math.min(width - 20, 0),
+                        minWidth: Math.max(width - 20, 0),
                         maxWidth: width,
                         columnType: column.type,
                         className: column.class || '',
@@ -52183,7 +52165,9 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     }
     render() {
         const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
-        const { filteredItems, globalError, columnsArray, tabs } = this.state;
+        const { filteredItems, globalError, columnsArray } = this.state;
+        console.log("columnsArray", columnsArray);
+        console.log("Filtered Items", filteredItems);
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: this.state.webPartTag, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableViewer }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: this.state.searchQuery, handleSearch: this.handleSearch }),

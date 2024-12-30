@@ -1,26 +1,9 @@
 import * as React from 'react';
-import { IColumn } from '@fluentui/react/lib/DetailsList';
-interface IExtendedColumn extends IColumn {
-    columnType: 'string' | 'number';
-}
 interface ITableViewerRenderProps {
-    columns: IExtendedColumn[];
     items: any[];
+    columns: any[];
     showFind: boolean;
 }
-interface ITableViewerRenderState {
-    sortedItems: any[];
-    columns: IExtendedColumn[];
-    showFind: boolean;
-}
-declare class TableViewerRender extends React.Component<ITableViewerRenderProps, ITableViewerRenderState> {
-    private listRef;
-    constructor(props: ITableViewerRenderProps);
-    componentDidUpdate(prevProps: ITableViewerRenderProps): void;
-    onRenderItemColumn: (item: any, index: number, column: IColumn) => JSX.Element;
-    private onColumnClick;
-    private sortItems;
-    render(): JSX.Element;
-}
+declare const TableViewerRender: React.FunctionComponent<ITableViewerRenderProps>;
 export default TableViewerRender;
 //# sourceMappingURL=TableViewerRender.d.ts.map

@@ -1,66 +1,34 @@
 import * as React from 'react';
-import {
-  DetailsList,
-  IColumn,
-  DetailsListLayoutMode,
-  ConstrainMode,
-  SelectionMode,
-} from '@fluentui/react/lib/DetailsList';
-
-interface IExtendedColumn extends IColumn {
-  columnType: 'string' | 'number'; 
-}
+import { DetailsList, IColumn, SelectionMode, DetailsListLayoutMode, ConstrainMode } from '@fluentui/react';
+import { IExtendedColumn } from '../../../helpers/Interfaces'; // Ensure this import is correct
 
 interface ITableViewerRenderProps {
-  columns: IExtendedColumn[];
   items: any[];
+  columns: any[];
   showFind: boolean;
 }
 
-interface ITableViewerRenderState {
-  sortedItems: any[]; 
-  columns: IExtendedColumn[];
-  showFind:boolean;
-  
-}
+const TableViewerRender: React.FunctionComponent<ITableViewerRenderProps> = ({ items, columns, showFind }) => {
+  const [sortedItems, setSortedItems] = React.useState(items);
+  const [sortedColumns, setSortedColumns] = React.useState(columns);
+  const listRef = React.useRef<HTMLDivElement>(null);
 
-class TableViewerRender extends React.Component<ITableViewerRenderProps, ITableViewerRenderState> {
-  private listRef = React.createRef<HTMLDivElement>();
-  constructor(props: ITableViewerRenderProps) {
-    super(props);
+  React.useEffect(() => {
+    setSortedItems(items);
+  }, [items]);
 
-    this.state = {
-      sortedItems: this.props.items,
-      columns: this.props.columns, // Initial columns passed from parent
-      showFind:this.props.showFind
-    };
+  React.useEffect(() => {
+    setSortedColumns(columns);
+  }, [columns]);
 
-    this.listRef = React.createRef<HTMLDivElement>();
-  }
- // Lifecycle method to handle prop changes
- componentDidUpdate(prevProps: ITableViewerRenderProps) {
-  // Check if the items prop has changed
-  if (prevProps.items !== this.props.items) {
-    // Sync state with new items if props changed
-    this.setState({
-      sortedItems: this.props.items
-    });
-  }
-}
-
-
-
-
-  onRenderItemColumn = (item: any, index: number, column: IColumn) => {
+  const onRenderItemColumn = (item: any, index: number, column: IColumn) => {
     const fieldContent = item[column.fieldName as keyof any] as string;
     return <span>{fieldContent}</span>;
   };
 
-  private onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IExtendedColumn): void => {
-    const { items,columns } = this.props;
-
+  const onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IExtendedColumn): void => {
     // Toggle sort direction and sort items
-    const newColumns = this.props.columns.map((col) => {
+    const newColumns = sortedColumns.map((col : any) => {
       if (col.key === column.key) {
         col.isSorted = true;
         col.isSortedDescending = !col.isSortedDescending;
@@ -70,68 +38,59 @@ class TableViewerRender extends React.Component<ITableViewerRenderProps, ITableV
       }
       return col;
     });
-  
+
     // Sort the items
-    const newSortedItems = this.sortItems(items, column.key!, column.isSortedDescending, column.columnType);
-  
+    const newSortedItems = sortItems(sortedItems, column.key!, column.isSortedDescending, column.columnType);
+
     // Update state with new sorted items and columns
-    this.setState({
-      sortedItems: newSortedItems,
-      columns: newColumns,
-    });
+    setSortedItems(newSortedItems);
+    setSortedColumns(newColumns);
   };
-  
- // Function to sort items based on column type and sort order
- private sortItems(items: any[], fieldName: string, isSortedDescending: boolean, columnType: string): any[] {
-  const sortedItems = items.slice().sort((a, b) => {
-    let aValue = a[fieldName];
-    let bValue = b[fieldName];
 
-    // Handle number sorting
-    if (columnType === 'number') {
-      aValue = parseFloat(aValue);
-      bValue = parseFloat(bValue);
+  const sortItems = (items: any[], fieldName: string, isSortedDescending: boolean, columnType: string): any[] => {
+    const sortedItems = items.slice().sort((a, b) => {
+      let aValue = a[fieldName];
+      let bValue = b[fieldName];
 
-      if (isNaN(aValue)) aValue = 0; // Handle NaN values
-      if (isNaN(bValue)) bValue = 0;
+      // Handle number sorting
+      if (columnType === 'number') {
+        aValue = parseFloat(aValue);
+        bValue = parseFloat(bValue);
 
-      return isSortedDescending 
-        ? bValue - aValue // Descending
-        : aValue - bValue; // Ascending
-    }
-  
+        if (isNaN(aValue)) aValue = 0; // Handle NaN values
+        if (isNaN(bValue)) bValue = 0;
 
-    // Handle string sorting (default case)
-    if (aValue < bValue) return isSortedDescending ? 1 : -1;
-    if (aValue > bValue) return isSortedDescending ? -1 : 1;
-    return 0;
-  });
+        return isSortedDescending 
+          ? bValue - aValue // Descending
+          : aValue - bValue; // Ascending
+      }
 
-  return sortedItems;
-}
+      // Handle string sorting (default case)
+      if (aValue < bValue) return isSortedDescending ? 1 : -1;
+      if (aValue > bValue) return isSortedDescending ? -1 : 1;
+      return 0;
+    });
 
-  render() {
-    const { columns } = this.props;
-    const { sortedItems } = this.state;
+    return sortedItems;
+  };
 
-    return (
-      <div ref={this.listRef} style={{ width: '100%'}}>
-        <DetailsList
-          items={sortedItems}
-          columns={columns.map((col) => ({
-            ...col,
-            onColumnClick: this.onColumnClick, // Attach column click handler
-          }))}
-          selectionMode={SelectionMode.none}
-          setKey="set"
-          layoutMode={DetailsListLayoutMode.justified}
-          selectionPreservedOnEmptyClick={true}
-          onRenderItemColumn={this.onRenderItemColumn}
-          constrainMode={ConstrainMode.unconstrained}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div ref={listRef} style={{ width: '100%' }}>
+      <DetailsList
+        items={sortedItems}
+        columns={sortedColumns.map((col: any) => ({
+          ...col,
+          onColumnClick: onColumnClick, // Attach column click handler
+        }))}
+        selectionMode={SelectionMode.none}
+        setKey="set"
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionPreservedOnEmptyClick={true}
+        onRenderItemColumn={onRenderItemColumn}
+        constrainMode={ConstrainMode.unconstrained}
+      />
+    </div>
+  );
+};
 
 export default TableViewerRender;
