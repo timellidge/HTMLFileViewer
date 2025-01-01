@@ -6,7 +6,6 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
 import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
-import TableViewerBody from './TableViewerBody';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';

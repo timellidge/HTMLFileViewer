@@ -38944,34 +38944,6 @@ function flipQuad(value) {
 /* harmony import */ var _fluentui_react_lib_MessageBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/MessageBar */ "2HwJ");
 /* harmony import */ var _fluentui_react_lib_MessageBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/MessageBar */ "e8ns");
 /* eslint-disable implicit-arrow-linebreak */
-/*import * as React from 'react';
-import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
-
-export interface ITableViewerPlaceholderProps {
-  message: string;
-  onDismiss: (value: null) => void;
-}
-
-const TableViewerPlaceholder: React.FunctionComponent<ITableViewerPlaceholderProps> = ({
-  message,
-  onDismiss,
-}) => (
-  <MessageBar
-    messageBarType={MessageBarType.blocked}
-    truncated
-    isMultiline={false}
-    overflowButtonAriaLabel="See more"
-    onDismiss={() => { onDismiss(null); }}
-    dismissButtonAriaLabel="Close"
-  >
-    Something went wrong ...
-    {' '}
-    {message}
-  </MessageBar>
-);
-
-export default TableViewerPlaceholder;
-*/
 
 
 const TableViewerPlaceholder = ({ message, onDismiss, }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_MessageBar__WEBPACK_IMPORTED_MODULE_1__[/* MessageBar */ "a"], { messageBarType: _fluentui_react_lib_MessageBar__WEBPACK_IMPORTED_MODULE_2__[/* MessageBarType */ "a"].blocked, truncated: true, isMultiline: false, onDismiss: onDismiss, dismissButtonAriaLabel: "Close the message" },
