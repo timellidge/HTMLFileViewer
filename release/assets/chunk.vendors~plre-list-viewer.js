@@ -401,6 +401,27 @@ module.exports.src = "\"no use strict\";!function(window){function resolveModule
 
 /***/ }),
 
+/***/ "5JhY":
+/*!************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Spinner/Spinner.js ***!
+  \************************************************************************/
+/*! exports provided: Spinner */
+/*! exports used: Spinner */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Spinner; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities */ "mUxj");
+/* harmony import */ var _Spinner_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Spinner.base */ "VMH+");
+/* harmony import */ var _Spinner_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Spinner.styles */ "Zxkc");
+
+
+
+var Spinner = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Spinner_base__WEBPACK_IMPORTED_MODULE_1__[/* SpinnerBase */ "a"], _Spinner_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, { scope: 'Spinner' });
+//# sourceMappingURL=Spinner.js.map
+
+/***/ }),
+
 /***/ "5zuL":
 /*!***********************************************************************************!*\
   !*** ./node_modules/@pnp/spfx-property-controls/lib/helpers/String.extensions.js ***!
@@ -1577,7 +1598,7 @@ var getStyles = function (props) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
     var className = props.className, theme = props.theme, reversed = props.reversed, checked = props.checked, disabled = props.disabled, isUsingCustomLabelRender = props.isUsingCustomLabelRender, indeterminate = props.indeterminate;
     var semanticColors = theme.semanticColors, effects = theme.effects, palette = theme.palette, fonts = theme.fonts;
-    var classNames = Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getGlobalClassNames */ "t"])(GlobalClassNames, theme);
+    var classNames = Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
     var checkmarkFontColor = semanticColors.inputForegroundChecked;
     // TODO: after updating the semanticColors slots mapping this needs to be semanticColors.inputBorder
     var checkmarkFontColorHovered = palette.neutralSecondary;
@@ -1614,7 +1635,7 @@ var getStyles = function (props) {
                 transitionDuration: MS_CHECKBOX_TRANSITION_DURATION,
                 transitionTimingFunction: MS_CHECKBOX_TRANSITION_TIMING
             },
-            _a[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+            _a[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                 borderColor: 'WindowText',
             },
             _a),
@@ -1635,7 +1656,7 @@ var getStyles = function (props) {
                     _b[":hover ." + classNames.checkbox] = (_c = {
                             borderColor: checkboxBorderHoveredColor
                         },
-                        _c[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _c[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             borderColor: 'Highlight',
                         },
                         _c),
@@ -1644,7 +1665,7 @@ var getStyles = function (props) {
                             color: checkmarkFontColorHovered,
                             opacity: '1'
                         },
-                        _d[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _d[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             color: 'Highlight',
                         },
                         _d),
@@ -1659,7 +1680,7 @@ var getStyles = function (props) {
                         background: checkboxBackgroundCheckedHovered,
                         borderColor: checkboxBorderColorCheckedHovered,
                     },
-                    _e[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = (_f = {},
+                    _e[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = (_f = {},
                         _f[":hover ." + classNames.checkbox] = {
                             background: 'Highlight',
                             borderColor: 'Highlight',
@@ -1682,7 +1703,7 @@ var getStyles = function (props) {
                     _g[":hover ." + classNames.checkbox + ", :hover ." + classNames.checkbox + ":after"] = (_h = {
                             borderColor: checkboxBorderIndeterminateHoveredColor
                         },
-                        _h[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _h[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             borderColor: 'WindowText',
                         },
                         _h),
@@ -1697,7 +1718,7 @@ var getStyles = function (props) {
                     _j[":hover ." + classNames.text + ", :focus ." + classNames.text] = (_k = {
                             color: checkboxHoveredTextColor
                         },
-                        _k[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _k[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             color: disabled ? 'GrayText' : 'WindowText',
                         },
                         _k),
@@ -1714,7 +1735,7 @@ var getStyles = function (props) {
                     outline: '1px solid ' + theme.palette.neutralSecondary,
                     outlineOffset: '2px'
                 },
-                _m[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _m[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     outline: '1px solid WindowText',
                 },
                 _m),
@@ -1765,7 +1786,7 @@ var getStyles = function (props) {
                     overflow: 'hidden',
                     ':after': indeterminate ? indeterminateDotStyles : null
                 },
-                _o[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ borderColor: 'WindowText' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                _o[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ borderColor: 'WindowText' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _o),
             indeterminate && {
                 borderColor: checkboxBorderIndeterminateColor,
@@ -1787,7 +1808,7 @@ var getStyles = function (props) {
                     background: checkboxBackgroundChecked,
                     borderColor: checkboxBorderColorChecked
                 },
-                _p[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _p[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     background: 'Highlight',
                     borderColor: 'Highlight',
                 },
@@ -1795,7 +1816,7 @@ var getStyles = function (props) {
             disabled && (_q = {
                     borderColor: checkboxBorderColorDisabled
                 },
-                _q[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _q[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     borderColor: 'GrayText',
                 },
                 _q),
@@ -1804,7 +1825,7 @@ var getStyles = function (props) {
                     background: checkboxBackgroundDisabledChecked,
                     borderColor: checkboxBorderColorDisabled
                 },
-                _r[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _r[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     background: 'Window',
                 },
                 _r),
@@ -1815,7 +1836,7 @@ var getStyles = function (props) {
                     opacity: checked && !indeterminate ? '1' : '0',
                     color: checkmarkFontColor
                 },
-                _s[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: disabled ? 'GrayText' : 'Window' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                _s[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: disabled ? 'GrayText' : 'Window' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _s),
         ],
         text: [
@@ -1825,7 +1846,7 @@ var getStyles = function (props) {
                     fontSize: fonts.medium.fontSize,
                     lineHeight: '20px'
                 },
-                _t[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: disabled ? 'GrayText' : 'WindowText' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                _t[_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: disabled ? 'GrayText' : 'WindowText' }, Object(_fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _t),
             !reversed
                 ? {
@@ -1928,35 +1949,35 @@ var panelMargin = {
 // Following consts are used below in `getPanelBreakpoints()` function to provide
 // necessary fallbacks for different types of Panel in different breakpoints.
 var smallPanelSelectors = (_a = {},
-    _a["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "k"] + "px)"] = {
+    _a["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "j"] + "px)"] = {
         width: panelWidth.sm,
     },
     _a);
 var mediumPanelSelectors = (_b = {},
-    _b["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinLarge */ "j"] + "px)"] = {
+    _b["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinLarge */ "i"] + "px)"] = {
         width: panelWidth.md1,
     },
-    _b["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXLarge */ "m"] + "px)"] = {
+    _b["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXLarge */ "l"] + "px)"] = {
         width: panelWidth.md2,
     },
     _b);
 var largePanelSelectors = (_c = {},
-    _c["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinUhfMobile */ "l"] + "px)"] = {
+    _c["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinUhfMobile */ "k"] + "px)"] = {
         left: panelMargin.md,
         width: panelWidth.auto,
     },
-    _c["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "n"] + "px)"] = {
+    _c["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "m"] + "px)"] = {
         left: panelMargin.lg,
     },
     _c);
 var largeFixedPanelSelectors = (_d = {},
-    _d["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "n"] + "px)"] = {
+    _d["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "m"] + "px)"] = {
         left: panelMargin.auto,
         width: panelWidth.lg,
     },
     _d);
 var extraLargePanelSelectors = (_e = {},
-    _e["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "n"] + "px)"] = {
+    _e["@media (min-width: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinXXLarge */ "m"] + "px)"] = {
         left: panelMargin.xl,
     },
     _e);
@@ -1997,7 +2018,7 @@ var getStyles = function (props) {
     var _a, _b, _c, _d;
     var className = props.className, focusTrapZoneClassName = props.focusTrapZoneClassName, hasCloseButton = props.hasCloseButton, headerClassName = props.headerClassName, isAnimating = props.isAnimating, isFooterSticky = props.isFooterSticky, isFooterAtBottom = props.isFooterAtBottom, isOnRightSide = props.isOnRightSide, isOpen = props.isOpen, isHiddenOnDismiss = props.isHiddenOnDismiss, hasCustomNavigation = props.hasCustomNavigation, theme = props.theme, _e = props.type, type = _e === void 0 ? _Panel_types__WEBPACK_IMPORTED_MODULE_1__[/* PanelType */ "a"].smallFixedFar : _e;
     var effects = theme.effects, fonts = theme.fonts, semanticColors = theme.semanticColors;
-    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_2__[/* getGlobalClassNames */ "t"])(GlobalClassNames, theme);
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_2__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
     var isCustomPanel = type === _Panel_types__WEBPACK_IMPORTED_MODULE_1__[/* PanelType */ "a"].custom || type === _Panel_types__WEBPACK_IMPORTED_MODULE_1__[/* PanelType */ "a"].customNear;
     return {
         root: [
@@ -2050,7 +2071,7 @@ var getStyles = function (props) {
                 left: panelMargin.auto,
                 right: panelMargin.none,
                 width: panelWidth.full,
-                selectors: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])((_a = {}, _a[_Styling__WEBPACK_IMPORTED_MODULE_2__[/* HighContrastSelector */ "e"]] = {
+                selectors: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])((_a = {}, _a[_Styling__WEBPACK_IMPORTED_MODULE_2__[/* HighContrastSelector */ "d"]] = {
                     borderLeft: "3px solid " + semanticColors.variantBorder,
                     borderRight: "3px solid " + semanticColors.variantBorder,
                 }, _a), getPanelBreakpoints(type)),
@@ -2083,7 +2104,7 @@ var getStyles = function (props) {
                 backgroundColor: semanticColors.bodyBackground,
                 paddingTop: 18,
                 selectors: (_b = {},
-                    _b["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "k"] + "px)"] = {
+                    _b["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "j"] + "px)"] = {
                         position: 'sticky',
                         top: 0,
                         zIndex: 1,
@@ -2160,7 +2181,7 @@ var getStyles = function (props) {
             },
             isFooterAtBottom && {
                 selectors: (_c = {},
-                    _c["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "k"] + "px)"] = {
+                    _c["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "j"] + "px)"] = {
                         flexGrow: 1,
                     },
                     _c),
@@ -2172,9 +2193,9 @@ var getStyles = function (props) {
                 // Ensure that footer doesn't shrink if screen is too small
                 flexShrink: 0,
                 borderTop: '1px solid transparent',
-                transition: "opacity " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* AnimationVariables */ "c"].durationValue3 + " " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* AnimationVariables */ "c"].easeFunction2,
+                transition: "opacity " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* AnimationVariables */ "b"].durationValue3 + " " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* AnimationVariables */ "b"].easeFunction2,
                 selectors: (_d = {},
-                    _d["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "k"] + "px)"] = {
+                    _d["@media (min-height: " + _Styling__WEBPACK_IMPORTED_MODULE_2__[/* ScreenWidthMinMedium */ "j"] + "px)"] = {
                         position: 'sticky',
                         bottom: 0,
                     },
@@ -2200,7 +2221,7 @@ var getStyles = function (props) {
                     {
                         marginRight: 14,
                         color: theme.palette.neutralSecondary,
-                        fontSize: _Styling__WEBPACK_IMPORTED_MODULE_2__[/* IconFontSizes */ "g"].large,
+                        fontSize: _Styling__WEBPACK_IMPORTED_MODULE_2__[/* IconFontSizes */ "f"].large,
                     },
                     hasCustomNavigation && {
                         marginRight: 0,
@@ -2652,12 +2673,46 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* memoizeFunctio
             height: DEFAULT_BUTTON_HEIGHT,
         },
         label: {
-            fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_0__[/* FontWeights */ "d"].semibold,
+            fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_0__[/* FontWeights */ "c"].semibold,
         },
     };
-    return Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* concatStyleSets */ "p"])(baseButtonStyles, defaultButtonStyles, primary ? Object(_ButtonThemes__WEBPACK_IMPORTED_MODULE_4__[/* primaryStyles */ "a"])(theme) : Object(_ButtonThemes__WEBPACK_IMPORTED_MODULE_4__[/* standardStyles */ "b"])(theme), splitButtonStyles, customStyles);
+    return Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* concatStyleSets */ "o"])(baseButtonStyles, defaultButtonStyles, primary ? Object(_ButtonThemes__WEBPACK_IMPORTED_MODULE_4__[/* primaryStyles */ "a"])(theme) : Object(_ButtonThemes__WEBPACK_IMPORTED_MODULE_4__[/* standardStyles */ "b"])(theme), splitButtonStyles, customStyles);
 });
 //# sourceMappingURL=DefaultButton.styles.js.map
+
+/***/ }),
+
+/***/ "JgGW":
+/*!***********************************!*\
+  !*** (webpack)/buildin/module.js ***!
+  \***********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
 
 /***/ }),
 
@@ -3483,7 +3538,7 @@ var getStyles = function (props) {
     var _a;
     var className = props.className, theme = props.theme, isNone = props.isNone, isDark = props.isDark;
     var palette = theme.palette;
-    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* getGlobalClassNames */ "t"])(GlobalClassNames, theme);
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
     return {
         root: [
             classNames.root,
@@ -3496,7 +3551,7 @@ var getStyles = function (props) {
                 left: 0,
                 position: 'absolute',
                 selectors: (_a = {},
-                    _a[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "e"]] = {
+                    _a[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "d"]] = {
                         border: '1px solid WindowText',
                         opacity: 0,
                     },
@@ -6540,6 +6595,71 @@ var DiffComponent = /** @class */ (function (_super) {
 }(React.Component));
 exports.default = DiffComponent;
 //# sourceMappingURL=diff.js.map
+
+/***/ }),
+
+/***/ "VMH+":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Spinner/Spinner.base.js ***!
+  \*****************************************************************************/
+/*! exports provided: SpinnerBase */
+/*! exports used: SpinnerBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SpinnerBase; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Spinner_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Spinner.types */ "oR7b");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities */ "9Ppb");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Utilities */ "D9iZ");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Utilities */ "Cx0t");
+
+
+
+
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* classNamesFunction */ "a"])();
+var SpinnerBase = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"])(SpinnerBase, _super);
+    function SpinnerBase() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    SpinnerBase.prototype.render = function () {
+        // eslint-disable-next-line deprecation/deprecation
+        var _a = this.props, type = _a.type, size = _a.size, ariaLabel = _a.ariaLabel, ariaLive = _a.ariaLive, styles = _a.styles, label = _a.label, theme = _a.theme, className = _a.className, labelPosition = _a.labelPosition;
+        var statusMessage = ariaLabel;
+        var nativeProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getNativeProps */ "d"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_4__[/* divProperties */ "c"], ['size']);
+        // SpinnerType is deprecated. If someone is still using this property, rather than putting the SpinnerType into the
+        // ISpinnerStyleProps, we'll map SpinnerType to its equivalent SpinnerSize and pass that in. Once SpinnerType
+        // finally goes away we should delete this.
+        var styleSize = size;
+        if (styleSize === undefined && type !== undefined) {
+            // eslint-disable-next-line deprecation/deprecation
+            styleSize = type === _Spinner_types__WEBPACK_IMPORTED_MODULE_2__[/* SpinnerType */ "b"].large ? _Spinner_types__WEBPACK_IMPORTED_MODULE_2__[/* SpinnerSize */ "a"].large : _Spinner_types__WEBPACK_IMPORTED_MODULE_2__[/* SpinnerSize */ "a"].medium;
+        }
+        var classNames = getClassNames(styles, {
+            theme: theme,
+            size: styleSize,
+            className: className,
+            labelPosition: labelPosition,
+        });
+        return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, nativeProps, { className: classNames.root }),
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: classNames.circle }),
+            label && react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: classNames.label }, label),
+            statusMessage && (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { role: "status", "aria-live": ariaLive },
+                react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* DelayedRender */ "a"], null,
+                    react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: classNames.screenReaderText }, statusMessage))))));
+    };
+    SpinnerBase.defaultProps = {
+        size: _Spinner_types__WEBPACK_IMPORTED_MODULE_2__[/* SpinnerSize */ "a"].medium,
+        ariaLive: 'polite',
+        labelPosition: 'bottom',
+    };
+    return SpinnerBase;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
+
+//# sourceMappingURL=Spinner.base.js.map
 
 /***/ }),
 
@@ -13711,6 +13831,133 @@ module.exports = function() {
 
 /***/ }),
 
+/***/ "Zxkc":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Spinner/Spinner.styles.js ***!
+  \*******************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _Spinner_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Spinner.types */ "oR7b");
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities */ "GJV8");
+
+
+
+
+var GlobalClassNames = {
+    root: 'ms-Spinner',
+    circle: 'ms-Spinner-circle',
+    label: 'ms-Spinner-label',
+};
+var spinAnimation = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* memoizeFunction */ "b"])(function () {
+    return Object(_Styling__WEBPACK_IMPORTED_MODULE_2__[/* keyframes */ "A"])({
+        '0%': {
+            transform: 'rotate(0deg)',
+        },
+        '100%': {
+            transform: 'rotate(360deg)',
+        },
+    });
+});
+var getStyles = function (props) {
+    var _a;
+    var theme = props.theme, size = props.size, className = props.className, labelPosition = props.labelPosition;
+    var palette = theme.palette;
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_2__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
+    return {
+        root: [
+            classNames.root,
+            {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+            },
+            labelPosition === 'top' && {
+                flexDirection: 'column-reverse',
+            },
+            labelPosition === 'right' && {
+                flexDirection: 'row',
+            },
+            labelPosition === 'left' && {
+                flexDirection: 'row-reverse',
+            },
+            className,
+        ],
+        circle: [
+            classNames.circle,
+            {
+                boxSizing: 'border-box',
+                borderRadius: '50%',
+                border: '1.5px solid ' + palette.themeLight,
+                borderTopColor: palette.themePrimary,
+                animationName: spinAnimation(),
+                animationDuration: '1.3s',
+                animationIterationCount: 'infinite',
+                animationTimingFunction: 'cubic-bezier(.53,.21,.29,.67)',
+                selectors: (_a = {},
+                    _a[_Styling__WEBPACK_IMPORTED_MODULE_2__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ borderTopColor: 'Highlight' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_2__[/* getHighContrastNoAdjustStyle */ "t"])()),
+                    _a),
+            },
+            size === _Spinner_types__WEBPACK_IMPORTED_MODULE_1__[/* SpinnerSize */ "a"].xSmall && [
+                'ms-Spinner--xSmall',
+                {
+                    width: 12,
+                    height: 12,
+                },
+            ],
+            size === _Spinner_types__WEBPACK_IMPORTED_MODULE_1__[/* SpinnerSize */ "a"].small && [
+                'ms-Spinner--small',
+                {
+                    width: 16,
+                    height: 16,
+                },
+            ],
+            size === _Spinner_types__WEBPACK_IMPORTED_MODULE_1__[/* SpinnerSize */ "a"].medium && [
+                'ms-Spinner--medium',
+                {
+                    width: 20,
+                    height: 20,
+                },
+            ],
+            size === _Spinner_types__WEBPACK_IMPORTED_MODULE_1__[/* SpinnerSize */ "a"].large && [
+                'ms-Spinner--large',
+                {
+                    width: 28,
+                    height: 28,
+                },
+            ],
+        ],
+        label: [
+            classNames.label,
+            theme.fonts.small,
+            {
+                color: palette.themePrimary,
+                margin: '8px 0 0',
+                textAlign: 'center',
+            },
+            labelPosition === 'top' && {
+                margin: '0 0 8px',
+            },
+            labelPosition === 'right' && {
+                margin: '0 0 0 8px',
+            },
+            labelPosition === 'left' && {
+                margin: '0 8px 0 0',
+            },
+        ],
+        screenReaderText: _Styling__WEBPACK_IMPORTED_MODULE_2__[/* hiddenContentStyle */ "z"],
+    };
+};
+//# sourceMappingURL=Spinner.styles.js.map
+
+/***/ }),
+
 /***/ "a99J":
 /*!*****************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Overlay/Overlay.base.js ***!
@@ -13749,7 +13996,7 @@ var OverlayBase = /** @class */ (function (_super) {
     };
     OverlayBase.prototype.render = function () {
         var _a = this.props, isDark = _a.isDarkThemed, className = _a.className, theme = _a.theme, styles = _a.styles;
-        var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* getNativeProps */ "h"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_5__[/* divProperties */ "f"]);
+        var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* getNativeProps */ "d"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_5__[/* divProperties */ "c"]);
         var classNames = getClassNames(styles, {
             theme: theme,
             className: className,
@@ -35095,7 +35342,7 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* memoizeFunctio
             backgroundColor: 'transparent',
             border: '1px solid transparent',
             selectors: (_a = {},
-                _a[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "e"]] = {
+                _a[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "d"]] = {
                     borderColor: 'Window',
                 },
                 _a),
@@ -35103,7 +35350,7 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* memoizeFunctio
         rootHovered: {
             color: theme.palette.themePrimary,
             selectors: (_b = {},
-                _b[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "e"]] = {
+                _b[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "d"]] = {
                     color: 'Highlight',
                 },
                 _b),
@@ -35125,7 +35372,7 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* memoizeFunctio
             backgroundColor: 'transparent',
             borderColor: 'transparent',
             selectors: (_c = {},
-                _c[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "e"]] = {
+                _c[_Styling__WEBPACK_IMPORTED_MODULE_0__[/* HighContrastSelector */ "d"]] = {
                     color: 'GrayText',
                 },
                 _c),
@@ -35152,7 +35399,7 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* memoizeFunctio
             flexGrow: 0,
         },
     };
-    return Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* concatStyleSets */ "p"])(baseButtonStyles, actionButtonStyles, customStyles);
+    return Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* concatStyleSets */ "o"])(baseButtonStyles, actionButtonStyles, customStyles);
 });
 //# sourceMappingURL=ActionButton.styles.js.map
 
@@ -35414,7 +35661,7 @@ var FocusTrapZone = react__WEBPACK_IMPORTED_MODULE_1__["forwardRef"](function (p
         delete internalState.previouslyFocusedElementInTrapZone;
     });
     useComponentRef(componentRef, internalState.previouslyFocusedElementInTrapZone, focusFTZ);
-    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ "aria-labelledby": props.ariaLabelledBy }, Object(_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getNativeProps */ "h"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_7__[/* divProperties */ "f"]), { ref: mergedRootRef, onFocusCapture: onRootFocusCapture, onBlurCapture: onRootBlurCapture }),
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ "aria-labelledby": props.ariaLabelledBy }, Object(_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getNativeProps */ "d"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_7__[/* divProperties */ "c"]), { ref: mergedRootRef, onFocusCapture: onRootFocusCapture, onBlurCapture: onRootBlurCapture }),
         react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, bumperProps, { ref: firstBumper })),
         children,
         react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, bumperProps, { ref: lastBumper }))));
@@ -37112,7 +37359,7 @@ var DropdownInternal = /** @class */ (function (_super) {
             this._sizePosCache.updateOptions(options);
         }
         var selectedOptions = Object(_SelectableOption__WEBPACK_IMPORTED_MODULE_30__[/* getAllSelectedOptions */ "a"])(options, selectedIndices);
-        var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_14__[/* getNativeProps */ "h"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_14__[/* divProperties */ "f"]);
+        var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_14__[/* getNativeProps */ "d"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_14__[/* divProperties */ "c"]);
         var disabled = this._isDisabled();
         var errorMessageId = id + '-errorMessage';
         this._classNames = getClassNames(propStyles, {
@@ -37364,10 +37611,10 @@ var GlobalClassNames = {
 var DROPDOWN_HEIGHT = 32;
 var DROPDOWN_ITEM_HEIGHT = 36;
 var highContrastAdjustMixin = (_a = {},
-    _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"] + ", " + _Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelectorWhite */ "f"].replace('@media ', '')] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "u"])()),
+    _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"] + ", " + _Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelectorWhite */ "e"].replace('@media ', '')] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "t"])()),
     _a);
 var highContrastItemAndTitleStateMixin = {
-    selectors: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])((_b = {}, _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+    selectors: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])((_b = {}, _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
         backgroundColor: 'Highlight',
         borderColor: 'Highlight',
         color: 'HighlightText',
@@ -37375,19 +37622,19 @@ var highContrastItemAndTitleStateMixin = {
 };
 var highContrastBorderState = {
     selectors: (_c = {},
-        _c[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+        _c[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
             borderColor: 'Highlight',
         },
         _c),
 };
-var MinimumScreenSelector = Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getScreenSelector */ "y"])(0, _Styling__WEBPACK_IMPORTED_MODULE_3__[/* ScreenWidthMinMedium */ "k"]);
+var MinimumScreenSelector = Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getScreenSelector */ "x"])(0, _Styling__WEBPACK_IMPORTED_MODULE_3__[/* ScreenWidthMinMedium */ "j"]);
 var getStyles = function (props) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     var theme = props.theme, hasError = props.hasError, hasLabel = props.hasLabel, className = props.className, isOpen = props.isOpen, disabled = props.disabled, required = props.required, isRenderingPlaceholder = props.isRenderingPlaceholder, panelClassName = props.panelClassName, calloutClassName = props.calloutClassName, calloutRenderEdge = props.calloutRenderEdge;
     if (!theme) {
         throw new Error('theme is undefined or null in base Dropdown getStyles function.');
     }
-    var globalClassnames = Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getGlobalClassNames */ "t"])(GlobalClassNames, theme);
+    var globalClassnames = Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
     var palette = theme.palette, semanticColors = theme.semanticColors, effects = theme.effects, fonts = theme.fonts;
     var rootHoverFocusActiveSelectorNeutralDarkMixin = {
         color: semanticColors.menuItemTextHovered,
@@ -37424,8 +37671,8 @@ var getStyles = function (props) {
     ];
     var dropdownHeaderStyle = [
         globalClassnames.dropdownItemHeader,
-        Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, fonts.medium), { fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_3__[/* FontWeights */ "d"].semibold, color: semanticColors.menuHeader, background: 'none', backgroundColor: 'transparent', border: 'none', height: DROPDOWN_ITEM_HEIGHT, lineHeight: DROPDOWN_ITEM_HEIGHT, cursor: 'default', padding: '0 8px', userSelect: 'none', textAlign: 'left', selectors: (_a = {},
-                _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'GrayText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "u"])()),
+        Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, fonts.medium), { fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_3__[/* FontWeights */ "c"].semibold, color: semanticColors.menuHeader, background: 'none', backgroundColor: 'transparent', border: 'none', height: DROPDOWN_ITEM_HEIGHT, lineHeight: DROPDOWN_ITEM_HEIGHT, cursor: 'default', padding: '0 8px', userSelect: 'none', textAlign: 'left', selectors: (_a = {},
+                _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'GrayText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _a) }),
     ];
     var selectedItemBackgroundColor = semanticColors.menuItemBackgroundPressed;
@@ -37458,11 +37705,11 @@ var getStyles = function (props) {
                         bottom: 0,
                         right: 0
                     },
-                    _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+                    _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
                         inset: '2px',
                     },
                     _b),
-                _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+                _a[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
                     border: 'none',
                 },
                 _a),
@@ -37481,7 +37728,7 @@ var getStyles = function (props) {
             color: semanticColors.disabledText,
             cursor: 'default',
             selectors: (_b = {},
-                _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+                _b[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
                     color: 'GrayText',
                     border: 'none',
                 },
@@ -37499,7 +37746,7 @@ var getStyles = function (props) {
         label: globalClassnames.label,
         dropdown: [
             globalClassnames.dropdown,
-            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "E"],
+            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "D"],
             fonts.medium,
             {
                 color: semanticColors.menuItemText,
@@ -37515,7 +37762,7 @@ var getStyles = function (props) {
                     ],
                     _c['&:focus .' + globalClassnames.title] = [
                         !disabled && rootHoverFocusActiveSelectorNeutralDarkMixin,
-                        { selectors: (_d = {}, _d[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = { color: 'Highlight' }, _d) },
+                        { selectors: (_d = {}, _d[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = { color: 'Highlight' }, _d) },
                     ],
                     _c['&:focus:after'] = [
                         {
@@ -37531,7 +37778,7 @@ var getStyles = function (props) {
                             border: !disabled ? "2px solid " + palette.themePrimary : 'none',
                             borderRadius: '2px',
                             selectors: (_e = {},
-                                _e[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+                                _e[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
                                     color: 'Highlight',
                                 },
                                 _e),
@@ -37545,7 +37792,7 @@ var getStyles = function (props) {
                     _c['&:hover .' + globalClassnames.caretDown] = !disabled && rootHoverFocusActiveSelectorNeutralPrimaryMixin,
                     _c['&:focus .' + globalClassnames.caretDown] = [
                         !disabled && rootHoverFocusActiveSelectorNeutralPrimaryMixin,
-                        { selectors: (_f = {}, _f[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = { color: 'Highlight' }, _f) },
+                        { selectors: (_f = {}, _f[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = { color: 'Highlight' }, _f) },
                     ],
                     _c['&:active .' + globalClassnames.caretDown] = !disabled && rootHoverFocusActiveSelectorNeutralPrimaryMixin,
                     _c['&:hover .' + globalClassnames.titleIsPlaceHolder] = !disabled && rootHoverFocusActiveSelectorNeutralPrimaryMixin,
@@ -37569,7 +37816,7 @@ var getStyles = function (props) {
                             right: -10,
                         }
                     },
-                    _g[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = {
+                    _g[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = {
                         selectors: {
                             ':after': {
                                 right: -14, // moving the * 4 pixel to right to alleviate border clipping in HC mode.
@@ -37581,7 +37828,7 @@ var getStyles = function (props) {
         ],
         title: [
             globalClassnames.title,
-            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "E"],
+            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "D"],
             {
                 backgroundColor: semanticColors.inputBackground,
                 borderWidth: 1,
@@ -37606,7 +37853,7 @@ var getStyles = function (props) {
                 color: semanticColors.disabledText,
                 cursor: 'default',
                 selectors: (_h = {},
-                    _h[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ border: '1px solid GrayText', color: 'GrayText', backgroundColor: 'Window' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                    _h[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ border: '1px solid GrayText', color: 'GrayText', backgroundColor: 'Window' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "t"])()),
                     _h),
             },
         ],
@@ -37630,7 +37877,7 @@ var getStyles = function (props) {
             disabled && {
                 color: semanticColors.disabledText,
                 selectors: (_j = {},
-                    _j[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'GrayText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                    _j[_Styling__WEBPACK_IMPORTED_MODULE_3__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'GrayText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_3__[/* getHighContrastNoAdjustStyle */ "t"])()),
                     _j),
             },
         ],
@@ -38203,6 +38450,59 @@ class CSSFormatter {
 
 /***/ }),
 
+/***/ "oR7b":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Spinner/Spinner.types.js ***!
+  \******************************************************************************/
+/*! exports provided: SpinnerSize, SpinnerType */
+/*! exports used: SpinnerSize, SpinnerType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SpinnerSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SpinnerType; });
+/**
+ * Possible variations of the spinner circle size.
+ * {@docCategory Spinner}
+ */
+var SpinnerSize;
+(function (SpinnerSize) {
+    /**
+     * 12px Spinner diameter
+     */
+    SpinnerSize[SpinnerSize["xSmall"] = 0] = "xSmall";
+    /**
+     * 16px Spinner diameter
+     */
+    SpinnerSize[SpinnerSize["small"] = 1] = "small";
+    /**
+     * 20px Spinner diameter
+     */
+    SpinnerSize[SpinnerSize["medium"] = 2] = "medium";
+    /**
+     * 28px Spinner diameter
+     */
+    SpinnerSize[SpinnerSize["large"] = 3] = "large";
+})(SpinnerSize || (SpinnerSize = {}));
+/**
+ * @deprecated Use `SpinnerSize` instead. Will be removed at \>= 2.0.0.
+ * {@docCategory Spinner}
+ */
+var SpinnerType;
+(function (SpinnerType) {
+    /**
+     * @deprecated Use `SpinnerSize.medium` instead. Will be removed at \>= 2.0.0.
+     */
+    SpinnerType[SpinnerType["normal"] = 0] = "normal";
+    /**
+     * @deprecated Use `SpinnerSize.large` instead. Will be removed at \>= 2.0.0.
+     */
+    SpinnerType[SpinnerType["large"] = 1] = "large";
+})(SpinnerType || (SpinnerType = {}));
+//# sourceMappingURL=Spinner.types.js.map
+
+/***/ }),
+
 /***/ "oVyQ":
 /*!***************************************************!*\
   !*** ./node_modules/prop-types/checkPropTypes.js ***!
@@ -38572,7 +38872,7 @@ function standardStyles(theme) {
             backgroundColor: buttonBackgroundHovered,
             color: buttonTextHovered,
             selectors: (_a = {},
-                _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     borderColor: 'Highlight',
                     color: 'Highlight',
                 },
@@ -38598,7 +38898,7 @@ function standardStyles(theme) {
             color: buttonTextDisabled,
             backgroundColor: buttonBackgroundDisabled,
             selectors: (_b = {},
-                _b[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _b[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     color: 'GrayText',
                     borderColor: 'GrayText',
                     backgroundColor: 'Window',
@@ -38608,7 +38908,7 @@ function standardStyles(theme) {
         // Split button styles
         splitButtonContainer: {
             selectors: (_c = {},
-                _c[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _c[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     border: 'none',
                 },
                 _c),
@@ -38620,7 +38920,7 @@ function standardStyles(theme) {
                 ':hover': {
                     backgroundColor: p.neutralLight,
                     selectors: (_d = {},
-                        _d[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _d[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             color: 'Highlight',
                         },
                         _d),
@@ -38636,7 +38936,7 @@ function standardStyles(theme) {
             },
         },
         splitButtonDivider: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, splitButtonDividerBaseStyles()), { backgroundColor: p.neutralTertiaryAlt, selectors: (_e = {},
-                _e[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _e[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     backgroundColor: 'WindowText',
                 },
                 _e) }),
@@ -38676,7 +38976,7 @@ function primaryStyles(theme) {
             border: "1px solid " + s.primaryButtonBackground,
             color: s.primaryButtonText,
             selectors: (_a = {},
-                _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'Window', backgroundColor: 'WindowText', borderColor: 'WindowText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'Window', backgroundColor: 'WindowText', borderColor: 'WindowText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _a["." + _Utilities__WEBPACK_IMPORTED_MODULE_2__[/* IsFocusVisibleClassName */ "a"] + " &:focus"] = {
                     selectors: {
                         ':after': {
@@ -38692,7 +38992,7 @@ function primaryStyles(theme) {
             border: "1px solid " + s.primaryButtonBackgroundHovered,
             color: s.primaryButtonTextHovered,
             selectors: (_b = {},
-                _b[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _b[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     color: 'Window',
                     backgroundColor: 'Highlight',
                     borderColor: 'Highlight',
@@ -38704,7 +39004,7 @@ function primaryStyles(theme) {
             border: "1px solid " + s.primaryButtonBackgroundPressed,
             color: s.primaryButtonTextPressed,
             selectors: (_c = {},
-                _c[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'Window', backgroundColor: 'WindowText', borderColor: 'WindowText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "u"])()),
+                _c[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ color: 'Window', backgroundColor: 'WindowText', borderColor: 'WindowText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()),
                 _c),
         },
         rootExpanded: {
@@ -38723,7 +39023,7 @@ function primaryStyles(theme) {
             color: s.primaryButtonTextDisabled,
             backgroundColor: s.primaryButtonBackgroundDisabled,
             selectors: (_d = {},
-                _d[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _d[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     color: 'GrayText',
                     borderColor: 'GrayText',
                     backgroundColor: 'Window',
@@ -38733,13 +39033,13 @@ function primaryStyles(theme) {
         // Split button styles
         splitButtonContainer: {
             selectors: (_e = {},
-                _e[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _e[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     border: 'none',
                 },
                 _e),
         },
         splitButtonDivider: Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, splitButtonDividerBaseStyles()), { backgroundColor: p.white, selectors: (_f = {},
-                _f[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _f[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     backgroundColor: 'Window',
                 },
                 _f) }),
@@ -38747,13 +39047,13 @@ function primaryStyles(theme) {
             backgroundColor: s.primaryButtonBackground,
             color: s.primaryButtonText,
             selectors: (_g = {},
-                _g[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _g[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     backgroundColor: 'Canvas',
                 },
                 _g[':hover'] = {
                     backgroundColor: s.primaryButtonBackgroundHovered,
                     selectors: (_h = {},
-                        _h[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                        _h[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                             color: 'Highlight',
                         },
                         _h),
@@ -38790,7 +39090,7 @@ function primaryStyles(theme) {
         splitButtonMenuIconDisabled: {
             color: p.neutralTertiary,
             selectors: (_j = {},
-                _j[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "e"]] = {
+                _j[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
                     color: 'GrayText',
                 },
                 _j),
@@ -44244,7 +44544,7 @@ var PanelBase = /** @class */ (function (_super) {
         var isRTL = Object(_Utilities__WEBPACK_IMPORTED_MODULE_14__[/* getRTL */ "a"])(theme);
         var isOnRightSide = isRTL ? isLeft : !isLeft;
         var customWidthStyles = type === _Panel_types__WEBPACK_IMPORTED_MODULE_18__[/* PanelType */ "a"].custom || type === _Panel_types__WEBPACK_IMPORTED_MODULE_18__[/* PanelType */ "a"].customNear ? { width: customWidth } : {};
-        var nativeProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_15__[/* getNativeProps */ "h"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_15__[/* divProperties */ "f"]);
+        var nativeProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_15__[/* getNativeProps */ "d"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_15__[/* divProperties */ "c"]);
         var isOpen = this.isActive;
         var isAnimating = visibility === PanelVisibilityState.animatingClosed || visibility === PanelVisibilityState.animatingOpen;
         this._headerTextId = headerText && id + '-headerText';

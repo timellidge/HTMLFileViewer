@@ -10,6 +10,7 @@ import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
 import { convertWidthToPx, getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
+import TableGridRender from './TableGridRender';
 
 import TabBarRender from './TabsRender/TabBarRender';
 import TextFieldRender from './FieldRender/TextFieldRender';
@@ -50,6 +51,7 @@ export interface ITableViewerContainerProps {
 export interface ITableViewerContainerState {
   items: any[];
   filteredItems: any[];
+  updatedItems: any[];
   searchQuery: string;
   lastNextHref: string;
   globalError: any | null;
@@ -78,6 +80,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     this.state = {
       items: [],
       filteredItems: [],
+      updatedItems: [],
       lastNextHref: '',
       globalError: null,
       webPartTag: this.props.webPartTag,
@@ -100,12 +103,16 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
   async componentDidMount() {
     try {
      // const choices = await this.parseChoiceColumns(this.props.JSONCode);
-      
+      //
       await Promise.all([this.parseColumns(), this.getItems()]);
+      //await Promise.all([this.getItems()]);
 
       if (this.state.items.length > 0) {
-        const tabs = Object.keys(this.state.NewJSON).filter(key => this.state.NewJSON[key].tab === true);
+        // get a list of thre fields that are marked as tabs
+        const newJSON = this.state.NewJSON;
+        const tabs = Object.keys(newJSON).filter(key => newJSON[key].tab === true);
         console.log("TabFields",tabs);
+        // get the unique values for each of the tab fields
         const tabData: ITabData = {};
         tabs.forEach((field) => {
           const tabFieldData = this.getFilterValues(this.state.items, field);
@@ -114,7 +121,46 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
         });
         console.log("ALL Tab data:",tabData);
         this.setState({tabData});
+
+        // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
+
+        const updatedItems = this.state.items.map(item => {
+          const newItem = { ...item };
+
+          Object.keys(item).forEach((key) => {
+            // for each field in the item we will check if it is in the JSON and if it is we will format it
+            if (newJSON[key]) {
+              const pre = newJSON[key].prefix || '';
+              const suf = newJSON[key].suffix || '';
+              const format = newJSON[key].format || '';
+              const type = newJSON[key].type || 'string';
+              let value = item[key];
+
+              // Format the value based on the type
+              if (type === 'number') {
+                value = Number(value);
+              } else if (type === 'singlechoice') {
+                value = value ? value : 'Not selected';
+              } else if (type === 'multichoice') {
+                value = Array.isArray(value) ? value.join(', ') : value;
+              } else if (type === 'person') {
+                value = value ? value : 'No person';
+              } else if (type === 'date') {
+                value = value ? new Date(value).toLocaleDateString() : 'No date';
+              }
+
+              newItem[key] = pre + value + suf; // Add the formatted value to the new item
+            }
+          });
+
+          return newItem;
+
+
+        });
+        console.log("updated Items", updatedItems);
+        this.setState({ updatedItems });
       }
+
     } catch (error) {
       console.error('Error during component initialization:', error);
     }
@@ -214,7 +260,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
               isSortable: column.isSortable === 'true',// Add sortable property
               isSorted: false, // Initialize sorting state
               isSortedDescending: false, // Initialize sorting direction 
-              onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
+             // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
             } as IExtendedColumn);
           } else {
           columnsArray.push({
@@ -228,7 +274,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
             isSortable: column.isSortable === 'true',// Add sortable property
             isSorted: false, // Initialize sorting state
             isSortedDescending: false, // Initialize sorting direction          
-            onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
+           // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
           } as IExtendedColumn);
         }
         });
@@ -240,41 +286,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
 
-  // Separate field rendering to simplify the parseColumns method
-  renderField = (column: any, key: string, item: any, columnsObject:IColumnJSON) => {
-    const prefix = column.prefix || '';
-    const suffix = column.suffix || '';
-    const fieldValue = item[key];
 
-    switch (column.type) {
-      case 'number': {
-        return <NumberFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-      }
-      case 'singlechoice': {
-        return <SingleChoiceFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-      }
-      case 'multichoice': {
-        const values = Array.isArray(item[key]) ? item[key] : [item[key]];
-        return <MultiChoiceFieldRender values={values}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-      }
-      case 'person': {
-        const person = item[key];
-        return <PersonFieldRender person={person} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-      }
-      case 'date': {
-        const dateValue = item[key];
-        return <DateFieldRender dateValue={dateValue} format={column.format} prefix={prefix} suffix={suffix}  className={column.class ? styles[column.class as keyof typeof styles] : undefined} />;
-      }
-      case 'stack': {
-        if (Array.isArray(column.Fields)) {
-          return <StackFieldRender fields={column.Fields} columnsObject={columnsObject} item={item} />;
-        }
-        break;
-      }
-      default:
-        return <TextFieldRender fieldValue={fieldValue} prefix={prefix} suffix={suffix} isMultiline={column.isMultiline} className={column.class ? styles[column.class as keyof typeof styles] : undefined}  />;
-    }
-  }
 
   handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchQuery = event.target.value.toLowerCase();
@@ -347,7 +359,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
 
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
-    const { filteredItems, globalError, columnsArray } = this.state;
+    const { filteredItems, globalError, columnsArray, updatedItems } = this.state;
     console.log("columnsArray",columnsArray);
     console.log("Filtered Items",filteredItems);
     return (
@@ -361,7 +373,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
                   <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange} />
                 ))}
               </div>
-              <TableViewerRender columns={columnsArray} items={filteredItems} showFind={showFind}/> 
+              <TableGridRender colJSON={this.state.NewJSON} items={updatedItems} /> 
             </TableViewer>
             {globalError && (
               <TableViewerErrorMessage message={globalError} onDismiss={() => this.setState({ globalError: null })} />

@@ -13,6 +13,62 @@ import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
 import { IColumnConfig } from './Interfaces';
 
+// export const manageFieldFormat = (value: number | Date | string, type: string, format: string) => {
+//   switch (type) {
+//     case 'number': {
+//       let formatter;
+//       switch (format) {
+//         case 'USD':
+//           formatter = new Intl.NumberFormat('en-US', {
+//             style: 'currency',
+//             currency: 'USD',
+//           });
+//           break;
+//         case 'GBP':
+//           formatter = new Intl.NumberFormat('en-GB', {
+//             style: 'currency',
+//             currency: 'GBP',
+//           });
+//           break;
+//         case '00000.00':
+//           formatter = new Intl.NumberFormat('en-US', {
+//             minimumFractionDigits: 2,
+//             maximumFractionDigits: 2,
+//             useGrouping: false, // Disable thousands separator
+//           });
+//           break;
+//         case '0,000.00':
+//           formatter = new Intl.NumberFormat('en-US', {
+//             minimumFractionDigits: 2,
+//             maximumFractionDigits: 2,
+//           });
+//           break;
+//         case '000':
+//           formatter = new Intl.NumberFormat('en-US', {
+//             minimumFractionDigits: 0,
+//             maximumFractionDigits: 0,
+//           });
+//           break;
+//         case '0,000.000':
+//           formatter = new Intl.NumberFormat('en-US', {
+//             minimumFractionDigits: 3,
+//             maximumFractionDigits: 3,
+//           });
+//           break;
+//         default:
+//           formatter = new Intl.NumberFormat('en-US');
+//       }
+//       value = formatter.format(parseFloat(value));
+//       break;
+//     }
+//     // Add other cases for different types if needed
+//     default: {
+//       value = 
+//     }
+//   }
+// }
+
+
 //==================================================================================================================================
 // A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION it includes % and fr (fractional) widths calculated based on the container width
 //==================================================================================================================================
@@ -27,7 +83,7 @@ import { IColumnConfig } from './Interfaces';
       const value = parseFloat(match[1]);
       switch (match[2]) {
         case 'px': TotPX  += value; break;
-        case '%' : TotPer += value;  break;
+        case '%' : TotPer += value; break;
         case 'fr': TotFR  += value; break;  
       }
     }

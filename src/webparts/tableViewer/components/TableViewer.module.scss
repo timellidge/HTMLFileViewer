@@ -29,6 +29,30 @@
     .searchBox{ 
         margin: 0px;
     }
+
+    .tableGrid{
+        display:grid;
+        background-color: #e2e5e9;
+        width: 100%;
+        gap: 2px;
+
+        .tableCell{
+            background-color: rgb(210, 253, 217);
+            &::after {
+                content: "";
+                display: inline;
+            }
+            
+            &::before {
+                content: "";
+                display: inline;
+            }
+           
+        }
+        .tableDataCell{
+            background-color: rgb(247, 253, 255);
+        }
+    }
 }
 
 

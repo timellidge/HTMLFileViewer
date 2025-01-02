@@ -4,6 +4,9 @@ declare const styles: {
     searchBox: string;
     tabBar: string;
     tableContainer: string;
+    tableGrid: string;
+    tableCell: string;
+    tableDataCell: string;
     ID: string;
     Title: string;
     BSADescription: string;
