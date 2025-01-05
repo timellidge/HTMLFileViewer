@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IColumnConfig } from '../../../helpers/Interfaces';
+import { IColumnsConfig } from '../../../helpers/Interfaces';
 interface ITableGridRenderProps {
-    colJSON: IColumnConfig;
+    colJSON: IColumnsConfig;
     items: any[];
 }
 declare const TableGridRender: React.FunctionComponent<ITableGridRenderProps>;

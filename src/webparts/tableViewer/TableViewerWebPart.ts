@@ -24,7 +24,7 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 // Container Component Import
 import { IPropertyPaneConfiguration, IPropertyPanePage } from '@microsoft/sp-property-pane';
 import TableViewerContainer, { ITableViewerContainerProps } from './components/TableViewerContainer';
-import { IColumnConfig } from '../../helpers/Interfaces';
+import { IColumnsConfig } from '../../helpers/Interfaces';
 
 // Utilities Import
 import {
@@ -71,7 +71,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private msProps: any;
 
-  private tableConfig: IColumnConfig = {
+  private tableConfig: IColumnsConfig = {
     "id": {
       "name": "ident",
       "width": "40px",

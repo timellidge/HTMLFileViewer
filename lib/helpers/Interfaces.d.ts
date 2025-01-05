@@ -11,8 +11,9 @@ export interface IColumnJSON {
     prefix?: string | undefined | null;
     suffix?: string | undefined | null;
     format?: string | undefined | null;
+    sequence?: number | 0;
 }
-export interface IColumnConfig {
+export interface IColumnsConfig {
     [key: string]: IColumnJSON;
 }
 export interface ITabData {

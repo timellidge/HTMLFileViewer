@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-import { IColumn } from '@fluentui/react/lib/DetailsList';
-import { IColumnConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
-interface IExtendedColumn extends IColumn {
-    columnType: 'string' | 'number';
-}
+import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 export interface ITableViewerContainerProps {
     JSONCode: string;
     siteUrl: string;
@@ -36,20 +32,19 @@ export interface ITableViewerContainerState {
     contentHeight: string;
     selectedTab: string | null;
     selectedChoiceFieldName: string | null;
-    columnsArray: IExtendedColumn[];
     tabs: string[];
     tabCounts: {
         [key: string]: number;
     };
     tabData: ITabData;
-    NewJSON: IColumnConfig;
+    ColumnsJSON: IColumnsConfig;
 }
 declare class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
     constructor(props: ITableViewerContainerProps);
     componentDidMount(): Promise<void>;
     getFilterValues(items: any[], columnName: string): ITabDataDetail;
     getItems(): Promise<void>;
-    parseColumns(): Promise<void>;
+    parseJSON(): Promise<void>;
     handleSearch(event: React.ChangeEvent<HTMLInputElement>): void;
     handleTabChange(fieldName: string, tab: string): void;
     private _containerClass;

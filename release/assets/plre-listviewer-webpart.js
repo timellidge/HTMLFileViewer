@@ -10031,38 +10031,16 @@ var Position;
 
 
 
-// export interface IColumnJSON {
-//   name: string;
-//   width: string;
-//   calculatedPX?: number | undefined | null;
-//   tab?: boolean | undefined | null;
-//   type?: string | undefined | null;
-//   class?: string | undefined | null;
-//   isSortable?: boolean | undefined | null;
-//   isMultiline?: boolean | undefined | null;
-//   Fields?: string[] | undefined | null;
-//   prefix?: string | undefined | null;
-//   suffix?: string | undefined | null;
-//   format?: string | undefined | null;
-// }
 const TableGridRender = ({ colJSON, items }) => {
-    const _columnWidths = Object.keys(colJSON).map((key) => (colJSON[key].width || '') + ' ').join('');
+    const _sortedColumns = Object.keys(colJSON)
+        .map((key) => ({ key, column: colJSON[key] }))
+        .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
+    const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
     console.log(">>> grid info", _columnWidths, _GridStyle);
-    // style={values && values.length > 0 ? { margin: 0, paddingLeft: '20px', listStyleType: 'none', whiteSpace: 'pre-wrap' } : undefined}
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, Object.keys(colJSON).map((key) => {
-            return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell }, colJSON[key].name));
-        })),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, items.map((item, itemIndex) => (Object.keys(colJSON).map((key) => {
-            if (colJSON[key].width > "0") {
-                return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { key: `${itemIndex}-${key}`, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataCell },
-                    " ",
-                    item[key],
-                    " "));
-            }
-            return null;
-        }))))));
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell }, column.name)))),
+        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { key: `${itemIndex}-${key}`, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataCell }, item[key])))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -20227,7 +20205,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "d"])(this.properties.siteUrl, this.properties.list, this.properties.view)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "c"])(this.properties.siteUrl, this.properties.list, this.properties.view)
                 .then(this.updateFieldViewPickerValue.bind(this));
         }
         else {
@@ -20245,7 +20223,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "c"])(this.properties.siteUrl, this.properties.list)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "b"])(this.properties.siteUrl, this.properties.list)
                 .then(this.updateFieldListPickerOptions.bind(this));
         }
         else {
@@ -20306,7 +20284,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                                 this.msProps.PropertyPaneTextField('siteUrl', {
                                     label: 'Site',
                                     value: this.properties.siteUrl,
-                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "e"],
+                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "d"],
                                     deferredValidationTime: 500,
                                 }),
                                 this.listProp.PropertyFieldListPicker('list', {
@@ -35032,12 +35010,11 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             contentHeight: this.props.contentHeight,
             searchQuery: '',
             selectedTab: null,
-            columnsArray: [],
             tabs: [],
             selectedChoiceFieldName: '',
             tabCounts: {},
             tabData: {},
-            NewJSON: {}
+            ColumnsJSON: {},
         };
         this.getItems = this.getItems.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -35047,12 +35024,12 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
         try {
             // const choices = await this.parseChoiceColumns(this.props.JSONCode);
             //
-            await Promise.all([this.parseColumns(), this.getItems()]);
+            await Promise.all([this.parseJSON(), this.getItems()]);
             //await Promise.all([this.getItems()]);
             if (this.state.items.length > 0) {
                 // get a list of thre fields that are marked as tabs
-                const newJSON = this.state.NewJSON;
-                const tabs = Object.keys(newJSON).filter(key => newJSON[key].tab === true);
+                const ColumnsJSON = this.state.ColumnsJSON;
+                const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
                 console.log("TabFields", tabs);
                 // get the unique values for each of the tab fields
                 const tabData = {};
@@ -35068,13 +35045,14 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                     const newItem = Object.assign({}, item);
                     Object.keys(item).forEach((key) => {
                         // for each field in the item we will check if it is in the JSON and if it is we will format it
-                        if (newJSON[key]) {
-                            const pre = newJSON[key].prefix || '';
-                            const suf = newJSON[key].suffix || '';
-                            const format = newJSON[key].format || '';
-                            const type = newJSON[key].type || 'string';
+                        if (ColumnsJSON[key]) {
+                            const ColData = ColumnsJSON[key];
+                            const pre = ColData.prefix || '';
+                            const suf = ColData.suffix || '';
+                            const format = ColData.format || '';
+                            const type = ColData.type || 'string';
                             let value = item[key];
-                            // Format the value based on the type
+                            // Format the value based on the type THIS WILL NEED TO BE EXTENDED
                             if (type === 'number') {
                                 value = Number(value);
                             }
@@ -35125,7 +35103,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     async getItems() {
         try {
             const { siteUrl, listId, viewXmlCode, hideErrorEmpty } = this.props;
-            const result = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode);
+            const result = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "a"])(siteUrl, listId, viewXmlCode);
             if (result) {
                 const { Row, NextHref } = result;
                 // Apply filtering based on the selected tab
@@ -35151,64 +35129,13 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
                 this.setState({ globalError: e });
         }
     }
-    async parseColumns() {
+    async parseJSON() {
+        // Parse the JSON string into an object then convert it to an array of key-value pairs in the oder of the sequecne
         try {
             const { JSONCode } = this.props;
-            const columnsObject = JSON.parse(JSONCode);
-            const columnsArray = [];
-            console.log("ColumnsObject", columnsObject);
-            const NewJSON = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* convertWidthToPx */ "a"])(728, columnsObject);
-            console.log("NewJSON", NewJSON);
-            this.setState({ NewJSON });
-            Object.keys(columnsObject)
-                .map((key) => {
-                const column = columnsObject[key];
-                return { key, column };
-            })
-                .sort((a, b) => {
-                const seqA = parseInt(a.column.sequence || '99', 10);
-                const seqB = parseInt(b.column.sequence || '99', 10);
-                return seqA - seqB;
-            })
-                .forEach(({ key, column }) => {
-                const width = column.calculatedPX || 0;
-                // Check if the column type is 'stack' to bypass width check
-                if (width === '0%' && column.type !== 'stack') {
-                    return; // Skip this column if it's not 'stack' and width is zero
-                }
-                // For stacked columns, use specified fields only
-                if (column.type === 'stack' && Array.isArray(column.fields)) {
-                    columnsArray.push({
-                        key: key,
-                        fieldName: column.name,
-                        name: column.name,
-                        minWidth: Math.min(width - 20, 0),
-                        maxWidth: width,
-                        columnType: column.type,
-                        className: column.class || '',
-                        isSortable: column.isSortable === 'true',
-                        isSorted: false,
-                        isSortedDescending: false, // Initialize sorting direction 
-                        // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
-                    });
-                }
-                else {
-                    columnsArray.push({
-                        key: key,
-                        fieldName: column.name,
-                        name: column.name,
-                        minWidth: Math.max(width - 20, 0),
-                        maxWidth: width,
-                        columnType: column.type,
-                        className: column.class || '',
-                        isSortable: column.isSortable === 'true',
-                        isSorted: false,
-                        isSortedDescending: false, // Initialize sorting direction          
-                        // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
-                    });
-                }
-            });
-            this.setState({ columnsArray });
+            const ColumnsJSON = JSON.parse(JSONCode);
+            console.log("ColumnsObject", ColumnsJSON);
+            this.setState({ ColumnsJSON });
         }
         catch (error) {
             console.error('Error parsing columns:', error);
@@ -35269,14 +35196,13 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
     }
     render() {
         const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
-        const { filteredItems, globalError, columnsArray, updatedItems } = this.state;
-        console.log("columnsArray", columnsArray);
+        const { filteredItems, globalError, updatedItems } = this.state;
         console.log("Filtered Items", filteredItems);
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: this.state.webPartTag, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableViewer }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: this.state.searchQuery, handleSearch: this.handleSearch }),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(this.state.tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { key: field, fieldName: field, tabs: this.state.tabData[field], handleTabChange: this.handleTabChange })))),
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { colJSON: this.state.NewJSON, items: updatedItems })),
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { colJSON: this.state.ColumnsJSON, items: updatedItems })),
             globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { message: globalError, onDismiss: () => this.setState({ globalError: null }) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
     }
 }
@@ -44100,18 +44026,18 @@ function _merge(target, source, circularReferences) {
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
 /*! exports provided: convertWidthToPx, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
-/*! exports used: convertWidthToPx, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, validateSiteExists */
+/*! exports used: getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return convertWidthToPx; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return validateSiteExists; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
+/* unused harmony export convertWidthToPx */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return validateSiteExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
 /* unused harmony export createSearchQueryViewXml */
 /* unused harmony export searchFieldTypes */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListViewXml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getListFields; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListViewXml; });
 /* unused harmony export getSearchFieldsFromOptions */
 /* unused harmony export updateListItem */
 /* unused harmony export addListItem */

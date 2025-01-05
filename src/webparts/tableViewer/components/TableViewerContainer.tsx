@@ -9,7 +9,7 @@ import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
-import { convertWidthToPx, getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
+import { getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 
 import TabBarRender from './TabsRender/TabBarRender';
@@ -20,7 +20,7 @@ import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
 import PersonFieldRender from './FieldRender/PersonFieldRender';
 import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
-import { IColumnConfig, IColumnJSON, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 
 
 // Extend the IColumn interface
@@ -59,11 +59,10 @@ export interface ITableViewerContainerState {
   contentHeight: string;
   selectedTab: string | null;
   selectedChoiceFieldName: string | null;
-  columnsArray: IExtendedColumn[];
   tabs: string[];
   tabCounts: { [key: string]: number };
   tabData: ITabData;
-  NewJSON: IColumnConfig;
+  ColumnsJSON:  IColumnsConfig;
   
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -87,12 +86,11 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       contentHeight: this.props.contentHeight,
       searchQuery: '',
       selectedTab: null,
-      columnsArray: [],
       tabs: [],
       selectedChoiceFieldName:'',
       tabCounts:{},
       tabData: {},
-      NewJSON:  {}
+      ColumnsJSON: {} as IColumnsConfig,
     };
 
     this.getItems = this.getItems.bind(this);
@@ -104,13 +102,13 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     try {
      // const choices = await this.parseChoiceColumns(this.props.JSONCode);
       //
-      await Promise.all([this.parseColumns(), this.getItems()]);
+      await Promise.all([this.parseJSON(), this.getItems()]);
       //await Promise.all([this.getItems()]);
 
       if (this.state.items.length > 0) {
         // get a list of thre fields that are marked as tabs
-        const newJSON = this.state.NewJSON;
-        const tabs = Object.keys(newJSON).filter(key => newJSON[key].tab === true);
+        const ColumnsJSON = this.state.ColumnsJSON;
+        const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
         console.log("TabFields",tabs);
         // get the unique values for each of the tab fields
         const tabData: ITabData = {};
@@ -129,14 +127,15 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
 
           Object.keys(item).forEach((key) => {
             // for each field in the item we will check if it is in the JSON and if it is we will format it
-            if (newJSON[key]) {
-              const pre = newJSON[key].prefix || '';
-              const suf = newJSON[key].suffix || '';
-              const format = newJSON[key].format || '';
-              const type = newJSON[key].type || 'string';
-              let value = item[key];
+            if (ColumnsJSON[key]) {
+              const ColData = ColumnsJSON[key];
+              const pre     = ColData.prefix || '';
+              const suf     = ColData.suffix || '';
+              const format  = ColData.format || '';
+              const type    = ColData.type || 'string';
+              let value     = item[key];
 
-              // Format the value based on the type
+              // Format the value based on the type THIS WILL NEED TO BE EXTENDED
               if (type === 'number') {
                 value = Number(value);
               } else if (type === 'singlechoice') {
@@ -216,70 +215,14 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
     }
   }
 
-  async parseColumns() {
+  async parseJSON() {
+    // Parse the JSON string into an object then convert it to an array of key-value pairs in the oder of the sequecne
     try {
       const { JSONCode } = this.props;
-      const columnsObject = JSON.parse(JSONCode);
-      const columnsArray: IExtendedColumn[] = [];
+      const ColumnsJSON: IColumnsConfig = JSON.parse(JSONCode);
+      console.log("ColumnsObject", ColumnsJSON);
+      this.setState({ ColumnsJSON });
 
-      console.log("ColumnsObject",columnsObject);
-
-      const NewJSON:IColumnConfig = convertWidthToPx( 728, columnsObject );
-      console.log("NewJSON",NewJSON);
-
-      this.setState({NewJSON});
-
-      Object.keys(columnsObject)
-        .map((key) => {
-          const column = columnsObject[key];
-          return { key, column };
-        })
-        .sort((a, b) => {
-          const seqA = parseInt(a.column.sequence || '99', 10);
-          const seqB = parseInt(b.column.sequence || '99', 10);
-          return seqA - seqB;
-        })
-        .forEach(({ key, column }) => {
-          const width = column.calculatedPX || 0;
-
-          // Check if the column type is 'stack' to bypass width check
-          if (width === '0%' && column.type !== 'stack') {
-            return; // Skip this column if it's not 'stack' and width is zero
-          }
-
-          // For stacked columns, use specified fields only
-          if (column.type === 'stack' && Array.isArray(column.fields)) {
-            columnsArray.push({
-              key: key,
-              fieldName: column.name,
-              name: column.name,
-              minWidth: Math.min(width - 20, 0), // Ensure width is at least 0
-              maxWidth:width,
-              columnType:column.type,
-              className: column.class || '', // Apply the CSS class from the JSON
-              isSortable: column.isSortable === 'true',// Add sortable property
-              isSorted: false, // Initialize sorting state
-              isSortedDescending: false, // Initialize sorting direction 
-             // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
-            } as IExtendedColumn);
-          } else {
-          columnsArray.push({
-            key: key,
-            fieldName: column.name,
-            name: column.name,
-            minWidth: Math.max(width - 20, 0), // Ensure width is at least 0
-            maxWidth:width,
-            columnType:column.type,
-            className: column.class || '', // Apply the CSS class from the JSON
-            isSortable: column.isSortable === 'true',// Add sortable property
-            isSorted: false, // Initialize sorting state
-            isSortedDescending: false, // Initialize sorting direction          
-           // onRender: (item: any) => this.renderField(column, key, item, columnsObject) // Handle field rendering separately
-          } as IExtendedColumn);
-        }
-        });
-
-      this.setState({ columnsArray });
     } catch (error) {
       console.error('Error parsing columns:', error);
       if (!this.props.hideErrorEmpty) this.setState({ globalError: 'Error parsing columns configuration' });
@@ -359,8 +302,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
 
   render() {
     const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = this.props;
-    const { filteredItems, globalError, columnsArray, updatedItems } = this.state;
-    console.log("columnsArray",columnsArray);
+    const { filteredItems, globalError,  updatedItems } = this.state;
     console.log("Filtered Items",filteredItems);
     return (
       <div id={this.state.webPartTag} className={styles.tableViewer}> 
@@ -373,7 +315,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
                   <TabBarRender key={field} fieldName={field} tabs={this.state.tabData[field]} handleTabChange={this.handleTabChange} />
                 ))}
               </div>
-              <TableGridRender colJSON={this.state.NewJSON} items={updatedItems} /> 
+              <TableGridRender colJSON={this.state.ColumnsJSON} items={updatedItems} /> 
             </TableViewer>
             {globalError && (
               <TableViewerErrorMessage message={globalError} onDismiss={() => this.setState({ globalError: null })} />

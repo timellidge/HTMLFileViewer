@@ -11,7 +11,7 @@ import { IDropdownOption } from 'office-ui-fabric-react';
 import { IViewInfo } from '@pnp/sp/views';
 import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
-import { IColumnConfig } from './Interfaces';
+import { IColumnsConfig } from './Interfaces';
 
 // export const manageFieldFormat = (value: number | Date | string, type: string, format: string) => {
 //   switch (type) {
@@ -72,7 +72,7 @@ import { IColumnConfig } from './Interfaces';
 //==================================================================================================================================
 // A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION it includes % and fr (fractional) widths calculated based on the container width
 //==================================================================================================================================
- export const convertWidthToPx = (containerPX: number, ColJSON: IColumnConfig ): IColumnConfig => {
+ export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
   //set my variables to  zero 
   let TotPX = 0, TotPer = 0, TotFR = 0;
   // two loops throrought the config json - first to get the total for the px the % and the fr columns
