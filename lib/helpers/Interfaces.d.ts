@@ -12,6 +12,7 @@ export interface IColumnJSON {
     suffix?: string | undefined | null;
     format?: string | undefined | null;
     sequence?: number | 0;
+    lines?: number | 0;
 }
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;

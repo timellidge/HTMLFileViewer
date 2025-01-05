@@ -22,12 +22,6 @@ import DateFieldRender from './FieldRender/DateFieldRender';
 import StackFieldRender from './FieldRender/StackFieldRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 
-
-// Extend the IColumn interface
-interface IExtendedColumn extends IColumn {
-  columnType: 'string' | 'number'; 
-}
-
 export interface ITableViewerContainerProps {
   JSONCode: string;
   siteUrl: string;
@@ -49,9 +43,9 @@ export interface ITableViewerContainerProps {
 }
 
 export interface ITableViewerContainerState {
-  items: any[];
-  filteredItems: any[];
-  updatedItems: any[];
+  items: any[];   // raw data from the list
+  filteredItems: any[]; // these are the items that have been filtered
+  updatedItems: any[];  // these are the items that have been formatted 
   searchQuery: string;
   lastNextHref: string;
   globalError: any | null;
@@ -65,10 +59,9 @@ export interface ITableViewerContainerState {
   ColumnsJSON:  IColumnsConfig;
   
 }
+
 ///////////////////////////////////////////////////////////////////////////
-
 // we will convert this old class pattern but first i NEED to understand the code
-
 ///////////////////////////////////////////////////////////////////////////
 
 class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
@@ -228,7 +221,6 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       if (!this.props.hideErrorEmpty) this.setState({ globalError: 'Error parsing columns configuration' });
     }
   }
-
 
 
   handleSearch(event: React.ChangeEvent<HTMLInputElement>) {

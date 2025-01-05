@@ -13,12 +13,12 @@ export interface IColumnJSON {
     suffix?: string | undefined | null;
     format?: string | undefined | null;
     sequence?: number | 0;
+    lines?: number | 0;
 }
   
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;
 }
-
 
 // the infro to draw and manage the tabs and state of the tabs
 // one tab bar per field that is marked as tab.
