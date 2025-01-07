@@ -12,61 +12,63 @@ import { IViewInfo } from '@pnp/sp/views';
 import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
 import { IColumnsConfig } from './Interfaces';
+import {DateTime} from 'luxon';
 
-// export const manageFieldFormat = (value: number | Date | string, type: string, format: string) => {
-//   switch (type) {
-//     case 'number': {
-//       let formatter;
-//       switch (format) {
-//         case 'USD':
-//           formatter = new Intl.NumberFormat('en-US', {
-//             style: 'currency',
-//             currency: 'USD',
-//           });
-//           break;
-//         case 'GBP':
-//           formatter = new Intl.NumberFormat('en-GB', {
-//             style: 'currency',
-//             currency: 'GBP',
-//           });
-//           break;
-//         case '00000.00':
-//           formatter = new Intl.NumberFormat('en-US', {
-//             minimumFractionDigits: 2,
-//             maximumFractionDigits: 2,
-//             useGrouping: false, // Disable thousands separator
-//           });
-//           break;
-//         case '0,000.00':
-//           formatter = new Intl.NumberFormat('en-US', {
-//             minimumFractionDigits: 2,
-//             maximumFractionDigits: 2,
-//           });
-//           break;
-//         case '000':
-//           formatter = new Intl.NumberFormat('en-US', {
-//             minimumFractionDigits: 0,
-//             maximumFractionDigits: 0,
-//           });
-//           break;
-//         case '0,000.000':
-//           formatter = new Intl.NumberFormat('en-US', {
-//             minimumFractionDigits: 3,
-//             maximumFractionDigits: 3,
-//           });
-//           break;
-//         default:
-//           formatter = new Intl.NumberFormat('en-US');
-//       }
-//       value = formatter.format(parseFloat(value));
-//       break;
-//     }
-//     // Add other cases for different types if needed
-//     default: {
-//       value = 
-//     }
-//   }
-// }
+
+//==================================================================================================================================
+// A FUNCTION TO work out date formats based on the locale adn will try 12 and 24 hour formats
+//==================================================================================================================================
+//https://github.com/moment/luxon/blob/master/docs/formatting.md#table-of-tokens
+
+export const dateFormat = (value: number | Date | string, format: string, locale: string) => {
+  // Determine the date format based on the locale
+  const dateFormat = locale === 'en-GB' ? 'dd/MM/yyyy' : 'M/d/yyyy';
+  let date: DateTime;
+  // Try parsing with 24-hour format
+  date = DateTime.fromFormat(value.toString(), `${dateFormat} H:mm`, { locale });
+  if (!date.isValid) {
+    // If parsing with 24-hour format fails, try 12-hour format
+    date = DateTime.fromFormat(value.toString(), `${dateFormat} h:mm a`, { locale });
+  }
+
+  try {
+    return date.toFormat(format);
+  } catch (e) {
+    return value;
+  }
+}
+
+
+// A FUNCTION TO work out number formats based on the locale and the currency symbol
+export const numberFormat = (value: number, format: string) => {
+  let style: 'decimal' | 'currency' = 'decimal';
+  let currency: string | undefined;
+  let useGrouping = false;
+  let minimumFractionDigits = 0;
+  let maximumFractionDigits = 0;
+
+  // Parse the format string
+  if (format.includes('$')) { style = 'currency'; currency = 'USD';
+  } else if (format.includes('£')) { style = 'currency'; currency = 'GBP';
+  } else if (format.includes('€')) {style = 'currency'; currency = 'EUR';
+  } else if (format.includes('¥')) { style = 'currency';currency = 'JPY'; }
+
+  if (format.includes(',')) {
+    useGrouping = true;
+  }
+
+  const decimalMatch = format.match(/\d+/);
+  if (decimalMatch) {
+    minimumFractionDigits = parseInt(decimalMatch[0], 10);
+    maximumFractionDigits = minimumFractionDigits;
+  }
+
+  try {
+    return new Intl.NumberFormat(undefined, {  style, currency, useGrouping, minimumFractionDigits, maximumFractionDigits}).format(value);
+  } catch (e) {
+    return value.toString();
+  }
+};
 
 
 //==================================================================================================================================
@@ -198,13 +200,34 @@ export const searchFieldTypes: FieldTypes[] = [
   FieldTypes.Note,
 ];
 
+// a helpers to ge the loacle of the site SO I CAN INTEPRET NUMBERS and dates properly 
+const languageIdToLocale: { [key: number]: string } = {
+  1033: 'en-US', // English - United States
+  1036: 'fr-FR', // French - France
+  1031: 'de-DE', // German - Germany
+  3082: 'es-ES', // Spanish - Spain
+  2057: 'en-GB', // English - United Kingdom
+  // Add more mappings as needed
+};
+
+
+export const getSiteLocale = async (siteUrl: string): Promise<string> => {
+  try {
+    const web = await Web(siteUrl).select("Language").get();
+    const languageId = web.Language;
+    const locale = languageIdToLocale[languageId] || 'en-US'; // Default to 'en-US' if not found
+    return locale;
+  } catch (error) {
+    console.error("Error getting SharePoint locale:", error);
+    return "en-UK"; // Default locale
+  }
+};
+
 export const getListFields = async (
   siteUrl: string, listId: string,
 ): Promise<IFieldInfo[]> => Web(siteUrl).lists
   .getById(listId).fields
   .get();
-
-
 
 export const getListViewXml = async (
   siteUrl: string, listId: string, viewId: string,
@@ -219,7 +242,6 @@ export const getSearchFieldsFromOptions = (options: IDropdownOption[]): IFieldIn
   return fields.filter((field: IFieldInfo) => field
     || searchFieldTypes.indexOf(field.FieldTypeKind) !== -1);
 };
-
 
 export const updateListItem = async (
   siteUrl: string, listId: string, itemId: number, properties: ITypedHash<unknown>,

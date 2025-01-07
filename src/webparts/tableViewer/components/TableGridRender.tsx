@@ -27,9 +27,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     <>
       <div className={_GridStyle}>
         {_sortedColumns.map(({ key, column }) => (
-          <div key={key} className={styles.tableHeaderCell}>
-            {column.name}
-          </div>
+          column.width > "0" && (
+            <div key={key} className={styles.tableHeaderCell}> {column.name} </div>
+          )
         ))}
       </div>
       {items.map((item, itemIndex) => (

@@ -9,7 +9,7 @@ import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
-import { getItemsUsingRenderListDataAsStream } from '../../../helpers/Utilities';
+import { dateFormat, getItemsUsingRenderListDataAsStream, numberFormat } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 
 import TabBarRender from './TabsRender/TabBarRender';
@@ -99,7 +99,8 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       //await Promise.all([this.getItems()]);
 
       if (this.state.items.length > 0) {
-        // get a list of thre fields that are marked as tabs
+        // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
+        // the one that shows counts, enumerates values idf it is selected  and the field it relates to 
         const ColumnsJSON = this.state.ColumnsJSON;
         const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
         console.log("TabFields",tabs);
@@ -128,19 +129,14 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
               const type    = ColData.type || 'string';
               let value     = item[key];
 
-              // Format the value based on the type THIS WILL NEED TO BE EXTENDED
-              if (type === 'number') {
-                value = Number(value);
-              } else if (type === 'singlechoice') {
-                value = value ? value : 'Not selected';
-              } else if (type === 'multichoice') {
-                value = Array.isArray(value) ? value.join(', ') : value;
-              } else if (type === 'person') {
-                value = value ? value : 'No person';
-              } else if (type === 'date') {
-                value = value ? new Date(value).toLocaleDateString() : 'No date';
-              }
+              // Format the value based on the type THIS WILL NEED TO BE DRAMATICALLY EXTENDED
+              if      (type === 'number')       {value =  value = numberFormat(value, format); } 
+              else if (type === 'date')         {value = dateFormat(value, format, 'en-GB'); } 
+              else if (type === 'singlechoice') {value = value ? value : 'Not selected'; } 
+              else if (type === 'multichoice')  {value = Array.isArray(value) ? value.join(', ') : value; }
+              else if (type === 'person')       { value = value && typeof value === 'object' && value.email ? value.email : ' - '; }
 
+              // its a string do just top and tail it 
               newItem[key] = pre + value + suf; // Add the formatted value to the new item
             }
           });

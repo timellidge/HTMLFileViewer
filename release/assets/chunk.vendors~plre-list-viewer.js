@@ -442,7 +442,7 @@ String.prototype.parseNumberInvariant = function () {
  * Parses number in provided culture
  */
 String.prototype._parseNumber = function (culture) {
-    var str = '' + this;
+    let str = '' + this;
     str = str.trim();
     if (str.match(/^[+-]?infinity$/i)) {
         return parseFloat(str);
@@ -450,10 +450,10 @@ String.prototype._parseNumber = function (culture) {
     if (str.match(/^0x[a-f0-9]+$/i)) {
         return parseInt(str);
     }
-    var numberFormat = culture.numberFormat;
-    var patternParsed = str._parseNumberNegativePattern(numberFormat, numberFormat.NumberNegativePattern);
-    var symbol = patternParsed[0];
-    var digit = patternParsed[1];
+    const numberFormat = culture.numberFormat;
+    let patternParsed = str._parseNumberNegativePattern(numberFormat, numberFormat.NumberNegativePattern);
+    let symbol = patternParsed[0];
+    let digit = patternParsed[1];
     if (symbol === '' && numberFormat.NumberNegativePattern !== 1) {
         patternParsed = str._parseNumberNegativePattern(numberFormat, 1);
         symbol = patternParsed[0];
@@ -462,9 +462,9 @@ String.prototype._parseNumber = function (culture) {
     if (symbol === '') {
         symbol = '+';
     }
-    var exponent;
-    var base;
-    var scientificSymbolIndex = digit.indexOf('e');
+    let exponent;
+    let base;
+    let scientificSymbolIndex = digit.indexOf('e');
     if (scientificSymbolIndex < 0) {
         scientificSymbolIndex = digit.indexOf('E');
     }
@@ -476,9 +476,9 @@ String.prototype._parseNumber = function (culture) {
         base = digit.substr(0, scientificSymbolIndex);
         exponent = digit.substr(scientificSymbolIndex + 1);
     }
-    var intPart;
-    var fractionalPart;
-    var decimalSeparatorIdx = base.indexOf(numberFormat.NumberDecimalSeparator);
+    let intPart;
+    let fractionalPart;
+    const decimalSeparatorIdx = base.indexOf(numberFormat.NumberDecimalSeparator);
     if (decimalSeparatorIdx < 0) {
         intPart = base;
         fractionalPart = null;
@@ -488,16 +488,16 @@ String.prototype._parseNumber = function (culture) {
         fractionalPart = base.substr(decimalSeparatorIdx + numberFormat.NumberDecimalSeparator.length);
     }
     intPart = intPart.split(numberFormat.NumberGroupSeparator).join('');
-    var n = numberFormat.NumberGroupSeparator.replace(/\u00A0/g, ' ');
+    const n = numberFormat.NumberGroupSeparator.replace(/\u00A0/g, ' ');
     if (numberFormat.NumberGroupSeparator !== n) {
         intPart = intPart.split(n).join('');
     }
-    var result = symbol + intPart;
+    let result = symbol + intPart;
     if (fractionalPart !== null) {
         result += '.' + fractionalPart;
     }
     if (exponent !== null) {
-        var exponentParsed = exponent._parseNumberNegativePattern(numberFormat, 1);
+        const exponentParsed = exponent._parseNumberNegativePattern(numberFormat, 1);
         if (exponentParsed[0] === '') {
             exponentParsed[0] = '+';
         }
@@ -512,8 +512,8 @@ String.prototype._parseNumber = function (culture) {
  * Internal method, Microsoft's replica to parse FriendlyFormat of date or digit
  */
 String.prototype._parseNumberNegativePattern = function (numberFormat, pattern) {
-    var negativeSign = numberFormat.NegativeSign;
-    var positiveSign = numberFormat.PositiveSign;
+    let negativeSign = numberFormat.NegativeSign;
+    let positiveSign = numberFormat.PositiveSign;
     switch (pattern) {
         case 4:
             negativeSign = ' ' + negativeSign;
@@ -619,11 +619,11 @@ if(content.locals) module.exports = content.locals;
 /**
  * Key that is used to store loaded fields in sessionStorage
  */
-var LoadedViewFieldsKey = 'LBLoadedViewFields';
+const LoadedViewFieldsKey = 'LBLoadedViewFields';
 /**
  * Mapping between current field name and the name of the real field that contains the data
  */
-var FieldNamesMapping = {
+const FieldNamesMapping = {
     'Title': {
         'storedName': 'Title'
     },
@@ -652,7 +652,7 @@ var FieldNamesMapping = {
 /**
  * Invariant Culture
  */
-var InvariantCulture = {
+const InvariantCulture = {
     name: '',
     numberFormat: {
         CurrencyDecimalDigits: 2,
@@ -752,11 +752,11 @@ var InvariantCulture = {
 /**
  * Represents a PropertyFieldListPicker object
  */
-var PropertyFieldListPickerBuilder = /** @class */ (function () {
+class PropertyFieldListPickerBuilder {
     /**
      * Constructor method
      */
-    function PropertyFieldListPickerBuilder(_targetProperty, _properties) {
+    constructor(_targetProperty, _properties) {
         //Properties defined by IPropertyPaneField
         this.type = _microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2__["PropertyPaneFieldType"].Custom;
         this.disabled = false;
@@ -795,12 +795,12 @@ var PropertyFieldListPickerBuilder = /** @class */ (function () {
             this.deferredValidationTime = _properties.deferredValidationTime;
         }
     }
-    PropertyFieldListPickerBuilder.prototype.onPropertyChange = function (propertyPath, oldValue, newValue) { }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    onPropertyChange(propertyPath, oldValue, newValue) { } // eslint-disable-line @typescript-eslint/no-explicit-any
     /**
      * Renders the SPListPicker field content
      */
-    PropertyFieldListPickerBuilder.prototype.render = function (elem, ctx, changeCallback) {
-        var componentProps = {
+    render(elem, ctx, changeCallback) {
+        const componentProps = {
             label: this.label,
             targetProperty: this.targetProperty,
             context: this.context,
@@ -831,26 +831,25 @@ var PropertyFieldListPickerBuilder = /** @class */ (function () {
             componentProps.showSelectAll = this.showSelectAll;
             componentProps.selectAllInList = this.selectAllInList;
             componentProps.selectAllInListLabel = this.selectAllInListLabel;
-            var element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldListMultiPickerHost__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], componentProps);
+            const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldListMultiPickerHost__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], componentProps);
             // Calls the REACT content generator
             react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](element, elem);
         }
         else {
             // Single selector
             componentProps.selectedList = this.selectedList;
-            var element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldListPickerHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], componentProps);
+            const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldListPickerHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], componentProps);
             // Calls the REACT content generator
             react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](element, elem);
         }
-    };
+    }
     /**
      * Disposes the current object
      */
-    PropertyFieldListPickerBuilder.prototype.dispose = function (elem) {
+    dispose(elem) {
         react_dom__WEBPACK_IMPORTED_MODULE_1__["unmountComponentAtNode"](elem);
-    };
-    return PropertyFieldListPickerBuilder;
-}());
+    }
+}
 /**
  * Helper method to create a SPList Picker on the PropertyPane.
  * @param targetProperty - Target property the SharePoint list picker is associated to.
@@ -858,7 +857,7 @@ var PropertyFieldListPickerBuilder = /** @class */ (function () {
  */
 function PropertyFieldListPicker(targetProperty, properties) {
     //Create an internal properties object from the given properties
-    var newProperties = {
+    const newProperties = {
         label: properties.label,
         targetProperty: targetProperty,
         context: properties.context,
@@ -2366,6 +2365,7 @@ dom.importCssString(exports.cssText, exports.cssClass);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PropertyFieldCodeEditorHost; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Utilities */ "GHdt");
@@ -2402,32 +2402,6 @@ dom.importCssString(exports.cssText, exports.cssClass);
 /* harmony import */ var brace_theme_monokai__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! brace/theme/monokai */ "FNQ8");
 /* harmony import */ var brace_theme_monokai__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(brace_theme_monokai__WEBPACK_IMPORTED_MODULE_23__);
 /* harmony import */ var _helpers_GeneralHelper__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../../helpers/GeneralHelper */ "yVpZ");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 
 
 
@@ -2453,31 +2427,29 @@ var __assign = (undefined && undefined.__assign) || function () {
 /**
  * Renders the controls for PropertyFieldCodeEditor component
  */
-var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
-    __extends(PropertyFieldCodeEditorHost, _super);
+class PropertyFieldCodeEditorHost extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     /**
      * Constructor method
      */
-    function PropertyFieldCodeEditorHost(props) {
-        var _this = _super.call(this, props) || this;
-        _this.cancel = true;
+    constructor(props) {
+        super(props);
+        this.cancel = true;
         _common_telemetry__WEBPACK_IMPORTED_MODULE_13__[/* track */ "a"]('PropertyFieldCodeEditor', {
             language: props.language,
             disabled: props.disabled
         });
-        _this.state = {
-            code: typeof _this.props.initialValue !== 'undefined' ? _this.props.initialValue : '',
+        this.state = {
+            code: typeof this.props.initialValue !== 'undefined' ? this.props.initialValue : '',
             loaded: false,
             openPanel: false,
             errorMessage: ''
         };
-        _this.onOpenPanel = _this.onOpenPanel.bind(_this);
-        _this.onClosePanel = _this.onClosePanel.bind(_this);
-        _this.onFormatCode = _this.onFormatCode.bind(_this);
-        _this.onChange = _this.onChange.bind(_this);
-        _this.onSave = _this.onSave.bind(_this);
-        _this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* Async */ "a"](_this);
-        return _this;
+        this.onOpenPanel = this.onOpenPanel.bind(this);
+        this.onClosePanel = this.onClosePanel.bind(this);
+        this.onFormatCode = this.onFormatCode.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSave = this.onSave.bind(this);
+        this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* Async */ "a"](this);
     }
     /**
      * UNSAFE_componentWillUpdate lifecycle hook
@@ -2485,17 +2457,17 @@ var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
      * @param nextProps
      * @param nextState
      */
-    PropertyFieldCodeEditorHost.prototype.UNSAFE_componentWillUpdate = function (nextProps, nextState) {
+    UNSAFE_componentWillUpdate(nextProps, nextState) {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.setState({
                 code: typeof nextProps.initialValue !== 'undefined' ? nextProps.initialValue : ''
             });
         }
-    };
+    }
     /**
      * Open the right Panel
      */
-    PropertyFieldCodeEditorHost.prototype.onOpenPanel = function () {
+    onOpenPanel() {
         if (this.props.disabled) {
             return;
         }
@@ -2506,30 +2478,29 @@ var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
             openPanel: true,
             loaded: false
         });
-    };
+    }
     /**
      * Close the panel
      */
-    PropertyFieldCodeEditorHost.prototype.onClosePanel = function () {
-        var _this = this;
-        this.setState(function (crntState) {
-            var newState = {
+    onClosePanel() {
+        this.setState((crntState) => {
+            const newState = {
                 openPanel: false,
                 loaded: false
             };
             // Check if the property has to be reset
-            if (_this.cancel) {
-                newState.code = _this.previousValue;
+            if (this.cancel) {
+                newState.code = this.previousValue;
             }
             return newState;
         });
-    };
+    }
     /**
      * Format the code
      */
-    PropertyFieldCodeEditorHost.prototype.onFormatCode = function () {
-        var formattedCode;
-        var codeFormatter = new _CodeFormatter__WEBPACK_IMPORTED_MODULE_10__[/* CodeFormatter */ "a"]();
+    onFormatCode() {
+        let formattedCode;
+        const codeFormatter = new _CodeFormatter__WEBPACK_IMPORTED_MODULE_10__[/* CodeFormatter */ "a"]();
         switch (this.props.language) {
             case _IPropertyFieldCodeEditor__WEBPACK_IMPORTED_MODULE_7__[/* PropertyFieldCodeEditorLanguages */ "a"].JSON: {
                 formattedCode = codeFormatter.formatJSON(this.state.code.trim());
@@ -2555,19 +2526,19 @@ var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
         // const beautify = require('beautify');
         // let formattedCode: any = beautify(this.state.code.trim(), { format: codeLanguage });
         this.setState({ code: formattedCode });
-    };
+    }
     /**
      * Called when the component will unmount
      */
-    PropertyFieldCodeEditorHost.prototype.componentWillUnmount = function () {
+    componentWillUnmount() {
         if (typeof this.async !== 'undefined') {
             this.async.dispose();
         }
-    };
+    }
     /**
      * Called when the save button  gets clicked
      */
-    PropertyFieldCodeEditorHost.prototype.onSave = function () {
+    onSave() {
         this.cancel = false;
         Object(_helpers_GeneralHelper__WEBPACK_IMPORTED_MODULE_24__[/* setPropertyValue */ "a"])(this.props.properties, this.props.targetProperty, this.state.code);
         this.props.onPropertyChange(this.props.targetProperty, this.props.initialValue, this.state.code);
@@ -2575,19 +2546,18 @@ var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
         if (typeof this.props.onChange !== 'undefined' && this.props.onChange !== null) {
             this.props.onChange(this.props.targetProperty, this.state.code);
         }
-        this.setState(function (current) { return (__assign(__assign({}, current), { openPanel: false })); });
-    };
+        this.setState((current) => (Object.assign(Object.assign({}, current), { openPanel: false })));
+    }
     /**
      * Called when the code gets changed
      */
-    PropertyFieldCodeEditorHost.prototype.onChange = function (newValue) {
-        this.setState(function (current) { return (__assign(__assign({}, current), { code: newValue })); });
-    };
+    onChange(newValue) {
+        this.setState((current) => (Object.assign(Object.assign({}, current), { code: newValue })));
+    }
     /**
      * Renders the SPListpicker controls with Office UI  Fabric
      */
-    PropertyFieldCodeEditorHost.prototype.render = function () {
-        var _this = this;
+    render() {
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
             this.props.label && react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Label__WEBPACK_IMPORTED_MODULE_8__[/* Label */ "a"], null, this.props.label),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("table", { className: _PropertyFieldCodeEditorHost_module_scss__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"].codeFieldTable },
@@ -2604,18 +2574,16 @@ var PropertyFieldCodeEditorHost = /** @class */ (function (_super) {
                         width: '100%',
                         boxSizing: 'border-box'
                     }
-                }, onRenderFooterContent: function () { return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _PropertyFieldCodeEditorHost_module_scss__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"].actions },
+                }, layerProps: { eventBubblingEnabled: true }, onRenderFooterContent: () => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _PropertyFieldCodeEditorHost_module_scss__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"].actions },
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "ms-Grid", dir: "ltr" },
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "ms-Grid-row" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_3__[/* PrimaryButton */ "a"], { iconProps: { iconName: 'Save' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["SaveButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["SaveButtonLabel"], onClick: _this.onSave }),
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_4__[/* DefaultButton */ "a"], { iconProps: { iconName: 'Cancel' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["CancelButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["CancelButtonLabel"], onClick: _this.onClosePanel }),
-                            _this.props.language !== _IPropertyFieldCodeEditor__WEBPACK_IMPORTED_MODULE_7__[/* PropertyFieldCodeEditorLanguages */ "a"]["Plain Text"] &&
-                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_4__[/* DefaultButton */ "a"], { color: "ms-bgColor-themeLight", iconProps: { iconName: 'ClearFormatting' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["FormatCodeButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["ExportButtonLabel"], onClick: _this.onFormatCode }))))); } },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react_ace__WEBPACK_IMPORTED_MODULE_15___default.a, { mode: this.props.language, theme: "monokai", onChange: this.onChange, value: this.state.code, name: "code-".concat(this.props.targetProperty), editorProps: { $blockScrolling: true }, setOptions: this.props.options, width: "100%", height: "100%" }))));
-    };
-    return PropertyFieldCodeEditorHost;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-/* harmony default export */ __webpack_exports__["a"] = (PropertyFieldCodeEditorHost);
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_3__[/* PrimaryButton */ "a"], { iconProps: { iconName: 'Save' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["SaveButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["SaveButtonLabel"], onClick: this.onSave }),
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_4__[/* DefaultButton */ "a"], { iconProps: { iconName: 'Cancel' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["CancelButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["CancelButtonLabel"], onClick: this.onClosePanel }),
+                            this.props.language !== _IPropertyFieldCodeEditor__WEBPACK_IMPORTED_MODULE_7__[/* PropertyFieldCodeEditorLanguages */ "a"]["Plain Text"] &&
+                                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Button__WEBPACK_IMPORTED_MODULE_4__[/* DefaultButton */ "a"], { color: "ms-bgColor-themeLight", iconProps: { iconName: 'ClearFormatting' }, text: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["FormatCodeButtonLabel"], value: PropertyControlStrings__WEBPACK_IMPORTED_MODULE_14__["ExportButtonLabel"], onClick: this.onFormatCode }))))) },
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react_ace__WEBPACK_IMPORTED_MODULE_15___default.a, { mode: this.props.language, theme: "monokai", onChange: this.onChange, value: this.state.code, name: `code-${this.props.targetProperty}`, editorProps: { $blockScrolling: true }, setOptions: this.props.options, width: "100%", height: "100%" }))));
+    }
+}
 //# sourceMappingURL=PropertyFieldCodeEditorHost.js.map
 
 /***/ }),
@@ -3068,50 +3036,30 @@ if(content.locals) module.exports = content.locals;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FieldErrorMessage; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _FieldErrorMessage_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FieldErrorMessage.module.scss */ "Rlnv");
 /* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
 
 /**
  * Component that shows an error message when something went wront with the property control
  */
-var FieldErrorMessage = /** @class */ (function (_super) {
-    __extends(FieldErrorMessage, _super);
-    function FieldErrorMessage() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FieldErrorMessage.prototype.render = function () {
+class FieldErrorMessage extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+    render() {
         if (this.props.errorMessage !== 'undefined' && this.props.errorMessage !== null && this.props.errorMessage !== '') {
             return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { "aria-live": "assertive" },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: "ms-TextField-errorMessage ".concat(_FieldErrorMessage_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].errorMessage) },
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", { className: `ms-TextField-errorMessage ${_FieldErrorMessage_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].errorMessage}` },
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__[/* Icon */ "a"], { iconName: 'Error', className: _FieldErrorMessage_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].errorIcon }),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { "data-automation-id": "error-message" }, this.props.errorMessage))));
         }
         else {
             return null;
         }
-    };
-    return FieldErrorMessage;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-/* harmony default export */ __webpack_exports__["a"] = (FieldErrorMessage);
+    }
+}
 //# sourceMappingURL=FieldErrorMessage.js.map
 
 /***/ }),
@@ -3643,17 +3591,6 @@ var getStyles = function (props) {
 /* harmony import */ var _microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @microsoft/sp-property-pane */ "26ea");
 /* harmony import */ var _microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _PropertyFieldCodeEditorHost__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PropertyFieldCodeEditorHost */ "HBx0");
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 
 
 
@@ -3661,11 +3598,11 @@ var __assign = (undefined && undefined.__assign) || function () {
 /**
  * Represents a PropertyFieldCodeEditor object
  */
-var PropertyFieldCodeEditorBuilder = /** @class */ (function () {
+class PropertyFieldCodeEditorBuilder {
     /**
      * Constructor method
      */
-    function PropertyFieldCodeEditorBuilder(_targetProperty, _properties) {
+    constructor(_targetProperty, _properties) {
         // Properties defined by IPropertyPaneField
         this.type = _microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2__["PropertyPaneFieldType"].Custom;
         this.disabled = false;
@@ -3693,13 +3630,13 @@ var PropertyFieldCodeEditorBuilder = /** @class */ (function () {
         }
         this.panelWidth = _properties.panelWidth;
     }
-    PropertyFieldCodeEditorBuilder.prototype.onPropertyChange = function (propertyPath, oldValue, newValue) { }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    onPropertyChange(propertyPath, oldValue, newValue) { } // eslint-disable-line @typescript-eslint/no-explicit-any
     /**
      * Renders the SPListPicker field content
      */
-    PropertyFieldCodeEditorBuilder.prototype.render = function (elem, ctx, changeCallback) {
+    render(elem, ctx, changeCallback) {
         // Construct the JSX properties
-        var element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldCodeEditorHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], {
+        const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldCodeEditorHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], {
             label: this.label,
             targetProperty: this.targetProperty,
             panelTitle: this.panelTitle,
@@ -3718,15 +3655,14 @@ var PropertyFieldCodeEditorBuilder = /** @class */ (function () {
         });
         // Calls the REACT content generator
         react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](element, elem);
-    };
+    }
     /**
      * Disposes the current object
      */
-    PropertyFieldCodeEditorBuilder.prototype.dispose = function (elem) {
+    dispose(elem) {
         react_dom__WEBPACK_IMPORTED_MODULE_1__["unmountComponentAtNode"](elem);
-    };
-    return PropertyFieldCodeEditorBuilder;
-}());
+    }
+}
 /**
  * Helper method to create a SPList Picker on the PropertyPane.
  * @param targetProperty - Target property the SharePoint list picker is associated to.
@@ -3735,7 +3671,7 @@ var PropertyFieldCodeEditorBuilder = /** @class */ (function () {
 function PropertyFieldCodeEditor(targetProperty, properties) {
     // Calls the PropertyFieldCodeEditor builder object
     // This object will simulate a PropertyFieldCustom to manage his rendering process
-    return new PropertyFieldCodeEditorBuilder(targetProperty, __assign(__assign({}, properties), { targetProperty: targetProperty, onRender: null, onDispose: null }));
+    return new PropertyFieldCodeEditorBuilder(targetProperty, Object.assign(Object.assign({}, properties), { targetProperty: targetProperty, onRender: null, onDispose: null }));
 }
 //# sourceMappingURL=PropertyFieldCodeEditor.js.map
 
@@ -3772,7 +3708,7 @@ var Checkbox = Object(_fluentui_utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return version; });
-var version = "3.15.0";
+const version = "3.17.0";
 //# sourceMappingURL=version.js.map
 
 /***/ }),
@@ -3788,7 +3724,7 @@ var version = "3.15.0";
 "use strict";
 /* tslint:disable */
 __webpack_require__(/*! ./FieldErrorMessage.module.css */ "Mmr5");
-var styles = {
+const styles = {
     errorMessage: 'errorMessage_49b1134c',
     errorIcon: 'errorIcon_49b1134c'
 };
@@ -4733,25 +4669,13 @@ if (false) {} else {
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./version */ "QbOg");
 /* harmony import */ var _microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @microsoft/sp-core-library */ "UWqr");
 /* harmony import */ var _microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__);
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 
 
 
-var CONTROL_TYPE = "property";
-function track(componentName, properties) {
-    if (properties === void 0) { properties = {}; }
-    var telemetry = _pnp_telemetry_js__WEBPACK_IMPORTED_MODULE_0___default.a.getInstance();
-    telemetry.trackEvent(componentName, __assign({ version: _version__WEBPACK_IMPORTED_MODULE_1__[/* version */ "a"], controlType: CONTROL_TYPE, debug:  true ? "true" : undefined, environment: _microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__["EnvironmentType"][_microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__["Environment"].type] }, properties));
+const CONTROL_TYPE = "property";
+function track(componentName, properties = {}) {
+    const telemetry = _pnp_telemetry_js__WEBPACK_IMPORTED_MODULE_0___default.a.getInstance();
+    telemetry.trackEvent(componentName, Object.assign({ version: _version__WEBPACK_IMPORTED_MODULE_1__[/* version */ "a"], controlType: CONTROL_TYPE, debug:  true ? "true" : undefined, environment: _microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__["EnvironmentType"][_microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_2__["Environment"].type] }, properties));
 }
 //# sourceMappingURL=index.js.map
 
@@ -4815,9 +4739,8 @@ var MODE;
     MODE["Conditional"] = "Conditional";
     MODE["Expression"] = "Expression"; //'(EXPRESSION)'
 })(MODE || (MODE = {}));
-var ScriptFormatter = /** @class */ (function () {
-    function ScriptFormatter() {
-        var _this = this;
+class ScriptFormatter {
+    constructor() {
         this.nonASCIIidentifierStartChars = "\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0\u08a2-\u08ac\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097f\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d\u0c58\u0c59\u0c60\u0c61\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d60\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191c\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19c1-\u19c7\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2e2f\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua697\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa80-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc";
         this.nonASCIIidentifierChars = "\u0300-\u036f\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u0620-\u0649\u0672-\u06d3\u06e7-\u06e8\u06fb-\u06fc\u0730-\u074a\u0800-\u0814\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0840-\u0857\u08e4-\u08fe\u0900-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962-\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09d7\u09df-\u09e0\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2-\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b5f-\u0b60\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c01-\u0c03\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62-\u0c63\u0c66-\u0c6f\u0c82\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2-\u0ce3\u0ce6-\u0cef\u0d02\u0d03\u0d46-\u0d48\u0d57\u0d62-\u0d63\u0d66-\u0d6f\u0d82\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0df2\u0df3\u0e34-\u0e3a\u0e40-\u0e45\u0e50-\u0e59\u0eb4-\u0eb9\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f41-\u0f47\u0f71-\u0f84\u0f86-\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u1000-\u1029\u1040-\u1049\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u170e-\u1710\u1720-\u1730\u1740-\u1750\u1772\u1773\u1780-\u17b2\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u1920-\u192b\u1930-\u193b\u1951-\u196d\u19b0-\u19c0\u19c8-\u19c9\u19d0-\u19d9\u1a00-\u1a15\u1a20-\u1a53\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1b46-\u1b4b\u1b50-\u1b59\u1b6b-\u1b73\u1bb0-\u1bb9\u1be6-\u1bf3\u1c00-\u1c22\u1c40-\u1c49\u1c5b-\u1c7d\u1cd0-\u1cd2\u1d00-\u1dbe\u1e01-\u1f15\u200c\u200d\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2d81-\u2d96\u2de0-\u2dff\u3021-\u3028\u3099\u309a\ua640-\ua66d\ua674-\ua67d\ua69f\ua6f0-\ua6f1\ua7f8-\ua800\ua806\ua80b\ua823-\ua827\ua880-\ua881\ua8b4-\ua8c4\ua8d0-\ua8d9\ua8f3-\ua8f7\ua900-\ua909\ua926-\ua92d\ua930-\ua945\ua980-\ua983\ua9b3-\ua9c0\uaa00-\uaa27\uaa40-\uaa41\uaa4c-\uaa4d\uaa50-\uaa59\uaa7b\uaae0-\uaae9\uaaf2-\uaaf3\uabc0-\uabe1\uabec\uabed\uabf0-\uabf9\ufb20-\ufb28\ufe00-\ufe0f\ufe20-\ufe26\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f";
         this.nonASCIIidentifierStart = new RegExp("[" + this.nonASCIIidentifierStartChars + "]");
@@ -4828,7 +4751,7 @@ var ScriptFormatter = /** @class */ (function () {
         // Matches a whole line break (where CRLF is considered a single line break). Used to count lines.
         this.lineBreak = /\r\n|[\n\r\u2028\u2029]/g;
         // Test whether a given character code starts an identifier.
-        this.isIdentifierStart = function (code) {
+        this.isIdentifierStart = (code) => {
             if (code < 65)
                 return code === 36;
             if (code < 91)
@@ -4837,10 +4760,10 @@ var ScriptFormatter = /** @class */ (function () {
                 return code === 95;
             if (code < 123)
                 return true;
-            return code >= 0xaa && _this.nonASCIIidentifierStart.test(String.fromCharCode(code));
+            return code >= 0xaa && this.nonASCIIidentifierStart.test(String.fromCharCode(code));
         };
         // Test whether a given character is part of an identifier.
-        this.isIdentifierChar = function (code) {
+        this.isIdentifierChar = (code) => {
             if (code < 48)
                 return code === 36;
             if (code < 58)
@@ -4853,11 +4776,11 @@ var ScriptFormatter = /** @class */ (function () {
                 return code === 95;
             if (code < 123)
                 return true;
-            return code >= 0xaa && _this.nonASCIIidentifier.test(String.fromCharCode(code));
+            return code >= 0xaa && this.nonASCIIidentifier.test(String.fromCharCode(code));
         };
     }
-    ScriptFormatter.prototype.create_flags = function (flags_base, mode) {
-        var next_indent_level = 0;
+    create_flags(flags_base, mode) {
+        let next_indent_level = 0;
         if (flags_base) {
             next_indent_level = flags_base.indentation_level;
             if (!this.just_added_newline() &&
@@ -4865,7 +4788,7 @@ var ScriptFormatter = /** @class */ (function () {
                 next_indent_level = flags_base.line_indent_level;
             }
         }
-        var next_flags = {
+        const next_flags = {
             mode: mode,
             parent: flags_base,
             last_text: flags_base ? flags_base.last_text : '',
@@ -4888,14 +4811,14 @@ var ScriptFormatter = /** @class */ (function () {
             ternary_depth: 0
         };
         return next_flags;
-    };
+    }
     // Using object instead of string to allow for later expansion of info about each line
-    ScriptFormatter.prototype.create_output_line = function () {
+    create_output_line() {
         return {
             text: []
         };
-    };
-    ScriptFormatter.prototype.trim_output = function (eat_newlines) {
+    }
+    trim_output(eat_newlines) {
         if (!eat_newlines) {
             return;
         }
@@ -4907,23 +4830,23 @@ var ScriptFormatter = /** @class */ (function () {
                 this.trim_output_line(this.output_lines[this.output_lines.length - 1]);
             }
         }
-    };
-    ScriptFormatter.prototype.trim_output_line = function (line) {
+    }
+    trim_output_line(line) {
         while (line.text.length &&
             (line.text[line.text.length - 1] === ' ' ||
                 line.text[line.text.length - 1] === this.indent_string ||
                 line.text[line.text.length - 1] === this.preindent_string)) {
             line.text.pop();
         }
-    };
-    ScriptFormatter.prototype.trim = function (s) {
+    }
+    trim(s) {
         return s.replace(/^\s+|\s+$/g, '');
-    };
+    }
     // We could use just string.split, but IE doesn't like returning empty strings
-    ScriptFormatter.prototype.split_newlines = function (s) {
+    split_newlines(s) {
         s = s.replace(/\x0d/g, ''); // eslint-disable-line no-control-regex
-        var out = [];
-        var idx = s.indexOf("\n");
+        const out = [];
+        let idx = s.indexOf("\n");
         while (idx !== -1) {
             out.push(s.substring(0, idx));
             s = s.substring(idx + 1);
@@ -4933,26 +4856,26 @@ var ScriptFormatter = /** @class */ (function () {
             out.push(s);
         }
         return out;
-    };
-    ScriptFormatter.prototype.just_added_newline = function () {
-        var line = this.output_lines[this.output_lines.length - 1];
+    }
+    just_added_newline() {
+        const line = this.output_lines[this.output_lines.length - 1];
         return line.text.length === 0;
-    };
-    ScriptFormatter.prototype.just_added_blankline = function () {
+    }
+    just_added_blankline() {
         if (this.just_added_newline()) {
             if (this.output_lines.length === 1) {
                 return true; // start of the file and newline = blank
             }
-            var line = this.output_lines[this.output_lines.length - 2];
+            const line = this.output_lines[this.output_lines.length - 2];
             return line.text.length === 0;
         }
         return false;
-    };
-    ScriptFormatter.prototype.allow_wrap_or_preserved_newline = function (force_linewrap) {
+    }
+    allow_wrap_or_preserved_newline(force_linewrap) {
         force_linewrap = force_linewrap === true;
         if (this.opt.wrap_line_length && !force_linewrap) {
-            var line = this.output_lines[this.output_lines.length - 1];
-            var proposed_line_length = 0;
+            const line = this.output_lines[this.output_lines.length - 1];
+            let proposed_line_length = 0;
             // never wrap the first token of a line.
             if (line.text.length > 0) {
                 proposed_line_length = line.text.join('').length + this.token_text.length + (this.output_space_before_token ? 1 : 0);
@@ -4968,8 +4891,8 @@ var ScriptFormatter = /** @class */ (function () {
                 this.output_wrapped = true;
             }
         }
-    };
-    ScriptFormatter.prototype.print_newline = function (force_newline, preserve_statement_flags) {
+    }
+    print_newline(force_newline, preserve_statement_flags) {
         this.output_wrapped = false;
         this.output_space_before_token = false;
         if (!preserve_statement_flags) {
@@ -4986,14 +4909,14 @@ var ScriptFormatter = /** @class */ (function () {
             this.flags.multiline_frame = true;
             this.output_lines.push(this.create_output_line());
         }
-    };
-    ScriptFormatter.prototype.print_token_line_indentation = function () {
+    }
+    print_token_line_indentation() {
         if (this.just_added_newline()) {
-            var line = this.output_lines[this.output_lines.length - 1];
+            const line = this.output_lines[this.output_lines.length - 1];
             if (this.opt.keep_array_indentation && this.is_array(this.flags.mode) && this.input_wanted_newline) {
                 // prevent removing of this whitespace as redundant
                 line.text.push('');
-                for (var i = 0; i < this.whitespace_before_token.length; i += 1) {
+                for (let i = 0; i < this.whitespace_before_token.length; i += 1) {
                     line.text.push(this.whitespace_before_token[i]);
                 }
             }
@@ -5004,44 +4927,44 @@ var ScriptFormatter = /** @class */ (function () {
                 this.print_indent_string(this.flags.indentation_level + (this.output_wrapped ? 1 : 0));
             }
         }
-    };
-    ScriptFormatter.prototype.print_indent_string = function (level) {
+    }
+    print_indent_string(level) {
         // Never indent your first output indent at the start of the file
         if (this.output_lines.length > 1) {
-            var line = this.output_lines[this.output_lines.length - 1];
+            const line = this.output_lines[this.output_lines.length - 1];
             this.flags.line_indent_level = level;
-            for (var i = 0; i < level; i += 1) {
+            for (let i = 0; i < level; i += 1) {
                 line.text.push(this.indent_string);
             }
         }
-    };
-    ScriptFormatter.prototype.print_token_space_before = function () {
-        var line = this.output_lines[this.output_lines.length - 1];
+    }
+    print_token_space_before() {
+        const line = this.output_lines[this.output_lines.length - 1];
         if (this.output_space_before_token && line.text.length) {
-            var last_output = line.text[line.text.length - 1];
+            const last_output = line.text[line.text.length - 1];
             if (last_output !== ' ' && last_output !== this.indent_string) {
                 // prevent occassional duplicate space
                 line.text.push(' ');
             }
         }
-    };
-    ScriptFormatter.prototype.print_token = function (printable_token) {
+    }
+    print_token(printable_token) {
         printable_token = printable_token || this.token_text;
         this.print_token_line_indentation();
         this.output_wrapped = false;
         this.print_token_space_before();
         this.output_space_before_token = false;
         this.output_lines[this.output_lines.length - 1].text.push(printable_token);
-    };
-    ScriptFormatter.prototype.indent = function () {
+    }
+    indent() {
         this.flags.indentation_level += 1;
-    };
-    ScriptFormatter.prototype.deindent = function () {
+    }
+    deindent() {
         if (this.flags.indentation_level > 0 &&
             ((!this.flags.parent) || this.flags.indentation_level > this.flags.parent.indentation_level))
             this.flags.indentation_level -= 1;
-    };
-    ScriptFormatter.prototype.remove_redundant_indentation = function (frame) {
+    }
+    remove_redundant_indentation(frame) {
         // This implementation is effective but has some issues:
         //     - less than great performance due to array splicing
         //     - can cause line wrap to happen too soon due to indent removal
@@ -5050,9 +4973,9 @@ var ScriptFormatter = /** @class */ (function () {
         if (frame.multiline_frame)
             return;
         // remove one indent from each line inside this section
-        var index = frame.start_line_index;
-        var splice_index = 0;
-        var line;
+        let index = frame.start_line_index;
+        let splice_index = 0;
+        let line;
         while (index < this.output_lines.length) {
             line = this.output_lines[index];
             index++;
@@ -5072,8 +4995,8 @@ var ScriptFormatter = /** @class */ (function () {
                 line.text.splice(splice_index, 1);
             }
         }
-    };
-    ScriptFormatter.prototype.set_mode = function (mode) {
+    }
+    set_mode(mode) {
         if (this.flags) {
             this.flag_store.push(this.flags);
             this.previous_flags = this.flags;
@@ -5082,14 +5005,14 @@ var ScriptFormatter = /** @class */ (function () {
             this.previous_flags = this.create_flags(null, mode);
         }
         this.flags = this.create_flags(this.previous_flags, mode);
-    };
-    ScriptFormatter.prototype.is_array = function (mode) {
+    }
+    is_array(mode) {
         return mode === MODE.ArrayLiteral;
-    };
-    ScriptFormatter.prototype.is_expression = function (mode) {
+    }
+    is_expression(mode) {
         return this.in_array(mode, [MODE.Expression, MODE.ForInitializer, MODE.Conditional]);
-    };
-    ScriptFormatter.prototype.restore_mode = function () {
+    }
+    restore_mode() {
         if (this.flag_store.length > 0) {
             this.previous_flags = this.flags;
             this.flags = this.flag_store.pop();
@@ -5097,11 +5020,11 @@ var ScriptFormatter = /** @class */ (function () {
                 this.remove_redundant_indentation(this.previous_flags);
             }
         }
-    };
-    ScriptFormatter.prototype.start_of_object_property = function () {
+    }
+    start_of_object_property() {
         return this.flags.mode === MODE.ObjectLiteral && this.flags.last_text === ':' && this.flags.ternary_depth === 0;
-    };
-    ScriptFormatter.prototype.start_of_statement = function () {
+    }
+    start_of_statement() {
         if ((this.last_type === 'TK_RESERVED' && this.in_array(this.flags.last_text, ['var', 'let', 'const']) && this.token_type === 'TK_WORD') ||
             (this.last_type === 'TK_RESERVED' && this.flags.last_text === 'do') ||
             (this.last_type === 'TK_RESERVED' && this.flags.last_text === 'return' && !this.input_wanted_newline) ||
@@ -5119,34 +5042,34 @@ var ScriptFormatter = /** @class */ (function () {
             return true;
         }
         return false;
-    };
-    ScriptFormatter.prototype.all_lines_start_with = function (lines, c) {
-        for (var i = 0; i < lines.length; i++) {
-            var line = this.trim(lines[i]);
+    }
+    all_lines_start_with(lines, c) {
+        for (let i = 0; i < lines.length; i++) {
+            const line = this.trim(lines[i]);
             if (line.charAt(0) !== c) {
                 return false;
             }
         }
         return true;
-    };
-    ScriptFormatter.prototype.is_special_word = function (word) {
+    }
+    is_special_word(word) {
         return this.in_array(word, ['case', 'return', 'do', 'if', 'throw', 'else']);
-    };
-    ScriptFormatter.prototype.in_array = function (what, arr) {
-        for (var i = 0; i < arr.length; i += 1) {
+    }
+    in_array(what, arr) {
+        for (let i = 0; i < arr.length; i += 1) {
             if (arr[i] === what) {
                 return true;
             }
         }
         return false;
-    };
-    ScriptFormatter.prototype.unescape_string = function (s) {
-        var esc = false;
-        var out = '';
-        var pos = 0;
-        var s_hex = '';
-        var escaped = 0;
-        var c;
+    }
+    unescape_string(s) {
+        let esc = false;
+        let out = '';
+        let pos = 0;
+        let s_hex = '';
+        let escaped = 0;
+        let c;
         while (esc || pos < s.length) {
             c = s.charAt(pos);
             pos++;
@@ -5205,10 +5128,10 @@ var ScriptFormatter = /** @class */ (function () {
             }
         }
         return out;
-    };
-    ScriptFormatter.prototype.is_next = function (find) {
-        var local_pos = this.parser_pos;
-        var c = this.input.charAt(local_pos);
+    }
+    is_next(find) {
+        let local_pos = this.parser_pos;
+        let c = this.input.charAt(local_pos);
         while (this.in_array(c, this.whitespace) && c !== find) {
             local_pos++;
             if (local_pos >= this.input_length) {
@@ -5217,16 +5140,16 @@ var ScriptFormatter = /** @class */ (function () {
             c = this.input.charAt(local_pos);
         }
         return c === find;
-    };
-    ScriptFormatter.prototype.get_next_token = function () {
-        var resulting_string;
+    }
+    get_next_token() {
+        let resulting_string;
         this.n_newlines = 0;
         if (this.parser_pos >= this.input_length) {
             return ['', 'TK_EOF'];
         }
         this.input_wanted_newline = false;
         this.whitespace_before_token = [];
-        var c = this.input.charAt(this.parser_pos);
+        let c = this.input.charAt(this.parser_pos);
         this.parser_pos += 1;
         while (this.in_array(c, this.whitespace)) {
             if (c === '\n') {
@@ -5261,9 +5184,9 @@ var ScriptFormatter = /** @class */ (function () {
             }
             // small and surprisingly unugly hack for 1E-10 representation
             if (this.parser_pos !== this.input_length && c.match(/^[0-9]+[Ee]$/) && (this.input.charAt(this.parser_pos) === '-' || this.input.charAt(this.parser_pos) === '+')) {
-                var sign = this.input.charAt(this.parser_pos);
+                const sign = this.input.charAt(this.parser_pos);
                 this.parser_pos += 1;
-                var t = this.get_next_token();
+                const t = this.get_next_token();
                 c += sign + t[0];
                 return [c, 'TK_WORD'];
             }
@@ -5293,9 +5216,9 @@ var ScriptFormatter = /** @class */ (function () {
             return [c, 'TK_SEMICOLON'];
         }
         if (c === '/') {
-            var comment = '';
+            let comment = '';
             // peek for comment /* ... */
-            var inline_comment = true;
+            let inline_comment = true;
             if (this.input.charAt(this.parser_pos) === '*') {
                 this.parser_pos += 1;
                 if (this.parser_pos < this.input_length) {
@@ -5341,15 +5264,15 @@ var ScriptFormatter = /** @class */ (function () {
                 (this.in_array(this.last_type, ['TK_COMMENT', 'TK_START_EXPR', 'TK_START_BLOCK',
                     'TK_END_BLOCK', 'TK_OPERATOR', 'TK_EQUALS', 'TK_EOF', 'TK_SEMICOLON', 'TK_COMMA'
                 ])))) {
-            var sep = c;
-            var esc = false, has_char_escapes = false;
+            const sep = c;
+            let esc = false, has_char_escapes = false;
             resulting_string = c;
             if (this.parser_pos < this.input_length) {
                 if (sep === '/') {
                     //
                     // handle regexp
                     //
-                    var in_char_class = false;
+                    let in_char_class = false;
                     while (esc || in_char_class || this.input.charAt(this.parser_pos) !== sep) {
                         resulting_string += this.input.charAt(this.parser_pos);
                         if (!esc) {
@@ -5376,16 +5299,16 @@ var ScriptFormatter = /** @class */ (function () {
                     //
                     // handle e4x xml literals
                     //
-                    var xmlRegExp = /<(\/?)([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*(\/?)\s*>/g;
-                    var xmlStr = this.input.slice(this.parser_pos - 1);
-                    var match = xmlRegExp.exec(xmlStr);
+                    const xmlRegExp = /<(\/?)([-a-zA-Z:0-9_.]+|{[^{}]*}|!\[CDATA\[[\s\S]*?\]\])\s*([-a-zA-Z:0-9_.]+=('[^']*'|"[^"]*"|{[^{}]*})\s*)*(\/?)\s*>/g;
+                    const xmlStr = this.input.slice(this.parser_pos - 1);
+                    let match = xmlRegExp.exec(xmlStr);
                     if (match && match.index === 0) {
-                        var rootTag = match[2];
-                        var depth = 0;
+                        const rootTag = match[2];
+                        let depth = 0;
                         while (match) {
-                            var isEndTag = !!match[1];
-                            var tagName = match[2];
-                            var isSingletonTag = (!!match[match.length - 1]) || (tagName.slice(0, 8) === "![CDATA[");
+                            const isEndTag = !!match[1];
+                            const tagName = match[2];
+                            const isSingletonTag = (!!match[match.length - 1]) || (tagName.slice(0, 8) === "![CDATA[");
                             if (tagName === rootTag && !isSingletonTag) {
                                 if (isEndTag) {
                                     --depth;
@@ -5399,7 +5322,7 @@ var ScriptFormatter = /** @class */ (function () {
                             }
                             match = xmlRegExp.exec(xmlStr);
                         }
-                        var xmlLength = match ? match.index + match[0].length : xmlStr.length;
+                        const xmlLength = match ? match.index + match[0].length : xmlStr.length;
                         this.parser_pos += xmlLength - 1;
                         return [xmlStr.slice(0, xmlLength), "TK_STRING"];
                     }
@@ -5456,7 +5379,7 @@ var ScriptFormatter = /** @class */ (function () {
             // Spidermonkey-specific sharp variables for circular references
             // https://developer.mozilla.org/En/Sharp_variables_in_JavaScript
             // http://mxr.mozilla.org/mozilla-central/source/js/src/jsscan.cpp around line 1935
-            var sharp = '#';
+            let sharp = '#';
             if (this.parser_pos < this.input_length && this.in_array(this.input.charAt(this.parser_pos), this.digits)) {
                 do {
                     c = this.input.charAt(this.parser_pos);
@@ -5514,12 +5437,12 @@ var ScriptFormatter = /** @class */ (function () {
             }
         }
         return [c, 'TK_UNKNOWN'];
-    };
-    ScriptFormatter.prototype.handle_start_expr = function () {
+    }
+    handle_start_expr() {
         if (this.start_of_statement()) {
             // The conditional starts the statement if appropriate.
         }
-        var next_mode = MODE.Expression; // eslint-disable-line @typescript-eslint/no-explicit-any
+        let next_mode = MODE.Expression; // eslint-disable-line @typescript-eslint/no-explicit-any
         if (this.token_text === '[') {
             if (this.last_type === 'TK_WORD' || this.flags.last_text === ')') {
                 // this is array index specifier, break immediately
@@ -5598,8 +5521,8 @@ var ScriptFormatter = /** @class */ (function () {
         }
         // In all cases, if we newline while inside an expression it should be indented.
         this.indent();
-    };
-    ScriptFormatter.prototype.handle_end_expr = function () {
+    }
+    handle_end_expr() {
         // statements inside expressions are not valid syntax, but...
         // statements must all be closed when their container closes
         while (this.flags.mode === MODE.Statement) {
@@ -5634,11 +5557,11 @@ var ScriptFormatter = /** @class */ (function () {
             this.flags.do_block = false;
             this.flags.do_while = false;
         }
-    };
-    ScriptFormatter.prototype.handle_start_block = function () {
+    }
+    handle_start_block() {
         this.set_mode(MODE.BlockStatement);
-        var empty_braces = this.is_next('}');
-        var empty_anonymous_function = empty_braces && this.flags.last_word === 'function' && this.last_type === 'TK_END_EXPR';
+        const empty_braces = this.is_next('}');
+        const empty_anonymous_function = empty_braces && this.flags.last_word === 'function' && this.last_type === 'TK_END_EXPR';
         if (this.opt.brace_style === "expand") {
             if (this.last_type !== 'TK_OPERATOR' &&
                 (empty_anonymous_function ||
@@ -5674,13 +5597,13 @@ var ScriptFormatter = /** @class */ (function () {
         }
         this.print_token(null);
         this.indent();
-    };
-    ScriptFormatter.prototype.handle_end_block = function () {
+    }
+    handle_end_block() {
         // statements must all be closed when their container closes
         while (this.flags.mode === MODE.Statement) {
             this.restore_mode();
         }
-        var empty_braces = this.last_type === 'TK_START_BLOCK';
+        const empty_braces = this.last_type === 'TK_START_BLOCK';
         if (this.opt.brace_style === "expand") {
             if (!empty_braces) {
                 this.print_newline(false, true);
@@ -5702,8 +5625,8 @@ var ScriptFormatter = /** @class */ (function () {
         }
         this.restore_mode();
         this.print_token(null);
-    };
-    ScriptFormatter.prototype.handle_word = function () {
+    }
+    handle_word() {
         if (this.start_of_statement()) {
             // The conditional starts the statement if appropriate.
         }
@@ -5843,7 +5766,7 @@ var ScriptFormatter = /** @class */ (function () {
             }
             else {
                 this.trim_output(true);
-                var line = this.output_lines[this.output_lines.length - 1]; // eslint-disable-line @typescript-eslint/no-explicit-any
+                const line = this.output_lines[this.output_lines.length - 1]; // eslint-disable-line @typescript-eslint/no-explicit-any
                 // If we trimmed and there's something other than a close block before us
                 // put a newline back in.  Handles '} // comment' scenario.
                 if (line.text[line.text.length - 1] !== '}') {
@@ -5887,8 +5810,8 @@ var ScriptFormatter = /** @class */ (function () {
         if (this.token_type === 'TK_RESERVED' && this.token_text === 'if') {
             this.flags.if_block = true;
         }
-    };
-    ScriptFormatter.prototype.handle_semicolon = function () {
+    }
+    handle_semicolon() {
         if (this.start_of_statement()) {
             // The conditional starts the statement if appropriate.
             // Semicolon can be the start (and end) of a statement
@@ -5903,8 +5826,8 @@ var ScriptFormatter = /** @class */ (function () {
             // recover back to treating this as a BLOCK
             this.flags.mode = MODE.BlockStatement;
         }
-    };
-    ScriptFormatter.prototype.handle_string = function () {
+    }
+    handle_string() {
         if (this.start_of_statement()) {
             // The conditional starts the statement if appropriate.
             // One difference - strings want at least a space before
@@ -5922,8 +5845,8 @@ var ScriptFormatter = /** @class */ (function () {
             this.print_newline(false, true);
         }
         this.print_token(null);
-    };
-    ScriptFormatter.prototype.handle_equals = function () {
+    }
+    handle_equals() {
         if (this.flags.declaration_statement) {
             // just got an '=' in a var-line, different formatting/line-breaking, etc will now be done
             this.flags.declaration_assignment = true;
@@ -5931,8 +5854,8 @@ var ScriptFormatter = /** @class */ (function () {
         this.output_space_before_token = true;
         this.print_token(null);
         this.output_space_before_token = true;
-    };
-    ScriptFormatter.prototype.handle_comma = function () {
+    }
+    handle_comma() {
         if (this.flags.declaration_statement) {
             if (this.is_expression(this.flags.parent.mode)) {
                 // do not break on comma, for(var a = 1, b = 2)
@@ -5968,10 +5891,10 @@ var ScriptFormatter = /** @class */ (function () {
                 this.output_space_before_token = true;
             }
         }
-    };
-    ScriptFormatter.prototype.handle_operator = function () {
-        var space_before = true;
-        var space_after = true;
+    }
+    handle_operator() {
+        let space_before = true;
+        let space_after = true;
         if (this.last_type === 'TK_RESERVED' && this.is_special_word(this.flags.last_text)) {
             // "return" had a special handling in TK_WORD. Now we need to return the favor
             this.output_space_before_token = true;
@@ -6040,11 +5963,11 @@ var ScriptFormatter = /** @class */ (function () {
         this.output_space_before_token = this.output_space_before_token || space_before;
         this.print_token(null);
         this.output_space_before_token = space_after;
-    };
-    ScriptFormatter.prototype.handle_block_comment = function () {
-        var lines = this.split_newlines(this.token_text); // eslint-disable-line @typescript-eslint/no-explicit-any
-        var j; // iterator for this case
-        var javadoc = false;
+    }
+    handle_block_comment() {
+        const lines = this.split_newlines(this.token_text); // eslint-disable-line @typescript-eslint/no-explicit-any
+        let j; // iterator for this case
+        let javadoc = false;
         // block comment starts with a new line
         this.print_newline(false, true);
         if (lines.length > 1) {
@@ -6067,13 +5990,13 @@ var ScriptFormatter = /** @class */ (function () {
         }
         // for comments of more than one line, make sure there's a new line after
         this.print_newline(false, true);
-    };
-    ScriptFormatter.prototype.handle_inline_comment = function () {
+    }
+    handle_inline_comment() {
         this.output_space_before_token = true;
         this.print_token(null);
         this.output_space_before_token = true;
-    };
-    ScriptFormatter.prototype.handle_comment = function () {
+    }
+    handle_comment() {
         if (this.input_wanted_newline) {
             this.print_newline(false, true);
         }
@@ -6083,8 +6006,8 @@ var ScriptFormatter = /** @class */ (function () {
         this.output_space_before_token = true;
         this.print_token(null);
         this.print_newline(false, true);
-    };
-    ScriptFormatter.prototype.handle_dot = function () {
+    }
+    handle_dot() {
         if (this.last_type === 'TK_RESERVED' && this.is_special_word(this.flags.last_text)) {
             this.output_space_before_token = true;
         }
@@ -6094,19 +6017,19 @@ var ScriptFormatter = /** @class */ (function () {
             this.allow_wrap_or_preserved_newline(this.flags.last_text === ')' && this.opt.break_chained_methods);
         }
         this.print_token(null);
-    };
-    ScriptFormatter.prototype.handle_unknown = function () {
+    }
+    handle_unknown() {
         this.print_token(null);
         if (this.token_text[this.token_text.length - 1] === '\n') {
             this.print_newline(false, true);
         }
-    };
-    ScriptFormatter.prototype.beautify = function () {
+    }
+    beautify() {
         /*jshint onevar:true */
-        var t; // eslint-disable-line @typescript-eslint/no-explicit-any
-        var i;
-        var keep_whitespace; // eslint-disable-line @typescript-eslint/no-explicit-any
-        var sweet_code;
+        let t; // eslint-disable-line @typescript-eslint/no-explicit-any
+        let i;
+        let keep_whitespace; // eslint-disable-line @typescript-eslint/no-explicit-any
+        let sweet_code;
         while (true) { // eslint-disable-line no-constant-condition
             t = this.get_next_token();
             this.token_text = t[0];
@@ -6201,17 +6124,17 @@ var ScriptFormatter = /** @class */ (function () {
             this.flags.had_comment = (this.token_type === 'TK_INLINE_COMMENT' || this.token_type === 'TK_COMMENT' || this.token_type === 'TK_BLOCK_COMMENT');
         }
         sweet_code = this.output_lines[0].text.join('');
-        for (var line_index = 1; line_index < this.output_lines.length; line_index++) {
+        for (let line_index = 1; line_index < this.output_lines.length; line_index++) {
             sweet_code += '\n' + this.output_lines[line_index].text.join('');
         }
         sweet_code = sweet_code.replace(/[\r\n ]+$/, '');
         return sweet_code;
-    };
-    ScriptFormatter.prototype.js_beautify = function (js_source_text, options) {
+    }
+    js_beautify(js_source_text, options) {
         this.whitespace = "\n\r\t ".split('');
         this.wordchar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$'.split('');
         this.digits = '0123456789'.split('');
-        var punct = '+ - * / % & ++ -- = += -= *= /= %= === === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! , : ? ^ ^= |= :: =>';
+        let punct = '+ - * / % & ++ -- = += -= *= /= %= === === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! , : ? ^ ^= |= :: =>';
         punct += ' <%= <% %> <?= <? ?>'; // try to be a good boy and try not to break the markup language identifiers
         this.punct = punct.split(' ');
         // words which should always start on new line.
@@ -6282,10 +6205,8 @@ var ScriptFormatter = /** @class */ (function () {
         this.set_mode(MODE.BlockStatement);
         this.parser_pos = 0;
         return this.beautify();
-    };
-    return ScriptFormatter;
-}());
-
+    }
+}
 //# sourceMappingURL=ScriptFormatter.js.map
 
 /***/ }),
@@ -6314,11 +6235,11 @@ var ScriptFormatter = /** @class */ (function () {
 /**
  * Represents a PropertyFieldViewPicker object
  */
-var PropertyFieldViewPickerBuilder = /** @class */ (function () {
+class PropertyFieldViewPickerBuilder {
     /**
      * Constructor method
      */
-    function PropertyFieldViewPickerBuilder(_targetProperty, _properties) {
+    constructor(_targetProperty, _properties) {
         this.type = _microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_2__["PropertyPaneFieldType"].Custom;
         this.deferredValidationTime = 200;
         this.disabled = false;
@@ -6348,12 +6269,12 @@ var PropertyFieldViewPickerBuilder = /** @class */ (function () {
             this.deferredValidationTime = _properties.deferredValidationTime;
         }
     }
-    PropertyFieldViewPickerBuilder.prototype.onPropertyChange = function (propertyPath, oldValue, newValue) { }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    onPropertyChange(propertyPath, oldValue, newValue) { } // eslint-disable-line @typescript-eslint/no-explicit-any
     /**
      * Renders the SPViewPicker field content
      */
-    PropertyFieldViewPickerBuilder.prototype.render = function (elem, ctx, changeCallback) {
-        var componentProps = {
+    render(elem, ctx, changeCallback) {
+        const componentProps = {
             label: this.label,
             targetProperty: this.targetProperty,
             context: this.context,
@@ -6375,18 +6296,17 @@ var PropertyFieldViewPickerBuilder = /** @class */ (function () {
         };
         // Single selector
         componentProps.selectedView = this.selectedView;
-        var element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldViewPickerHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], componentProps);
+        const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_PropertyFieldViewPickerHost__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], componentProps);
         // Calls the REACT content generator
         react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](element, elem);
-    };
+    }
     /**
      * Disposes the current object
      */
-    PropertyFieldViewPickerBuilder.prototype.dispose = function (_elem) {
+    dispose(_elem) {
         // no-op;
-    };
-    return PropertyFieldViewPickerBuilder;
-}());
+    }
+}
 /**
  * Helper method to create a SPView Picker on the PropertyPane.
  * @param targetProperty - Target property the SharePoint view picker is associated to.
@@ -6394,7 +6314,7 @@ var PropertyFieldViewPickerBuilder = /** @class */ (function () {
  */
 function PropertyFieldViewPicker(targetProperty, properties) {
     //Create an internal properties object from the given properties
-    var newProperties = {
+    const newProperties = {
         label: properties.label,
         targetProperty: targetProperty,
         context: properties.context,
@@ -11293,6 +11213,7 @@ module.exports = isEqual;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PropertyFieldListPickerHost; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fluentui_react_lib_Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Dropdown */ "+onJ");
@@ -11302,21 +11223,6 @@ module.exports = isEqual;
 /* harmony import */ var _errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../errorMessage/FieldErrorMessage */ "N3ZD");
 /* harmony import */ var _common_telemetry__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/telemetry */ "TVYz");
 /* harmony import */ var _helpers_GeneralHelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../helpers/GeneralHelper */ "yVpZ");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11325,33 +11231,6 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
 };
 
 
@@ -11362,105 +11241,94 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 // Empty list value, to be checked for single list selection
-var EMPTY_LIST_KEY = 'NO_LIST_SELECTED';
+const EMPTY_LIST_KEY = 'NO_LIST_SELECTED';
 /**
  * Renders the controls for PropertyFieldListPicker component
  */
-var PropertyFieldListPickerHost = /** @class */ (function (_super) {
-    __extends(PropertyFieldListPickerHost, _super);
+class PropertyFieldListPickerHost extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     /**
      * Constructor method
      */
-    function PropertyFieldListPickerHost(props) {
-        var _this = _super.call(this, props) || this;
+    constructor(props) {
+        super(props);
         _common_telemetry__WEBPACK_IMPORTED_MODULE_6__[/* track */ "a"]('PropertyFieldListPicker', {
             disabled: props.disabled
         });
-        _this.state = {
+        this.state = {
             loadedLists: {
                 value: []
             },
             results: [],
             errorMessage: ''
         };
-        _this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* Async */ "a"](_this);
-        _this.validate = _this.validate.bind(_this);
-        _this.onChanged = _this.onChanged.bind(_this);
-        _this.notifyAfterValidate = _this.notifyAfterValidate.bind(_this);
-        _this.delayedValidate = _this.async.debounce(_this.validate, _this.props.deferredValidationTime);
-        return _this;
+        this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* Async */ "a"](this);
+        this.validate = this.validate.bind(this);
+        this.onChanged = this.onChanged.bind(this);
+        this.notifyAfterValidate = this.notifyAfterValidate.bind(this);
+        this.delayedValidate = this.async.debounce(this.validate, this.props.deferredValidationTime);
     }
-    PropertyFieldListPickerHost.prototype.componentDidMount = function () {
+    componentDidMount() {
         // Start retrieving the SharePoint lists
-        this.loadLists().then(function () { }).catch(function () { });
-    };
-    PropertyFieldListPickerHost.prototype.componentDidUpdate = function (prevProps, prevState) {
+        this.loadLists().then(() => { }).catch(() => { });
+    }
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.baseTemplate !== prevProps.baseTemplate ||
             this.props.webAbsoluteUrl !== prevProps.webAbsoluteUrl) {
-            this.loadLists().then(function () { }).catch(function () { });
+            this.loadLists().then(() => { }).catch(() => { });
         }
-    };
+    }
     /**
      * Loads the list from SharePoint current web site, or target site if specified by webRelativeUrl
      */
-    PropertyFieldListPickerHost.prototype.loadLists = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, context, selectedList, listService, listsToExclude, options, selectedListKey, selectedKey, response;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.props, context = _a.context, selectedList = _a.selectedList;
-                        listService = new _services_SPListPickerService__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"](this.props, context);
-                        listsToExclude = this.props.listsToExclude || [];
-                        options = [];
-                        selectedListKey = '';
-                        if (selectedList) {
-                            selectedListKey = typeof selectedList === 'string' ? selectedList : selectedList.id;
-                        }
-                        return [4 /*yield*/, listService.getLibs()];
-                    case 1:
-                        response = _b.sent();
-                        // Start mapping the list that are selected
-                        response.value.forEach(function (list) {
-                            if (selectedListKey === list.Id) {
-                                selectedKey = list.Id;
-                            }
-                            // Make sure that the current list is NOT in the 'listsToExclude' array
-                            if (listsToExclude.indexOf(list.Title) === -1 && listsToExclude.indexOf(list.Id) === -1) {
-                                options.push({
-                                    key: list.Id,
-                                    text: list.Title
-                                });
-                            }
-                        });
-                        // Option to unselect the list
-                        options.unshift({
-                            key: EMPTY_LIST_KEY,
-                            text: ''
-                        });
-                        // Update the current component state
-                        this.setState({
-                            loadedLists: response,
-                            results: options,
-                            selectedKey: selectedKey
-                        });
-                        return [2 /*return*/];
+    loadLists() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { context, selectedList } = this.props;
+            const listService = new _services_SPListPickerService__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"](this.props, context);
+            const listsToExclude = this.props.listsToExclude || [];
+            const options = [];
+            let selectedListKey = '';
+            if (selectedList) {
+                selectedListKey = typeof selectedList === 'string' ? selectedList : selectedList.id;
+            }
+            let selectedKey;
+            const response = yield listService.getLibs();
+            // Start mapping the list that are selected
+            response.value.forEach((list) => {
+                if (selectedListKey === list.Id) {
+                    selectedKey = list.Id;
+                }
+                // Make sure that the current list is NOT in the 'listsToExclude' array
+                if (listsToExclude.indexOf(list.Title) === -1 && listsToExclude.indexOf(list.Id) === -1) {
+                    options.push({
+                        key: list.Id,
+                        text: list.Title
+                    });
                 }
             });
+            // Option to unselect the list
+            options.unshift({
+                key: EMPTY_LIST_KEY,
+                text: ''
+            });
+            // Update the current component state
+            this.setState({
+                loadedLists: response,
+                results: options,
+                selectedKey: selectedKey
+            });
         });
-    };
+    }
     /**
      * Raises when a list has been selected
      */
-    PropertyFieldListPickerHost.prototype.onChanged = function (option, index) {
-        var newValue = option.key;
+    onChanged(option, index) {
+        const newValue = option.key;
         this.delayedValidate(newValue);
-    };
+    }
     /**
      * Validates the new custom field value
      */
-    PropertyFieldListPickerHost.prototype.validate = function (value) {
-        var _this = this;
+    validate(value) {
         if (this.props.onGetErrorMessage === null || this.props.onGetErrorMessage === undefined) {
             this.notifyAfterValidate(value);
             return;
@@ -11469,7 +11337,7 @@ var PropertyFieldListPickerHost = /** @class */ (function (_super) {
             return;
         }
         this.latestValidateValue = value;
-        var errResult = this.props.onGetErrorMessage(value || '');
+        const errResult = this.props.onGetErrorMessage(value || '');
         if (typeof errResult !== 'undefined') {
             if (typeof errResult === 'string') {
                 if (errResult === '') {
@@ -11480,34 +11348,34 @@ var PropertyFieldListPickerHost = /** @class */ (function (_super) {
                 });
             }
             else {
-                errResult.then(function (errorMessage) {
+                errResult.then((errorMessage) => {
                     if (!errorMessage) {
-                        _this.notifyAfterValidate(value);
+                        this.notifyAfterValidate(value);
                     }
-                    _this.setState({
+                    this.setState({
                         errorMessage: errorMessage
                     });
-                }).catch(function () { });
+                }).catch(() => { });
             }
         }
         else {
             this.notifyAfterValidate(value);
         }
-    };
+    }
     /**
      * Notifies the parent Web Part of a property value change
      */
-    PropertyFieldListPickerHost.prototype.notifyAfterValidate = function (newValue) {
-        var _a = this.props, onPropertyChange = _a.onPropertyChange, targetProperty = _a.targetProperty, selectedList = _a.selectedList, includeListTitleAndUrl = _a.includeListTitleAndUrl, properties = _a.properties, onChange = _a.onChange;
-        var loadedLists = this.state.loadedLists;
+    notifyAfterValidate(newValue) {
+        const { onPropertyChange, targetProperty, selectedList, includeListTitleAndUrl, properties, onChange } = this.props;
+        const { loadedLists } = this.state;
         // Check if the user wanted to unselect the list
-        var propValue;
+        let propValue;
         if (includeListTitleAndUrl) {
             if (newValue === EMPTY_LIST_KEY) {
                 propValue = undefined;
             }
             else {
-                var spList = loadedLists.value.filter(function (l) { return l.Id === newValue; })[0];
+                const spList = loadedLists.value.filter(l => l.Id === newValue)[0];
                 propValue = {
                     id: newValue,
                     title: spList.Title,
@@ -11519,14 +11387,14 @@ var PropertyFieldListPickerHost = /** @class */ (function (_super) {
             propValue = newValue === EMPTY_LIST_KEY ? '' : newValue;
         }
         // Deselect all options
-        var options = this.state.results.map(function (option) {
+        const options = this.state.results.map(option => {
             if (option.selected) {
                 option.selected = false;
             }
             return option;
         });
         // Set the current selected key
-        var selectedKey = newValue;
+        const selectedKey = newValue;
         // Update the state
         this.setState({
             selectedKey: selectedKey,
@@ -11542,28 +11410,26 @@ var PropertyFieldListPickerHost = /** @class */ (function (_super) {
                 onChange(targetProperty, propValue);
             }
         }
-    };
+    }
     /**
      * Called when the component will unmount
      */
-    PropertyFieldListPickerHost.prototype.componentWillUnmount = function () {
+    componentWillUnmount() {
         if (typeof this.async !== 'undefined') {
             this.async.dispose();
         }
-    };
+    }
     /**
      * Renders the SPListpicker controls with Office UI Fabric
      */
-    PropertyFieldListPickerHost.prototype.render = function () {
+    render() {
         // Renders content
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
             this.props.label && react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Label__WEBPACK_IMPORTED_MODULE_3__[/* Label */ "a"], null, this.props.label),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Dropdown__WEBPACK_IMPORTED_MODULE_1__[/* Dropdown */ "a"], { disabled: this.props.disabled, label: '', onChanged: this.onChanged, options: this.state.results, selectedKey: this.state.selectedKey }),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { errorMessage: this.state.errorMessage })));
-    };
-    return PropertyFieldListPickerHost;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-/* harmony default export */ __webpack_exports__["a"] = (PropertyFieldListPickerHost);
+    }
+}
 //# sourceMappingURL=PropertyFieldListPickerHost.js.map
 
 /***/ }),
@@ -11577,6 +11443,7 @@ var PropertyFieldListPickerHost = /** @class */ (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SPListPickerService; });
 /* harmony import */ var _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @microsoft/sp-http */ "vlQI");
 /* harmony import */ var _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _propertyFields_listPicker_IPropertyFieldListPicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../propertyFields/listPicker/IPropertyFieldListPicker */ "b58g");
@@ -11589,144 +11456,108 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 /**
  * Service implementation to get list & list items from current SharePoint site
  */
-var SPListPickerService = /** @class */ (function () {
+class SPListPickerService {
     /**
      * Service constructor
      */
-    function SPListPickerService(_props, pageContext) {
+    constructor(_props, pageContext) {
         this.props = _props;
         this.context = pageContext;
     }
     /**
      * Gets the collection of libs in the current SharePoint site, or target site if specified by webRelativeUrl
      */
-    SPListPickerService.prototype.getLibs = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var webAbsoluteUrl, queryUrl, response, lists, testct_1, lr, output;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        webAbsoluteUrl = this.props.webAbsoluteUrl
-                            ? this.props.webAbsoluteUrl
-                            : this.context.pageContext.web.absoluteUrl;
-                        if (this.props.contentTypeId) {
-                            queryUrl = "".concat(webAbsoluteUrl, "/_api/lists?$select=Title,id,BaseTemplate,RootFolder/ServerRelativeUrl,ContentTypes/StringId,ContentTypes/Name&$expand=RootFolder&$expand=ContentTypes");
-                        }
-                        else {
-                            queryUrl = "".concat(webAbsoluteUrl, "/_api/lists?$select=Title,id,BaseTemplate,RootFolder/ServerRelativeUrl&$expand=RootFolder");
-                        }
-                        // Check if the orderBy property is provided
-                        if (this.props.orderBy !== null) {
-                            queryUrl += '&$orderby=';
-                            switch (this.props.orderBy) {
-                                case _propertyFields_listPicker_IPropertyFieldListPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldListPickerOrderBy */ "a"].Id:
-                                    queryUrl += 'Id';
-                                    break;
-                                case _propertyFields_listPicker_IPropertyFieldListPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldListPickerOrderBy */ "a"].Title:
-                                    queryUrl += 'Title';
-                                    break;
-                            }
-                        }
-                        // Adds an OData Filter to the list
-                        if (this.props.filter) {
-                            queryUrl += "&$filter=".concat(encodeURIComponent(this.props.filter));
-                        }
-                        // Check if the list have get filtered based on the list base template type
-                        else if ((this.props.baseTemplate !== null && this.props.baseTemplate) || Array.isArray(this.props.baseTemplate)) {
-                            if (Array.isArray(this.props.baseTemplate)) {
-                                queryUrl += '&$filter=(';
-                                queryUrl += this.props.baseTemplate.map(function (temp) { return "(BaseTemplate%20eq%20".concat(temp, ")"); }).join('%20or%20');
-                                queryUrl += ')';
-                            }
-                            else {
-                                queryUrl += '&$filter=BaseTemplate%20eq%20';
-                                queryUrl += this.props.baseTemplate;
-                            }
-                            // Check if you also want to exclude hidden list in the list
-                            if (this.props.includeHidden === false) {
-                                queryUrl += '%20and%20Hidden%20eq%20false';
-                            }
-                        }
-                        else {
-                            if (this.props.includeHidden === false) {
-                                queryUrl += '&$filter=Hidden%20eq%20false';
-                            }
-                        }
-                        return [4 /*yield*/, this.context.spHttpClient.get(queryUrl, _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__["SPHttpClient"].configurations.v1)];
-                    case 1:
-                        response = _a.sent();
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        lists = (_a.sent());
-                        //remove unwanted contenttypes
-                        if (this.props.contentTypeId) {
-                            testct_1 = this.props.contentTypeId.toUpperCase();
-                            lists.value = lists.value.filter(function (l) {
-                                for (var _i = 0, _a = l.ContentTypes; _i < _a.length; _i++) {
-                                    var ct = _a[_i];
-                                    var ctid = ct.StringId.toUpperCase();
-                                    if (ctid.substring(0, testct_1.length) === testct_1) {
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            });
-                        }
-                        if (!this.props.onListsRetrieved) return [3 /*break*/, 6];
-                        lr = this.props.onListsRetrieved(lists.value);
-                        output = void 0;
-                        if (!(lr instanceof Array)) return [3 /*break*/, 3];
-                        output = lr;
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, lr];
-                    case 4:
-                        output = _a.sent();
-                        _a.label = 5;
-                    case 5:
-                        lists = {
-                            value: output,
-                        };
-                        _a.label = 6;
-                    case 6: return [2 /*return*/, lists];
+    getLibs() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // use the web relative url if provided, otherwise default to current SharePoint site
+            const webAbsoluteUrl = this.props.webAbsoluteUrl
+                ? this.props.webAbsoluteUrl
+                : this.context.pageContext.web.absoluteUrl;
+            // If the running environment is SharePoint, request the lists REST service
+            let queryUrl;
+            if (this.props.contentTypeId) {
+                queryUrl = `${webAbsoluteUrl}/_api/lists?$select=Title,id,BaseTemplate,RootFolder/ServerRelativeUrl,ContentTypes/StringId,ContentTypes/Name&$expand=RootFolder&$expand=ContentTypes`;
+            }
+            else {
+                queryUrl = `${webAbsoluteUrl}/_api/lists?$select=Title,id,BaseTemplate,RootFolder/ServerRelativeUrl&$expand=RootFolder`;
+            }
+            // Check if the orderBy property is provided
+            if (this.props.orderBy !== null) {
+                queryUrl += '&$orderby=';
+                switch (this.props.orderBy) {
+                    case _propertyFields_listPicker_IPropertyFieldListPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldListPickerOrderBy */ "a"].Id:
+                        queryUrl += 'Id';
+                        break;
+                    case _propertyFields_listPicker_IPropertyFieldListPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldListPickerOrderBy */ "a"].Title:
+                        queryUrl += 'Title';
+                        break;
                 }
-            });
+            }
+            // Adds an OData Filter to the list
+            if (this.props.filter) {
+                queryUrl += `&$filter=${encodeURIComponent(this.props.filter)}`;
+            }
+            // Check if the list have get filtered based on the list base template type
+            else if ((this.props.baseTemplate !== null && this.props.baseTemplate) || Array.isArray(this.props.baseTemplate)) {
+                if (Array.isArray(this.props.baseTemplate)) {
+                    queryUrl += '&$filter=(';
+                    queryUrl += this.props.baseTemplate.map(temp => `(BaseTemplate%20eq%20${temp})`).join('%20or%20');
+                    queryUrl += ')';
+                }
+                else {
+                    queryUrl += '&$filter=BaseTemplate%20eq%20';
+                    queryUrl += this.props.baseTemplate;
+                }
+                // Check if you also want to exclude hidden list in the list
+                if (this.props.includeHidden === false) {
+                    queryUrl += '%20and%20Hidden%20eq%20false';
+                }
+            }
+            else {
+                if (this.props.includeHidden === false) {
+                    queryUrl += '&$filter=Hidden%20eq%20false';
+                }
+            }
+            const response = yield this.context.spHttpClient.get(queryUrl, _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__["SPHttpClient"].configurations.v1);
+            let lists = (yield response.json());
+            //remove unwanted contenttypes
+            if (this.props.contentTypeId) {
+                const testct = this.props.contentTypeId.toUpperCase();
+                lists.value = lists.value.filter((l) => {
+                    for (const ct of l.ContentTypes) {
+                        const ctid = ct.StringId.toUpperCase();
+                        if (ctid.substring(0, testct.length) === testct) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+            // Check if onListsRetrieved callback is defined
+            if (this.props.onListsRetrieved) {
+                //Call onListsRetrieved
+                const lr = this.props.onListsRetrieved(lists.value);
+                let output;
+                //Conditional checking to see of PromiseLike object or array
+                if (lr instanceof Array) {
+                    output = lr;
+                }
+                else {
+                    output = yield lr;
+                }
+                lists = {
+                    value: output,
+                };
+            }
+            return lists;
         });
-    };
-    return SPListPickerService;
-}());
-/* harmony default export */ __webpack_exports__["a"] = (SPListPickerService);
+    }
+}
 //# sourceMappingURL=SPListPickerService.js.map
 
 /***/ }),
@@ -36340,7 +36171,7 @@ exports.default = ReactAce;
 "use strict";
 /* tslint:disable */
 __webpack_require__(/*! ./PropertyFieldCodeEditorHost.module.css */ "8M4E");
-var styles = {
+const styles = {
     codeFieldTable: 'codeFieldTable_89488f0f',
     codeFieldRow: 'codeFieldRow_89488f0f',
     actions: 'actions_89488f0f'
@@ -38187,113 +38018,77 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 /**
  * Service implementation to get list & list items from current SharePoint site
  */
-var SPViewPickerService = /** @class */ (function () {
+class SPViewPickerService {
     /**
      * Service constructor
      */
-    function SPViewPickerService(_props, pageContext) {
+    constructor(_props, pageContext) {
         this.props = _props;
         this.context = pageContext;
     }
     /**
      * Gets the collection of view for a selected list
      */
-    SPViewPickerService.prototype.getViews = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var webAbsoluteUrl, queryUrl, response, views, lr, output;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (this.props.listId === undefined || this.props.listId === "") {
-                            return [2 /*return*/, this.getEmptyViews()];
-                        }
-                        webAbsoluteUrl = this.props.webAbsoluteUrl ? this.props.webAbsoluteUrl : this.context.pageContext.web.absoluteUrl;
-                        queryUrl = "".concat(webAbsoluteUrl, "/_api/lists(guid'").concat(this.props.listId, "')/Views?$select=Title,Id");
-                        if (!(this.props.orderBy !== null)) return [3 /*break*/, 7];
-                        queryUrl += '&$orderby=';
-                        switch (this.props.orderBy) {
-                            case _propertyFields_viewPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldViewPickerOrderBy */ "b"].Id:
-                                queryUrl += 'Id';
-                                break;
-                            case _propertyFields_viewPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldViewPickerOrderBy */ "b"].Title:
-                                queryUrl += 'Title';
-                                break;
-                        }
-                        // Adds an OData Filter to the list
-                        if (this.props.filter) {
-                            queryUrl += "&$filter=".concat(encodeURIComponent(this.props.filter));
-                        }
-                        return [4 /*yield*/, this.context.spHttpClient.get(queryUrl, _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__["SPHttpClient"].configurations.v1)];
-                    case 1:
-                        response = _a.sent();
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        views = (_a.sent());
-                        if (!this.props.onViewsRetrieved) return [3 /*break*/, 6];
-                        lr = this.props.onViewsRetrieved(views.value);
-                        output = void 0;
-                        if (!(lr instanceof Array)) return [3 /*break*/, 3];
-                        output = lr;
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, lr];
-                    case 4:
-                        output = _a.sent();
-                        _a.label = 5;
-                    case 5:
-                        views.value = output;
-                        _a.label = 6;
-                    case 6: return [2 /*return*/, views];
-                    case 7: return [2 /*return*/];
+    getViews() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.props.listId === undefined || this.props.listId === "") {
+                return this.getEmptyViews();
+            }
+            const webAbsoluteUrl = this.props.webAbsoluteUrl ? this.props.webAbsoluteUrl : this.context.pageContext.web.absoluteUrl;
+            // If the running environment is SharePoint, request the lists REST service
+            let queryUrl = `${webAbsoluteUrl}/_api/lists(guid'${this.props.listId}')/Views?$select=Title,Id`;
+            // Check if the orderBy property is provided
+            if (this.props.orderBy !== null) {
+                queryUrl += '&$orderby=';
+                switch (this.props.orderBy) {
+                    case _propertyFields_viewPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldViewPickerOrderBy */ "b"].Id:
+                        queryUrl += 'Id';
+                        break;
+                    case _propertyFields_viewPicker__WEBPACK_IMPORTED_MODULE_1__[/* PropertyFieldViewPickerOrderBy */ "b"].Title:
+                        queryUrl += 'Title';
+                        break;
                 }
-            });
+                // Adds an OData Filter to the list
+                if (this.props.filter) {
+                    queryUrl += `&$filter=${encodeURIComponent(this.props.filter)}`;
+                }
+                const response = yield this.context.spHttpClient.get(queryUrl, _microsoft_sp_http__WEBPACK_IMPORTED_MODULE_0__["SPHttpClient"].configurations.v1);
+                const views = (yield response.json());
+                // Check if onViewsRetrieved callback is defined
+                if (this.props.onViewsRetrieved) {
+                    //Call onViewsRetrieved
+                    const lr = this.props.onViewsRetrieved(views.value);
+                    let output;
+                    //Conditional checking to see of PromiseLike object or array
+                    if (lr instanceof Array) {
+                        output = lr;
+                    }
+                    else {
+                        output = yield lr;
+                    }
+                    views.value = output;
+                }
+                return views;
+            }
         });
-    };
+    }
     /**
      * Returns an empty view for when a list isn't selected
      */
-    SPViewPickerService.prototype.getEmptyViews = function () {
-        return new Promise(function (resolve) {
-            var listData = {
+    getEmptyViews() {
+        return new Promise((resolve) => {
+            const listData = {
                 value: []
             };
             resolve(listData);
         });
-    };
-    return SPViewPickerService;
-}());
-
+    }
+}
 //# sourceMappingURL=SPViewPickerService.js.map
 
 /***/ }),
@@ -38353,8 +38148,8 @@ exports.default = ace_1.default;
       'end_with_newline': false,
     });
  */
-var CSSFormatter = /** @class */ (function () {
-    function CSSFormatter() {
+class CSSFormatter {
+    constructor() {
         this.pos = -1;
         this.whiteRe = /^\s+$/; // tokenizer
         this.indentLevel = 0;
@@ -38377,15 +38172,15 @@ var CSSFormatter = /** @class */ (function () {
             "@document": true
         };
     }
-    CSSFormatter.prototype.next = function () {
+    next() {
         this.ch = this.source_text.charAt(++this.pos);
         return this.ch;
-    };
-    CSSFormatter.prototype.peek = function () {
+    }
+    peek() {
         return this.source_text.charAt(this.pos + 1);
-    };
-    CSSFormatter.prototype.eatString = function (endChar) {
-        var start = this.pos;
+    }
+    eatString(endChar) {
+        const start = this.pos;
         while (this.next()) {
             if (this.ch === "\\") {
                 this.next();
@@ -38399,23 +38194,23 @@ var CSSFormatter = /** @class */ (function () {
             }
         }
         return this.source_text.substring(start, this.pos + 1);
-    };
-    CSSFormatter.prototype.eatWhitespace = function () {
-        var start = this.pos;
+    }
+    eatWhitespace() {
+        const start = this.pos;
         while (this.whiteRe.test(this.peek())) {
             this.pos++;
         }
         return this.pos !== start;
-    };
-    CSSFormatter.prototype.skipWhitespace = function () {
-        var start = this.pos;
+    }
+    skipWhitespace() {
+        const start = this.pos;
         do {
             // no-op;
         } while (this.whiteRe.test(this.next()));
         return this.pos !== start + 1;
-    };
-    CSSFormatter.prototype.eatComment = function (singleLine) {
-        var start = this.pos;
+    }
+    eatComment(singleLine) {
+        const start = this.pos;
         this.next();
         while (this.next()) {
             if (this.ch === "*" && this.peek() === "/") {
@@ -38427,30 +38222,30 @@ var CSSFormatter = /** @class */ (function () {
             }
         }
         return this.source_text.substring(start, this.pos + 1);
-    };
-    CSSFormatter.prototype.lookBack = function (str) {
+    }
+    lookBack(str) {
         return this.source_text.substring(this.pos - str.length, this.pos).toLowerCase() === str;
-    };
-    CSSFormatter.prototype.isCommentOnLine = function () {
-        var endOfLine = this.source_text.indexOf('\n', this.pos);
+    }
+    isCommentOnLine() {
+        const endOfLine = this.source_text.indexOf('\n', this.pos);
         if (endOfLine === -1) {
             return false;
         }
-        var restOfLine = this.source_text.substring(this.pos, endOfLine);
+        const restOfLine = this.source_text.substring(this.pos, endOfLine);
         return restOfLine.indexOf('//') !== -1;
-    };
-    CSSFormatter.prototype.indent = function () {
+    }
+    indent() {
         this.indentLevel++;
         this.indentString += this.singleIndent;
-    };
-    CSSFormatter.prototype.outdent = function () {
+    }
+    outdent() {
         this.indentLevel--;
         this.indentString = this.indentString.slice(0, -this.indentSize);
-    };
-    CSSFormatter.prototype.lastCharWhitespace = function () {
+    }
+    lastCharWhitespace() {
         return this.whiteRe.test(this.output[this.output.length - 1]);
-    };
-    CSSFormatter.prototype.newLine = function (keepWhitespace) {
+    }
+    newLine(keepWhitespace) {
         if (!keepWhitespace) {
             while (this.lastCharWhitespace()) {
                 this.output.pop();
@@ -38462,43 +38257,42 @@ var CSSFormatter = /** @class */ (function () {
         if (this.indentString) {
             this.output.push(this.indentString);
         }
-    };
-    CSSFormatter.prototype.singleSpace = function () {
+    }
+    singleSpace() {
         if (this.output.length && !this.lastCharWhitespace()) {
             this.output.push(' ');
         }
-    };
-    CSSFormatter.prototype.css_beautify = function (sourceText, options) {
-        var _this = this;
+    }
+    css_beautify(sourceText, options) {
         options = options || {};
         this.source_text = sourceText;
-        var indentSize = options.indent_size || 4;
-        var indentCharacter = options.indent_char || ' ';
-        var selectorSeparatorNewline = (options.selector_separator_newline === undefined) ? true : options.selector_separator_newline;
-        var endWithNewline = (options.end_with_newline === undefined) ? false : options.end_with_newline;
+        let indentSize = options.indent_size || 4;
+        const indentCharacter = options.indent_char || ' ';
+        const selectorSeparatorNewline = (options.selector_separator_newline === undefined) ? true : options.selector_separator_newline;
+        const endWithNewline = (options.end_with_newline === undefined) ? false : options.end_with_newline;
         // compatibility
         if (typeof indentSize === "string") {
             indentSize = parseInt(indentSize, 10);
         }
         this.indentString = sourceText.match(/^[\r\n]*[\t ]*/)[0];
         this.singleIndent = new Array(indentSize + 1).join(indentCharacter);
-        this.print["{"] = function (chOpenBrace) {
-            _this.singleSpace();
-            _this.output.push(chOpenBrace);
-            _this.newLine(false);
+        this.print["{"] = (chOpenBrace) => {
+            this.singleSpace();
+            this.output.push(chOpenBrace);
+            this.newLine(false);
         };
-        this.print["}"] = function (chCloseBrace) {
-            _this.newLine(false);
-            _this.output.push(chCloseBrace);
-            _this.newLine(false);
+        this.print["}"] = (chCloseBrace) => {
+            this.newLine(false);
+            this.output.push(chCloseBrace);
+            this.newLine(false);
         };
         if (this.indentString) {
             this.output.push(this.indentString);
         }
-        var insideRule = false;
-        var enteringConditionalGroup = false;
+        let insideRule = false;
+        let enteringConditionalGroup = false;
         while (true) { // eslint-disable-line no-constant-condition
-            var isAfterSpace = this.skipWhitespace();
+            const isAfterSpace = this.skipWhitespace();
             if (!this.ch) {
                 break;
             }
@@ -38506,7 +38300,7 @@ var CSSFormatter = /** @class */ (function () {
                 /* css comment */
                 this.newLine(false);
                 this.output.push(this.eatComment(true), "\n", this.indentString);
-                var header = this.lookBack("");
+                const header = this.lookBack("");
                 if (header) {
                     this.newLine(false);
                 }
@@ -38517,7 +38311,7 @@ var CSSFormatter = /** @class */ (function () {
             }
             else if (this.ch === '@') {
                 // strip trailing space, if present, for hash property checks
-                var atRule = this.eatString(" ").replace(/ $/, '');
+                const atRule = this.eatString(" ").replace(/ $/, '');
                 // pass along the space we found as a separate item
                 this.output.push(atRule, this.ch);
                 // might be a nesting at-rule
@@ -38580,8 +38374,8 @@ var CSSFormatter = /** @class */ (function () {
             }
             else if (this.ch === ';') {
                 if (this.isCommentOnLine()) {
-                    var beforeComment = this.eatString('/');
-                    var comment = this.eatComment(true);
+                    const beforeComment = this.eatString('/');
+                    const comment = this.eatComment(true);
                     this.output.push(beforeComment, comment.substring(1, comment.length - 1), '\n', this.indentString);
                 }
                 else {
@@ -38639,10 +38433,10 @@ var CSSFormatter = /** @class */ (function () {
                 this.output.push(this.ch);
             }
         }
-        var sweetCode = this.output.join('').replace(/[\n ]+$/, '');
+        let sweetCode = this.output.join('').replace(/[\n ]+$/, '');
         // establish end_with_newline
-        var should = endWithNewline;
-        var actually = /\n$/.test(sweetCode);
+        const should = endWithNewline;
+        const actually = /\n$/.test(sweetCode);
         if (should && !actually) {
             sweetCode += "\n";
         }
@@ -38650,10 +38444,8 @@ var CSSFormatter = /** @class */ (function () {
             sweetCode = sweetCode.slice(0, -1);
         }
         return sweetCode;
-    };
-    return CSSFormatter;
-}());
-
+    }
+}
 //# sourceMappingURL=CSSFormatter.js.map
 
 /***/ }),
@@ -39922,6 +39714,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PropertyFieldViewPickerHost; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fluentui_react_lib_Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Dropdown */ "+onJ");
@@ -39931,21 +39724,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 /* harmony import */ var _errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../errorMessage/FieldErrorMessage */ "N3ZD");
 /* harmony import */ var _common_telemetry__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/telemetry */ "TVYz");
 /* harmony import */ var _helpers_GeneralHelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../helpers/GeneralHelper */ "yVpZ");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
 
@@ -39955,87 +39733,83 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 
 // Empty view value
-var EMPTY_VIEW_KEY = 'NO_VIEW_SELECTED';
+const EMPTY_VIEW_KEY = 'NO_VIEW_SELECTED';
 /**
  * Renders the controls for PropertyFieldViewPicker component
  */
-var PropertyFieldViewPickerHost = /** @class */ (function (_super) {
-    __extends(PropertyFieldViewPickerHost, _super);
+class PropertyFieldViewPickerHost extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     /**
      * Constructor method
      */
-    function PropertyFieldViewPickerHost(props) {
-        var _this = _super.call(this, props) || this;
-        _this.options = [];
+    constructor(props) {
+        super(props);
+        this.options = [];
         _common_telemetry__WEBPACK_IMPORTED_MODULE_6__[/* track */ "a"]('PropertyFieldViewPicker', {
             disabled: props.disabled
         });
-        _this.state = {
-            results: _this.options,
+        this.state = {
+            results: this.options,
             errorMessage: ''
         };
-        _this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* Async */ "a"](_this);
-        _this.validate = _this.validate.bind(_this);
-        _this.onChanged = _this.onChanged.bind(_this);
-        _this.notifyAfterValidate = _this.notifyAfterValidate.bind(_this);
-        _this.delayedValidate = _this.async.debounce(_this.validate, _this.props.deferredValidationTime);
-        return _this;
+        this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* Async */ "a"](this);
+        this.validate = this.validate.bind(this);
+        this.onChanged = this.onChanged.bind(this);
+        this.notifyAfterValidate = this.notifyAfterValidate.bind(this);
+        this.delayedValidate = this.async.debounce(this.validate, this.props.deferredValidationTime);
     }
-    PropertyFieldViewPickerHost.prototype.componentDidMount = function () {
+    componentDidMount() {
         // Start retrieving the list views
         this.loadViews();
-    };
-    PropertyFieldViewPickerHost.prototype.componentDidUpdate = function (prevProps, _prevState) {
+    }
+    componentDidUpdate(prevProps, _prevState) {
         if (this.props.listId !== prevProps.listId || this.props.webAbsoluteUrl !== prevProps.webAbsoluteUrl) {
             this.loadViews();
         }
-    };
+    }
     /**
      * Loads the views from a SharePoint list
      */
-    PropertyFieldViewPickerHost.prototype.loadViews = function () {
-        var _this = this;
-        var viewService = new _services_SPViewPickerService__WEBPACK_IMPORTED_MODULE_4__[/* SPViewPickerService */ "a"](this.props, this.props.context);
-        var viewsToExclude = this.props.viewsToExclude || [];
+    loadViews() {
+        const viewService = new _services_SPViewPickerService__WEBPACK_IMPORTED_MODULE_4__[/* SPViewPickerService */ "a"](this.props, this.props.context);
+        const viewsToExclude = this.props.viewsToExclude || [];
         this.options = [];
-        viewService.getViews().then(function (response) {
+        viewService.getViews().then((response) => {
             // Start mapping the views that are selected
-            response.value.forEach(function (view) {
-                if (_this.props.selectedView === view.Id) {
-                    _this.selectedKey = view.Id;
+            response.value.forEach((view) => {
+                if (this.props.selectedView === view.Id) {
+                    this.selectedKey = view.Id;
                 }
                 // Make sure that the current view is NOT in the 'viewsToExclude' array
                 if (viewsToExclude.indexOf(view.Title) === -1 && viewsToExclude.indexOf(view.Id) === -1) {
-                    _this.options.push({
+                    this.options.push({
                         key: view.Id,
                         text: view.Title
                     });
                 }
             });
             // Option to unselect the view
-            _this.options.unshift({
+            this.options.unshift({
                 key: EMPTY_VIEW_KEY,
                 text: ''
             });
             // Update the current component state
-            _this.setState({
-                results: _this.options,
-                selectedKey: _this.selectedKey
+            this.setState({
+                results: this.options,
+                selectedKey: this.selectedKey
             });
-        }).catch(function () { });
-    };
+        }).catch(() => { });
+    }
     /**
      * Raises when a view has been selected
      */
-    PropertyFieldViewPickerHost.prototype.onChanged = function (option, _index) {
-        var newValue = option.key;
+    onChanged(option, _index) {
+        const newValue = option.key;
         this.delayedValidate(newValue);
-    };
+    }
     /**
      * Validates the new custom field value
      */
-    PropertyFieldViewPickerHost.prototype.validate = function (value) {
-        var _this = this;
+    validate(value) {
         if (this.props.onGetErrorMessage === null || this.props.onGetErrorMessage === undefined) {
             this.notifyAfterValidate(this.props.selectedView, value);
             return;
@@ -40044,7 +39818,7 @@ var PropertyFieldViewPickerHost = /** @class */ (function (_super) {
             return;
         }
         this.latestValidateValue = value;
-        var errResult = this.props.onGetErrorMessage(value || '');
+        const errResult = this.props.onGetErrorMessage(value || '');
         if (typeof errResult !== 'undefined') {
             if (typeof errResult === 'string') {
                 if (errResult === '') {
@@ -40055,28 +39829,28 @@ var PropertyFieldViewPickerHost = /** @class */ (function (_super) {
                 });
             }
             else {
-                errResult.then(function (errorMessage) {
+                errResult.then((errorMessage) => {
                     if (!errorMessage) {
-                        _this.notifyAfterValidate(_this.props.selectedView, value);
+                        this.notifyAfterValidate(this.props.selectedView, value);
                     }
-                    _this.setState({
+                    this.setState({
                         errorMessage: errorMessage
                     });
-                }).catch(function () { });
+                }).catch(() => { });
             }
         }
         else {
             this.notifyAfterValidate(this.props.selectedView, value);
         }
-    };
+    }
     /**
      * Notifies the parent Web Part of a property value change
      */
-    PropertyFieldViewPickerHost.prototype.notifyAfterValidate = function (oldValue, newValue) {
+    notifyAfterValidate(oldValue, newValue) {
         // Check if the user wanted to unselect the view
-        var propValue = newValue === EMPTY_VIEW_KEY ? '' : newValue;
+        const propValue = newValue === EMPTY_VIEW_KEY ? '' : newValue;
         // Deselect all options
-        this.options = this.state.results.map(function (option) {
+        this.options = this.state.results.map(option => {
             if (option.selected) {
                 option.selected = false;
             }
@@ -40099,28 +39873,26 @@ var PropertyFieldViewPickerHost = /** @class */ (function (_super) {
                 this.props.onChange(this.props.targetProperty, propValue);
             }
         }
-    };
+    }
     /**
      * Called when the component will unmount
      */
-    PropertyFieldViewPickerHost.prototype.componentWillUnmount = function () {
+    componentWillUnmount() {
         if (typeof this.async !== 'undefined') {
             this.async.dispose();
         }
-    };
+    }
     /**
      * Renders the SPViewPicker controls with Office UI Fabric
      */
-    PropertyFieldViewPickerHost.prototype.render = function () {
+    render() {
         // Renders content
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
             this.props.label && react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Label__WEBPACK_IMPORTED_MODULE_3__[/* Label */ "a"], null, this.props.label),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Dropdown__WEBPACK_IMPORTED_MODULE_1__[/* Dropdown */ "a"], { disabled: this.props.disabled, label: '', onChanged: this.onChanged, options: this.state.results, selectedKey: this.state.selectedKey }),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { errorMessage: this.state.errorMessage })));
-    };
-    return PropertyFieldViewPickerHost;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-/* harmony default export */ __webpack_exports__["a"] = (PropertyFieldViewPickerHost);
+    }
+}
 //# sourceMappingURL=PropertyFieldViewPickerHost.js.map
 
 /***/ }),
@@ -40244,6 +40016,7 @@ exports.debounce = debounce;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PropertyFieldListMultiPickerHost; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fluentui_react_lib_Label__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Label */ "lqH9");
@@ -40255,21 +40028,6 @@ exports.debounce = debounce;
 /* harmony import */ var _errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../errorMessage/FieldErrorMessage */ "N3ZD");
 /* harmony import */ var _common_telemetry__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../common/telemetry */ "TVYz");
 /* harmony import */ var _helpers_GeneralHelper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../helpers/GeneralHelper */ "yVpZ");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -40278,42 +40036,6 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
 };
 
 
@@ -40327,115 +40049,106 @@ var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from
 /**
 * Renders the controls for PropertyFieldSPListMultiplePicker component
 */
-var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
-    __extends(PropertyFieldListMultiPickerHost, _super);
+class PropertyFieldListMultiPickerHost extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     /**
     * Constructor
     */
-    function PropertyFieldListMultiPickerHost(props) {
-        var _this = _super.call(this, props) || this;
-        _this.loaded = false;
+    constructor(props) {
+        super(props);
+        this.loaded = false;
         _common_telemetry__WEBPACK_IMPORTED_MODULE_8__[/* track */ "a"]('PropertyFieldListMultiPicker', {
             disabled: props.disabled
         });
-        _this.onChanged = _this.onChanged.bind(_this);
-        _this.onSelectAllChanged = _this.onSelectAllChanged.bind(_this);
-        _this.state = {
+        this.onChanged = this.onChanged.bind(this);
+        this.onSelectAllChanged = this.onSelectAllChanged.bind(this);
+        this.state = {
             loadedLists: {
                 value: []
             },
             results: [],
             selectedKeys: [],
-            loaded: _this.loaded,
+            loaded: this.loaded,
             errorMessage: ''
         };
-        _this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* Async */ "a"](_this);
-        _this.validate = _this.validate.bind(_this);
-        _this.notifyAfterValidate = _this.notifyAfterValidate.bind(_this);
-        _this.delayedValidate = _this.async.debounce(_this.validate, _this.props.deferredValidationTime);
-        return _this;
+        this.async = new _fluentui_react_lib_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* Async */ "a"](this);
+        this.validate = this.validate.bind(this);
+        this.notifyAfterValidate = this.notifyAfterValidate.bind(this);
+        this.delayedValidate = this.async.debounce(this.validate, this.props.deferredValidationTime);
     }
-    PropertyFieldListMultiPickerHost.prototype.componentDidMount = function () {
-        this.loadLists().then(function () { }).catch(function () { });
-    };
-    PropertyFieldListMultiPickerHost.prototype.componentDidUpdate = function (prevProps, prevState) {
+    componentDidMount() {
+        this.loadLists().then(() => { }).catch(() => { });
+    }
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.baseTemplate !== prevProps.baseTemplate ||
             this.props.webAbsoluteUrl !== prevProps.webAbsoluteUrl) {
-            this.loadLists().then(function () { }).catch(function () { });
+            this.loadLists().then(() => { }).catch(() => { });
         }
-    };
+    }
     /**
     * Loads the list from SharePoint current web site, or target site if specified by webRelativeUrl
     */
-    PropertyFieldListMultiPickerHost.prototype.loadLists = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, context, selectedLists, listService, listsToExclude, selectedListsKeys, firstItem, options, selectedKeys, response;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.props, context = _a.context, selectedLists = _a.selectedLists;
-                        listService = new _services_SPListPickerService__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"](this.props, context);
-                        listsToExclude = this.props.listsToExclude || [];
-                        selectedListsKeys = [];
-                        if (selectedLists && selectedLists.length) {
-                            firstItem = selectedLists[0];
-                            if (typeof firstItem === 'string') {
-                                selectedListsKeys = selectedLists;
-                            }
-                            else {
-                                selectedListsKeys = selectedLists.map(function (sl) { return sl.id; });
-                            }
-                        }
-                        options = [];
-                        selectedKeys = [];
-                        return [4 /*yield*/, listService.getLibs()];
-                    case 1:
-                        response = _b.sent();
-                        response.value.forEach(function (list) {
-                            var indexInExisting = -1;
-                            // Defines if the current list must be selected by default
-                            if (selectedListsKeys) {
-                                indexInExisting = selectedListsKeys.indexOf(list.Id);
-                            }
-                            if (indexInExisting > -1) {
-                                selectedKeys.push(list.Id);
-                            }
-                            // Add the option to the list if not inside the 'listsToExclude' array
-                            if (listsToExclude.indexOf(list.Title) === -1 && listsToExclude.indexOf(list.Id) === -1) {
-                                options.push({
-                                    key: list.Id,
-                                    text: list.Title
-                                });
-                            }
-                        });
-                        this.loaded = true;
-                        this.setState({
-                            loadedLists: response,
-                            results: options,
-                            selectedKeys: selectedKeys,
-                            loaded: true
-                        });
-                        return [2 /*return*/];
+    loadLists() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { context, selectedLists } = this.props;
+            // Builds the SharePoint List service
+            const listService = new _services_SPListPickerService__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"](this.props, context);
+            const listsToExclude = this.props.listsToExclude || [];
+            let selectedListsKeys = [];
+            if (selectedLists && selectedLists.length) {
+                const firstItem = selectedLists[0];
+                if (typeof firstItem === 'string') {
+                    selectedListsKeys = selectedLists;
+                }
+                else {
+                    selectedListsKeys = selectedLists.map(sl => sl.id);
+                }
+            }
+            const options = [];
+            const selectedKeys = [];
+            // Gets the libs
+            const response = yield listService.getLibs();
+            response.value.forEach((list) => {
+                let indexInExisting = -1;
+                // Defines if the current list must be selected by default
+                if (selectedListsKeys) {
+                    indexInExisting = selectedListsKeys.indexOf(list.Id);
+                }
+                if (indexInExisting > -1) {
+                    selectedKeys.push(list.Id);
+                }
+                // Add the option to the list if not inside the 'listsToExclude' array
+                if (listsToExclude.indexOf(list.Title) === -1 && listsToExclude.indexOf(list.Id) === -1) {
+                    options.push({
+                        key: list.Id,
+                        text: list.Title
+                    });
                 }
             });
+            this.loaded = true;
+            this.setState({
+                loadedLists: response,
+                results: options,
+                selectedKeys: selectedKeys,
+                loaded: true
+            });
         });
-    };
+    }
     /**
     * Raises when a list has been selected
     */
-    PropertyFieldListMultiPickerHost.prototype.onChanged = function (element, isChecked) {
+    onChanged(element, isChecked) {
         if (element) {
-            var value_1 = element.currentTarget.value; // eslint-disable-line @typescript-eslint/no-explicit-any
-            var selectedKeys = this.state.selectedKeys;
+            const value = element.currentTarget.value; // eslint-disable-line @typescript-eslint/no-explicit-any
+            let selectedKeys = this.state.selectedKeys;
             // Check if the element is selected
             if (isChecked === false) {
                 // Remove the unselected item
-                selectedKeys = selectedKeys.filter(function (s) { return s !== value_1; });
+                selectedKeys = selectedKeys.filter(s => s !== value);
             }
             else {
                 // Add the selected item and filter out the doubles
-                selectedKeys.push(value_1);
-                selectedKeys = selectedKeys.filter(function (item, pos, self) {
+                selectedKeys.push(value);
+                selectedKeys = selectedKeys.filter((item, pos, self) => {
                     return self.indexOf(item) === pos;
                 });
             }
@@ -40445,35 +40158,34 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
             });
             this.delayedValidate(selectedKeys);
         }
-    };
+    }
     /**
      * Raises when the select all checkbox is changed
      */
-    PropertyFieldListMultiPickerHost.prototype.onSelectAllChanged = function (element, isChecked) {
+    onSelectAllChanged(element, isChecked) {
         if (element) {
-            var selectedKeys_1 = new Array();
-            var results = this.state.results;
+            const selectedKeys = new Array();
+            const { results } = this.state;
             if (isChecked === true) {
-                results.forEach(function (value) {
-                    selectedKeys_1.push(value.key);
+                results.forEach((value) => {
+                    selectedKeys.push(value.key);
                 });
             }
             this.setState({
-                selectedKeys: selectedKeys_1
+                selectedKeys: selectedKeys
             });
-            this.delayedValidate(selectedKeys_1);
+            this.delayedValidate(selectedKeys);
         }
-    };
+    }
     /**
     * Validates the new custom field value
     */
-    PropertyFieldListMultiPickerHost.prototype.validate = function (value) {
-        var _this = this;
+    validate(value) {
         if (this.props.onGetErrorMessage === null || typeof this.props.onGetErrorMessage === 'undefined') {
             this.notifyAfterValidate(value);
             return;
         }
-        var errResult = this.props.onGetErrorMessage(value || []);
+        const errResult = this.props.onGetErrorMessage(value || []);
         if (typeof errResult !== 'undefined') {
             if (typeof errResult === 'string') {
                 if (errResult === '') {
@@ -40484,33 +40196,33 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
                 });
             }
             else {
-                errResult.then(function (errorMessage) {
+                errResult.then((errorMessage) => {
                     if (typeof errorMessage === 'undefined' || errorMessage === '') {
-                        _this.notifyAfterValidate(value);
+                        this.notifyAfterValidate(value);
                     }
-                    _this.setState({
+                    this.setState({
                         errorMessage: errorMessage
                     });
-                }).catch(function () { });
+                }).catch(() => { });
             }
         }
         else {
             this.notifyAfterValidate(value);
         }
-    };
+    }
     /**
     * Notifies the parent Web Part of a property value change
     */
-    PropertyFieldListMultiPickerHost.prototype.notifyAfterValidate = function (newValue) {
-        var _a = this.props, onPropertyChange = _a.onPropertyChange, onChange = _a.onChange, selectedLists = _a.selectedLists, targetProperty = _a.targetProperty, properties = _a.properties, includeListTitleAndUrl = _a.includeListTitleAndUrl;
-        var loadedLists = this.state.loadedLists;
-        var propValue;
+    notifyAfterValidate(newValue) {
+        const { onPropertyChange, onChange, selectedLists, targetProperty, properties, includeListTitleAndUrl } = this.props;
+        const { loadedLists } = this.state;
+        let propValue;
         if (!newValue || !newValue.length) {
             propValue = [];
         }
         else {
             if (includeListTitleAndUrl) {
-                propValue = loadedLists.value.filter(function (l) { return newValue.indexOf(l.Id) !== -1; }).map(function (l) {
+                propValue = loadedLists.value.filter(l => newValue.indexOf(l.Id) !== -1).map(l => {
                     return {
                         id: l.Id,
                         title: l.Title,
@@ -40519,7 +40231,7 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
                 });
             }
             else {
-                propValue = __spreadArray([], newValue, true);
+                propValue = [...newValue];
             }
         }
         if (onPropertyChange && newValue !== null) {
@@ -40530,20 +40242,19 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
                 onChange(targetProperty, propValue);
             }
         }
-    };
+    }
     /**
     * Called when the component will unmount
     */
-    PropertyFieldListMultiPickerHost.prototype.componentWillUnmount = function () {
+    componentWillUnmount() {
         this.async.dispose();
-    };
+    }
     /**
     * Renders the SPListMultiplePicker controls with Office UI  Fabric
     */
-    PropertyFieldListMultiPickerHost.prototype.render = function () {
-        var _this = this;
-        var _a = this.state, selectedKeys = _a.selectedKeys, results = _a.results, errorMessage = _a.errorMessage;
-        var _b = this.props, label = _b.label, disabled = _b.disabled, showSelectAll = _b.showSelectAll, selectAllInList = _b.selectAllInList, selectAllInListLabel = _b.selectAllInListLabel, targetProperty = _b.targetProperty;
+    render() {
+        const { selectedKeys, results, errorMessage } = this.state;
+        const { label, disabled, showSelectAll, selectAllInList, selectAllInListLabel, targetProperty } = this.props;
         if (this.loaded === false) {
             return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Label__WEBPACK_IMPORTED_MODULE_1__[/* Label */ "a"], null, label),
@@ -40562,17 +40273,15 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
                                     visibility: (selectAllInList === false ? 'hidden' : 'visible')
                                 }
                             } })),
-                results.map(function (item, index) {
-                    var uniqueKey = targetProperty + '-' + item.key;
+                results.map((item, index) => {
+                    const uniqueKey = targetProperty + '-' + item.key;
                     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { style: { marginBottom: '5px' }, className: 'ms-ChoiceField', key: uniqueKey },
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Checkbox__WEBPACK_IMPORTED_MODULE_5__[/* Checkbox */ "a"], { checked: selectedKeys.indexOf(item.key.toString()) >= 0, disabled: disabled, label: item.text, onChange: _this.onChanged, inputProps: { value: item.key } })));
+                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Checkbox__WEBPACK_IMPORTED_MODULE_5__[/* Checkbox */ "a"], { checked: selectedKeys.indexOf(item.key.toString()) >= 0, disabled: disabled, label: item.text, onChange: this.onChanged, inputProps: { value: item.key } })));
                 }),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_errorMessage_FieldErrorMessage__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { errorMessage: errorMessage })));
         }
-    };
-    return PropertyFieldListMultiPickerHost;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
-/* harmony default export */ __webpack_exports__["a"] = (PropertyFieldListMultiPickerHost);
+    }
+}
 //# sourceMappingURL=PropertyFieldListMultiPickerHost.js.map
 
 /***/ }),
@@ -40623,34 +40332,32 @@ var PropertyFieldListMultiPickerHost = /** @class */ (function (_super) {
 /**
  * Helper class to format the code.
  */
-var CodeFormatter = /** @class */ (function () {
-    function CodeFormatter() {
-    }
+class CodeFormatter {
     /**
      * Formats CSS code
      * @param rawCSS
      */
-    CodeFormatter.prototype.formatCSS = function (rawCSS) {
-        var cssFormatter = new _CSSFormatter__WEBPACK_IMPORTED_MODULE_0__[/* CSSFormatter */ "a"]();
+    formatCSS(rawCSS) {
+        const cssFormatter = new _CSSFormatter__WEBPACK_IMPORTED_MODULE_0__[/* CSSFormatter */ "a"]();
         return cssFormatter.css_beautify(rawCSS, null);
-    };
+    }
     /**
      * Formats JavaScript code
      * @param rawScript
      */
-    CodeFormatter.prototype.formatScript = function (rawScript) {
-        var scriptFormatter = new _ScriptFormatter__WEBPACK_IMPORTED_MODULE_1__[/* ScriptFormatter */ "a"]();
+    formatScript(rawScript) {
+        const scriptFormatter = new _ScriptFormatter__WEBPACK_IMPORTED_MODULE_1__[/* ScriptFormatter */ "a"]();
         return scriptFormatter.js_beautify(rawScript, null);
-    };
+    }
     /**
      * Formats XML code
      * @param rawXML
      */
-    CodeFormatter.prototype.formatXML = function (rawXML) {
-        var tab = '\t';
-        var result = '';
-        var indent = '';
-        rawXML.split(/>\s*</).forEach(function (element) {
+    formatXML(rawXML) {
+        const tab = '\t';
+        let result = '';
+        let indent = '';
+        rawXML.split(/>\s*</).forEach(element => {
             if (element.match(/^\/\w/)) {
                 indent = indent.substring(tab.length);
             }
@@ -40660,24 +40367,22 @@ var CodeFormatter = /** @class */ (function () {
             }
         });
         return result.substring(1, result.length - 3);
-    };
+    }
     /**
      * Formats HTML code
      * @param rawHTML
      */
-    CodeFormatter.prototype.formatHTML = function (rawHTML) {
+    formatHTML(rawHTML) {
         return this.formatXML(rawHTML);
-    };
+    }
     /**
      * Formats JSON code
      * @param rawJSON
      */
-    CodeFormatter.prototype.formatJSON = function (rawJSON) {
+    formatJSON(rawJSON) {
         return JSON.stringify(JSON.parse(rawJSON), null, 2);
-    };
-    return CodeFormatter;
-}());
-
+    }
+}
 //# sourceMappingURL=CodeFormatter.js.map
 
 /***/ }),
@@ -45912,43 +45617,41 @@ module.exports = get;
 
 
 
-var IMG_SUPPORTED_EXTENSIONS = ".gif,.jpg,.jpeg,.bmp,.dib,.tif,.tiff,.ico,.png,.jxr,.svg";
+const IMG_SUPPORTED_EXTENSIONS = ".gif,.jpg,.jpeg,.bmp,.dib,.tif,.tiff,.ico,.png,.jxr,.svg";
 /**
  * Helper with general methods to simplify some routines
  */
-var GeneralHelper = /** @class */ (function () {
-    function GeneralHelper() {
-    }
+class GeneralHelper {
     /**
      * Trims slash at the end of URL if needed
      * @param url URL
      */
-    GeneralHelper.trimSlash = function (url) {
+    static trimSlash(url) {
         if (url.lastIndexOf('/') === url.length - 1)
             return url.slice(0, -1);
         return url;
-    };
+    }
     /**
      * Encodes text
      * @param text text to encode
      */
-    GeneralHelper.encodeText = function (text) {
-        var n = /[<>&'"\\]/g;
+    static encodeText(text) {
+        const n = /[<>&'"\\]/g;
         return text ? text.replace(n, this._getEncodedChar) : '';
-    };
+    }
     /**
      * Copy of Microsoft's GetRelativeDateTimeString from SP.dateTimeUtil
      */
-    GeneralHelper.getRelativeDateTimeString = function (format) {
-        var formatParts = format.split('|');
-        var result = null;
-        var placeholdersString = null;
+    static getRelativeDateTimeString(format) {
+        const formatParts = format.split('|');
+        let result = null;
+        let placeholdersString = null;
         if (formatParts[0] === '0')
             return format.substring(2);
-        var isFuture = formatParts[1] === '1';
-        var formatType = formatParts[2];
-        var timeString = formatParts.length >= 4 ? formatParts[3] : null;
-        var dayString = formatParts.length >= 5 ? formatParts[4] : null;
+        const isFuture = formatParts[1] === '1';
+        const formatType = formatParts[2];
+        const timeString = formatParts.length >= 4 ? formatParts[3] : null;
+        const dayString = formatParts.length >= 5 ? formatParts[4] : null;
         switch (formatType) {
             case '1':
                 result = isFuture ? PropertyControlStrings__WEBPACK_IMPORTED_MODULE_2__["DateTime"].L_RelativeDateTime_AFewSecondsFuture : PropertyControlStrings__WEBPACK_IMPORTED_MODULE_2__["DateTime"].L_RelativeDateTime_AFewSeconds;
@@ -45994,31 +45697,31 @@ var GeneralHelper = /** @class */ (function () {
             }
         }
         return result;
-    };
+    }
     /**
      * Copy of Microsoft's GetLocalizedCountValue from SP.dateTimeUtil.
      * I've tried to rename all the vars to have meaningful names... but some were too unclear
      */
-    GeneralHelper.getLocalizedCountValue = function (format, first, second) {
+    static getLocalizedCountValue(format, first, second) {
         if (format === undefined || first === undefined || second === undefined)
             return null;
-        var result = '';
-        var a = -1;
-        var firstOperandOptions = first.split('||');
-        for (var firstOperandOptionsIdx = 0, firstOperandOptionsLen = firstOperandOptions.length; firstOperandOptionsIdx < firstOperandOptionsLen; firstOperandOptionsIdx++) {
-            var firstOperandOption = firstOperandOptions[firstOperandOptionsIdx];
+        let result = '';
+        let a = -1;
+        const firstOperandOptions = first.split('||');
+        for (let firstOperandOptionsIdx = 0, firstOperandOptionsLen = firstOperandOptions.length; firstOperandOptionsIdx < firstOperandOptionsLen; firstOperandOptionsIdx++) {
+            const firstOperandOption = firstOperandOptions[firstOperandOptionsIdx];
             if (firstOperandOption === null || firstOperandOption === '')
                 continue;
-            var optionParts = firstOperandOption.split(',');
-            for (var optionPartsIdx = 0, optionPartsLen = optionParts.length; optionPartsIdx < optionPartsLen; optionPartsIdx++) {
-                var optionPart = optionParts[optionPartsIdx];
+            const optionParts = firstOperandOption.split(',');
+            for (let optionPartsIdx = 0, optionPartsLen = optionParts.length; optionPartsIdx < optionPartsLen; optionPartsIdx++) {
+                const optionPart = optionParts[optionPartsIdx];
                 if (optionPart === null || optionPart === '')
                     continue;
                 if (isNaN(optionPart.parseNumberInvariant())) {
-                    var dashParts = optionPart.split('-');
+                    const dashParts = optionPart.split('-');
                     if (dashParts === null || dashParts.length !== 2)
                         continue;
-                    var j = void 0, n = void 0;
+                    let j, n;
                     if (dashParts[0] === '')
                         j = 0;
                     else if (isNaN(dashParts[0].parseNumberInvariant()))
@@ -46041,7 +45744,7 @@ var GeneralHelper = /** @class */ (function () {
                     }
                 }
                 else {
-                    var p = parseInt(optionPart);
+                    const p = parseInt(optionPart);
                     if (second === p) {
                         a = firstOperandOptionsIdx;
                         break;
@@ -46052,21 +45755,21 @@ var GeneralHelper = /** @class */ (function () {
                 break;
         }
         if (a !== -1) {
-            var e = format.split('||');
+            const e = format.split('||');
             if (e !== null && e[a] !== null && e[a] !== '')
                 result = e[a];
         }
         return result;
-    };
+    }
     /**
      * Extracts text from HTML strings without creating HTML elements
      * @param html HTML string
      */
-    GeneralHelper.getTextFromHTML = function (html) {
-        var result = html;
-        var oldResult = result;
-        var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
-        var tagOrComment = new RegExp('<(?:'
+    static getTextFromHTML(html) {
+        let result = html;
+        let oldResult = result;
+        const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+        const tagOrComment = new RegExp('<(?:'
             // Comment body.
             + '!--(?:(?:-*[^->])*--+|-?)'
             // Special "raw text" elements whose content should be elided.
@@ -46081,42 +45784,42 @@ var GeneralHelper = /** @class */ (function () {
             result = result.replace(tagOrComment, '');
         } while (result !== oldResult);
         return result;
-    };
+    }
     /**
      * Checks if value is defined (not null and not undefined)
      * @param value value
      */
-    GeneralHelper.isDefined = function (value) {
+    static isDefined(value) {
         return typeof value !== 'undefined' && value !== null;
-    };
+    }
     /**
      * Creates Document element based on Xml string
      * @param xmlString XML string to parse
      */
-    GeneralHelper.parseXml = function (xmlString) {
-        var parser = new DOMParser();
-        var xml = parser.parseFromString(xmlString, 'text/xml');
+    static parseXml(xmlString) {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlString, 'text/xml');
         return xml;
-    };
+    }
     /**
      * Returns absoulute domain URL.
      * @param url
      */
-    GeneralHelper.getAbsoluteDomainUrl = function (url) {
+    static getAbsoluteDomainUrl(url) {
         if (url !== undefined) {
-            var myURL = new URL(url.toLowerCase());
+            const myURL = new URL(url.toLowerCase());
             return myURL.protocol + "//" + myURL.host;
         }
         else {
             return undefined;
         }
-    };
+    }
     /**
      * To support IE11 that has no support for File constructor
      * @param blob
      */
-    GeneralHelper.getFileFromBlob = function (blob, fileName) {
-        var result = null; // eslint-disable-line @typescript-eslint/no-explicit-any
+    static getFileFromBlob(blob, fileName) {
+        let result = null; // eslint-disable-line @typescript-eslint/no-explicit-any
         // IE 11 foesn't support File API, create a workaround to return Blob with fileName assigned.
         try {
             result = new File([blob], fileName);
@@ -46126,58 +45829,58 @@ var GeneralHelper = /** @class */ (function () {
             result.fileName = fileName;
         }
         return result;
-    };
-    GeneralHelper.formatBytes = function (bytes, decimals) {
+    }
+    static formatBytes(bytes, decimals) {
         if (bytes === 0) {
             return PropertyControlStrings__WEBPACK_IMPORTED_MODULE_2__["EmptyFileSize"];
         }
-        var k = 1024;
-        var dm = decimals <= 0 ? 0 : decimals || 2;
-        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        const k = 1024;
+        const dm = decimals <= 0 ? 0 : decimals || 2;
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + PropertyControlStrings__WEBPACK_IMPORTED_MODULE_2__["SizeUnit"][i];
-    };
+    }
     /**
      * Returns file name without extension.
      */
-    GeneralHelper.getFileNameWithoutExtension = function (itemUrl) {
-        var fileNameWithExtension = GeneralHelper.getFileNameFromUrl(itemUrl);
-        var fileNameTokens = fileNameWithExtension.split(".");
-        var fileName = fileNameTokens[0];
+    static getFileNameWithoutExtension(itemUrl) {
+        const fileNameWithExtension = GeneralHelper.getFileNameFromUrl(itemUrl);
+        const fileNameTokens = fileNameWithExtension.split(".");
+        const fileName = fileNameTokens[0];
         return fileName;
-    };
+    }
     /**
      * Returns file name with the extension
      */
-    GeneralHelper.getFileNameFromUrl = function (itemUrl) {
-        var urlTokens = itemUrl.split("?");
-        var url = urlTokens[0];
-        var tokens = url.split("/");
-        var fileNameWithExtension = tokens[tokens.length - 1];
+    static getFileNameFromUrl(itemUrl) {
+        const urlTokens = itemUrl.split("?");
+        const url = urlTokens[0];
+        const tokens = url.split("/");
+        const fileNameWithExtension = tokens[tokens.length - 1];
         return fileNameWithExtension;
-    };
-    GeneralHelper.isImage = function (fileName) {
-        var acceptableExtensions = IMG_SUPPORTED_EXTENSIONS.split(",");
-        var thisExtension = GeneralHelper.getFileExtension(fileName);
+    }
+    static isImage(fileName) {
+        const acceptableExtensions = IMG_SUPPORTED_EXTENSIONS.split(",");
+        const thisExtension = GeneralHelper.getFileExtension(fileName);
         return acceptableExtensions.indexOf(thisExtension) > -1;
-    };
+    }
     /**
      * Returns extension of the file
      */
-    GeneralHelper.getFileExtension = function (fileName) {
+    static getFileExtension(fileName) {
         // Split the URL on the dots
-        var splitFileName = fileName.toLowerCase().split('.');
+        const splitFileName = fileName.toLowerCase().split('.');
         // Take the last value
-        var extensionValue = splitFileName.pop();
+        let extensionValue = splitFileName.pop();
         // Check if there are query string params in place
         if (extensionValue.indexOf('?') !== -1) {
             // Split the string on the question mark and return the first part
-            var querySplit = extensionValue.split('?');
+            const querySplit = extensionValue.split('?');
             extensionValue = querySplit[0];
         }
-        return ".".concat(extensionValue);
-    };
-    GeneralHelper._getEncodedChar = function (c) {
-        var o = {
+        return `.${extensionValue}`;
+    }
+    static _getEncodedChar(c) {
+        const o = {
             "<": "&lt;",
             ">": "&gt;",
             "&": "&amp;",
@@ -46186,11 +45889,9 @@ var GeneralHelper = /** @class */ (function () {
             "\\": "&#92;"
         };
         return o[c];
-    };
-    return GeneralHelper;
-}());
-
-var setPropertyValue = function (properties, targetProperty, value) {
+    }
+}
+const setPropertyValue = (properties, targetProperty, value) => {
     if (!properties) {
         return;
     }
@@ -46201,7 +45902,7 @@ var setPropertyValue = function (properties, targetProperty, value) {
         _microsoft_sp_lodash_subset__WEBPACK_IMPORTED_MODULE_1__["set"](properties, targetProperty, value);
     }
 };
-var getPropertyValue = function (properties, targetProperty) {
+const getPropertyValue = (properties, targetProperty) => {
     if (!properties) {
         return undefined;
     }
@@ -46210,11 +45911,11 @@ var getPropertyValue = function (properties, targetProperty) {
     }
     return _microsoft_sp_lodash_subset__WEBPACK_IMPORTED_MODULE_1__["get"](properties, targetProperty);
 };
-var toRelativeUrl = function (absoluteUrl) {
+const toRelativeUrl = (absoluteUrl) => {
     if (!absoluteUrl) {
         return '';
     }
-    return absoluteUrl.replace(/^(?:\/\/|[^/]+)*\//, '/');
+    return new URL(absoluteUrl).pathname;
 };
 //# sourceMappingURL=GeneralHelper.js.map
 
