@@ -25,7 +25,7 @@ import { DisplayMode } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration, IPropertyPanePage } from '@microsoft/sp-property-pane';
 import TableViewerContainer, { ITableViewerContainerProps } from './components/TableViewerContainer';
 import { IColumnsConfig } from '../../helpers/Interfaces';
-
+import { PropertyFieldCodeEditor, PropertyFieldCodeEditorLanguages } from '@pnp/spfx-property-controls/lib/PropertyFieldCodeEditor';
 // Utilities Import
 import {
   getListFields, getListViewXml, validateSiteExists,
@@ -36,6 +36,7 @@ import {
 export interface ITableViewerWebPartProps {
   key:string;
   JSONCode: string;
+  webPartCSS: string;
   siteUrl: string;
   list: string;
   view: string;
@@ -144,6 +145,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
       {
         key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2', // This forces React to re-render
         JSONCode: this.properties.JSONCode,
+        webPartCSS: this.properties.webPartCSS,
         siteUrl: this.properties.siteUrl,
         listId: this.properties.list,
         viewXmlCode: this.properties.viewXmlCode,
@@ -163,6 +165,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
           this.properties.view,
           this.properties.viewXmlCode,
           this.properties.JSONCode,
+          this.properties.webPartCSS,
           this.properties.list]),
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
         contextUser: this.context.pageContext.user.loginName,
@@ -390,11 +393,32 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                 this.msProps.PropertyPaneTextField('contentHeight', {
                   label: 'Content Height',
                   value: this.properties.contentHeight,
+                 
                 }),
               ],
             },
           ],
         },
+        {
+          header: {
+            description: "Additional CSS"
+          },
+          groups: [
+            {
+              groupName: "CSS",
+              groupFields: [
+                this.editorProp.PropertyFieldCodeEditor('webPartCSS', {
+                  label: 'Web Part CSS',
+                  value: this.properties.webPartCSS,
+                  disabled: false,
+                  key: 'CSSCode',
+                  language: this.editorProp.PropertyFieldCodeEditorLanguages.HTML,
+                })
+              ]
+            },
+          ]
+        }
+        
       ],
     };
   }

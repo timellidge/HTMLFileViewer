@@ -4,6 +4,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 export interface ITableViewerContainerProps {
     JSONCode: string;
+    webPartCSS: string;
     siteUrl: string;
     listId: string;
     viewXmlCode: string;
@@ -38,6 +39,7 @@ export interface ITableViewerContainerState {
     };
     tabData: ITabData;
     ColumnsJSON: IColumnsConfig;
+    webPartCSS: string;
 }
 declare class TableViewerContainer extends React.Component<ITableViewerContainerProps, ITableViewerContainerState> {
     constructor(props: ITableViewerContainerProps);

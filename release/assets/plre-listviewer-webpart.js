@@ -28781,6 +28781,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_components_TableViewerContainer__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], {
             key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2',
             JSONCode: this.properties.JSONCode,
+            webPartCSS: this.properties.webPartCSS,
             siteUrl: this.properties.siteUrl,
             listId: this.properties.list,
             viewXmlCode: this.properties.viewXmlCode,
@@ -28800,6 +28801,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                 this.properties.view,
                 this.properties.viewXmlCode,
                 this.properties.JSONCode,
+                this.properties.webPartCSS,
                 this.properties.list
             ]),
             contextSiteUrl: this.context.pageContext.web.absoluteUrl,
@@ -28970,6 +28972,25 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                         },
                     ],
                 },
+                {
+                    header: {
+                        description: "Additional CSS"
+                    },
+                    groups: [
+                        {
+                            groupName: "CSS",
+                            groupFields: [
+                                this.editorProp.PropertyFieldCodeEditor('webPartCSS', {
+                                    label: 'Web Part CSS',
+                                    value: this.properties.webPartCSS,
+                                    disabled: false,
+                                    key: 'CSSCode',
+                                    language: this.editorProp.PropertyFieldCodeEditorLanguages.HTML,
+                                })
+                            ]
+                        },
+                    ]
+                }
             ],
         };
     }
@@ -43627,6 +43648,7 @@ class TableViewerContainer extends react__WEBPACK_IMPORTED_MODULE_0__["Component
             searchQuery: '',
             selectedTab: null,
             tabs: [],
+            webPartCSS: this.props.webPartCSS,
             selectedChoiceFieldName: '',
             tabCounts: {},
             tabData: {},

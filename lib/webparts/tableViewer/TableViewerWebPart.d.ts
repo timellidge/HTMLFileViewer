@@ -5,6 +5,7 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane';
 export interface ITableViewerWebPartProps {
     key: string;
     JSONCode: string;
+    webPartCSS: string;
     siteUrl: string;
     list: string;
     view: string;

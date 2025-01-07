@@ -24,6 +24,7 @@ import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Inter
 
 export interface ITableViewerContainerProps {
   JSONCode: string;
+  webPartCSS: string;
   siteUrl: string;
   listId: string;
   viewXmlCode: string;
@@ -57,6 +58,7 @@ export interface ITableViewerContainerState {
   tabCounts: { [key: string]: number };
   tabData: ITabData;
   ColumnsJSON:  IColumnsConfig;
+  webPartCSS: string;
   
 }
 
@@ -80,6 +82,7 @@ class TableViewerContainer extends React.Component<ITableViewerContainerProps, I
       searchQuery: '',
       selectedTab: null,
       tabs: [],
+      webPartCSS: this.props.webPartCSS,
       selectedChoiceFieldName:'',
       tabCounts:{},
       tabData: {},
