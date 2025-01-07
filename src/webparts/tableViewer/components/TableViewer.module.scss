@@ -34,23 +34,19 @@
         display:grid;
         background-color: #e2e5e9;
         width: 100%;
-        gap: 2px;
+        grid-gap: 2px;
 
         .tableCell{
             background-color: rgb(210, 253, 217);
-            &::after {
-                content: "";
-                display: inline;
-            }
-            
-            &::before {
-                content: "";
-                display: inline;
-            }
-           
         }
         .tableDataCell{
             background-color: rgb(247, 253, 255);
+            padding: 2px;
+        }
+        .tableCellClamped { 
+            background-color: rgb(226, 207, 226);
+            padding:2px;
+
         }
     }
 }

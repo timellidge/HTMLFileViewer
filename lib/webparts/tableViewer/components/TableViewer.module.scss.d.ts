@@ -7,6 +7,7 @@ declare const styles: {
     tableGrid: string;
     tableCell: string;
     tableDataCell: string;
+    tableCellClamped: string;
     ID: string;
     Title: string;
     BSADescription: string;
