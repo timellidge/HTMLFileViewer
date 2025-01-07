@@ -39,11 +39,12 @@
         .tableHeaderCell{
             background-color: rgb(210, 253, 217);
         }
-        
+
         .tableCell{
             background-color: rgb(210, 253, 217);
         }
 
+        // this is only needed as a class when lines > 0 or exists. 
         .tableDataContent{
             background-color: rgb(247, 253, 255);
             padding: 2px;
@@ -53,67 +54,6 @@
             text-overflow: ellipsis;
         }
     }
-}
-
-
-// display: -webkit-box;
-// -webkit-box-orient: vertical;
-// overflow: hidden;
-// text-overflow: ellipsis;
-// -webkit-line-clamp: 3;
-// line-clamp: 3; /* For non-webkit browsers */
-
-.tableCellClamped{ 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 1;
-    line-clamp: 1; /* For non-webkit browsers */
-}
-.tableCellClamped1 { 
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 1;
-        line-clamp: 1; /* For non-webkit browsers */
-}
-
-.tableCellClamped2 { 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    line-clamp: 2; /* For non-webkit browsers */
-}
-
-.tableCellClamped3 { 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
-    line-clamp: 3; /* For non-webkit browsers */
-}
-
-.tableCellClamped4 { 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 4;
-    line-clamp: 4; /* For non-webkit browsers */
-}
-
-.tableCellClamped5 { 
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 5;
-    line-clamp: 5; /* For non-webkit browsers */
 }
 
 

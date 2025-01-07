@@ -13126,7 +13126,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_27fb6771 .tableViewerHeader_27fb6771{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_27fb6771 .tableViewerHeader_27fb6771 .searchBox_27fb6771{margin:0}.tableViewer_27fb6771 .tabBar_27fb6771{background-color:#c0f307;margin-top:5px}.tableViewer_27fb6771 .tableContainer_27fb6771{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_27fb6771 .searchBox_27fb6771{margin:0}.tableViewer_27fb6771 .tableGrid_27fb6771{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_27fb6771 .tableGrid_27fb6771 .tableCell_27fb6771,.tableViewer_27fb6771 .tableGrid_27fb6771 .tableHeaderCell_27fb6771{background-color:#d2fdd9}.tableViewer_27fb6771 .tableGrid_27fb6771 .tableDataContent_27fb6771{-webkit-box-orient:vertical;background-color:#f7fdff;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.tableCellClamped1_27fb6771,.tableCellClamped_27fb6771{-webkit-line-clamp:1;line-clamp:1}.tableCellClamped1_27fb6771,.tableCellClamped2_27fb6771,.tableCellClamped_27fb6771{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableCellClamped2_27fb6771{-webkit-line-clamp:2;line-clamp:2}.tableCellClamped3_27fb6771{-webkit-line-clamp:3;line-clamp:3}.tableCellClamped3_27fb6771,.tableCellClamped4_27fb6771{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableCellClamped4_27fb6771{-webkit-line-clamp:4;line-clamp:4}.tableCellClamped5_27fb6771{-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.ID_27fb6771{border:1px solid #ff0}.Title_27fb6771{border:1px solid #09f}.BSADescription_27fb6771{border:1px solid green}.singlechoice_27fb6771{border:1px solid #56acd1}.multichoice_27fb6771{border:1px solid #ff00f7}.BSAColor_27fb6771{border:1px solid #797676}.BSAStart_27fb6771{border:1px solid #ff7300}.BSAEnd_27fb6771{border:1px solid #0f0f0f}.PersonField_27fb6771{border:1px solid #5d1111}.Stack_27fb6771{border:1px solid #00ff40}.error input:-ms-input-placeholder{color:red!important}.error_27fb6771 input::placeholder{color:red!important}.error_27fb6771 input:-ms-input-placeholder{color:red!important}.error_27fb6771 input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_f561aec2 .tableViewerHeader_f561aec2{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_f561aec2 .tableViewerHeader_f561aec2 .searchBox_f561aec2{margin:0}.tableViewer_f561aec2 .tabBar_f561aec2{background-color:#c0f307;margin-top:5px}.tableViewer_f561aec2 .tableContainer_f561aec2{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_f561aec2 .searchBox_f561aec2{margin:0}.tableViewer_f561aec2 .tableGrid_f561aec2{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_f561aec2 .tableGrid_f561aec2 .tableCell_f561aec2,.tableViewer_f561aec2 .tableGrid_f561aec2 .tableHeaderCell_f561aec2{background-color:#d2fdd9}.tableViewer_f561aec2 .tableGrid_f561aec2 .tableDataContent_f561aec2{-webkit-box-orient:vertical;background-color:#f7fdff;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.ID_f561aec2{border:1px solid #ff0}.Title_f561aec2{border:1px solid #09f}.BSADescription_f561aec2{border:1px solid green}.singlechoice_f561aec2{border:1px solid #56acd1}.multichoice_f561aec2{border:1px solid #ff00f7}.BSAColor_f561aec2{border:1px solid #797676}.BSAStart_f561aec2{border:1px solid #ff7300}.BSAEnd_f561aec2{border:1px solid #0f0f0f}.PersonField_f561aec2{border:1px solid #5d1111}.Stack_f561aec2{border:1px solid #00ff40}.error input:-ms-input-placeholder{color:red!important}.error_f561aec2 input::placeholder{color:red!important}.error_f561aec2 input:-ms-input-placeholder{color:red!important}.error_f561aec2 input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -20852,32 +20852,26 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_27fb6771',
-    tableViewerHeader: 'tableViewerHeader_27fb6771',
-    searchBox: 'searchBox_27fb6771',
-    tabBar: 'tabBar_27fb6771',
-    tableContainer: 'tableContainer_27fb6771',
-    tableGrid: 'tableGrid_27fb6771',
-    tableHeaderCell: 'tableHeaderCell_27fb6771',
-    tableCell: 'tableCell_27fb6771',
-    tableDataContent: 'tableDataContent_27fb6771',
-    tableCellClamped: 'tableCellClamped_27fb6771',
-    tableCellClamped1: 'tableCellClamped1_27fb6771',
-    tableCellClamped2: 'tableCellClamped2_27fb6771',
-    tableCellClamped3: 'tableCellClamped3_27fb6771',
-    tableCellClamped4: 'tableCellClamped4_27fb6771',
-    tableCellClamped5: 'tableCellClamped5_27fb6771',
-    ID: 'ID_27fb6771',
-    Title: 'Title_27fb6771',
-    BSADescription: 'BSADescription_27fb6771',
-    singlechoice: 'singlechoice_27fb6771',
-    multichoice: 'multichoice_27fb6771',
-    BSAColor: 'BSAColor_27fb6771',
-    BSAStart: 'BSAStart_27fb6771',
-    BSAEnd: 'BSAEnd_27fb6771',
-    PersonField: 'PersonField_27fb6771',
-    Stack: 'Stack_27fb6771',
-    error: 'error_27fb6771'
+    tableViewer: 'tableViewer_f561aec2',
+    tableViewerHeader: 'tableViewerHeader_f561aec2',
+    searchBox: 'searchBox_f561aec2',
+    tabBar: 'tabBar_f561aec2',
+    tableContainer: 'tableContainer_f561aec2',
+    tableGrid: 'tableGrid_f561aec2',
+    tableHeaderCell: 'tableHeaderCell_f561aec2',
+    tableCell: 'tableCell_f561aec2',
+    tableDataContent: 'tableDataContent_f561aec2',
+    ID: 'ID_f561aec2',
+    Title: 'Title_f561aec2',
+    BSADescription: 'BSADescription_f561aec2',
+    singlechoice: 'singlechoice_f561aec2',
+    multichoice: 'multichoice_f561aec2',
+    BSAColor: 'BSAColor_f561aec2',
+    BSAStart: 'BSAStart_f561aec2',
+    BSAEnd: 'BSAEnd_f561aec2',
+    PersonField: 'PersonField_f561aec2',
+    Stack: 'Stack_f561aec2',
+    error: 'error_f561aec2'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
