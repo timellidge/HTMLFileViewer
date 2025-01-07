@@ -10035,29 +10035,17 @@ const TableGridRender = ({ colJSON, items }) => {
     const _sortedColumns = Object.keys(colJSON)
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
-    // Build the class object if the columsn has a lines attribute then add the line-clamp class but clamped to the number of lines
-    const _columnClasses = _sortedColumns.reduce((acc, { key, column }) => {
-        if (column.lines) {
-            acc[key] = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])({
-                display: '-webkit-box',
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                WebkitLineClamp: column.lines,
-            });
-        }
-        else {
-            acc[key] = _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataCell;
-        }
-        return acc;
-    }, {});
     // const gridCellStyle = { display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', WebkitLineClamp: 3 };
     const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
     console.log(">>> grid info", _columnWidths, _GridStyle);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell }, column.name)))),
-        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataCell} ${_columnClasses[key]}` }, item[key])))))))));
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, column.name)))),
+        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
+                " ",
+                item[key],
+                " "))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -13138,7 +13126,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_e6b4b24d .tableViewerHeader_e6b4b24d{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_e6b4b24d .tableViewerHeader_e6b4b24d .searchBox_e6b4b24d{margin:0}.tableViewer_e6b4b24d .tabBar_e6b4b24d{background-color:#c0f307;margin-top:5px}.tableViewer_e6b4b24d .tableContainer_e6b4b24d{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_e6b4b24d .searchBox_e6b4b24d{margin:0}.tableViewer_e6b4b24d .tableGrid_e6b4b24d{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_e6b4b24d .tableGrid_e6b4b24d .tableCell_e6b4b24d{background-color:#d2fdd9}.tableViewer_e6b4b24d .tableGrid_e6b4b24d .tableDataCell_e6b4b24d{background-color:#f7fdff;padding:2px}.tableViewer_e6b4b24d .tableGrid_e6b4b24d .tableCellClamped_e6b4b24d{background-color:#e2cfe2;padding:2px}.ID_e6b4b24d{border:1px solid #ff0}.Title_e6b4b24d{border:1px solid #09f}.BSADescription_e6b4b24d{border:1px solid green}.singlechoice_e6b4b24d{border:1px solid #56acd1}.multichoice_e6b4b24d{border:1px solid #ff00f7}.BSAColor_e6b4b24d{border:1px solid #797676}.BSAStart_e6b4b24d{border:1px solid #ff7300}.BSAEnd_e6b4b24d{border:1px solid #0f0f0f}.PersonField_e6b4b24d{border:1px solid #5d1111}.Stack_e6b4b24d{border:1px solid #00ff40}.error input:-ms-input-placeholder{color:red!important}.error_e6b4b24d input::placeholder{color:red!important}.error_e6b4b24d input:-ms-input-placeholder{color:red!important}.error_e6b4b24d input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_27fb6771 .tableViewerHeader_27fb6771{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_27fb6771 .tableViewerHeader_27fb6771 .searchBox_27fb6771{margin:0}.tableViewer_27fb6771 .tabBar_27fb6771{background-color:#c0f307;margin-top:5px}.tableViewer_27fb6771 .tableContainer_27fb6771{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_27fb6771 .searchBox_27fb6771{margin:0}.tableViewer_27fb6771 .tableGrid_27fb6771{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_27fb6771 .tableGrid_27fb6771 .tableCell_27fb6771,.tableViewer_27fb6771 .tableGrid_27fb6771 .tableHeaderCell_27fb6771{background-color:#d2fdd9}.tableViewer_27fb6771 .tableGrid_27fb6771 .tableDataContent_27fb6771{-webkit-box-orient:vertical;background-color:#f7fdff;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.tableCellClamped1_27fb6771,.tableCellClamped_27fb6771{-webkit-line-clamp:1;line-clamp:1}.tableCellClamped1_27fb6771,.tableCellClamped2_27fb6771,.tableCellClamped_27fb6771{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableCellClamped2_27fb6771{-webkit-line-clamp:2;line-clamp:2}.tableCellClamped3_27fb6771{-webkit-line-clamp:3;line-clamp:3}.tableCellClamped3_27fb6771,.tableCellClamped4_27fb6771{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableCellClamped4_27fb6771{-webkit-line-clamp:4;line-clamp:4}.tableCellClamped5_27fb6771{-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.ID_27fb6771{border:1px solid #ff0}.Title_27fb6771{border:1px solid #09f}.BSADescription_27fb6771{border:1px solid green}.singlechoice_27fb6771{border:1px solid #56acd1}.multichoice_27fb6771{border:1px solid #ff00f7}.BSAColor_27fb6771{border:1px solid #797676}.BSAStart_27fb6771{border:1px solid #ff7300}.BSAEnd_27fb6771{border:1px solid #0f0f0f}.PersonField_27fb6771{border:1px solid #5d1111}.Stack_27fb6771{border:1px solid #00ff40}.error input:-ms-input-placeholder{color:red!important}.error_27fb6771 input::placeholder{color:red!important}.error_27fb6771 input:-ms-input-placeholder{color:red!important}.error_27fb6771 input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -20864,26 +20852,32 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_e6b4b24d',
-    tableViewerHeader: 'tableViewerHeader_e6b4b24d',
-    searchBox: 'searchBox_e6b4b24d',
-    tabBar: 'tabBar_e6b4b24d',
-    tableContainer: 'tableContainer_e6b4b24d',
-    tableGrid: 'tableGrid_e6b4b24d',
-    tableCell: 'tableCell_e6b4b24d',
-    tableDataCell: 'tableDataCell_e6b4b24d',
-    tableCellClamped: 'tableCellClamped_e6b4b24d',
-    ID: 'ID_e6b4b24d',
-    Title: 'Title_e6b4b24d',
-    BSADescription: 'BSADescription_e6b4b24d',
-    singlechoice: 'singlechoice_e6b4b24d',
-    multichoice: 'multichoice_e6b4b24d',
-    BSAColor: 'BSAColor_e6b4b24d',
-    BSAStart: 'BSAStart_e6b4b24d',
-    BSAEnd: 'BSAEnd_e6b4b24d',
-    PersonField: 'PersonField_e6b4b24d',
-    Stack: 'Stack_e6b4b24d',
-    error: 'error_e6b4b24d'
+    tableViewer: 'tableViewer_27fb6771',
+    tableViewerHeader: 'tableViewerHeader_27fb6771',
+    searchBox: 'searchBox_27fb6771',
+    tabBar: 'tabBar_27fb6771',
+    tableContainer: 'tableContainer_27fb6771',
+    tableGrid: 'tableGrid_27fb6771',
+    tableHeaderCell: 'tableHeaderCell_27fb6771',
+    tableCell: 'tableCell_27fb6771',
+    tableDataContent: 'tableDataContent_27fb6771',
+    tableCellClamped: 'tableCellClamped_27fb6771',
+    tableCellClamped1: 'tableCellClamped1_27fb6771',
+    tableCellClamped2: 'tableCellClamped2_27fb6771',
+    tableCellClamped3: 'tableCellClamped3_27fb6771',
+    tableCellClamped4: 'tableCellClamped4_27fb6771',
+    tableCellClamped5: 'tableCellClamped5_27fb6771',
+    ID: 'ID_27fb6771',
+    Title: 'Title_27fb6771',
+    BSADescription: 'BSADescription_27fb6771',
+    singlechoice: 'singlechoice_27fb6771',
+    multichoice: 'multichoice_27fb6771',
+    BSAColor: 'BSAColor_27fb6771',
+    BSAStart: 'BSAStart_27fb6771',
+    BSAEnd: 'BSAEnd_27fb6771',
+    PersonField: 'PersonField_27fb6771',
+    Stack: 'Stack_27fb6771',
+    error: 'error_27fb6771'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 

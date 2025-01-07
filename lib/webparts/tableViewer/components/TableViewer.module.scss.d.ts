@@ -5,9 +5,15 @@ declare const styles: {
     tabBar: string;
     tableContainer: string;
     tableGrid: string;
+    tableHeaderCell: string;
     tableCell: string;
-    tableDataCell: string;
+    tableDataContent: string;
     tableCellClamped: string;
+    tableCellClamped1: string;
+    tableCellClamped2: string;
+    tableCellClamped3: string;
+    tableCellClamped4: string;
+    tableCellClamped5: string;
     ID: string;
     Title: string;
     BSADescription: string;

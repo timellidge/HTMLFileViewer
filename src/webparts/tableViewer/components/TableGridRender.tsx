@@ -17,26 +17,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   .map((key) => ({ key, column: colJSON[key] }))
   .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
 
-  // Build the class object if the columsn has a lines attribute then add the line-clamp class but clamped to the number of lines
-
-  const _columnClasses = _sortedColumns.reduce<{ [key: string]: string }>((acc, { key, column }) => {
-    if (column.lines) {
-      acc[key] = mergeStyles({
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        WebkitLineClamp: column.lines,
-      });
-    } else {
-      acc[key] = styles.tableDataCell;
-    }
-    return acc;
-  }, {});
-
-
  // const gridCellStyle = { display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', WebkitLineClamp: 3 };
-
 
   const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
   const _GridStyle = mergeStyles(styles.tableGrid, {gridTemplateColumns: _columnWidths});
@@ -46,7 +27,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     <>
       <div className={_GridStyle}>
         {_sortedColumns.map(({ key, column }) => (
-          <div key={key} className={styles.tableCell}>
+          <div key={key} className={styles.tableHeaderCell}>
             {column.name}
           </div>
         ))}
@@ -55,8 +36,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
         <div key={itemIndex} className={_GridStyle}>
           {_sortedColumns.map(({ key, column }) => (
             column.width > "0" && (
-              <div  key={`${itemIndex}-${key}`} className= {`${styles.tableDataCell} ${_columnClasses[key]}`}  >
-                 {item[key]} 
+              <div  key={`${itemIndex}-${key}`} className= {styles.tableCell}  >
+                <span className= {styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}> {item[key]} </span> 
               </div>
             )
           ))}
