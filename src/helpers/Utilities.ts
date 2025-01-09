@@ -70,9 +70,8 @@ export const numberFormat = (value: number, format: string) => {
   }
 };
 
-
 //==================================================================================================================================
-// A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION it includes % and fr (fractional) widths calculated based on the container width
+// A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION WHEN YOU NEED IT IN PX
 //==================================================================================================================================
  export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
   //set my variables to  zero 
@@ -138,7 +137,6 @@ export const getItemsUsingRenderListDataAsStream = (
 
 export const useDebounce = (value: string, delay: number): string => {
   const [debouncedValue, setDebouncedValue] = React.useState(value);
-
   React.useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(value);
@@ -194,6 +192,7 @@ export const createSearchQueryViewXml = (
   }
   return xmlDoc.documentElement.outerHTML;
 };
+
 export const searchFieldTypes: FieldTypes[] = [
   FieldTypes.Text,
   FieldTypes.Choice,
@@ -209,7 +208,6 @@ const languageIdToLocale: { [key: number]: string } = {
   2057: 'en-GB', // English - United Kingdom
   // Add more mappings as needed
 };
-
 
 export const getSiteLocale = async (siteUrl: string): Promise<string> => {
   try {

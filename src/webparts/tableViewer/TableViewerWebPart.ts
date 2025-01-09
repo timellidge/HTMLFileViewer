@@ -69,6 +69,10 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private msProps: any;
 
+  // -----------------------------------------------------------------------------------------------------------------------------
+  // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
+  // -----------------------------------------------------------------------------------------------------------------------------
+
   private tableConfig: IColumnsConfig = {
     "id": {
       "name": "ident",
@@ -112,7 +116,9 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   .Stack{border:1px solid rgb(0, 255, 64);}
   </style>`;
 
-  
+  // -----------------------------------------------------------------------------------------------------------------------------
+  // SPFX type functions 
+  // -----------------------------------------------------------------------------------------------------------------------------
   protected async onInit(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spfxContext: any = {
@@ -133,6 +139,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.properties.JSONCode   =  this.properties.JSONCode   || JSON.stringify(this.tableConfig);
     this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
   }
+
   protected onPropertyPaneConfigurationComplete(): void {
     super.onPropertyPaneConfigurationComplete();
     
@@ -162,14 +169,16 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     }
   }
 
-
+ // -----------------------------------------------------------------------------------------------------------------------------
+  // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
+  // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
-  console.log("Rendering TableViewerWebPart");
-  console.log("Display Mode:", this.displayMode);
-  console.log("Properties:", this.properties);
+    console.log("Rendering TableViewerWebPart");
+    console.log("Display Mode:", this.displayMode);
+    console.log("Properties:", this.properties);
 
-      // Inject the CSS into the document's <style> tag
-      this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
+    // Inject the CSS into the document's <style> tag
+    this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
 
     const element: React.ReactElement<ITableViewerContainerProps> = React.createElement(
       TableViewerContainer,
@@ -205,7 +214,9 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     ReactDom.render(element, this.domElement);
   }
 
-
+  // -----------------------------------------------------------------------------------------------------------------------------
+  // OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS
+  // -----------------------------------------------------------------------------------------------------------------------------
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
