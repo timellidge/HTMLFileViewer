@@ -28,7 +28,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
       <div className={_GridStyle}>
         {_sortedColumns.map(({ key, column }) => (
           column.width > "0" && (
-            <div key={key} className={styles.tableHeaderCell}> {column.name} </div>
+            <div key={key} className={"testclass"}> {column.name} </div>
           )
         ))}
       </div>
@@ -36,7 +36,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
         <div key={itemIndex} className={_GridStyle}>
           {_sortedColumns.map(({ key, column }) => (
             column.width > "0" && (
-              <div  key={`${itemIndex}-${key}`} className= {styles.tableCell}  >
+              <div  key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`} >
                 <span className= {styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}> {item[key]} </span> 
               </div>
             )

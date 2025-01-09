@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import {
   ThemeProvider,
@@ -20,12 +19,10 @@ import '@pnp/sp/views';
 // Fabric UI Imports
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DisplayMode } from '@microsoft/sp-core-library';
 // Container Component Import
 import { IPropertyPaneConfiguration, IPropertyPanePage } from '@microsoft/sp-property-pane';
 import TableViewerContainer, { ITableViewerContainerProps } from './components/TableViewerContainer';
 import { IColumnsConfig } from '../../helpers/Interfaces';
-import { PropertyFieldCodeEditor, PropertyFieldCodeEditorLanguages } from '@pnp/spfx-property-controls/lib/PropertyFieldCodeEditor';
 // Utilities Import
 import {
   getListFields, getListViewXml, validateSiteExists,
@@ -101,6 +98,20 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     }
   }
 
+  private defaultCSS = `<style>
+  .testclass{color: #cc1111;}
+  .ID{border:1px solid yellow;}
+  .Title{border:1px solid rgb(0, 153, 255)};
+  .BSADescription{border:1px solid green;}
+  .singlechoice{border:1px solid #56acd1;}
+  .multichoice{border:1px solid #ff00f7;}
+  .BSAColor{border:1px solid rgb(121, 118, 118);}
+  .BSAStart{border:1px solid #ff7300;}
+  .BSAEnd{border:1px solid rgb(15, 15, 15);}
+  .PersonField{border:1px solid rgb(93, 17, 17);}
+  .Stack{border:1px solid rgb(0, 255, 64);}
+  </style>`;
+
   
   protected async onInit(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,13 +129,9 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
 
     this.themeSetup();
 
-    // if (this.properties.siteUrl && this.properties.list) {
-    //   const fields = await getListFields(this.properties.siteUrl, this.properties.list);
-    //   this.updateFieldListPickerOptions(fields);
-    // }
-
     await super.onInit();
-    this.properties.JSONCode =  this.properties.JSONCode || JSON.stringify(this.tableConfig);
+    this.properties.JSONCode   =  this.properties.JSONCode   || JSON.stringify(this.tableConfig);
+    this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
   }
   protected onPropertyPaneConfigurationComplete(): void {
     super.onPropertyPaneConfigurationComplete();
@@ -135,10 +142,34 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     // Trigger the re-render
     this.render();
   }
+
+  private injectCSS(css: string): void {
+    // Remove the existing <style> element if it exists
+    if(!this.properties.webPartTag || this.properties.webPartTag === undefined) {
+      console.log("WebPartTag is undefined so nowhere to inject the css");
+    } else { 
+      console.log("settign style for ", this.properties.webPartTag);
+      let style = document.getElementById(this.properties.webPartTag);
+      if (style) {
+        style.parentNode.removeChild(style);
+      }
+    
+      // Create a new <style> element
+      style = document.createElement('style');
+      style.id = this.properties.webPartTag;
+      style.innerHTML = css;
+      document.head.appendChild(style);
+    }
+  }
+
+
   public render(): void {
   console.log("Rendering TableViewerWebPart");
   console.log("Display Mode:", this.displayMode);
   console.log("Properties:", this.properties);
+
+      // Inject the CSS into the document's <style> tag
+      this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
 
     const element: React.ReactElement<ITableViewerContainerProps> = React.createElement(
       TableViewerContainer,
@@ -165,7 +196,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
           this.properties.view,
           this.properties.viewXmlCode,
           this.properties.JSONCode,
-          this.properties.webPartCSS,
           this.properties.list]),
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
         contextUser: this.context.pageContext.user.loginName,
@@ -405,13 +435,16 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
           },
           groups: [
             {
-              groupName: "CSS",
+              groupName: "User defined CSS",
               groupFields: [
                 this.editorProp.PropertyFieldCodeEditor('webPartCSS', {
                   label: 'Web Part CSS',
-                  value: this.properties.webPartCSS,
+                  panelTitle: 'Edit Web Part CSS',
+                  initialValue: this.properties.webPartCSS,
+                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  properties: this.properties,
                   disabled: false,
-                  key: 'CSSCode',
+                  key: 'webPartCSS',
                   language: this.editorProp.PropertyFieldCodeEditorLanguages.HTML,
                 })
               ]

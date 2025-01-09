@@ -8,16 +8,6 @@ declare const styles: {
     tableHeaderCell: string;
     tableCell: string;
     tableDataContent: string;
-    ID: string;
-    Title: string;
-    BSADescription: string;
-    singlechoice: string;
-    multichoice: string;
-    BSAColor: string;
-    BSAStart: string;
-    BSAEnd: string;
-    PersonField: string;
-    Stack: string;
     error: string;
 };
 export default styles;

@@ -10040,11 +10040,11 @@ const TableGridRender = ({ colJSON, items }) => {
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
     console.log(">>> grid info", _columnWidths, _GridStyle);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: "testclass" },
             " ",
             column.name,
             " "))))),
-        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell },
+        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
                 " ",
                 item[key],
@@ -13129,7 +13129,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_f561aec2 .tableViewerHeader_f561aec2{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_f561aec2 .tableViewerHeader_f561aec2 .searchBox_f561aec2{margin:0}.tableViewer_f561aec2 .tabBar_f561aec2{background-color:#c0f307;margin-top:5px}.tableViewer_f561aec2 .tableContainer_f561aec2{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_f561aec2 .searchBox_f561aec2{margin:0}.tableViewer_f561aec2 .tableGrid_f561aec2{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_f561aec2 .tableGrid_f561aec2 .tableCell_f561aec2,.tableViewer_f561aec2 .tableGrid_f561aec2 .tableHeaderCell_f561aec2{background-color:#d2fdd9}.tableViewer_f561aec2 .tableGrid_f561aec2 .tableDataContent_f561aec2{-webkit-box-orient:vertical;background-color:#f7fdff;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.ID_f561aec2{border:1px solid #ff0}.Title_f561aec2{border:1px solid #09f}.BSADescription_f561aec2{border:1px solid green}.singlechoice_f561aec2{border:1px solid #56acd1}.multichoice_f561aec2{border:1px solid #ff00f7}.BSAColor_f561aec2{border:1px solid #797676}.BSAStart_f561aec2{border:1px solid #ff7300}.BSAEnd_f561aec2{border:1px solid #0f0f0f}.PersonField_f561aec2{border:1px solid #5d1111}.Stack_f561aec2{border:1px solid #00ff40}.error input:-ms-input-placeholder{color:red!important}.error_f561aec2 input::placeholder{color:red!important}.error_f561aec2 input:-ms-input-placeholder{color:red!important}.error_f561aec2 input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_1da0d11d .tableViewerHeader_1da0d11d{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_1da0d11d .tableViewerHeader_1da0d11d .searchBox_1da0d11d{margin:0}.tableViewer_1da0d11d .tabBar_1da0d11d{background-color:#c0f307;margin-top:5px}.tableViewer_1da0d11d .tableContainer_1da0d11d{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_1da0d11d .searchBox_1da0d11d{margin:0}.tableViewer_1da0d11d .tableGrid_1da0d11d{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_1da0d11d .tableGrid_1da0d11d .tableHeaderCell_1da0d11d{background-color:#d3d5d6}.tableViewer_1da0d11d .tableGrid_1da0d11d .tableCell_1da0d11d{background-color:#fafafa}.tableViewer_1da0d11d .tableGrid_1da0d11d .tableDataContent_1da0d11d{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.error input:-ms-input-placeholder{color:red!important}.error_1da0d11d input::placeholder{color:red!important}.error_1da0d11d input:-ms-input-placeholder{color:red!important}.error_1da0d11d input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -28696,6 +28696,7 @@ __webpack_require__.r(__webpack_exports__);
 // React Imports
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 
 // PnP JS Imports
@@ -28738,6 +28739,19 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                 "tab": true
             }
         };
+        this.defaultCSS = `<style>
+  .testclass{color: #cc1111;}
+  .ID{border:1px solid yellow;}
+  .Title{border:1px solid rgb(0, 153, 255)};
+  .BSADescription{border:1px solid green;}
+  .singlechoice{border:1px solid #56acd1;}
+  .multichoice{border:1px solid #ff00f7;}
+  .BSAColor{border:1px solid rgb(121, 118, 118);}
+  .BSAStart{border:1px solid #ff7300;}
+  .BSAEnd{border:1px solid rgb(15, 15, 15);}
+  .PersonField{border:1px solid rgb(93, 17, 17);}
+  .Stack{border:1px solid rgb(0, 255, 64);}
+  </style>`;
         this.hasAllValues = (strings) => strings.filter((i) => (i === '' || i === null)).length > 0;
         this.onConfigure = () => {
             this.context.propertyPane.open();
@@ -28760,12 +28774,9 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             spfxContext: spfxContext,
         });
         this.themeSetup();
-        // if (this.properties.siteUrl && this.properties.list) {
-        //   const fields = await getListFields(this.properties.siteUrl, this.properties.list);
-        //   this.updateFieldListPickerOptions(fields);
-        // }
         await super.onInit();
         this.properties.JSONCode = this.properties.JSONCode || JSON.stringify(this.tableConfig);
+        this.properties.webPartCSS = this.properties.webPartCSS || this.defaultCSS;
     }
     onPropertyPaneConfigurationComplete() {
         super.onPropertyPaneConfigurationComplete();
@@ -28774,10 +28785,30 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         // Trigger the re-render
         this.render();
     }
+    injectCSS(css) {
+        // Remove the existing <style> element if it exists
+        if (!this.properties.webPartTag || this.properties.webPartTag === undefined) {
+            console.log("WebPartTag is undefined so nowhere to inject the css");
+        }
+        else {
+            console.log("settign style for ", this.properties.webPartTag);
+            let style = document.getElementById(this.properties.webPartTag);
+            if (style) {
+                style.parentNode.removeChild(style);
+            }
+            // Create a new <style> element
+            style = document.createElement('style');
+            style.id = this.properties.webPartTag;
+            style.innerHTML = css;
+            document.head.appendChild(style);
+        }
+    }
     render() {
         console.log("Rendering TableViewerWebPart");
         console.log("Display Mode:", this.displayMode);
         console.log("Properties:", this.properties);
+        // Inject the CSS into the document's <style> tag
+        this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
         const element = react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_components_TableViewerContainer__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], {
             key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2',
             JSONCode: this.properties.JSONCode,
@@ -28801,7 +28832,6 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                 this.properties.view,
                 this.properties.viewXmlCode,
                 this.properties.JSONCode,
-                this.properties.webPartCSS,
                 this.properties.list
             ]),
             contextSiteUrl: this.context.pageContext.web.absoluteUrl,
@@ -28978,13 +29008,16 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                     },
                     groups: [
                         {
-                            groupName: "CSS",
+                            groupName: "User defined CSS",
                             groupFields: [
                                 this.editorProp.PropertyFieldCodeEditor('webPartCSS', {
                                     label: 'Web Part CSS',
-                                    value: this.properties.webPartCSS,
+                                    panelTitle: 'Edit Web Part CSS',
+                                    initialValue: this.properties.webPartCSS,
+                                    onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                                    properties: this.properties,
                                     disabled: false,
-                                    key: 'CSSCode',
+                                    key: 'webPartCSS',
                                     language: this.editorProp.PropertyFieldCodeEditorLanguages.HTML,
                                 })
                             ]
@@ -29481,26 +29514,16 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_f561aec2',
-    tableViewerHeader: 'tableViewerHeader_f561aec2',
-    searchBox: 'searchBox_f561aec2',
-    tabBar: 'tabBar_f561aec2',
-    tableContainer: 'tableContainer_f561aec2',
-    tableGrid: 'tableGrid_f561aec2',
-    tableHeaderCell: 'tableHeaderCell_f561aec2',
-    tableCell: 'tableCell_f561aec2',
-    tableDataContent: 'tableDataContent_f561aec2',
-    ID: 'ID_f561aec2',
-    Title: 'Title_f561aec2',
-    BSADescription: 'BSADescription_f561aec2',
-    singlechoice: 'singlechoice_f561aec2',
-    multichoice: 'multichoice_f561aec2',
-    BSAColor: 'BSAColor_f561aec2',
-    BSAStart: 'BSAStart_f561aec2',
-    BSAEnd: 'BSAEnd_f561aec2',
-    PersonField: 'PersonField_f561aec2',
-    Stack: 'Stack_f561aec2',
-    error: 'error_f561aec2'
+    tableViewer: 'tableViewer_1da0d11d',
+    tableViewerHeader: 'tableViewerHeader_1da0d11d',
+    searchBox: 'searchBox_1da0d11d',
+    tabBar: 'tabBar_1da0d11d',
+    tableContainer: 'tableContainer_1da0d11d',
+    tableGrid: 'tableGrid_1da0d11d',
+    tableHeaderCell: 'tableHeaderCell_1da0d11d',
+    tableCell: 'tableCell_1da0d11d',
+    tableDataContent: 'tableDataContent_1da0d11d',
+    error: 'error_1da0d11d'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
