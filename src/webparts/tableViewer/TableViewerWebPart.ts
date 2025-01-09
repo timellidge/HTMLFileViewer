@@ -240,8 +240,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.render();
   };
 
-
-
   private onPropertyFieldViewPickerChanged(
     targetProperty: keyof ITableViewerWebPartProps,
     oldValue: unknown,
@@ -261,13 +259,11 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.render();
   }
 
-
   private updateFieldViewPickerValue(value?: IViewInfo) {
     this.properties.viewXmlCode = value ? value.ListViewXml : '';
     this.context.propertyPane.refresh();
     this.render(); // Re-render the web part when view picker value is updated
   }
-
 
   private onPropertyFieldListPickerChanged(
     targetProperty: keyof ITableViewerWebPartProps,
@@ -309,7 +305,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     newValue: any
   ): void {
     super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
-    
     // Immediately reflect the property change
     this.render();
   }
@@ -417,7 +412,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                   key: 'JSONCode',
                   language: this.editorProp.PropertyFieldCodeEditorLanguages.JSON,
                 }),
-               
                 this.msProps.PropertyPaneToggle('showTitle', {
                   label: 'Show Title',
                   checked: this.properties.showTitle,
@@ -430,7 +424,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                   label: 'Hide On Error or Empty',
                   checked: this.properties.hideErrorEmpty,
                 }),
-              
                 this.msProps.PropertyPaneTextField('contentHeight', {
                   label: 'Content Height',
                   value: this.properties.contentHeight,
@@ -462,7 +455,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
             },
           ]
         }
-        
       ],
     };
   }
