@@ -4,7 +4,6 @@ import { mergeStyles } from '@fluentui/react';
 import styles from './TableViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-import { IColumn } from '@fluentui/react/lib/DetailsList';
 import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
@@ -12,17 +11,9 @@ import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
 import { dateFormat, getItemsUsingRenderListDataAsStream, numberFormat } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
-
 import TabBarRender from './TabsRender/TabBarRender';
-import TextFieldRender from './FieldRender/TextFieldRender';
-import NumberFieldRender from './FieldRender/NumberFieldRender';
-import SingleChoiceFieldRender from './FieldRender/SingleChoiceFieldRender';
-import MultiChoiceFieldRender from './FieldRender/MultiChoiceFieldRender';
-import PersonFieldRender from './FieldRender/PersonFieldRender';
-import DateFieldRender from './FieldRender/DateFieldRender';
-import StackFieldRender from './FieldRender/StackFieldRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
-import { get } from 'lodash';
+
 
 export interface ITableViewerContainerProps {
   JSONCode: string;
