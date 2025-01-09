@@ -22340,6 +22340,9 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         super(...arguments);
         //@typescript-eslint/no-unused-vars
         this.shouldRerender = false;
+        // -----------------------------------------------------------------------------------------------------------------------------
+        // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
+        // -----------------------------------------------------------------------------------------------------------------------------
         this.tableConfig = {
             "id": {
                 "name": "ident",
@@ -22390,6 +22393,9 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             this.render();
         };
     }
+    // -----------------------------------------------------------------------------------------------------------------------------
+    // SPFX type functions 
+    // -----------------------------------------------------------------------------------------------------------------------------
     async onInit() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const spfxContext = {
@@ -22432,6 +22438,9 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             document.head.appendChild(style);
         }
     }
+    // -----------------------------------------------------------------------------------------------------------------------------
+    // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
+    // -----------------------------------------------------------------------------------------------------------------------------
     render() {
         console.log("Rendering TableViewerWebPart");
         console.log("Display Mode:", this.displayMode);
@@ -22469,6 +22478,9 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         });
         react_dom__WEBPACK_IMPORTED_MODULE_1__["render"](element, this.domElement);
     }
+    // -----------------------------------------------------------------------------------------------------------------------------
+    // OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS
+    // -----------------------------------------------------------------------------------------------------------------------------
     onDispose() {
         react_dom__WEBPACK_IMPORTED_MODULE_1__["unmountComponentAtNode"](this.domElement);
     }
@@ -33332,27 +33344,15 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 
 
 
-// export interface ITableViewerContainerState {
-//   items: any[];   // raw data from the list
-//   filteredItems: any[]; // these are the items that have been filtered
-//   updatedItems: any[];  // these are the items that have been formatted 
-//   searchQuery: string;
-//   lastNextHref: string;
-//   globalError: any | null;
-//   webPartTag: string;
-//   contentHeight: string;
-//   selectedTab: string | null;
-//   selectedChoiceFieldName: string | null;
-//   tabs: string[];
-//   tabCounts: { [key: string]: number };
-//   tabData: ITabData;
-//   ColumnsJSON:  IColumnsConfig;
-//   webPartCSS: string;
-// }
-///////////////////////////////////////////////////////////////////////////
-// we will convert this old class pattern but first i NEED to understand the code
-///////////////////////////////////////////////////////////////////////////
+//=================================================================================================================
+// ALL NEW FUNCTIONAL COMPONENT CODE MIGRATED FROM CLASS PATTERN (if only it would work)
+//=================================================================================================================
 const TableViewerContainer = (props) => {
+    // pull out the properties from the props object
+    const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty, themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag } = props;
+    //=================================================================================================================
+    // SET UP SOME REFERENCE DATA AND THE STATE VARIABLES 
+    //=================================================================================================================
     const [tabData, setTabData] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
     const [items, setItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]);
     const [updatedItems, setUpdatedItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]);
@@ -33360,18 +33360,107 @@ const TableViewerContainer = (props) => {
     const [ColumnsJSON, setColumnsJSON] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
     const [globalError, setGlobalError] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
     const [searchQuery, setSearchQuery] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        const ColumnsJSON = JSON.parse(props.JSONCode);
-        console.log("ColumnsObject", ColumnsJSON);
-        setColumnsJSON(ColumnsJSON);
-        getItems();
-    });
-    // GET THE DATA FROM SHAREPOINT ONCE ITS CONFIGURED
+    //=================================================================================================================
+    // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
+    //=================================================================================================================
+    const getFilterValues = (items, columnName) => {
+        // This gets a list of the unique values in the data structure and indicates how many items have that value, and sets selected to false
+        const tabData = {};
+        items.forEach((item) => {
+            const tabValue = item[columnName];
+            if (tabValue) {
+                // If the tabValue exists, increase the count
+                if (tabData[tabValue]) {
+                    tabData[tabValue].itemCount++;
+                }
+                else {
+                    // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected
+                    // This defines the structure and initial content of the tabData object
+                    tabData[tabValue] = { itemCount: 1, selected: false };
+                }
+            }
+        });
+        return tabData;
+    };
+    const handleSearch = (event) => {
+        const searchQuery = event.target.value.toLowerCase();
+        setSearchQuery(searchQuery);
+        const filteredItems = items.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
+        // Re-apply the tab filters
+        const selectedKeys = Object.keys(tabData).filter(fieldName => Object.values(tabData[fieldName]).some(tab => tab.selected));
+        console.log("SelectedKeys", selectedKeys);
+        // if (selectedTab) {
+        //   filteredItems = filteredItems.filter((item) =>
+        //     item[selectedTab] && String(item[selectedTab]).toLowerCase().includes(searchQuery)
+        //   );
+        // }
+        // Update the state with the search query and the filtered items
+        setFilteredItems(filteredItems);
+    };
+    const handleTabChange = (fieldName, tab) => {
+        const updatedTabData = Object.assign({}, tabData);
+        if (tab) {
+            Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                if (key === tab) {
+                    updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+                }
+            });
+        }
+        else {
+            Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                updatedTabData[fieldName][key].selected = false;
+            });
+        }
+        const selectedKeys = Object.keys(updatedTabData).filter((fieldName) => Object.values(updatedTabData[fieldName]).some((tab) => tab.selected));
+        let newFilteredItems;
+        if (selectedKeys.length === 0) {
+            newFilteredItems = items;
+        }
+        else {
+            const filteredItemsSet = new Set();
+            selectedKeys.forEach((fieldKey) => {
+                const selectedTabs = Object.keys(updatedTabData[fieldKey]).filter((key) => updatedTabData[fieldKey][key].selected);
+                console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
+                items.forEach((item) => {
+                    if (selectedTabs.includes(item[fieldKey])) {
+                        filteredItemsSet.add(item);
+                    }
+                });
+            });
+            newFilteredItems = Array.from(filteredItemsSet);
+        }
+        setFilteredItems(newFilteredItems);
+        setTabData(updatedTabData);
+    };
+    //=================================================================================================================
+    // GET THE ITEMS FROM SHAREPOINT
+    //================================================================================================================= 
+    const getItems = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
+        try {
+            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode);
+            setItems(Row);
+        }
+        catch (e) {
+            if (hideErrorEmpty)
+                setGlobalError(e);
+        }
+    }, [viewXmlCode, siteUrl, listId]);
+    //=================================================================================================================
+    // CSS CONSTS AND STUFF
+    //================================================================================================================= 
+    //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
+    const _containerClass = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "B"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableContainer, { height: contentHeight });
+    //=================================================================================================================
+    // USE EFFECTS TO GET THE DATA AND SET UP THE TABS (lifecycle methods and reacting to data changes)
+    //=================================================================================================================
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (!configured) {
+            const ColumnsJSON = JSON.parse(JSONCode);
+            console.log("ColumnsObject", ColumnsJSON);
+            setColumnsJSON(ColumnsJSON);
             getItems();
         }
-    }, [props.configured]);
+    }, [configured]);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         // Update tabData and updatedItems when items change
         // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
@@ -33421,104 +33510,20 @@ const TableViewerContainer = (props) => {
                 return newItem;
             });
             setUpdatedItems(newTabData);
+            setFilteredItems(newTabData); // pop in the first lot of items to be displayed
+            console.log(">>> UpdatedItems", newTabData);
         };
         updateData();
     }, [items]);
-    function getFilterValues(items, columnName) {
-        // this gets a list of the unique values id  data structure and indicates how many items have that value, and sets selected to false
-        const tabData = {};
-        items.forEach((item) => {
-            const tabValue = item[columnName];
-            if (tabValue) {
-                // If the tabValue exists, increase the count
-                if (tabData[tabValue]) {
-                    tabData[tabValue].itemCount++;
-                }
-                else {
-                    // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected note trying them as strings as they are not defined
-                    // so this defines the structure and initial content of the tabData object
-                    tabData[tabValue] = { "itemCount": 1, "selected": false, };
-                }
-            }
-        });
-        return tabData;
-    }
     //=================================================================================================================
-    // GET THE ITEMS FROM SHAREPOINT
-    //================================================================================================================= 
-    const getItems = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
-        try {
-            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* getItemsUsingRenderListDataAsStream */ "b"])(props.siteUrl, props.listId, props.viewXmlCode);
-            setItems(Row);
-        }
-        catch (e) {
-            if (props.hideErrorEmpty)
-                setGlobalError(e);
-        }
-    }, [props.viewXmlCode, props.siteUrl, props.listId]);
+    // RENDER THE COMPONENT TREE :-)
     //=================================================================================================================
-    // HANDLE SEARCH by looking in the items (text values) and filtering them based on the search query
-    //=================================================================================================================
-    function handleSearch(event) {
-        const searchQuery = event.target.value.toLowerCase();
-        const { items, selectedTab } = this.state;
-        let filteredItems = items.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
-        // thAT BIT IS EASY NOW RE-APPLY THE TAB FILTERS
-        if (selectedTab) {
-            filteredItems = filteredItems.filter((item) => item[selectedTab] && String(item[selectedTab]).toLowerCase().includes(searchQuery));
-        }
-        //now POPULATE THE STATE WITH THE SEARCH QUERY AND THE FILTERED ITEMS
-        this.setState({ filteredItems });
-    }
-    function handleTabChange(fieldName, tab) {
-        const { items } = this.state; // Original items
-        const { tabData } = this.state; // Column to filter by
-        let filteredItems;
-        // Apply filtering if a tab is selected, otherwise show all items (this is VERY simple filterign it need to go up a notch)
-        // multiple fields multiple values this implements one tab a time ie radio buttons
-        if (tab) {
-            Object.keys(tabData[fieldName]).forEach((key) => {
-                if (key === tab) { // toggle the selected state 
-                    tabData[fieldName][key].selected = !tabData[fieldName][key].selected;
-                }
-            });
-        }
-        else {
-            Object.keys(tabData[fieldName]).forEach((key) => {
-                tabData[fieldName][key].selected = false;
-            });
-        }
-        const selectedKeys = Object.keys(tabData).filter(fieldName => Object.values(tabData[fieldName]).some(tab => tab.selected));
-        if (selectedKeys.length === 0) {
-            filteredItems = items;
-        }
-        else {
-            const filteredItemsSet = new Set();
-            selectedKeys.forEach(fieldKey => {
-                const selectedTabs = Object.keys(tabData[fieldKey]).filter(key => tabData[fieldKey][key].selected);
-                console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
-                // Add items to the filteredItemsSet that match any of the selected tab values
-                items.forEach((item) => {
-                    if (selectedTabs.includes(item[fieldKey])) {
-                        filteredItemsSet.add(item);
-                    }
-                });
-            });
-            filteredItems = Array.from(filteredItemsSet);
-        }
-        // Update the state with selectedTab and filtered items
-        setFilteredItems(filteredItems);
-        setTabData(tabData);
-    }
-    //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
-    const _containerClass = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "B"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableContainer, { height: props.contentHeight });
-    const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure } = props;
     console.log("Filtered Items", filteredItems);
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: props.webPartTag, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableViewer }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: webPartTag, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableViewer }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange })))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { colJSON: ColumnsJSON, items: updatedItems })),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { colJSON: ColumnsJSON, items: filteredItems })),
         globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h1", null, "ERROR")
         // <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />
         ))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
@@ -40945,7 +40950,7 @@ const numberFormat = (value, format) => {
     }
 };
 //==================================================================================================================================
-// A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION it includes % and fr (fractional) widths calculated based on the container width
+// A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION WHEN YOU NEED IT IN PX
 //==================================================================================================================================
 const convertWidthToPx = (containerPX, ColJSON) => {
     //set my variables to  zero 

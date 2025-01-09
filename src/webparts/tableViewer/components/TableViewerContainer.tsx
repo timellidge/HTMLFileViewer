@@ -91,7 +91,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     const searchQuery = event.target.value.toLowerCase();
     setSearchQuery(searchQuery);
 
-    let filteredItems = items.filter((item) =>
+    const filteredItems = items.filter((item) =>
       Object.values(item).some(value =>
         String(value).toLowerCase().includes(searchQuery)
       )
@@ -235,6 +235,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
         return newItem;
       });
       setUpdatedItems(newTabData);
+      setFilteredItems(newTabData); // pop in the first lot of items to be displayed
+      console.log(">>> UpdatedItems",newTabData);
     };
 
     updateData();
@@ -255,7 +257,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} />
               ))}
             </div>
-            <TableGridRender colJSON={ColumnsJSON} items={updatedItems} /> 
+            <TableGridRender colJSON={ColumnsJSON} items={filteredItems} /> 
           </TableViewer>
           {globalError && (
             <h1>ERROR</h1>
@@ -267,7 +269,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       )}
     </div>
   );
-  
 }
 
 export default TableViewerContainer;
