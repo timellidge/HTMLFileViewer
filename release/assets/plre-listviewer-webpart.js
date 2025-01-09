@@ -33386,13 +33386,6 @@ const TableViewerContainer = (props) => {
     const handleSearch = (event) => {
         const searchQuery = event.target.value.toLowerCase();
         setSearchQuery(searchQuery);
-        // const filteredItems = items.filter((item) =>
-        //   Object.values(item).some(value =>
-        //     String(value).toLowerCase().includes(searchQuery)
-        //   )
-        // );
-        // Update the state with the search query and the filtered items
-        //setFilteredItems(filteredItems);
         applyFilter();
     };
     //split this into two funtions?  one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
@@ -33443,8 +33436,14 @@ const TableViewerContainer = (props) => {
             });
             newFilteredItems = Array.from(filteredItemsSet);
         }
-        const filteredItems = newFilteredItems.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
-        setFilteredItems(filteredItems);
+        // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
+        if (searchQuery) {
+            const filteredItems = newFilteredItems.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
+            setFilteredItems(filteredItems);
+        }
+        else {
+            setFilteredItems(newFilteredItems);
+        }
     };
     //=================================================================================================================
     // GET THE ITEMS FROM SHAREPOINT

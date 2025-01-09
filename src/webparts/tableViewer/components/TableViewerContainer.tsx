@@ -91,15 +91,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchQuery = event.target.value.toLowerCase();
     setSearchQuery(searchQuery);
-
-    // const filteredItems = items.filter((item) =>
-    //   Object.values(item).some(value =>
-    //     String(value).toLowerCase().includes(searchQuery)
-    //   )
-    // );
-
-    // Update the state with the search query and the filtered items
-    //setFilteredItems(filteredItems);
     applyFilter();
   };
 
@@ -155,12 +146,17 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       });
       newFilteredItems = Array.from(filteredItemsSet);
     }
-    const filteredItems = newFilteredItems.filter((item) =>
-      Object.values(item).some(value =>
-        String(value).toLowerCase().includes(searchQuery)
-      )
-    );
-    setFilteredItems(filteredItems);
+    // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
+    if (searchQuery) {
+      const filteredItems = newFilteredItems.filter((item) =>
+        Object.values(item).some(value =>
+          String(value).toLowerCase().includes(searchQuery)
+        )
+      );
+      setFilteredItems(filteredItems);
+    } else {
+      setFilteredItems(newFilteredItems);
+    }
   };
 
 
