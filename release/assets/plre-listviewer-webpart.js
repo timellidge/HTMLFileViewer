@@ -33382,36 +33382,50 @@ const TableViewerContainer = (props) => {
         });
         return tabData;
     };
+    // This function is called when the user types in the search box
     const handleSearch = (event) => {
         const searchQuery = event.target.value.toLowerCase();
         setSearchQuery(searchQuery);
-        const filteredItems = items.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
-        // Re-apply the tab filters
-        const selectedKeys = Object.keys(tabData).filter(fieldName => Object.values(tabData[fieldName]).some(tab => tab.selected));
-        console.log("SelectedKeys", selectedKeys);
-        // if (selectedTab) {
-        //   filteredItems = filteredItems.filter((item) =>
-        //     item[selectedTab] && String(item[selectedTab]).toLowerCase().includes(searchQuery)
-        //   );
-        // }
+        // const filteredItems = items.filter((item) =>
+        //   Object.values(item).some(value =>
+        //     String(value).toLowerCase().includes(searchQuery)
+        //   )
+        // );
         // Update the state with the search query and the filtered items
-        setFilteredItems(filteredItems);
+        //setFilteredItems(filteredItems);
+        applyFilter();
     };
+    //split this into two funtions?  one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
     const handleTabChange = (fieldName, tab) => {
-        const updatedTabData = Object.assign({}, tabData);
-        if (tab) {
-            Object.keys(updatedTabData[fieldName]).forEach((key) => {
-                if (key === tab) {
-                    updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
-                }
+        const updatedTabData = Object.assign({}, tabData); // take a copy to work with 
+        if (!fieldName) {
+            // if i call this with no field name then i want to clear all the selected tabs
+            // Loop through all keys in updatedTabData and set all .selected to false
+            Object.keys(updatedTabData).forEach((field) => {
+                Object.keys(updatedTabData[field]).forEach((key) => {
+                    updatedTabData[field][key].selected = false;
+                });
             });
         }
         else {
-            Object.keys(updatedTabData[fieldName]).forEach((key) => {
-                updatedTabData[fieldName][key].selected = false;
-            });
+            if (tab) {
+                Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                    if (key === tab) {
+                        updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+                    }
+                });
+            }
+            else {
+                Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                    updatedTabData[fieldName][key].selected = false;
+                });
+            }
         }
-        const selectedKeys = Object.keys(updatedTabData).filter((fieldName) => Object.values(updatedTabData[fieldName]).some((tab) => tab.selected));
+        setTabData(updatedTabData);
+        applyFilter();
+    };
+    const applyFilter = () => {
+        const selectedKeys = Object.keys(tabData).filter((fieldName) => Object.values(tabData[fieldName]).some((tab) => tab.selected));
         let newFilteredItems;
         if (selectedKeys.length === 0) {
             newFilteredItems = items;
@@ -33419,7 +33433,7 @@ const TableViewerContainer = (props) => {
         else {
             const filteredItemsSet = new Set();
             selectedKeys.forEach((fieldKey) => {
-                const selectedTabs = Object.keys(updatedTabData[fieldKey]).filter((key) => updatedTabData[fieldKey][key].selected);
+                const selectedTabs = Object.keys(tabData[fieldKey]).filter((key) => tabData[fieldKey][key].selected);
                 console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
                 items.forEach((item) => {
                     if (selectedTabs.includes(item[fieldKey])) {
@@ -33429,8 +33443,8 @@ const TableViewerContainer = (props) => {
             });
             newFilteredItems = Array.from(filteredItemsSet);
         }
-        setFilteredItems(newFilteredItems);
-        setTabData(updatedTabData);
+        const filteredItems = newFilteredItems.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
+        setFilteredItems(filteredItems);
     };
     //=================================================================================================================
     // GET THE ITEMS FROM SHAREPOINT
