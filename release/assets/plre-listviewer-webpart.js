@@ -10037,6 +10037,7 @@ var Position;
 const TableGridRender = ({ colJSON, items }) => {
     //we can only have one column sorted at a time so i need to know its name and its state
     const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: '', direction: null });
+    const [sortedItems, setSortedItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(items);
     const _sortedColumns = Object.keys(colJSON)
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
@@ -10051,6 +10052,22 @@ const TableGridRender = ({ colJSON, items }) => {
             direction: prevState.key === columnKey ? !prevState.direction : true,
         }));
     };
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        if (sortField.key) {
+            const sorted = [...items].sort((a, b) => {
+                if (sortField.direction) {
+                    return a[sortField.key] > b[sortField.key] ? 1 : -1;
+                }
+                else {
+                    return a[sortField.key] < b[sortField.key] ? 1 : -1;
+                }
+            });
+            setSortedItems(sorted);
+        }
+        else {
+            setSortedItems(items);
+        }
+    }, [sortField, items]);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null,
@@ -10061,7 +10078,7 @@ const TableGridRender = ({ colJSON, items }) => {
                     : sortField.direction
                         ? 'SortDown'
                         : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))))),
-        items.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` },
+        sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
                 " ",
                 item[key],

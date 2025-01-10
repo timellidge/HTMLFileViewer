@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { IColumnJSON, IColumnsConfig } from '../../../helpers/Interfaces'; // Ensure this import is correct
 import styles from './TableViewer.module.scss';
 import { mergeStyles } from '@fluentui/react';
@@ -17,6 +17,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
 
   //we can only have one column sorted at a time so i need to know its name and its state
   const [sortField, setSortField] = useState<{ key: string; direction: boolean | null }>({ key: '', direction: null });
+  const [sortedItems, setSortedItems] = useState<any[]>(items);
 
   const _sortedColumns = Object.keys(colJSON)
   .map((key) => ({ key, column: colJSON[key] }))
@@ -35,6 +36,22 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
       direction: prevState.key === columnKey ? !prevState.direction : true,
     }));
   };
+
+
+  useEffect(() => {
+    if (sortField.key) {
+      const sorted = [...items].sort((a, b) => {
+        if (sortField.direction) {
+          return a[sortField.key] > b[sortField.key] ? 1 : -1;
+        } else {
+          return a[sortField.key] < b[sortField.key] ? 1 : -1;
+        }
+      });
+      setSortedItems(sorted);
+    } else {
+      setSortedItems(items);
+    }
+  }, [sortField, items]);
 
    return (
     <>
@@ -59,7 +76,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
           )
         ))}
       </div>
-      {items.map((item, itemIndex) => (
+      {sortedItems.map((item, itemIndex) => (
         <div key={itemIndex} className={_GridStyle}>
           {_sortedColumns.map(({ key, column }) => (
             column.width > "0" && (
