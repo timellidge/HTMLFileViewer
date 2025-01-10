@@ -7,6 +7,7 @@ export interface IColumnJSON {
     type?: string | undefined | null;
     class?: string | undefined | null;
     isSortable?: boolean | undefined | null;
+    sortState?: boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
     Fields?: string[] | undefined | null;
     prefix?: string | undefined | null;

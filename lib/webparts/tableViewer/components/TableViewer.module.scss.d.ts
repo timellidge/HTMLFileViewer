@@ -6,6 +6,7 @@ declare const styles: {
     tableContainer: string;
     tableGrid: string;
     tableHeaderCell: string;
+    sortIcon: string;
     tableCell: string;
     tableDataContent: string;
     error: string;

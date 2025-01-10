@@ -38,6 +38,17 @@
 
         .tableHeaderCell{
             background-color: rgb(211, 213, 214);
+                display: grid;
+                grid-template-columns: auto 24px; // Adjust the size of the icon column as needed
+                align-items: center;
+                padding: 2px; // Adjust the padding as needed
+              
+            .sortIcon{
+                color: grey;
+                margin-left: 5px;
+                cursor: pointer;
+            }
+
         }
 
         .tableCell{

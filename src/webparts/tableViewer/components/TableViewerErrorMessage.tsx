@@ -4,7 +4,7 @@ import * as React from 'react';
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 
 export interface ITableViewerPlaceholderProps {
-  message: string;
+  message: any;
   onDismiss: () => void;
 }
 

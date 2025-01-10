@@ -256,8 +256,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
             <TableGridRender colJSON={ColumnsJSON} items={filteredItems} /> 
           </TableViewer>
           {globalError && (
-            <h1>ERROR</h1>
-            // <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />
+            <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />
           )}
         </>
       ) : (
