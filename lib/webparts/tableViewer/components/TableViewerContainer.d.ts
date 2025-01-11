@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
+export interface IField {
+    rawValue: any;
+    displayValue: string;
+}
+export declare type ItemField = IField | any;
 export interface ITableViewerContainerProps {
     JSONCode: string;
     webPartCSS: string;
@@ -12,6 +17,7 @@ export interface ITableViewerContainerProps {
     updateProperty: (value: string) => void;
     showTitle: boolean;
     showFind: boolean;
+    tabBehaviour: boolean;
     hideErrorEmpty: boolean;
     themeVariant: IReadonlyTheme | undefined;
     contentHeight: string;

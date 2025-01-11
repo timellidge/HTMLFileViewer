@@ -38,27 +38,33 @@
 
         .tableHeaderCell{
             background-color: rgb(211, 213, 214);
-                display: grid;
-                grid-template-columns: auto 24px; // Adjust the size of the icon column as needed
-                align-items: center;
-                padding: 2px; // Adjust the padding as needed
-              
+            display: grid;
+            grid-template-columns: auto 24px; // Adjust the size of the icon column as needed
+            align-items: center;
+            padding: 2px; // Adjust the padding as needed
+            height : 45px;
+            font-size: 14px;
+            font-weight: 600;
+            box-sizing: border-box;
             .sortIcon{
                 color: grey;
                 margin-left: 5px;
                 cursor: pointer;
             }
-
         }
 
         .tableCell{
             background-color: rgb(250, 250, 250);
+            padding:2px;
+            font-size: 12px;
+            font-weight: 400;
+            box-sizing: border-box;
         }
 
         // this is only needed as a class when lines > 0 or exists. 
         .tableDataContent{
-            padding: 2px;
             display: -webkit-box;
+            box-sizing: border-box;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;

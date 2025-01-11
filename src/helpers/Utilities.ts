@@ -73,47 +73,47 @@ export const numberFormat = (value: number, format: string) => {
 //==================================================================================================================================
 // A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION WHEN YOU NEED IT IN PX
 //==================================================================================================================================
- export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
-  //set my variables to  zero 
-  let TotPX = 0, TotPer = 0, TotFR = 0;
-  // two loops throrought the config json - first to get the total for the px the % and the fr columns
-  Object.keys(ColJSON).forEach(key => {
-    const width = ColJSON[key].width.toLowerCase();
-    const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/); //regex to match the width value and the unit but also work with decimal numbers
-    if (match) {
-      const value = parseFloat(match[1]);
-      switch (match[2]) {
-        case 'px': TotPX  += value; break;
-        case '%' : TotPer += value; break;
-        case 'fr': TotFR  += value; break;  
-      }
-    }
-  });
+//  export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
+//   //set my variables to  zero 
+//   let TotPX = 0, TotPer = 0, TotFR = 0;
+//   // two loops throrought the config json - first to get the total for the px the % and the fr columns
+//   Object.keys(ColJSON).forEach(key => {
+//     const width = ColJSON[key].width.toLowerCase();
+//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/); //regex to match the width value and the unit but also work with decimal numbers
+//     if (match) {
+//       const value = parseFloat(match[1]);
+//       switch (match[2]) {
+//         case 'px': TotPX  += value; break;
+//         case '%' : TotPer += value; break;
+//         case 'fr': TotFR  += value; break;  
+//       }
+//     }
+//   });
 
-  // now calculate the px for % and fr columns based in the container width
-  const percentPX = containerPX / 100; //one percent of the container width
-  const percentTotPX = percentPX * TotPer; //total px for all % columns i ned this to see what is left tfor the FR as they ar a fractional remainder of the total px
-  const FRpx = (containerPX - percentTotPX - TotPX) / TotFR; //so one fr is equal to this many px
+//   // now calculate the px for % and fr columns based in the container width
+//   const percentPX = containerPX / 100; //one percent of the container width
+//   const percentTotPX = percentPX * TotPer; //total px for all % columns i ned this to see what is left tfor the FR as they ar a fractional remainder of the total px
+//   const FRpx = (containerPX - percentTotPX - TotPX) / TotFR; //so one fr is equal to this many px
 
-  // NOW loop through again and set the CalculatedPixels field in the JSON
-  Object.keys(ColJSON).forEach(key => {
-    const width = ColJSON[key].width.toLowerCase();
-    const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/);
-    if (match) {
-      const value = parseFloat(match[1]);
-      const unit = match[2];
-      let calculatedPixels = 0;
-      switch (unit) {
-        case 'px': calculatedPixels = value; break;
-        case '%' : calculatedPixels = value * percentPX; break;
-        case 'fr': calculatedPixels = value * FRpx; break;
-        default  : calculatedPixels = 0;
-      }
-      ColJSON[key].calculatedPX = calculatedPixels;
-    }
-  });
-  return ColJSON;
- }
+//   // NOW loop through again and set the CalculatedPixels field in the JSON
+//   Object.keys(ColJSON).forEach(key => {
+//     const width = ColJSON[key].width.toLowerCase();
+//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/);
+//     if (match) {
+//       const value = parseFloat(match[1]);
+//       const unit = match[2];
+//       let calculatedPixels = 0;
+//       switch (unit) {
+//         case 'px': calculatedPixels = value; break;
+//         case '%' : calculatedPixels = value * percentPX; break;
+//         case 'fr': calculatedPixels = value * FRpx; break;
+//         default  : calculatedPixels = 0;
+//       }
+//       ColJSON[key].calculatedPX = calculatedPixels;
+//     }
+//   });
+//   return ColJSON;
+//  }
 
 
  //============================================================================================================

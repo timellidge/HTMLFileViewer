@@ -1,14 +1,13 @@
 export interface IColumnJSON {
     name: string;
     width: string;
-    calculatedPX?: number | undefined | null;
     tab?: boolean | undefined | null;
     type?: string | undefined | null;
     class?: string | undefined | null;
     isSortable?: boolean | undefined | null;
     sortState?: boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
-    Fields?: string[] | undefined | null;
+    fields?: string[] | undefined | null;
     prefix?: string | undefined | null;
     suffix?: string | undefined | null;
     format?: string | undefined | null;

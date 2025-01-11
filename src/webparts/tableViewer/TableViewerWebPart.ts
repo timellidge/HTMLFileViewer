@@ -42,6 +42,7 @@ export interface ITableViewerWebPartProps {
   showTitle: boolean;
   showFind: boolean;
   hideErrorEmpty:boolean;
+  tabBehaviour: boolean;
   contentHeight: string;
   configured: boolean;
   contextSiteUrl: string;
@@ -74,14 +75,15 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
 
   private tableConfig: IColumnsConfig = {
-    "id": {
-      "name": "ident",
+    "ID": {
+      "name": "ID",
       "width": "40px",
       "tab": false,
-      "calculatedPX": 0,
-      "type": "number"
+      "type": "number",
+      "prefix": "=",
+      "isSortable": true
     },
-    "LinkTitle": {
+    "Title": {
       "name": "title",
       "width": "14%"
     },
@@ -98,7 +100,14 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     "BSAColor": {
       "name": "Color",
       "width": "0.5fr",
-      "tab": true
+      "tab": true,
+      "isSortable": true
+    },
+    "Modified": {
+      "name": "Modified",
+      "width": "0.5fr",
+      "type": "date",
+      "format": "f"
     }
   }
 
@@ -197,6 +206,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         showTitle: this.properties.showTitle,
         showFind: this.properties.showFind,
         hideErrorEmpty:this.properties.hideErrorEmpty,
+        tabBehaviour: this.properties.tabBehaviour,
         themeVariant: this.themeVariant,
         contentHeight: this.properties.contentHeight,
         onConfigure: this.onConfigure,
@@ -419,6 +429,10 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                 this.msProps.PropertyPaneToggle('showFind', {
                   label: 'Show Find',
                   checked: this.properties.showFind,
+                }),
+                this.msProps.PropertyPaneToggle('tabBehaviour', {
+                  label: 'Multi Tab Behaviour',
+                  checked: this.properties.tabBehaviour,
                 }),
                 this.msProps.PropertyPaneToggle('hideErrorEmpty', {
                   label: 'Hide On Error or Empty',

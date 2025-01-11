@@ -14,6 +14,7 @@ export interface ITableViewerWebPartProps {
     showTitle: boolean;
     showFind: boolean;
     hideErrorEmpty: boolean;
+    tabBehaviour: boolean;
     contentHeight: string;
     configured: boolean;
     contextSiteUrl: string;

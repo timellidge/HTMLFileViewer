@@ -14,6 +14,12 @@ import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
 
+export interface IField {
+  rawValue: any;
+  displayValue: string;
+}
+
+export type ItemField = IField | any;
 
 export interface ITableViewerContainerProps {
   JSONCode: string;
@@ -26,6 +32,7 @@ export interface ITableViewerContainerProps {
   updateProperty: (value: string) => void;
   showTitle: boolean;
   showFind: boolean;
+  tabBehaviour: boolean;
   hideErrorEmpty: boolean;
   themeVariant: IReadonlyTheme | undefined;
   contentHeight: string;
@@ -42,7 +49,10 @@ export interface ITableViewerContainerProps {
 
 const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> = (props) => {
   // pull out the properties from the props object
-  const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty, themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag  } = props;
+  const { displayMode, title, updateProperty, showTitle, showFind, configured, 
+          onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty,
+          themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag , tabBehaviour 
+    } = props;
 
   //=================================================================================================================
   // SET UP SOME REFERENCE DATA AND THE STATE VARIABLES 
@@ -86,27 +96,42 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   };
 
   //split this into two funtions?  one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
-
   const handleTabChange = (fieldName: string, tab: string) => {
     const updatedTabData = { ...tabData }; // take a copy to work with 
-    if(!fieldName){
-      // if i call this with no field name then i want to clear all the selected tabs
+    
+    const clearTabs = () => {
       // Loop through all keys in updatedTabData and set all .selected to false
       Object.keys(updatedTabData).forEach((field) => {
         Object.keys(updatedTabData[field]).forEach((key) => {
           updatedTabData[field][key].selected = false;
         });
       });
+    };
+
+    // if i call this with no field name then i want to clear all the selected tabs (like a reset button for example)
+    if(!fieldName){
+      clearTabs();
     } else {
-      if (tab) {
+      // two versons of this code one for when we are using the tab behaviour (multiple selectable tabs) and one for when we are not
+      if(tabBehaviour){ //this allows togle and multi select
+        if (tab) {
+          Object.keys(updatedTabData[fieldName]).forEach((key) => {
+            if (key === tab) {
+              updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+            }
+          });
+        } else {
+          Object.keys(updatedTabData[fieldName]).forEach((key) => {
+            updatedTabData[fieldName][key].selected = false;
+          });
+        }
+      } else { // this is a single select tab so it clears all the others and only sets the selected one
         Object.keys(updatedTabData[fieldName]).forEach((key) => {
           if (key === tab) {
-            updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+            updatedTabData[fieldName][key].selected = true;
+          } else {
+            updatedTabData[fieldName][key].selected = false;
           }
-        });
-      } else {
-        Object.keys(updatedTabData[fieldName]).forEach((key) => {
-          updatedTabData[fieldName][key].selected = false;
         });
       }
     }
@@ -121,7 +146,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
 
     let newFilteredItems: any[];
     if (selectedKeys.length === 0) {
-      newFilteredItems = items;
+      newFilteredItems = updatedItems;
     } else {
       const filteredItemsSet = new Set<any>();
       selectedKeys.forEach((fieldKey) => {
@@ -129,8 +154,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
           (key) => tabData[fieldKey][key].selected
         );
         console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
-        items.forEach((item: any) => {
-          if (selectedTabs.includes(item[fieldKey])) {
+        updatedItems.forEach((item: any) => {
+          if (selectedTabs.includes(item[fieldKey].rawValue)) {
             filteredItemsSet.add(item);
           }
         });
@@ -140,9 +165,10 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
     if (searchQuery) {
       const filteredItems = newFilteredItems.filter((item) =>
-        Object.values(item).some(value =>
-          String(value).toLowerCase().includes(searchQuery)
-        )
+        Object.values(item).some((field) => {
+          const fieldValue = field as ItemField;
+          return fieldValue && fieldValue.displayValue && String(fieldValue.displayValue).toLowerCase().includes(searchQuery);
+        })
       );
       setFilteredItems(filteredItems);
     } else {
@@ -200,40 +226,48 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     console.log("ALL Tab data:",tabData);
     setTabData(tabData);
 
-    const updateData = async () => {
       // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
-      const newTabData = items.map(item => {
-        const newItem = { ...item };
-
-        Object.keys(item).forEach((key) => {
-          if (ColumnsJSON[key]) {
-            const ColData = ColumnsJSON[key];
-            const pre = ColData.prefix || '';
-            const suf = ColData.suffix || '';
-            const format = ColData.format || '';
-            const type = ColData.type || 'string';
-            let value = item[key];
-            // Format the value based on the type THIS WILL NEED TO BE EXTENDED to cope with the stack field type
-            if (type === 'number') {
-              value = numberFormat(value, format);
-            } else if (type === 'date') {
-              value = dateFormat(value, format, 'en-GB');
-            } else if (type === 'singlechoice') {
-              value = value ? value : 'Not selected';
-            } else if (type === 'multichoice') {
-              value = Array.isArray(value) ? value.join(', ') : value;
-            } else if (type === 'person') {
-              value = value && typeof value === 'object' && value.email ? value.email : 'No person';
+      const updateData = async () => {
+        // Prepare the data by identifying if it has a prefix or a suffix or a specific format and then render the data in the table
+        const newTabData = items.map(item => {
+          const newItem = { ...item };
+      
+          Object.keys(item).forEach((key) => {
+            if (ColumnsJSON[key]) {
+              const ColData = ColumnsJSON[key];
+              const pre = ColData.prefix || '';
+              const suf = ColData.suffix || '';
+              const format = ColData.format || '';
+              const type = ColData.type || 'string';
+              const rawValue = item[key];
+              let displayValue = rawValue;
+      
+              // Format the value based on the type
+              if (type === 'number') {
+                displayValue = numberFormat(rawValue, format);
+              } else if (type === 'date') {
+                displayValue = dateFormat(rawValue, format, 'en-GB');
+              } else if (type === 'singlechoice') {
+                displayValue = rawValue ? rawValue : 'Not selected';
+              } else if (type === 'multichoice') {
+                displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
+              } else if (type === 'person') {
+                displayValue = rawValue && typeof rawValue === 'object' && rawValue.email ? rawValue.email : 'No person';
+              }
+      
+              newItem[key] = {
+                rawValue: rawValue,
+                displayValue: (pre + displayValue + suf),
+              };
             }
-            newItem[key] = pre + value + suf;
-          }
+          });
+          return newItem;
         });
-        return newItem;
-      });
-      setUpdatedItems(newTabData);
-      setFilteredItems(newTabData); // pop in the first lot of items to be displayed
-      console.log(">>> UpdatedItems",newTabData);
-    };
+      
+        setUpdatedItems(newTabData);
+        setFilteredItems(newTabData); // pop in the first lot of items to be displayed
+        console.log(">>> UpdatedItems", newTabData);
+      };
 
     updateData();
   }, [items]);

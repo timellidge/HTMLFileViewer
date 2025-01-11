@@ -10055,11 +10055,25 @@ const TableGridRender = ({ colJSON, items }) => {
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (sortField.key) {
             const sorted = [...items].sort((a, b) => {
-                if (sortField.direction) {
-                    return a[sortField.key] > b[sortField.key] ? 1 : -1;
+                const aValue = a[sortField.key].rawValue;
+                const bValue = b[sortField.key].rawValue;
+                if (aValue === null || aValue === undefined)
+                    return 1;
+                if (bValue === null || bValue === undefined)
+                    return -1;
+                const aNumber = parseFloat(aValue);
+                const bNumber = parseFloat(bValue);
+                if (!isNaN(aNumber) && !isNaN(bNumber)) {
+                    return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
+                }
+                else if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                }
+                else if (aValue instanceof Date && bValue instanceof Date) {
+                    return sortField.direction ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
                 }
                 else {
-                    return a[sortField.key] < b[sortField.key] ? 1 : -1;
+                    return 0;
                 }
             });
             setSortedItems(sorted);
@@ -10081,7 +10095,7 @@ const TableGridRender = ({ colJSON, items }) => {
         sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
                 " ",
-                item[key],
+                item[key].displayValue,
                 " "))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
@@ -13163,7 +13177,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_87e3f115 .tableViewerHeader_87e3f115{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_87e3f115 .tableViewerHeader_87e3f115 .searchBox_87e3f115{margin:0}.tableViewer_87e3f115 .tabBar_87e3f115{background-color:#c0f307;margin-top:5px}.tableViewer_87e3f115 .tableContainer_87e3f115{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_87e3f115 .searchBox_87e3f115{margin:0}.tableViewer_87e3f115 .tableGrid_87e3f115{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_87e3f115 .tableGrid_87e3f115 .tableHeaderCell_87e3f115{-ms-flex-align:center;align-items:center;background-color:#d3d5d6;display:grid;grid-template-columns:auto 24px;padding:2px}.tableViewer_87e3f115 .tableGrid_87e3f115 .tableHeaderCell_87e3f115 .sortIcon_87e3f115{color:grey;cursor:pointer;margin-left:5px}.tableViewer_87e3f115 .tableGrid_87e3f115 .tableCell_87e3f115{background-color:#fafafa}.tableViewer_87e3f115 .tableGrid_87e3f115 .tableDataContent_87e3f115{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;padding:2px;text-overflow:ellipsis}.error input:-ms-input-placeholder{color:red!important}.error_87e3f115 input::placeholder{color:red!important}.error_87e3f115 input:-ms-input-placeholder{color:red!important}.error_87e3f115 input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_e1c388ca .tableViewerHeader_e1c388ca{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_e1c388ca .tableViewerHeader_e1c388ca .searchBox_e1c388ca{margin:0}.tableViewer_e1c388ca .tabBar_e1c388ca{background-color:#c0f307;margin-top:5px}.tableViewer_e1c388ca .tableContainer_e1c388ca{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_e1c388ca .searchBox_e1c388ca{margin:0}.tableViewer_e1c388ca .tableGrid_e1c388ca{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableHeaderCell_e1c388ca{-ms-flex-align:center;align-items:center;background-color:#d3d5d6;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableHeaderCell_e1c388ca .sortIcon_e1c388ca{color:grey;cursor:pointer;margin-left:5px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableCell_e1c388ca{background-color:#fafafa;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableDataContent_e1c388ca{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.error input:-ms-input-placeholder{color:red!important}.error_e1c388ca input::placeholder{color:red!important}.error_e1c388ca input:-ms-input-placeholder{color:red!important}.error_e1c388ca input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -28749,14 +28763,15 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
         // -----------------------------------------------------------------------------------------------------------------------------
         this.tableConfig = {
-            "id": {
-                "name": "ident",
+            "ID": {
+                "name": "ID",
                 "width": "40px",
                 "tab": false,
-                "calculatedPX": 0,
-                "type": "number"
+                "type": "number",
+                "prefix": "=",
+                "isSortable": true
             },
-            "LinkTitle": {
+            "Title": {
                 "name": "title",
                 "width": "14%"
             },
@@ -28773,7 +28788,14 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             "BSAColor": {
                 "name": "Color",
                 "width": "0.5fr",
-                "tab": true
+                "tab": true,
+                "isSortable": true
+            },
+            "Modified": {
+                "name": "Modified",
+                "width": "0.5fr",
+                "type": "date",
+                "format": "f"
             }
         };
         this.defaultCSS = `<style>
@@ -28867,6 +28889,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             showTitle: this.properties.showTitle,
             showFind: this.properties.showFind,
             hideErrorEmpty: this.properties.hideErrorEmpty,
+            tabBehaviour: this.properties.tabBehaviour,
             themeVariant: this.themeVariant,
             contentHeight: this.properties.contentHeight,
             onConfigure: this.onConfigure,
@@ -29035,6 +29058,10 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                                 this.msProps.PropertyPaneToggle('showFind', {
                                     label: 'Show Find',
                                     checked: this.properties.showFind,
+                                }),
+                                this.msProps.PropertyPaneToggle('tabBehaviour', {
+                                    label: 'Multi Tab Behaviour',
+                                    checked: this.properties.tabBehaviour,
                                 }),
                                 this.msProps.PropertyPaneToggle('hideErrorEmpty', {
                                     label: 'Hide On Error or Empty',
@@ -29560,17 +29587,17 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_87e3f115',
-    tableViewerHeader: 'tableViewerHeader_87e3f115',
-    searchBox: 'searchBox_87e3f115',
-    tabBar: 'tabBar_87e3f115',
-    tableContainer: 'tableContainer_87e3f115',
-    tableGrid: 'tableGrid_87e3f115',
-    tableHeaderCell: 'tableHeaderCell_87e3f115',
-    sortIcon: 'sortIcon_87e3f115',
-    tableCell: 'tableCell_87e3f115',
-    tableDataContent: 'tableDataContent_87e3f115',
-    error: 'error_87e3f115'
+    tableViewer: 'tableViewer_e1c388ca',
+    tableViewerHeader: 'tableViewerHeader_e1c388ca',
+    searchBox: 'searchBox_e1c388ca',
+    tabBar: 'tabBar_e1c388ca',
+    tableContainer: 'tableContainer_e1c388ca',
+    tableGrid: 'tableGrid_e1c388ca',
+    tableHeaderCell: 'tableHeaderCell_e1c388ca',
+    sortIcon: 'sortIcon_e1c388ca',
+    tableCell: 'tableCell_e1c388ca',
+    tableDataContent: 'tableDataContent_e1c388ca',
+    error: 'error_e1c388ca'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
@@ -43705,7 +43732,7 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 //=================================================================================================================
 const TableViewerContainer = (props) => {
     // pull out the properties from the props object
-    const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty, themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag } = props;
+    const { displayMode, title, updateProperty, showTitle, showFind, configured, onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty, themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag, tabBehaviour } = props;
     //=================================================================================================================
     // SET UP SOME REFERENCE DATA AND THE STATE VARIABLES 
     //=================================================================================================================
@@ -43747,26 +43774,42 @@ const TableViewerContainer = (props) => {
     //split this into two funtions?  one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
     const handleTabChange = (fieldName, tab) => {
         const updatedTabData = Object.assign({}, tabData); // take a copy to work with 
-        if (!fieldName) {
-            // if i call this with no field name then i want to clear all the selected tabs
+        const clearTabs = () => {
             // Loop through all keys in updatedTabData and set all .selected to false
             Object.keys(updatedTabData).forEach((field) => {
                 Object.keys(updatedTabData[field]).forEach((key) => {
                     updatedTabData[field][key].selected = false;
                 });
             });
+        };
+        // if i call this with no field name then i want to clear all the selected tabs (like a reset button for example)
+        if (!fieldName) {
+            clearTabs();
         }
         else {
-            if (tab) {
+            // two versons of this code one for when we are using the tab behaviour (multiple selectable tabs) and one for when we are not
+            if (tabBehaviour) { //this allows togle and multi select
+                if (tab) {
+                    Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                        if (key === tab) {
+                            updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+                        }
+                    });
+                }
+                else {
+                    Object.keys(updatedTabData[fieldName]).forEach((key) => {
+                        updatedTabData[fieldName][key].selected = false;
+                    });
+                }
+            }
+            else { // this is a single select tab so it clears all the others and only sets the selected one
                 Object.keys(updatedTabData[fieldName]).forEach((key) => {
                     if (key === tab) {
-                        updatedTabData[fieldName][key].selected = !updatedTabData[fieldName][key].selected;
+                        updatedTabData[fieldName][key].selected = true;
                     }
-                });
-            }
-            else {
-                Object.keys(updatedTabData[fieldName]).forEach((key) => {
-                    updatedTabData[fieldName][key].selected = false;
+                    else {
+                        updatedTabData[fieldName][key].selected = false;
+                    }
                 });
             }
         }
@@ -43777,15 +43820,15 @@ const TableViewerContainer = (props) => {
         const selectedKeys = Object.keys(tabData).filter((fieldName) => Object.values(tabData[fieldName]).some((tab) => tab.selected));
         let newFilteredItems;
         if (selectedKeys.length === 0) {
-            newFilteredItems = items;
+            newFilteredItems = updatedItems;
         }
         else {
             const filteredItemsSet = new Set();
             selectedKeys.forEach((fieldKey) => {
                 const selectedTabs = Object.keys(tabData[fieldKey]).filter((key) => tabData[fieldKey][key].selected);
                 console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
-                items.forEach((item) => {
-                    if (selectedTabs.includes(item[fieldKey])) {
+                updatedItems.forEach((item) => {
+                    if (selectedTabs.includes(item[fieldKey].rawValue)) {
                         filteredItemsSet.add(item);
                     }
                 });
@@ -43794,7 +43837,10 @@ const TableViewerContainer = (props) => {
         }
         // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
         if (searchQuery) {
-            const filteredItems = newFilteredItems.filter((item) => Object.values(item).some(value => String(value).toLowerCase().includes(searchQuery)));
+            const filteredItems = newFilteredItems.filter((item) => Object.values(item).some((field) => {
+                const fieldValue = field;
+                return fieldValue && fieldValue.displayValue && String(fieldValue.displayValue).toLowerCase().includes(searchQuery);
+            }));
             setFilteredItems(filteredItems);
         }
         else {
@@ -43845,8 +43891,9 @@ const TableViewerContainer = (props) => {
         });
         console.log("ALL Tab data:", tabData);
         setTabData(tabData);
+        // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
         const updateData = async () => {
-            // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
+            // Prepare the data by identifying if it has a prefix or a suffix or a specific format and then render the data in the table
             const newTabData = items.map(item => {
                 const newItem = Object.assign({}, item);
                 Object.keys(item).forEach((key) => {
@@ -43856,24 +43903,28 @@ const TableViewerContainer = (props) => {
                         const suf = ColData.suffix || '';
                         const format = ColData.format || '';
                         const type = ColData.type || 'string';
-                        let value = item[key];
-                        // Format the value based on the type THIS WILL NEED TO BE EXTENDED to cope with the stack field type
+                        const rawValue = item[key];
+                        let displayValue = rawValue;
+                        // Format the value based on the type
                         if (type === 'number') {
-                            value = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(value, format);
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(rawValue, format);
                         }
                         else if (type === 'date') {
-                            value = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* dateFormat */ "a"])(value, format, 'en-GB');
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* dateFormat */ "a"])(rawValue, format, 'en-GB');
                         }
                         else if (type === 'singlechoice') {
-                            value = value ? value : 'Not selected';
+                            displayValue = rawValue ? rawValue : 'Not selected';
                         }
                         else if (type === 'multichoice') {
-                            value = Array.isArray(value) ? value.join(', ') : value;
+                            displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
                         }
                         else if (type === 'person') {
-                            value = value && typeof value === 'object' && value.email ? value.email : 'No person';
+                            displayValue = rawValue && typeof rawValue === 'object' && rawValue.email ? rawValue.email : 'No person';
                         }
-                        newItem[key] = pre + value + suf;
+                        newItem[key] = {
+                            rawValue: rawValue,
+                            displayValue: (pre + displayValue + suf),
+                        };
                     }
                 });
                 return newItem;
@@ -52714,14 +52765,13 @@ function _merge(target, source, circularReferences) {
 /*!**********************************!*\
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
-/*! exports provided: dateFormat, numberFormat, convertWidthToPx, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
+/*! exports provided: dateFormat, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
 /*! exports used: dateFormat, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, numberFormat, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dateFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return numberFormat; });
-/* unused harmony export convertWidthToPx */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return validateSiteExists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
@@ -52815,57 +52865,45 @@ const numberFormat = (value, format) => {
 //==================================================================================================================================
 // A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION WHEN YOU NEED IT IN PX
 //==================================================================================================================================
-const convertWidthToPx = (containerPX, ColJSON) => {
-    //set my variables to  zero 
-    let TotPX = 0, TotPer = 0, TotFR = 0;
-    // two loops throrought the config json - first to get the total for the px the % and the fr columns
-    Object.keys(ColJSON).forEach(key => {
-        const width = ColJSON[key].width.toLowerCase();
-        const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/); //regex to match the width value and the unit but also work with decimal numbers
-        if (match) {
-            const value = parseFloat(match[1]);
-            switch (match[2]) {
-                case 'px':
-                    TotPX += value;
-                    break;
-                case '%':
-                    TotPer += value;
-                    break;
-                case 'fr':
-                    TotFR += value;
-                    break;
-            }
-        }
-    });
-    // now calculate the px for % and fr columns based in the container width
-    const percentPX = containerPX / 100; //one percent of the container width
-    const percentTotPX = percentPX * TotPer; //total px for all % columns i ned this to see what is left tfor the FR as they ar a fractional remainder of the total px
-    const FRpx = (containerPX - percentTotPX - TotPX) / TotFR; //so one fr is equal to this many px
-    // NOW loop through again and set the CalculatedPixels field in the JSON
-    Object.keys(ColJSON).forEach(key => {
-        const width = ColJSON[key].width.toLowerCase();
-        const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/);
-        if (match) {
-            const value = parseFloat(match[1]);
-            const unit = match[2];
-            let calculatedPixels = 0;
-            switch (unit) {
-                case 'px':
-                    calculatedPixels = value;
-                    break;
-                case '%':
-                    calculatedPixels = value * percentPX;
-                    break;
-                case 'fr':
-                    calculatedPixels = value * FRpx;
-                    break;
-                default: calculatedPixels = 0;
-            }
-            ColJSON[key].calculatedPX = calculatedPixels;
-        }
-    });
-    return ColJSON;
-};
+//  export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
+//   //set my variables to  zero 
+//   let TotPX = 0, TotPer = 0, TotFR = 0;
+//   // two loops throrought the config json - first to get the total for the px the % and the fr columns
+//   Object.keys(ColJSON).forEach(key => {
+//     const width = ColJSON[key].width.toLowerCase();
+//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/); //regex to match the width value and the unit but also work with decimal numbers
+//     if (match) {
+//       const value = parseFloat(match[1]);
+//       switch (match[2]) {
+//         case 'px': TotPX  += value; break;
+//         case '%' : TotPer += value; break;
+//         case 'fr': TotFR  += value; break;  
+//       }
+//     }
+//   });
+//   // now calculate the px for % and fr columns based in the container width
+//   const percentPX = containerPX / 100; //one percent of the container width
+//   const percentTotPX = percentPX * TotPer; //total px for all % columns i ned this to see what is left tfor the FR as they ar a fractional remainder of the total px
+//   const FRpx = (containerPX - percentTotPX - TotPX) / TotFR; //so one fr is equal to this many px
+//   // NOW loop through again and set the CalculatedPixels field in the JSON
+//   Object.keys(ColJSON).forEach(key => {
+//     const width = ColJSON[key].width.toLowerCase();
+//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/);
+//     if (match) {
+//       const value = parseFloat(match[1]);
+//       const unit = match[2];
+//       let calculatedPixels = 0;
+//       switch (unit) {
+//         case 'px': calculatedPixels = value; break;
+//         case '%' : calculatedPixels = value * percentPX; break;
+//         case 'fr': calculatedPixels = value * FRpx; break;
+//         default  : calculatedPixels = 0;
+//       }
+//       ColJSON[key].calculatedPX = calculatedPixels;
+//     }
+//   });
+//   return ColJSON;
+//  }
 //============================================================================================================
 const validateSiteExists = async (value) => {
     try {
