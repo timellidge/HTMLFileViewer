@@ -10532,7 +10532,7 @@ const TableGridRender = ({ colJSON, items }) => {
                     return 1;
                 if (bValue === null || bValue === undefined)
                     return -1;
-                //see if they are numbers even though they have a strign type
+                //see if they are numbers even though they have a string type
                 const aNumber = parseFloat(aValue);
                 const bNumber = parseFloat(bValue);
                 if (typeof aValue === 'string' && typeof bValue === 'string') {
@@ -13838,7 +13838,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_e1c388ca .tableViewerHeader_e1c388ca{background-color:#00ff15;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_e1c388ca .tableViewerHeader_e1c388ca .searchBox_e1c388ca{margin:0}.tableViewer_e1c388ca .tabBar_e1c388ca{background-color:#c0f307;margin-top:5px}.tableViewer_e1c388ca .tableContainer_e1c388ca{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_e1c388ca .searchBox_e1c388ca{margin:0}.tableViewer_e1c388ca .tableGrid_e1c388ca{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableHeaderCell_e1c388ca{-ms-flex-align:center;align-items:center;background-color:#d3d5d6;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableHeaderCell_e1c388ca .sortIcon_e1c388ca{color:grey;cursor:pointer;margin-left:5px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableCell_e1c388ca{background-color:#fafafa;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_e1c388ca .tableGrid_e1c388ca .tableDataContent_e1c388ca{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.error input:-ms-input-placeholder{color:red!important}.error_e1c388ca input::placeholder{color:red!important}.error_e1c388ca input:-ms-input-placeholder{color:red!important}.error_e1c388ca input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_0233d165 .tableViewerHeader_0233d165{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_0233d165 .tableViewerHeader_0233d165 .searchBox_0233d165{margin:0}.tableViewer_0233d165 .tabBar_0233d165{background-color:#fff;margin-top:5px}.tableViewer_0233d165 .tableContainer_0233d165{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_0233d165 .searchBox_0233d165{margin:0}.tableViewer_0233d165 .tableGrid_0233d165{grid-gap:2px;background-color:#e2e5e9;display:grid;width:100%}.tableViewer_0233d165 .tableGrid_0233d165 .tableHeaderCell_0233d165{-ms-flex-align:center;align-items:center;background-color:#d3d5d6;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_0233d165 .tableGrid_0233d165 .tableHeaderCell_0233d165 .sortIcon_0233d165{color:grey;cursor:pointer;margin-left:5px}.tableViewer_0233d165 .tableGrid_0233d165 .tableCell_0233d165{background-color:#fafafa;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_0233d165 .tableGrid_0233d165 .tableDataContent_0233d165{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.error input:-ms-input-placeholder{color:red!important}.error_0233d165 input::placeholder{color:red!important}.error_0233d165 input:-ms-input-placeholder{color:red!important}.error_0233d165 input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -30615,17 +30615,17 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_e1c388ca',
-    tableViewerHeader: 'tableViewerHeader_e1c388ca',
-    searchBox: 'searchBox_e1c388ca',
-    tabBar: 'tabBar_e1c388ca',
-    tableContainer: 'tableContainer_e1c388ca',
-    tableGrid: 'tableGrid_e1c388ca',
-    tableHeaderCell: 'tableHeaderCell_e1c388ca',
-    sortIcon: 'sortIcon_e1c388ca',
-    tableCell: 'tableCell_e1c388ca',
-    tableDataContent: 'tableDataContent_e1c388ca',
-    error: 'error_e1c388ca'
+    tableViewer: 'tableViewer_0233d165',
+    tableViewerHeader: 'tableViewerHeader_0233d165',
+    searchBox: 'searchBox_0233d165',
+    tabBar: 'tabBar_0233d165',
+    tableContainer: 'tableContainer_0233d165',
+    tableGrid: 'tableGrid_0233d165',
+    tableHeaderCell: 'tableHeaderCell_0233d165',
+    sortIcon: 'sortIcon_0233d165',
+    tableCell: 'tableCell_0233d165',
+    tableDataContent: 'tableDataContent_0233d165',
+    error: 'error_0233d165'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
