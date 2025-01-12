@@ -9,7 +9,7 @@ import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
-import { dateFormat, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase } from '../../../helpers/Utilities';
+import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
@@ -249,8 +249,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               if (type === 'number') {
                 displayValue = numberFormat(rawValue, format);
               } else if (type === 'date') {
-                displayValue = dateFormat(rawValue, format, 'en-GB');
-                rawValue = DateTime.fromISO(rawValue); 
+                rawValue = parseDate(rawValue, 'en-GB'); 
+                displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
               } else if (type === 'singlechoice') {
                 displayValue = rawValue ? rawValue : '-';
               } else if (type === 'multichoice') {

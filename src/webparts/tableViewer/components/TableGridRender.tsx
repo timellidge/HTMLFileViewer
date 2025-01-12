@@ -48,18 +48,22 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   
         if (aValue === null || aValue === undefined) return 1;
         if (bValue === null || bValue === undefined) return -1;
-
+        //see if they are numbers even though they have a string type
         const aNumber = parseFloat(aValue);
         const bNumber = parseFloat(bValue);
   
-        if (!isNaN(aNumber) && !isNaN(bNumber)) {
-          return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
-        } else if (typeof aValue === 'string' && typeof bValue === 'string') {
-          return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-        }  else if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue)) {
-          return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          if (!isNaN(aNumber) && !isNaN(bNumber)) {
+            return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
+          } else {  
+            return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
         } else {
-          return 0;
+          if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue))  {
+            return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+          } else {
+              return 0;
+          }
         }
       });
       setSortedItems(sorted);

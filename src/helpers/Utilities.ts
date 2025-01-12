@@ -20,7 +20,7 @@ import {DateTime} from 'luxon';
 //==================================================================================================================================
 //https://github.com/moment/luxon/blob/master/docs/formatting.md#table-of-tokens
 
-export const dateFormat = (value: number | Date | string, format: string, locale: string) => {
+export const parseDate = (value: number | Date | string, locale: string) => {
   // Determine the date format based on the locale
   const dateFormat = locale === 'en-GB' ? 'dd/MM/yyyy' : 'M/d/yyyy';
   let date: DateTime;
@@ -32,7 +32,7 @@ export const dateFormat = (value: number | Date | string, format: string, locale
   }
 
   try {
-    return date.toFormat(format);
+    return date;
   } catch (e) {
     return value;
   }

@@ -10532,19 +10532,24 @@ const TableGridRender = ({ colJSON, items }) => {
                     return 1;
                 if (bValue === null || bValue === undefined)
                     return -1;
+                //see if they are numbers even though they have a strign type
                 const aNumber = parseFloat(aValue);
                 const bNumber = parseFloat(bValue);
-                if (!isNaN(aNumber) && !isNaN(bNumber)) {
-                    return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
-                }
-                else if (typeof aValue === 'string' && typeof bValue === 'string') {
-                    return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-                }
-                else if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
-                    return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    if (!isNaN(aNumber) && !isNaN(bNumber)) {
+                        return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
+                    }
+                    else {
+                        return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                    }
                 }
                 else {
-                    return 0;
+                    if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
+                        return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+                    }
+                    else {
+                        return 0;
+                    }
                 }
             });
             setSortedItems(sorted);
@@ -29944,7 +29949,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "e"])(this.properties.siteUrl, this.properties.list, this.properties.view)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "d"])(this.properties.siteUrl, this.properties.list, this.properties.view)
                 .then(this.updateFieldViewPickerValue.bind(this));
         }
         else {
@@ -29962,7 +29967,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "d"])(this.properties.siteUrl, this.properties.list)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "c"])(this.properties.siteUrl, this.properties.list)
                 .then(this.updateFieldListPickerOptions.bind(this));
         }
         else {
@@ -45286,9 +45291,6 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 /* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
 /* harmony import */ var _TableGridRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableGridRender */ "B0n2");
 /* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! luxon */ "ExVU");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_10__);
-
 
 
 
@@ -45425,7 +45427,7 @@ const TableViewerContainer = (props) => {
     //================================================================================================================= 
     const getItems = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
         try {
-            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "c"])(siteUrl, listId, viewXmlCode);
+            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode);
             setItems(Row);
         }
         catch (e) {
@@ -45482,11 +45484,11 @@ const TableViewerContainer = (props) => {
                         let displayValue = rawValue;
                         // Format the value based on the type
                         if (type === 'number') {
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "f"])(rawValue, format);
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(rawValue, format);
                         }
                         else if (type === 'date') {
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* dateFormat */ "a"])(rawValue, format, 'en-GB');
-                            rawValue = luxon__WEBPACK_IMPORTED_MODULE_10__["DateTime"].fromISO(rawValue);
+                            rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* parseDate */ "f"])(rawValue, 'en-GB');
+                            displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
                         }
                         else if (type === 'singlechoice') {
                             displayValue = rawValue ? rawValue : '-';
@@ -53669,7 +53671,7 @@ function PersonCard({ email, name, title, format }) {
     };
     const examplePersona = {
         imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,
-        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "b"])(name),
+        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "a"])(name),
         text: name,
         secondaryText: email
     };
@@ -54642,23 +54644,23 @@ function _merge(target, source, circularReferences) {
 /*!**********************************!*\
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
-/*! exports provided: dateFormat, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
-/*! exports used: dateFormat, getInitials, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, numberFormat, toProperCase, validateSiteExists */
+/*! exports provided: parseDate, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
+/*! exports used: getInitials, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, numberFormat, parseDate, toProperCase, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dateFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getInitials; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return parseDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getInitials; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return toProperCase; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return numberFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return numberFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return validateSiteExists; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getItemsUsingRenderListDataAsStream; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
 /* unused harmony export createSearchQueryViewXml */
 /* unused harmony export searchFieldTypes */
 /* unused harmony export getSiteLocale */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getListViewXml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListFields; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListViewXml; });
 /* unused harmony export getSearchFieldsFromOptions */
 /* unused harmony export updateListItem */
 /* unused harmony export addListItem */
@@ -54685,7 +54687,7 @@ function _merge(target, source, circularReferences) {
 // A FUNCTION TO work out date formats based on the locale adn will try 12 and 24 hour formats
 //==================================================================================================================================
 //https://github.com/moment/luxon/blob/master/docs/formatting.md#table-of-tokens
-const dateFormat = (value, format, locale) => {
+const parseDate = (value, locale) => {
     // Determine the date format based on the locale
     const dateFormat = locale === 'en-GB' ? 'dd/MM/yyyy' : 'M/d/yyyy';
     let date;
@@ -54696,7 +54698,7 @@ const dateFormat = (value, format, locale) => {
         date = luxon__WEBPACK_IMPORTED_MODULE_6__["DateTime"].fromFormat(value.toString(), `${dateFormat} h:mm a`, { locale });
     }
     try {
-        return date.toFormat(format);
+        return date;
     }
     catch (e) {
         return value;
