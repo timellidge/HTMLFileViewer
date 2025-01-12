@@ -9,10 +9,11 @@ import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import TableViewerRender from './TableViewerRender';
-import { dateFormat, getItemsUsingRenderListDataAsStream, numberFormat } from '../../../helpers/Utilities';
+import { dateFormat, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { DateTime } from 'luxon';
 
 export interface IField {
   rawValue: any;
@@ -199,7 +200,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
 
 
   //=================================================================================================================
-  // USE EFFECTS TO GET THE DATA AND SET UP THE TABS (lifecycle methods and reacting to data changes)
+  // USE EFFECTS TO GET THE DATA 
   //=================================================================================================================
   useEffect(() => {
     if (!configured) {
@@ -210,10 +211,11 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     }
   }, [configured]);
 
+  // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE TABS AND THEN AGAIN TO FORMAT THE DATA
   useEffect(() => {
     // Update tabData and updatedItems when items change
     // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-    // the one that shows counts, enumerates values idf it is selected  and the field it relates to 
+    // the one that shows counts, enumerates values if it is selected  and the field it relates to 
     const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
     console.log("TabFields",tabs);
     // get the unique values for each of the tab fields
@@ -223,6 +225,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       // assign the tabFieldData to the tabData object WITH the field name as the key
       tabData[field] = tabFieldData;
     });
+    // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
     console.log("ALL Tab data:",tabData);
     setTabData(tabData);
 
@@ -239,7 +242,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               const suf = ColData.suffix || '';
               const format = ColData.format || '';
               const type = ColData.type || 'string';
-              const rawValue = item[key];
+              let rawValue = item[key];
               let displayValue = rawValue;
       
               // Format the value based on the type
@@ -247,12 +250,20 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 displayValue = numberFormat(rawValue, format);
               } else if (type === 'date') {
                 displayValue = dateFormat(rawValue, format, 'en-GB');
+                rawValue = DateTime.fromISO(rawValue); 
               } else if (type === 'singlechoice') {
-                displayValue = rawValue ? rawValue : 'Not selected';
+                displayValue = rawValue ? rawValue : '-';
               } else if (type === 'multichoice') {
                 displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
               } else if (type === 'person') {
-                displayValue = rawValue && typeof rawValue === 'object' && rawValue.email ? rawValue.email : 'No person';
+                if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
+                  const email = rawValue[0].email || '';
+                  const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
+                  rawValue[0].name = name; // Add the name key to rawValue[0]
+                  displayValue = rawValue[0].title;
+                } else {
+                  displayValue = '';
+                }
               }
       
               newItem[key] = {

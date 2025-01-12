@@ -42,4 +42,5 @@ export interface IExtendedColumn {
     isSorted: boolean;
     isSortedDescending: boolean;
     onRender: (item: any) => JSX.Element;
-  }
+}
+

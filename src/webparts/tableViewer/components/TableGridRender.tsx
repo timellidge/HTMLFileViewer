@@ -5,6 +5,8 @@ import styles from './TableViewer.module.scss';
 import { mergeStyles } from '@fluentui/react';
 import * as _ from 'lodash';
 import { Icon } from '@fluentui/react/lib/Icon';
+import PersonCard from './TabsRender/PersonCard';
+import { DateTime } from 'luxon';
 
 interface ITableGridRenderProps {
 
@@ -54,8 +56,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
           return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
         } else if (typeof aValue === 'string' && typeof bValue === 'string') {
           return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-        } else if (aValue instanceof Date && bValue instanceof Date) {
-          return sortField.direction ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
+        }  else if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue)) {
+          return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
         } else {
           return 0;
         }
@@ -94,7 +96,11 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
           {_sortedColumns.map(({ key, column }) => (
             column.width > "0" && (
               <div  key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`} >
-                <span className= {styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}> {item[key].displayValue} </span> 
+                {column.type === 'person' ? (
+                  <PersonCard email={item[key].rawValue[0].email} name={item[key].rawValue[0].name} title={item[key].rawValue[0].title} format={column.format}/>
+                ) : (
+                  item[key].displayValue
+                )}
               </div>
             )
           ))}

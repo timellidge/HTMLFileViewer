@@ -7,6 +7,8 @@ import { IViewInfo } from '@pnp/sp/views';
 import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
 export declare const dateFormat: (value: number | Date | string, format: string, locale: string) => string | number | Date;
+export declare const getInitials: (name: string | null | undefined) => string;
+export declare const toProperCase: (str: string | null | undefined) => string;
 export declare const numberFormat: (value: number, format: string) => string;
 export declare const validateSiteExists: (value: string) => Promise<string>;
 export declare const getItemsUsingRenderListDataAsStream: (siteUrl: string, listId: string, viewXmlCode: string, nextHref?: string) => Promise<IRenderListDataAsStreamResult>;

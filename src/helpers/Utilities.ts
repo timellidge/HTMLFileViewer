@@ -40,6 +40,27 @@ export const dateFormat = (value: number | Date | string, format: string, locale
 
 
 // A FUNCTION TO work out number formats based on the locale and the currency symbol
+export const getInitials = (name: string | null | undefined): string => {
+  if (!name) {
+    return '';
+  }
+  return name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+};
+
+export const toProperCase = (str: string | null | undefined): string => {
+  if (!str) {
+    return '';
+  }
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+// A FUNCTION TO work out number formats based on the locale and the currency symbol
 export const numberFormat = (value: number, format: string) => {
   let style: 'decimal' | 'currency' = 'decimal';
   let currency: string | undefined;

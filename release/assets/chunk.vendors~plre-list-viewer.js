@@ -37746,7 +37746,7 @@ var getStyles = function (props) {
         label: globalClassnames.label,
         dropdown: [
             globalClassnames.dropdown,
-            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "D"],
+            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "E"],
             fonts.medium,
             {
                 color: semanticColors.menuItemText,
@@ -37828,7 +37828,7 @@ var getStyles = function (props) {
         ],
         title: [
             globalClassnames.title,
-            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "D"],
+            _Styling__WEBPACK_IMPORTED_MODULE_3__[/* normalize */ "E"],
             {
                 backgroundColor: semanticColors.inputBackground,
                 borderWidth: 1,

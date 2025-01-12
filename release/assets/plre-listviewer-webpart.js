@@ -2522,6 +2522,74 @@ var MessageBar = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"
 
 /***/ }),
 
+/***/ "2Phr":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/Tooltip.base.js ***!
+  \*****************************************************************************/
+/*! exports provided: TooltipBase */
+/*! exports used: TooltipBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TooltipBase; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Utilities */ "9Ppb");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities */ "D9iZ");
+/* harmony import */ var _Callout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Callout */ "oy5u");
+/* harmony import */ var _common_DirectionalHint__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../common/DirectionalHint */ "gDcn");
+
+
+
+
+
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* classNamesFunction */ "a"])();
+var TooltipBase = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"])(TooltipBase, _super);
+    function TooltipBase() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._onRenderContent = function (props) {
+            if (typeof props.content === 'string') {
+                return react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("p", { className: _this._classNames.subText }, props.content);
+            }
+            else {
+                return react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: _this._classNames.subText }, props.content);
+            }
+        };
+        return _this;
+    }
+    TooltipBase.prototype.render = function () {
+        var _a = this.props, className = _a.className, calloutProps = _a.calloutProps, directionalHint = _a.directionalHint, directionalHintForRTL = _a.directionalHintForRTL, styles = _a.styles, id = _a.id, maxWidth = _a.maxWidth, _b = _a.onRenderContent, onRenderContent = _b === void 0 ? this._onRenderContent : _b, targetElement = _a.targetElement, theme = _a.theme;
+        this._classNames = getClassNames(styles, {
+            theme: theme,
+            className: className || (calloutProps && calloutProps.className),
+            beakWidth: calloutProps && calloutProps.beakWidth,
+            gapSpace: calloutProps && calloutProps.gapSpace,
+            maxWidth: maxWidth,
+        });
+        return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Callout__WEBPACK_IMPORTED_MODULE_4__[/* Callout */ "a"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ target: targetElement, directionalHint: directionalHint, directionalHintForRTL: directionalHintForRTL }, calloutProps, Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getNativeProps */ "d"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_3__[/* divProperties */ "c"], ['id']), { className: this._classNames.root }),
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: this._classNames.content, id: id, onFocus: this.props.onFocus, onMouseEnter: this.props.onMouseEnter, onMouseLeave: this.props.onMouseLeave }, onRenderContent(this.props, this._onRenderContent))));
+    };
+    // Specify default props values
+    TooltipBase.defaultProps = {
+        directionalHint: _common_DirectionalHint__WEBPACK_IMPORTED_MODULE_5__[/* DirectionalHint */ "a"].topCenter,
+        maxWidth: '364px',
+        calloutProps: {
+            isBeakVisible: true,
+            beakWidth: 16,
+            gapSpace: 0,
+            setInitialFocus: true,
+            doNotLayer: false,
+        },
+    };
+    return TooltipBase;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
+
+//# sourceMappingURL=Tooltip.base.js.map
+
+/***/ }),
+
 /***/ "2fIR":
 /*!*********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/merge-styles/lib/styleToClassName.js ***!
@@ -4523,6 +4591,164 @@ var CalloutContentBase = /** @class */ (function (_super) {
 
 var _a;
 //# sourceMappingURL=CalloutContent.base.js.map
+
+/***/ }),
+
+/***/ "42TE":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaCoin/PersonaCoin.styles.js ***!
+  \***********************************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Styling */ "Dfs8");
+/* harmony import */ var _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../PersonaConsts */ "A98K");
+
+
+
+var GlobalClassNames = {
+    coin: 'ms-Persona-coin',
+    imageArea: 'ms-Persona-imageArea',
+    image: 'ms-Persona-image',
+    initials: 'ms-Persona-initials',
+    size8: 'ms-Persona--size8',
+    size10: 'ms-Persona--size10',
+    size16: 'ms-Persona--size16',
+    size24: 'ms-Persona--size24',
+    size28: 'ms-Persona--size28',
+    size32: 'ms-Persona--size32',
+    size40: 'ms-Persona--size40',
+    size48: 'ms-Persona--size48',
+    size56: 'ms-Persona--size56',
+    size72: 'ms-Persona--size72',
+    size100: 'ms-Persona--size100',
+    size120: 'ms-Persona--size120',
+};
+var getStyles = function (props) {
+    var _a;
+    var className = props.className, theme = props.theme, coinSize = props.coinSize;
+    var palette = theme.palette, fonts = theme.fonts;
+    var size = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* sizeBoolean */ "d"])(props.size);
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
+    // Static colors used when displaying 'unknown persona' coin
+    var unknownPersonaBackgroundColor = 'rgb(234, 234, 234)';
+    var unknownPersonaFontColor = 'rgb(168, 0, 0)';
+    var dimension = coinSize || (props.size && _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* sizeToPixels */ "e"][props.size]) || 48;
+    return {
+        coin: [
+            classNames.coin,
+            fonts.medium,
+            size.isSize8 && classNames.size8,
+            size.isSize10 && classNames.size10,
+            size.isSize16 && classNames.size16,
+            size.isSize24 && classNames.size24,
+            size.isSize28 && classNames.size28,
+            size.isSize32 && classNames.size32,
+            size.isSize40 && classNames.size40,
+            size.isSize48 && classNames.size48,
+            size.isSize56 && classNames.size56,
+            size.isSize72 && classNames.size72,
+            size.isSize100 && classNames.size100,
+            size.isSize120 && classNames.size120,
+            className,
+        ],
+        size10WithoutPresenceIcon: {
+            fontSize: fonts.xSmall.fontSize,
+            position: 'absolute',
+            top: '5px',
+            right: 'auto',
+            left: 0,
+        },
+        imageArea: [
+            classNames.imageArea,
+            {
+                position: 'relative',
+                textAlign: 'center',
+                flex: '0 0 auto',
+                height: dimension,
+                width: dimension,
+            },
+            dimension <= 10 && {
+                overflow: 'visible',
+                background: 'transparent',
+                height: 0,
+                width: 0,
+            },
+        ],
+        image: [
+            classNames.image,
+            {
+                marginRight: '10px',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                border: 0,
+                borderRadius: '50%',
+                perspective: '1px',
+            },
+            dimension <= 10 && {
+                overflow: 'visible',
+                background: 'transparent',
+                height: 0,
+                width: 0,
+            },
+            dimension > 10 && {
+                height: dimension,
+                width: dimension,
+            },
+        ],
+        initials: [
+            classNames.initials,
+            {
+                borderRadius: '50%',
+                color: props.showUnknownPersonaCoin ? unknownPersonaFontColor : palette.white,
+                fontSize: fonts.large.fontSize,
+                fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_1__[/* FontWeights */ "c"].semibold,
+                // copying the logic for the dimensions; defaulted to 46 for size48
+                lineHeight: dimension === 48 ? 46 : dimension,
+                height: dimension,
+                selectors: (_a = {},
+                    _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ border: '1px solid WindowText' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()), { color: 'WindowText', boxSizing: 'border-box', backgroundColor: 'Window !important' }),
+                    _a.i = {
+                        fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_1__[/* FontWeights */ "c"].semibold,
+                    },
+                    _a),
+            },
+            props.showUnknownPersonaCoin && {
+                backgroundColor: unknownPersonaBackgroundColor,
+            },
+            dimension < 32 && {
+                fontSize: fonts.xSmall.fontSize,
+            },
+            dimension >= 32 &&
+                dimension < 40 && {
+                fontSize: fonts.medium.fontSize,
+            },
+            dimension >= 40 &&
+                dimension < 56 && {
+                fontSize: fonts.mediumPlus.fontSize,
+            },
+            dimension >= 56 &&
+                dimension < 72 && {
+                fontSize: fonts.xLarge.fontSize,
+            },
+            dimension >= 72 &&
+                dimension < 100 && {
+                fontSize: fonts.xxLarge.fontSize,
+            },
+            dimension >= 100 && {
+                fontSize: fonts.superLarge.fontSize,
+            },
+        ],
+    };
+};
+//# sourceMappingURL=PersonaCoin.styles.js.map
 
 /***/ }),
 
@@ -8197,6 +8423,93 @@ function usePortalCompat() {
 
 /***/ }),
 
+/***/ "95cz":
+/*!**********************************************************!*\
+  !*** ./node_modules/@fluentui/utilities/lib/initials.js ***!
+  \**********************************************************/
+/*! exports provided: getInitials */
+/*! exports used: getInitials */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getInitials; });
+/**
+ * Regular expressions matching characters to ignore when calculating the initials.
+ */
+/**
+ * Regular expression matching characters within various types of enclosures, including the enclosures themselves
+ *  so for example, (xyz) [xyz] {xyz} <xyz> all would be ignored
+ */
+var UNWANTED_ENCLOSURES_REGEX = /[\(\[\{\<][^\)\]\}\>]*[\)\]\}\>]/g;
+/**
+ * Regular expression matching special ASCII characters except space, plus some unicode special characters.
+ * Applies after unwanted enclosures have been removed
+ */
+var UNWANTED_CHARS_REGEX = /[\0-\u001F\!-/:-@\[-`\{-\u00BF\u0250-\u036F\uD800-\uFFFF]/g;
+/**
+ * Regular expression matching phone numbers. Applied after chars matching UNWANTED_CHARS_REGEX have been removed
+ * and number has been trimmed for whitespaces
+ */
+var PHONENUMBER_REGEX = /^\d+[\d\s]*(:?ext|x|)\s*\d+$/i;
+/** Regular expression matching one or more spaces. */
+var MULTIPLE_WHITESPACES_REGEX = /\s+/g;
+/**
+ * Regular expression matching languages for which we currently don't support initials.
+ * Arabic:   Arabic, Arabic Supplement, Arabic Extended-A.
+ * Korean:   Hangul Jamo, Hangul Compatibility Jamo, Hangul Jamo Extended-A, Hangul Syllables, Hangul Jamo Extended-B.
+ * Japanese: Hiragana, Katakana.
+ * CJK:      CJK Unified Ideographs Extension A, CJK Unified Ideographs, CJK Compatibility Ideographs,
+ *             CJK Unified Ideographs Extension B
+ */
+var UNSUPPORTED_TEXT_REGEX = 
+// eslint-disable-next-line @fluentui/max-len
+/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]|[\uD840-\uD869][\uDC00-\uDED6]/;
+function getInitialsLatin(displayName, isRtl) {
+    var initials = '';
+    var splits = displayName.split(' ');
+    if (splits.length === 2) {
+        initials += splits[0].charAt(0).toUpperCase();
+        initials += splits[1].charAt(0).toUpperCase();
+    }
+    else if (splits.length === 3) {
+        initials += splits[0].charAt(0).toUpperCase();
+        initials += splits[2].charAt(0).toUpperCase();
+    }
+    else if (splits.length !== 0) {
+        initials += splits[0].charAt(0).toUpperCase();
+    }
+    if (isRtl && initials.length > 1) {
+        return initials.charAt(1) + initials.charAt(0);
+    }
+    return initials;
+}
+function cleanupDisplayName(displayName) {
+    displayName = displayName.replace(UNWANTED_ENCLOSURES_REGEX, '');
+    displayName = displayName.replace(UNWANTED_CHARS_REGEX, '');
+    displayName = displayName.replace(MULTIPLE_WHITESPACES_REGEX, ' ');
+    displayName = displayName.trim();
+    return displayName;
+}
+/**
+ * Get (up to 2 characters) initials based on display name of the persona.
+ *
+ * @public
+ */
+function getInitials(displayName, isRtl, allowPhoneInitials) {
+    if (!displayName) {
+        return '';
+    }
+    displayName = cleanupDisplayName(displayName);
+    // For names containing CJK characters, and phone numbers, we don't display initials
+    if (UNSUPPORTED_TEXT_REGEX.test(displayName) || (!allowPhoneInitials && PHONENUMBER_REGEX.test(displayName))) {
+        return '';
+    }
+    return getInitialsLatin(displayName, isRtl);
+}
+//# sourceMappingURL=initials.js.map
+
+/***/ }),
+
 /***/ "95qC":
 /*!***************************************************************!*\
   !*** ./node_modules/@pnp/sp/node_modules/@pnp/common/util.js ***!
@@ -8438,6 +8751,56 @@ function getHashCode(s) {
 }
 /* eslint-enable no-bitwise */
 //# sourceMappingURL=util.js.map
+
+/***/ }),
+
+/***/ "9BIk":
+/*!************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/Tooltip.js ***!
+  \************************************************************************/
+/*! exports provided: Tooltip */
+/*! exports used: Tooltip */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Tooltip; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities */ "mUxj");
+/* harmony import */ var _Tooltip_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tooltip.base */ "2Phr");
+/* harmony import */ var _Tooltip_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tooltip.styles */ "bGOj");
+
+
+
+var Tooltip = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Tooltip_base__WEBPACK_IMPORTED_MODULE_1__[/* TooltipBase */ "a"], _Tooltip_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, {
+    scope: 'Tooltip',
+});
+//# sourceMappingURL=Tooltip.js.map
+
+/***/ }),
+
+/***/ "9CMT":
+/*!************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/Persona.js ***!
+  \************************************************************************/
+/*! exports provided: Persona */
+/*! exports used: Persona */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Persona; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities */ "mUxj");
+/* harmony import */ var _Persona_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Persona.base */ "SxZD");
+/* harmony import */ var _Persona_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Persona.styles */ "y4tK");
+
+
+
+/**
+ * Personas are used for rendering an individual's avatar, presence and details.
+ * They are used within the PeoplePicker components.
+ */
+var Persona = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Persona_base__WEBPACK_IMPORTED_MODULE_1__[/* PersonaBase */ "a"], _Persona_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, {
+    scope: 'Persona',
+});
+//# sourceMappingURL=Persona.js.map
 
 /***/ }),
 
@@ -9325,6 +9688,109 @@ var useMergeStylesShadowRootContext = function () {
 
 /***/ }),
 
+/***/ "A98K":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaConsts.js ***!
+  \******************************************************************************/
+/*! exports provided: personaSize, personaPresenceSize, sizeBoolean, sizeToPixels, presenceBoolean */
+/*! exports used: personaPresenceSize, personaSize, presenceBoolean, sizeBoolean, sizeToPixels */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return personaSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return personaPresenceSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return sizeBoolean; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return sizeToPixels; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return presenceBoolean; });
+/* harmony import */ var _Persona_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Persona.types */ "YMdL");
+var _a;
+
+// Persona Sizes
+var personaSize;
+(function (personaSize) {
+    personaSize.size8 = '20px';
+    // TODO: remove in a future major release as it's deprecated.
+    personaSize.size10 = '20px';
+    // TODO: remove in a future major release as it's deprecated.
+    personaSize.size16 = '16px';
+    personaSize.size24 = '24px';
+    // TODO: remove in a future major release as it's deprecated.
+    personaSize.size28 = '28px';
+    personaSize.size32 = '32px';
+    personaSize.size40 = '40px';
+    personaSize.size48 = '48px';
+    personaSize.size56 = '56px';
+    personaSize.size72 = '72px';
+    personaSize.size100 = '100px';
+    personaSize.size120 = '120px';
+})(personaSize || (personaSize = {}));
+// Persona Presence Sizes
+var personaPresenceSize;
+(function (personaPresenceSize) {
+    personaPresenceSize.size6 = '6px';
+    personaPresenceSize.size8 = '8px';
+    personaPresenceSize.size12 = '12px';
+    personaPresenceSize.size16 = '16px';
+    personaPresenceSize.size20 = '20px';
+    personaPresenceSize.size28 = '28px';
+    personaPresenceSize.size32 = '32px';
+    /**
+     * @deprecated This is now unused
+     */
+    personaPresenceSize.border = '2px';
+})(personaPresenceSize || (personaPresenceSize = {}));
+// TODO: remove the deprecated parts in a future major release.
+var sizeBoolean = function (size) { return ({
+    isSize8: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size8,
+    /* eslint-disable deprecation/deprecation */
+    isSize10: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size10 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].tiny,
+    isSize16: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size16,
+    isSize24: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size24 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraExtraSmall,
+    isSize28: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size28 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraSmall,
+    isSize32: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size32,
+    isSize40: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size40 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].small,
+    isSize48: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size48 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].regular,
+    isSize56: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size56,
+    isSize72: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size72 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].large,
+    isSize100: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size100 || size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraLarge,
+    isSize120: size === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size120,
+}); };
+var sizeToPixels = (_a = {},
+    // Old deprecated sizes
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].tiny] = 10,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraExtraSmall] = 24,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraSmall] = 28,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].small] = 40,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].regular] = 48,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].large] = 72,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].extraLarge] = 100,
+    // New sizes
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size8] = 8,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size10] = 10,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size16] = 16,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size24] = 24,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size28] = 28,
+    /* eslint-enable deprecation/deprecation */
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size32] = 32,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size40] = 40,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size48] = 48,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size56] = 56,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size72] = 72,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size100] = 100,
+    _a[_Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaSize */ "c"].size120] = 120,
+    _a);
+var presenceBoolean = function (presence) { return ({
+    isAvailable: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].online,
+    isAway: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].away,
+    isBlocked: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].blocked,
+    isBusy: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].busy,
+    isDoNotDisturb: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].dnd,
+    isOffline: presence === _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaPresence */ "b"].offline,
+}); };
+//# sourceMappingURL=PersonaConsts.js.map
+
+/***/ }),
+
 /***/ "ADns":
 /*!**********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/merge-styles/lib/extractStyleParts.js ***!
@@ -10029,6 +10495,11 @@ var Position;
 /* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
 /* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
 /* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TabsRender/PersonCard */ "qfZ8");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! luxon */ "ExVU");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_5__);
+
+
 
 
 
@@ -10069,8 +10540,8 @@ const TableGridRender = ({ colJSON, items }) => {
                 else if (typeof aValue === 'string' && typeof bValue === 'string') {
                     return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
                 }
-                else if (aValue instanceof Date && bValue instanceof Date) {
-                    return sortField.direction ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
+                else if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
+                    return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
                 }
                 else {
                     return 0;
@@ -10092,11 +10563,7 @@ const TableGridRender = ({ colJSON, items }) => {
                     : sortField.direction
                         ? 'SortDown'
                         : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))))),
-        sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
-                " ",
-                item[key].displayValue,
-                " "))))))))));
+        sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, column.type === 'person' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format })) : (item[key].displayValue))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -12304,6 +12771,170 @@ function setItem(key, data) {
 
 /***/ }),
 
+/***/ "D8iC":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaCoin/PersonaCoin.base.js ***!
+  \*********************************************************************************************/
+/*! exports provided: PersonaCoinBase */
+/*! exports used: PersonaCoinBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaCoinBase; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Utilities */ "9Ppb");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Utilities */ "GJV8");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Utilities */ "pSkZ");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../Utilities */ "D9iZ");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../Utilities */ "Bo8X");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../Utilities */ "95cz");
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../Styling */ "Dfs8");
+/* harmony import */ var _PersonaPresence_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../PersonaPresence/index */ "Ui6W");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../Icon */ "htj1");
+/* harmony import */ var _Image__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../Image */ "+CQO");
+/* harmony import */ var _Image__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../Image */ "zVE8");
+/* harmony import */ var _Persona_types__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Persona.types */ "YMdL");
+/* harmony import */ var _PersonaInitialsColor__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../PersonaInitialsColor */ "GZJC");
+/* harmony import */ var _PersonaConsts__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../PersonaConsts */ "A98K");
+/* harmony import */ var _fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @fluentui/react-hooks */ "v/vq");
+
+
+
+
+
+
+
+
+
+
+
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* classNamesFunction */ "a"])({
+    // There can be many PersonaCoin rendered with different sizes.
+    // Therefore setting a larger cache size.
+    cacheSize: 100,
+});
+var getInitialsStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* memoizeFunction */ "b"])(function (className, initialsColor, initialsTextColor, text, primaryText, showUnknownPersonaCoin) {
+    return Object(_Styling__WEBPACK_IMPORTED_MODULE_8__[/* mergeStyles */ "C"])(className, !showUnknownPersonaCoin && {
+        backgroundColor: Object(_PersonaInitialsColor__WEBPACK_IMPORTED_MODULE_14__[/* getPersonaInitialsColor */ "a"])({ text: text, initialsColor: initialsColor, primaryText: primaryText }),
+        color: initialsTextColor,
+    });
+});
+var DEFAULT_PROPS = {
+    size: _Persona_types__WEBPACK_IMPORTED_MODULE_13__[/* PersonaSize */ "c"].size48,
+    presence: _Persona_types__WEBPACK_IMPORTED_MODULE_13__[/* PersonaPresence */ "b"].none,
+    imageAlt: '',
+};
+function useDebugWarnings(props) {
+    if (true) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks -- build-time conditional
+        Object(_fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_16__[/* useWarnings */ "a"])({
+            name: 'PersonaCoin',
+            props: props,
+            deprecations: { primaryText: 'text' },
+        });
+    }
+}
+function useImageLoadState(_a) {
+    var onPhotoLoadingStateChange = _a.onPhotoLoadingStateChange, imageUrl = _a.imageUrl;
+    var _b = react__WEBPACK_IMPORTED_MODULE_1__["useState"](_Image__WEBPACK_IMPORTED_MODULE_11__[/* ImageLoadState */ "c"].notLoaded), imageLoadState = _b[0], setImageLoadstate = _b[1];
+    react__WEBPACK_IMPORTED_MODULE_1__["useEffect"](function () {
+        setImageLoadstate(_Image__WEBPACK_IMPORTED_MODULE_11__[/* ImageLoadState */ "c"].notLoaded);
+    }, [imageUrl]);
+    var onLoadingStateChange = function (loadState) {
+        setImageLoadstate(loadState);
+        onPhotoLoadingStateChange === null || onPhotoLoadingStateChange === void 0 ? void 0 : onPhotoLoadingStateChange(loadState);
+    };
+    return [imageLoadState, onLoadingStateChange];
+}
+/**
+ * PersonaCoin with no default styles.
+ * [Use the `getStyles` API to add your own styles.](https://github.com/microsoft/fluentui/wiki/Styling)
+ */
+var PersonaCoinBase = react__WEBPACK_IMPORTED_MODULE_1__["forwardRef"](function (propsWithoutDefaults, forwardedRef) {
+    var props = Object(_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getPropsWithDefaults */ "a"])(DEFAULT_PROPS, propsWithoutDefaults);
+    useDebugWarnings(props);
+    var _a = useImageLoadState(props), imageLoadState = _a[0], onLoadingStateChange = _a[1];
+    var renderCoin = getCoinRenderer(onLoadingStateChange);
+    var className = props.className, coinProps = props.coinProps, showUnknownPersonaCoin = props.showUnknownPersonaCoin, coinSize = props.coinSize, styles = props.styles, imageUrl = props.imageUrl, initialsColor = props.initialsColor, initialsTextColor = props.initialsTextColor, isOutOfOffice = props.isOutOfOffice, 
+    // eslint-disable-next-line deprecation/deprecation
+    _b = props.onRenderCoin, 
+    // eslint-disable-next-line deprecation/deprecation
+    onRenderCoin = _b === void 0 ? renderCoin : _b, 
+    // eslint-disable-next-line deprecation/deprecation
+    _c = props.onRenderPersonaCoin, 
+    // eslint-disable-next-line deprecation/deprecation
+    onRenderPersonaCoin = _c === void 0 ? onRenderCoin : _c, _d = props.onRenderInitials, onRenderInitials = _d === void 0 ? renderPersonaCoinInitials : _d, presence = props.presence, presenceTitle = props.presenceTitle, presenceColors = props.presenceColors, 
+    // eslint-disable-next-line deprecation/deprecation
+    primaryText = props.primaryText, showInitialsUntilImageLoads = props.showInitialsUntilImageLoads, text = props.text, theme = props.theme, size = props.size;
+    var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* getNativeProps */ "d"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_5__[/* divProperties */ "c"]);
+    var divCoinProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* getNativeProps */ "d"])(coinProps || {}, _Utilities__WEBPACK_IMPORTED_MODULE_5__[/* divProperties */ "c"]);
+    var coinSizeStyle = coinSize ? { width: coinSize, height: coinSize } : undefined;
+    var hideImage = showUnknownPersonaCoin;
+    var personaPresenceProps = {
+        coinSize: coinSize,
+        isOutOfOffice: isOutOfOffice,
+        presence: presence,
+        presenceTitle: presenceTitle,
+        presenceColors: presenceColors,
+        size: size,
+        theme: theme,
+    };
+    // Use getStyles from props, or fall back to getStyles from styles file.
+    var classNames = getClassNames(styles, {
+        theme: theme,
+        className: coinProps && coinProps.className ? coinProps.className : className,
+        size: size,
+        coinSize: coinSize,
+        showUnknownPersonaCoin: showUnknownPersonaCoin,
+    });
+    var shouldRenderInitials = Boolean(imageLoadState !== _Image__WEBPACK_IMPORTED_MODULE_11__[/* ImageLoadState */ "c"].loaded &&
+        ((showInitialsUntilImageLoads && imageUrl) || !imageUrl || imageLoadState === _Image__WEBPACK_IMPORTED_MODULE_11__[/* ImageLoadState */ "c"].error || hideImage));
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ role: "presentation" }, divProps, { className: classNames.coin, ref: forwardedRef }),
+        // Render PersonaCoin if size is not size8. size10 and tiny need to removed after a deprecation cleanup.
+        // eslint-disable-next-line deprecation/deprecation
+        size !== _Persona_types__WEBPACK_IMPORTED_MODULE_13__[/* PersonaSize */ "c"].size8 && size !== _Persona_types__WEBPACK_IMPORTED_MODULE_13__[/* PersonaSize */ "c"].size10 && size !== _Persona_types__WEBPACK_IMPORTED_MODULE_13__[/* PersonaSize */ "c"].tiny ? (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ role: "presentation" }, divCoinProps, { className: classNames.imageArea, style: coinSizeStyle }),
+            shouldRenderInitials && (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: getInitialsStyles(classNames.initials, initialsColor, initialsTextColor, text, primaryText, showUnknownPersonaCoin), style: coinSizeStyle, "aria-hidden": "true" }, onRenderInitials(props, renderPersonaCoinInitials))),
+            !hideImage && onRenderPersonaCoin(props, renderCoin),
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_PersonaPresence_index__WEBPACK_IMPORTED_MODULE_9__[/* PersonaPresence */ "a"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, personaPresenceProps)))) : // Otherwise, render just PersonaPresence.
+            props.presence ? (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_PersonaPresence_index__WEBPACK_IMPORTED_MODULE_9__[/* PersonaPresence */ "a"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, personaPresenceProps))) : (
+            // Just render Contact Icon if there isn't a Presence prop.
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Icon__WEBPACK_IMPORTED_MODULE_10__[/* Icon */ "a"], { iconName: "Contact", className: classNames.size10WithoutPresenceIcon })),
+        props.children));
+});
+PersonaCoinBase.displayName = 'PersonaCoinBase';
+var getCoinRenderer = function (onLoadingStateChange) {
+    return function (_a) {
+        var coinSize = _a.coinSize, styles = _a.styles, imageUrl = _a.imageUrl, imageAlt = _a.imageAlt, imageShouldFadeIn = _a.imageShouldFadeIn, imageShouldStartVisible = _a.imageShouldStartVisible, theme = _a.theme, showUnknownPersonaCoin = _a.showUnknownPersonaCoin, _b = _a.size, size = _b === void 0 ? DEFAULT_PROPS.size : _b;
+        // Render the Image component only if an image URL is provided
+        if (!imageUrl) {
+            return null;
+        }
+        var classNames = getClassNames(styles, {
+            theme: theme,
+            size: size,
+            showUnknownPersonaCoin: showUnknownPersonaCoin,
+        });
+        var dimension = coinSize || _PersonaConsts__WEBPACK_IMPORTED_MODULE_15__[/* sizeToPixels */ "e"][size];
+        return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Image__WEBPACK_IMPORTED_MODULE_12__[/* Image */ "a"], { className: classNames.image, imageFit: _Image__WEBPACK_IMPORTED_MODULE_11__[/* ImageFit */ "b"].cover, src: imageUrl, width: dimension, height: dimension, alt: imageAlt, shouldFadeIn: imageShouldFadeIn, shouldStartVisible: imageShouldStartVisible, onLoadingStateChange: onLoadingStateChange }));
+    };
+};
+var renderPersonaCoinInitials = function (_a) {
+    var imageInitials = _a.imageInitials, allowPhoneInitials = _a.allowPhoneInitials, showUnknownPersonaCoin = _a.showUnknownPersonaCoin, text = _a.text, 
+    // eslint-disable-next-line deprecation/deprecation
+    primaryText = _a.primaryText, theme = _a.theme;
+    if (showUnknownPersonaCoin) {
+        return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Icon__WEBPACK_IMPORTED_MODULE_10__[/* Icon */ "a"], { iconName: "Help" });
+    }
+    var isRTL = Object(_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* getRTL */ "a"])(theme);
+    imageInitials = imageInitials || Object(_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getInitials */ "a"])(text || primaryText || '', isRTL, allowPhoneInitials);
+    return imageInitials !== '' ? react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("span", null, imageInitials) : react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Icon__WEBPACK_IMPORTED_MODULE_10__[/* Icon */ "a"], { iconName: "Contact" });
+};
+//# sourceMappingURL=PersonaCoin.base.js.map
+
+/***/ }),
+
 /***/ "D9iZ":
 /*!************************************************************!*\
   !*** ./node_modules/@fluentui/utilities/lib/properties.js ***!
@@ -12790,6 +13421,29 @@ function warnMutuallyExclusive(componentName, props, exclusiveMap) {
 
 /***/ }),
 
+/***/ "DMfw":
+/*!****************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/TooltipHost.js ***!
+  \****************************************************************************/
+/*! exports provided: TooltipHost */
+/*! exports used: TooltipHost */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TooltipHost; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utilities */ "mUxj");
+/* harmony import */ var _TooltipHost_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TooltipHost.base */ "LI1r");
+/* harmony import */ var _TooltipHost_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TooltipHost.styles */ "v9Qs");
+
+
+
+var TooltipHost = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_TooltipHost_base__WEBPACK_IMPORTED_MODULE_1__[/* TooltipHostBase */ "a"], _TooltipHost_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, {
+    scope: 'TooltipHost',
+});
+//# sourceMappingURL=TooltipHost.js.map
+
+/***/ }),
+
 /***/ "DX2c":
 /*!**************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/utilities/keytips/KeytipConstants.js ***!
@@ -12862,7 +13516,7 @@ var Icon = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Ic
   !*** ./node_modules/@fluentui/style-utilities/lib/index.js ***!
   \*************************************************************/
 /*! exports provided: AnimationClassNames, FontClassNames, ColorClassNames, AnimationStyles, AnimationVariables, DefaultPalette, DefaultEffects, DefaultFontStyles, registerDefaultFontFaces, FontSizes, FontWeights, IconFontSizes, createFontStyles, hiddenContentStyle, PulsingBeaconAnimationStyles, getGlobalClassNames, getFocusStyle, getFocusOutlineStyle, getInputFocusStyle, getThemedContext, focusClear, ThemeSettingName, getTheme, loadTheme, createTheme, registerOnThemeChangeCallback, removeOnThemeChangeCallback, HighContrastSelector, HighContrastSelectorWhite, HighContrastSelectorBlack, EdgeChromiumHighContrastSelector, ScreenWidthMinSmall, ScreenWidthMinMedium, ScreenWidthMinLarge, ScreenWidthMinXLarge, ScreenWidthMinXXLarge, ScreenWidthMinXXXLarge, ScreenWidthMaxSmall, ScreenWidthMaxMedium, ScreenWidthMaxLarge, ScreenWidthMaxXLarge, ScreenWidthMaxXXLarge, ScreenWidthMinUhfMobile, getScreenSelector, getHighContrastNoAdjustStyle, getEdgeChromiumNoHighContrastAdjustSelector, normalize, noWrap, getFadedOverflowStyle, getPlaceholderStyles, ZIndexes, buildClassMap, getIcon, registerIcons, registerIconAlias, unregisterIcons, setIconOptions, getIconClassName, InjectionMode, Stylesheet, concatStyleSets, concatStyleSetsWithProps, fontFace, keyframes, mergeStyleSets, mergeStyles, FLUENT_CDN_BASE_URL */
-/*! exports used: AnimationClassNames, AnimationVariables, FontWeights, HighContrastSelector, HighContrastSelectorWhite, IconFontSizes, ScreenWidthMaxMedium, ScreenWidthMaxSmall, ScreenWidthMinLarge, ScreenWidthMinMedium, ScreenWidthMinUhfMobile, ScreenWidthMinXLarge, ScreenWidthMinXXLarge, ZIndexes, concatStyleSets, concatStyleSetsWithProps, focusClear, getFocusStyle, getGlobalClassNames, getHighContrastNoAdjustStyle, getIcon, getInputFocusStyle, getPlaceholderStyles, getScreenSelector, getTheme, hiddenContentStyle, keyframes, mergeStyleSets, mergeStyles, normalize */
+/*! exports used: AnimationClassNames, AnimationVariables, FontWeights, HighContrastSelector, HighContrastSelectorWhite, IconFontSizes, ScreenWidthMaxMedium, ScreenWidthMaxSmall, ScreenWidthMinLarge, ScreenWidthMinMedium, ScreenWidthMinUhfMobile, ScreenWidthMinXLarge, ScreenWidthMinXXLarge, ZIndexes, concatStyleSets, concatStyleSetsWithProps, focusClear, getFocusStyle, getGlobalClassNames, getHighContrastNoAdjustStyle, getIcon, getInputFocusStyle, getPlaceholderStyles, getScreenSelector, getTheme, hiddenContentStyle, keyframes, mergeStyleSets, mergeStyles, noWrap, normalize */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12917,6 +13571,8 @@ var Icon = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Ic
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "t", function() { return _styles_index__WEBPACK_IMPORTED_MODULE_7__["j"]; });
 
 /* harmony import */ var _styles_index__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/index */ "EH7T");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "E", function() { return _styles_index__WEBPACK_IMPORTED_MODULE_8__["b"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "D", function() { return _styles_index__WEBPACK_IMPORTED_MODULE_8__["a"]; });
 
 /* harmony import */ var _styles_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/index */ "6Ssw");
@@ -13785,12 +14441,12 @@ var KeytipManager = /** @class */ (function () {
   !*** ./node_modules/@fluentui/style-utilities/lib/styles/GeneralStyles.js ***!
   \****************************************************************************/
 /*! exports provided: normalize, noWrap */
-/*! exports used: normalize */
+/*! exports used: noWrap, normalize */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return normalize; });
-/* unused harmony export noWrap */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return normalize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return noWrap; });
 // This file mimics styles and mixins from _General.Mixins.scss
 var normalize = {
     boxShadow: 'none',
@@ -24375,6 +25031,147 @@ function portalContainsElement(target, parent) {
 
 /***/ }),
 
+/***/ "GZJC":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaInitialsColor.js ***!
+  \*************************************************************************************/
+/*! exports provided: initialsColorPropToColorCode, getPersonaInitialsColor */
+/*! exports used: getPersonaInitialsColor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export initialsColorPropToColorCode */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getPersonaInitialsColor; });
+/* harmony import */ var _Persona_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Persona.types */ "YMdL");
+
+/**
+ * Following colors are considered reserved and can only be set with overrides, so they are excluded from this set:
+ * - `gray` and `black` can result in offensive persona coins with some initials combinations
+ * - `red` often has a special meaning
+ * - `transparent` is not intended to be used with typical initials due to accessibility issues;
+ *   its primary use is for Facepile overflow buttons.
+ */
+var COLOR_SWATCHES_LOOKUP = [
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightBlue,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].blue,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkBlue,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].teal,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].green,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkGreen,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightPink,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].pink,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].magenta,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].purple,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].orange,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightRed,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkRed,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].violet,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].gold,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].burgundy,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].warmGray,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].cyan,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].rust,
+    _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].coolGray,
+];
+var COLOR_SWATCHES_NUM_ENTRIES = COLOR_SWATCHES_LOOKUP.length;
+function getInitialsColorFromName(displayName) {
+    var color = _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].blue;
+    if (!displayName) {
+        return color;
+    }
+    var hashCode = 0;
+    for (var iLen = displayName.length - 1; iLen >= 0; iLen--) {
+        var ch = displayName.charCodeAt(iLen);
+        var shift = iLen % 8;
+        // eslint-disable-next-line no-bitwise
+        hashCode ^= (ch << shift) + (ch >> (8 - shift));
+    }
+    color = COLOR_SWATCHES_LOOKUP[hashCode % COLOR_SWATCHES_NUM_ENTRIES];
+    return color;
+}
+function personaInitialsColorToHexCode(personaInitialsColor) {
+    switch (personaInitialsColor) {
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightBlue:
+            return '#4F6BED';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].blue:
+            return '#0078D4';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkBlue:
+            return '#004E8C';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].teal:
+            return '#038387';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightGreen:
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].green:
+            return '#498205';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkGreen:
+            return '#0B6A0B';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightPink:
+            return '#C239B3';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].pink:
+            return '#E3008C';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].magenta:
+            return '#881798';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].purple:
+            return '#5C2E91';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].orange:
+            return '#CA5010';
+        // eslint-disable-next-line deprecation/deprecation
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].red:
+            return '#EE1111';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].lightRed:
+            return '#D13438';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].darkRed:
+            return '#A4262C';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].transparent:
+            return 'transparent';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].violet:
+            return '#8764B8';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].gold:
+            return '#986F0B';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].burgundy:
+            return '#750B1C';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].warmGray:
+            return '#7A7574';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].cyan:
+            return '#005B70';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].rust:
+            return '#8E562E';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].coolGray:
+            return '#69797E';
+        // eslint-disable-next-line deprecation/deprecation
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].black:
+            return '#1D1D1D';
+        case _Persona_types__WEBPACK_IMPORTED_MODULE_0__[/* PersonaInitialsColor */ "a"].gray:
+            return '#393939';
+    }
+}
+/** @deprecated Use `getPersonaInitialsColor` */
+function initialsColorPropToColorCode(props) {
+    return getPersonaInitialsColor(props);
+}
+/**
+ * Gets the hex color string (prefixed with #) for the given persona props.
+ * This is the logic used internally by the Persona control.
+ * @param props - Current persona props
+ * @returns Hex color string prefixed with #
+ */
+function getPersonaInitialsColor(props) {
+    // eslint-disable-next-line deprecation/deprecation
+    var primaryText = props.primaryText, text = props.text;
+    var initialsColor = props.initialsColor;
+    var initialsColorCode;
+    if (typeof initialsColor === 'string') {
+        initialsColorCode = initialsColor;
+    }
+    else {
+        initialsColor = initialsColor !== undefined ? initialsColor : getInitialsColorFromName(text || primaryText);
+        initialsColorCode = personaInitialsColorToHexCode(initialsColor);
+    }
+    return initialsColorCode;
+}
+//# sourceMappingURL=PersonaInitialsColor.js.map
+
+/***/ }),
+
 /***/ "GejX":
 /*!*************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Label/Label.base.js ***!
@@ -28173,6 +28970,232 @@ function nullRender() {
 
 /***/ }),
 
+/***/ "LI1r":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/TooltipHost.base.js ***!
+  \*********************************************************************************/
+/*! exports provided: TooltipHostBase */
+/*! exports used: TooltipHostBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TooltipHostBase; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities */ "9Ppb");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Utilities */ "n9dH");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Utilities */ "ymW2");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Utilities */ "/w2j");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Utilities */ "ePGq");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../Utilities */ "Qhgy");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../Utilities */ "GHdt");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../Utilities */ "VSLK");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../Utilities */ "D9iZ");
+/* harmony import */ var _TooltipHost_types__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./TooltipHost.types */ "UGoI");
+/* harmony import */ var _Tooltip__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Tooltip */ "9BIk");
+/* harmony import */ var _Tooltip_types__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Tooltip.types */ "oNb7");
+
+
+
+
+
+
+
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* classNamesFunction */ "a"])();
+var TooltipHostBase = /** @class */ (function (_super) {
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __extends */ "c"])(TooltipHostBase, _super);
+    // Constructor
+    function TooltipHostBase(props) {
+        var _this = _super.call(this, props) || this;
+        // The wrapping div that gets the hover events
+        _this._tooltipHost = react__WEBPACK_IMPORTED_MODULE_1__["createRef"]();
+        _this._defaultTooltipId = Object(_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getId */ "a"])('tooltip');
+        _this.show = function () {
+            _this._toggleTooltip(true);
+        };
+        _this.dismiss = function () {
+            _this._hideTooltip();
+        };
+        _this._getTargetElement = function () {
+            if (!_this._tooltipHost.current) {
+                return undefined;
+            }
+            var overflowMode = _this.props.overflowMode;
+            // Select target element based on overflow mode. For parent mode, you want to position the tooltip relative
+            // to the parent element, otherwise it might look off.
+            if (overflowMode !== undefined) {
+                switch (overflowMode) {
+                    case _TooltipHost_types__WEBPACK_IMPORTED_MODULE_12__[/* TooltipOverflowMode */ "a"].Parent:
+                        return _this._tooltipHost.current.parentElement;
+                    case _TooltipHost_types__WEBPACK_IMPORTED_MODULE_12__[/* TooltipOverflowMode */ "a"].Self:
+                        return _this._tooltipHost.current;
+                }
+            }
+            return _this._tooltipHost.current;
+        };
+        _this._onTooltipFocus = function (ev) {
+            if (_this._ignoreNextFocusEvent) {
+                _this._ignoreNextFocusEvent = false;
+                return;
+            }
+            _this._onTooltipMouseEnter(ev);
+        };
+        _this._onTooltipContentFocus = function (ev) {
+            if (TooltipHostBase._currentVisibleTooltip && TooltipHostBase._currentVisibleTooltip !== _this) {
+                TooltipHostBase._currentVisibleTooltip.dismiss();
+            }
+            TooltipHostBase._currentVisibleTooltip = _this;
+            _this._clearDismissTimer();
+            _this._clearOpenTimer();
+        };
+        _this._onTooltipBlur = function (ev) {
+            // The focused element gets a blur event when the document loses focus
+            // (e.g. switching tabs in the browser), but we don't want to show the
+            // tooltip again when the document gets focus back. Handle this case by
+            // checking if the blurred element is still the document's activeElement,
+            // and ignoring when it next gets focus back.
+            // See https://github.com/microsoft/fluentui/issues/13541
+            _this._ignoreNextFocusEvent = (document === null || document === void 0 ? void 0 : document.activeElement) === ev.target;
+            _this._dismissTimerId = _this._async.setTimeout(function () {
+                _this._hideTooltip();
+            }, 0);
+        };
+        // Show Tooltip
+        _this._onTooltipMouseEnter = function (ev) {
+            var _a = _this.props, overflowMode = _a.overflowMode, delay = _a.delay;
+            if (TooltipHostBase._currentVisibleTooltip && TooltipHostBase._currentVisibleTooltip !== _this) {
+                TooltipHostBase._currentVisibleTooltip.dismiss();
+            }
+            TooltipHostBase._currentVisibleTooltip = _this;
+            if (overflowMode !== undefined) {
+                var overflowElement = _this._getTargetElement();
+                if (overflowElement && !Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* hasOverflow */ "a"])(overflowElement)) {
+                    return;
+                }
+            }
+            if (ev.target && Object(_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* portalContainsElement */ "a"])(ev.target, _this._getTargetElement())) {
+                // Do not show tooltip when target is inside a portal relative to TooltipHost.
+                return;
+            }
+            _this._clearDismissTimer();
+            _this._clearOpenTimer();
+            if (delay !== _Tooltip_types__WEBPACK_IMPORTED_MODULE_14__[/* TooltipDelay */ "a"].zero) {
+                var delayTime = _this._getDelayTime(delay); // non-null assertion because we set it in `defaultProps`
+                _this._openTimerId = _this._async.setTimeout(function () {
+                    _this._toggleTooltip(true);
+                }, delayTime);
+            }
+            else {
+                _this._toggleTooltip(true);
+            }
+        };
+        // Hide Tooltip
+        _this._onTooltipMouseLeave = function (ev) {
+            var closeDelay = _this.props.closeDelay;
+            _this._clearDismissTimer();
+            _this._clearOpenTimer();
+            if (closeDelay) {
+                _this._dismissTimerId = _this._async.setTimeout(function () {
+                    _this._toggleTooltip(false);
+                }, closeDelay);
+            }
+            else {
+                _this._toggleTooltip(false);
+            }
+            if (TooltipHostBase._currentVisibleTooltip === _this) {
+                TooltipHostBase._currentVisibleTooltip = undefined;
+            }
+        };
+        _this._onTooltipKeyDown = function (ev) {
+            // eslint-disable-next-line deprecation/deprecation
+            if ((ev.which === _Utilities__WEBPACK_IMPORTED_MODULE_7__[/* KeyCodes */ "a"].escape || ev.ctrlKey) && _this.state.isTooltipVisible) {
+                _this._hideTooltip();
+                ev.stopPropagation();
+            }
+        };
+        _this._clearDismissTimer = function () {
+            _this._async.clearTimeout(_this._dismissTimerId);
+        };
+        _this._clearOpenTimer = function () {
+            _this._async.clearTimeout(_this._openTimerId);
+        };
+        // Hide Tooltip
+        _this._hideTooltip = function () {
+            _this._clearOpenTimer();
+            _this._clearDismissTimer();
+            _this._toggleTooltip(false);
+        };
+        _this._toggleTooltip = function (isTooltipVisible) {
+            if (_this.state.isTooltipVisible !== isTooltipVisible) {
+                _this.setState({ isTooltipVisible: isTooltipVisible }, function () { return _this.props.onTooltipToggle && _this.props.onTooltipToggle(isTooltipVisible); });
+            }
+        };
+        _this._getDelayTime = function (delay) {
+            switch (delay) {
+                case _Tooltip_types__WEBPACK_IMPORTED_MODULE_14__[/* TooltipDelay */ "a"].medium:
+                    return 300;
+                case _Tooltip_types__WEBPACK_IMPORTED_MODULE_14__[/* TooltipDelay */ "a"].long:
+                    return 500;
+                default:
+                    return 0;
+            }
+        };
+        Object(_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* initializeComponentRef */ "a"])(_this);
+        _this.state = {
+            isAriaPlaceholderRendered: false,
+            isTooltipVisible: false,
+        };
+        _this._async = new _Utilities__WEBPACK_IMPORTED_MODULE_9__[/* Async */ "a"](_this);
+        return _this;
+    }
+    // Render
+    TooltipHostBase.prototype.render = function () {
+        var _a = this.props, calloutProps = _a.calloutProps, children = _a.children, content = _a.content, directionalHint = _a.directionalHint, directionalHintForRTL = _a.directionalHintForRTL, className = _a.hostClassName, id = _a.id, 
+        // eslint-disable-next-line deprecation/deprecation
+        _b = _a.setAriaDescribedBy, 
+        // eslint-disable-next-line deprecation/deprecation
+        setAriaDescribedBy = _b === void 0 ? true : _b, tooltipProps = _a.tooltipProps, styles = _a.styles, theme = _a.theme;
+        this._classNames = getClassNames(styles, {
+            theme: theme,
+            className: className,
+        });
+        var isTooltipVisible = this.state.isTooltipVisible;
+        var tooltipId = id || this._defaultTooltipId;
+        var tooltipRenderProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ id: tooltipId + "--tooltip", content: content, targetElement: this._getTargetElement(), directionalHint: directionalHint, directionalHintForRTL: directionalHintForRTL, calloutProps: Object(_Utilities__WEBPACK_IMPORTED_MODULE_10__[/* assign */ "a"])({}, calloutProps, {
+                onDismiss: this._hideTooltip,
+                onFocus: this._onTooltipContentFocus,
+                onMouseEnter: this._onTooltipMouseEnter,
+                onMouseLeave: this._onTooltipMouseLeave,
+            }), onMouseEnter: this._onTooltipMouseEnter, onMouseLeave: this._onTooltipMouseLeave }, Object(_Utilities__WEBPACK_IMPORTED_MODULE_11__[/* getNativeProps */ "d"])(this.props, _Utilities__WEBPACK_IMPORTED_MODULE_11__[/* divProperties */ "c"], ['id'])), tooltipProps);
+        // Get the content of the tooltip for use in the hidden div used for screen readers
+        var tooltipContent = (tooltipProps === null || tooltipProps === void 0 ? void 0 : tooltipProps.onRenderContent)
+            ? tooltipProps.onRenderContent(tooltipRenderProps, function (props) { return ((props === null || props === void 0 ? void 0 : props.content) ? react__WEBPACK_IMPORTED_MODULE_1__["createElement"](react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, props.content) : null); })
+            : content;
+        var showTooltip = isTooltipVisible && !!tooltipContent;
+        var ariaDescribedBy = setAriaDescribedBy && isTooltipVisible && !!tooltipContent ? tooltipId : undefined;
+        return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ className: this._classNames.root, ref: this._tooltipHost }, { onFocusCapture: this._onTooltipFocus }, { onBlurCapture: this._onTooltipBlur }, { onMouseEnter: this._onTooltipMouseEnter, onMouseLeave: this._onTooltipMouseLeave, onKeyDown: this._onTooltipKeyDown, role: "none", "aria-describedby": ariaDescribedBy }),
+            children,
+            showTooltip && react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Tooltip__WEBPACK_IMPORTED_MODULE_13__[/* Tooltip */ "a"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, tooltipRenderProps)),
+            react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { hidden: true, id: tooltipId, style: _Styling__WEBPACK_IMPORTED_MODULE_2__[/* hiddenContentStyle */ "z"] }, tooltipContent)));
+    };
+    TooltipHostBase.prototype.componentWillUnmount = function () {
+        if (TooltipHostBase._currentVisibleTooltip && TooltipHostBase._currentVisibleTooltip === this) {
+            TooltipHostBase._currentVisibleTooltip = undefined;
+        }
+        this._async.dispose();
+    };
+    TooltipHostBase.defaultProps = {
+        delay: _Tooltip_types__WEBPACK_IMPORTED_MODULE_14__[/* TooltipDelay */ "a"].medium,
+    };
+    return TooltipHostBase;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
+
+//# sourceMappingURL=TooltipHost.base.js.map
+
+/***/ }),
+
 /***/ "LKLn":
 /*!**********************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/utilities/keytips/KeytipUtils.js ***!
@@ -28921,7 +29944,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "d"])(this.properties.siteUrl, this.properties.list, this.properties.view)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "e"])(this.properties.siteUrl, this.properties.list, this.properties.view)
                 .then(this.updateFieldViewPickerValue.bind(this));
         }
         else {
@@ -28939,7 +29962,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "c"])(this.properties.siteUrl, this.properties.list)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListFields */ "d"])(this.properties.siteUrl, this.properties.list)
                 .then(this.updateFieldListPickerOptions.bind(this));
         }
         else {
@@ -29000,7 +30023,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                                 this.msProps.PropertyPaneTextField('siteUrl', {
                                     label: 'Site',
                                     value: this.properties.siteUrl,
-                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "f"],
+                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "h"],
                                     deferredValidationTime: 500,
                                 }),
                                 this.listProp.PropertyFieldListPicker('list', {
@@ -30132,6 +31155,32 @@ function (theme) {
     });
 });
 //# sourceMappingURL=VerticalDivider.classNames.js.map
+
+/***/ }),
+
+/***/ "OQrn":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaCoin/PersonaCoin.js ***!
+  \****************************************************************************************/
+/*! exports provided: PersonaCoin */
+/*! exports used: PersonaCoin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaCoin; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Utilities */ "mUxj");
+/* harmony import */ var _PersonaCoin_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonaCoin.base */ "D8iC");
+/* harmony import */ var _PersonaCoin_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PersonaCoin.styles */ "42TE");
+
+
+
+/**
+ * PersonaCoin is used to render an individual's avatar and presence.
+ */
+var PersonaCoin = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_PersonaCoin_base__WEBPACK_IMPORTED_MODULE_1__[/* PersonaCoinBase */ "a"], _PersonaCoin_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, {
+    scope: 'PersonaCoin',
+});
+//# sourceMappingURL=PersonaCoin.js.map
 
 /***/ }),
 
@@ -32397,6 +33446,143 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_Sgrz__;
 
 /***/ }),
 
+/***/ "SxZD":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/Persona.base.js ***!
+  \*****************************************************************************/
+/*! exports provided: PersonaBase */
+/*! exports used: PersonaBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaBase; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Utilities */ "9Ppb");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Utilities */ "pSkZ");
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Utilities */ "D9iZ");
+/* harmony import */ var _Tooltip__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Tooltip */ "DMfw");
+/* harmony import */ var _Tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Tooltip */ "UGoI");
+/* harmony import */ var _PersonaCoin_PersonaCoin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PersonaCoin/PersonaCoin */ "OQrn");
+/* harmony import */ var _Persona_types__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Persona.types */ "YMdL");
+/* harmony import */ var _fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @fluentui/react-hooks */ "v/vq");
+/* harmony import */ var _fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @fluentui/react-hooks */ "4JwV");
+/* harmony import */ var _common_DirectionalHint__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../common/DirectionalHint */ "gDcn");
+
+
+
+
+
+
+
+
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* classNamesFunction */ "a"])();
+var DEFAULT_PROPS = {
+    size: _Persona_types__WEBPACK_IMPORTED_MODULE_8__[/* PersonaSize */ "c"].size48,
+    presence: _Persona_types__WEBPACK_IMPORTED_MODULE_8__[/* PersonaPresence */ "b"].none,
+    imageAlt: '',
+    showOverflowTooltip: true,
+};
+function useDebugWarnings(props) {
+    if (true) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks -- build-time conditional
+        Object(_fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_9__[/* useWarnings */ "a"])({
+            name: 'Persona',
+            props: props,
+            deprecations: { primaryText: 'text' },
+        });
+    }
+}
+/**
+ * Persona with no default styles.
+ * [Use the `styles` API to add your own styles.](https://github.com/microsoft/fluentui/wiki/Styling)
+ */
+var PersonaBase = react__WEBPACK_IMPORTED_MODULE_1__["forwardRef"](function (propsWithoutDefaults, forwardedRef) {
+    var props = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getPropsWithDefaults */ "a"])(DEFAULT_PROPS, propsWithoutDefaults);
+    useDebugWarnings(props);
+    var rootRef = react__WEBPACK_IMPORTED_MODULE_1__["useRef"](null);
+    var mergedRootRef = Object(_fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_10__[/* useMergedRefs */ "a"])(forwardedRef, rootRef);
+    /**
+     * Deprecation helper for getting text.
+     */
+    var getText = function () {
+        // eslint-disable-next-line deprecation/deprecation
+        return props.text || props.primaryText || '';
+    };
+    /**
+     * Renders various types of Text (primaryText, secondaryText, etc)
+     * based on the classNames passed
+     * @param elementClassNames - element className
+     * @param renderFunction - render function
+     * @param defaultRenderFunction - default render function
+     */
+    var renderElement = function (elementClassNames, renderFunction, defaultRenderFunction) {
+        var content = renderFunction && renderFunction(props, defaultRenderFunction);
+        return content ? (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { dir: "auto", className: elementClassNames }, content)) : undefined;
+    };
+    /**
+     * using closure to wrap the default render behavior
+     * to make it independent of the type of text passed
+     * @param text - text to render
+     */
+    var onRenderText = function (text, tooltip) {
+        if (tooltip === void 0) { tooltip = true; }
+        // return default render behavior for valid text or undefined
+        return text
+            ? tooltip
+                ? function () {
+                    // default onRender behavior
+                    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_Tooltip__WEBPACK_IMPORTED_MODULE_5__[/* TooltipHost */ "a"], { content: text, overflowMode: _Tooltip__WEBPACK_IMPORTED_MODULE_6__[/* TooltipOverflowMode */ "a"].Parent, directionalHint: _common_DirectionalHint__WEBPACK_IMPORTED_MODULE_11__[/* DirectionalHint */ "a"].topLeftEdge }, text));
+                }
+                : function () { return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, text); }
+            : undefined;
+    };
+    var onInternalRenderPersonaCoin = function (providedCoinProps) {
+        return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_PersonaCoin_PersonaCoin__WEBPACK_IMPORTED_MODULE_7__[/* PersonaCoin */ "a"], Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, providedCoinProps));
+    };
+    // wrapping default render behavior based on various props properties
+    var onInternalRenderPrimaryText = onRenderText(getText(), props.showOverflowTooltip);
+    var onInternalRenderSecondaryText = onRenderText(props.secondaryText, props.showOverflowTooltip);
+    var onInternalRenderTertiaryText = onRenderText(props.tertiaryText, props.showOverflowTooltip);
+    var onInternalRenderOptionalText = onRenderText(props.optionalText, props.showOverflowTooltip);
+    var hidePersonaDetails = props.hidePersonaDetails, _a = props.onRenderOptionalText, onRenderOptionalText = _a === void 0 ? onInternalRenderOptionalText : _a, _b = props.onRenderPrimaryText, onRenderPrimaryText = _b === void 0 ? onInternalRenderPrimaryText : _b, _c = props.onRenderSecondaryText, onRenderSecondaryText = _c === void 0 ? onInternalRenderSecondaryText : _c, _d = props.onRenderTertiaryText, onRenderTertiaryText = _d === void 0 ? onInternalRenderTertiaryText : _d, _e = props.onRenderPersonaCoin, onRenderPersonaCoin = _e === void 0 ? onInternalRenderPersonaCoin : _e;
+    var size = props.size;
+    // These properties are to be explicitly passed into PersonaCoin because they are the only props directly used
+    var allowPhoneInitials = props.allowPhoneInitials, className = props.className, coinProps = props.coinProps, showUnknownPersonaCoin = props.showUnknownPersonaCoin, coinSize = props.coinSize, styles = props.styles, imageAlt = props.imageAlt, imageInitials = props.imageInitials, imageShouldFadeIn = props.imageShouldFadeIn, imageShouldStartVisible = props.imageShouldStartVisible, imageUrl = props.imageUrl, initialsColor = props.initialsColor, initialsTextColor = props.initialsTextColor, isOutOfOffice = props.isOutOfOffice, onPhotoLoadingStateChange = props.onPhotoLoadingStateChange, 
+    // eslint-disable-next-line deprecation/deprecation
+    onRenderCoin = props.onRenderCoin, onRenderInitials = props.onRenderInitials, presence = props.presence, presenceTitle = props.presenceTitle, presenceColors = props.presenceColors, showInitialsUntilImageLoads = props.showInitialsUntilImageLoads, showSecondaryText = props.showSecondaryText, theme = props.theme;
+    var personaCoinProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ allowPhoneInitials: allowPhoneInitials, showUnknownPersonaCoin: showUnknownPersonaCoin, coinSize: coinSize, imageAlt: imageAlt, imageInitials: imageInitials, imageShouldFadeIn: imageShouldFadeIn, imageShouldStartVisible: imageShouldStartVisible, imageUrl: imageUrl, initialsColor: initialsColor, initialsTextColor: initialsTextColor, onPhotoLoadingStateChange: onPhotoLoadingStateChange, onRenderCoin: onRenderCoin, onRenderInitials: onRenderInitials, presence: presence, presenceTitle: presenceTitle, showInitialsUntilImageLoads: showInitialsUntilImageLoads, size: size, text: getText(), isOutOfOffice: isOutOfOffice, presenceColors: presenceColors }, coinProps);
+    var classNames = getClassNames(styles, {
+        theme: theme,
+        className: className,
+        showSecondaryText: showSecondaryText,
+        presence: presence,
+        size: size,
+    });
+    var divProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getNativeProps */ "d"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_4__[/* divProperties */ "c"]);
+    var personaDetails = (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", { className: classNames.details },
+        renderElement(classNames.primaryText, onRenderPrimaryText, onInternalRenderPrimaryText),
+        renderElement(classNames.secondaryText, onRenderSecondaryText, onInternalRenderSecondaryText),
+        renderElement(classNames.tertiaryText, onRenderTertiaryText, onInternalRenderTertiaryText),
+        renderElement(classNames.optionalText, onRenderOptionalText, onInternalRenderOptionalText),
+        props.children));
+    return (react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, divProps, { ref: mergedRootRef, className: classNames.root, style: coinSize ? { height: coinSize, minWidth: coinSize } : undefined }),
+        onRenderPersonaCoin(personaCoinProps, onRenderPersonaCoin),
+        /* eslint-disable deprecation/deprecation */
+        (!hidePersonaDetails ||
+            size === _Persona_types__WEBPACK_IMPORTED_MODULE_8__[/* PersonaSize */ "c"].size8 ||
+            size === _Persona_types__WEBPACK_IMPORTED_MODULE_8__[/* PersonaSize */ "c"].size10 ||
+            size === _Persona_types__WEBPACK_IMPORTED_MODULE_8__[/* PersonaSize */ "c"].tiny) &&
+            personaDetails
+    /* eslint-enable deprecation/deprecation */
+    ));
+});
+PersonaBase.displayName = 'PersonaBase';
+//# sourceMappingURL=Persona.base.js.map
+
+/***/ }),
+
 /***/ "Tahi":
 /*!*********************************************************************************!*\
   !*** ./node_modules/@fluentui/style-utilities/lib/styles/hiddenContentStyle.js ***!
@@ -33735,6 +34921,33 @@ var ImageIcon = function (props) {
 
 /***/ }),
 
+/***/ "UGoI":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/TooltipHost.types.js ***!
+  \**********************************************************************************/
+/*! exports provided: TooltipOverflowMode */
+/*! exports used: TooltipOverflowMode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TooltipOverflowMode; });
+/**
+ * {@docCategory Tooltip}
+ */
+var TooltipOverflowMode;
+(function (TooltipOverflowMode) {
+    /** Only show tooltip if parent DOM element is overflowing */
+    TooltipOverflowMode[TooltipOverflowMode["Parent"] = 0] = "Parent";
+    /**
+     * Only show tooltip if tooltip host's content is overflowing.
+     * Note that this does not check the children for overflow, only the TooltipHost root.
+     */
+    TooltipOverflowMode[TooltipOverflowMode["Self"] = 1] = "Self";
+})(TooltipOverflowMode || (TooltipOverflowMode = {}));
+//# sourceMappingURL=TooltipHost.types.js.map
+
+/***/ }),
+
 /***/ "UI1s":
 /*!******************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/KeytipData/KeytipData.js ***!
@@ -34053,6 +35266,30 @@ function useOnEvent(element, eventName, callback, useCapture) {
     }, [element, eventName, useCapture]);
 }
 //# sourceMappingURL=useOnEvent.js.map
+
+/***/ }),
+
+/***/ "Ui6W":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaPresence/PersonaPresence.js ***!
+  \************************************************************************************************/
+/*! exports provided: PersonaPresence */
+/*! exports used: PersonaPresence */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaPresence; });
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Utilities */ "mUxj");
+/* harmony import */ var _PersonaPresence_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonaPresence.base */ "YO6B");
+/* harmony import */ var _PersonaPresence_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PersonaPresence.styles */ "jRb8");
+
+
+
+/**
+ * PersonaPresence is used to render an individual's presence.
+ */
+var PersonaPresence = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_PersonaPresence_base__WEBPACK_IMPORTED_MODULE_1__[/* PersonaPresenceBase */ "a"], _PersonaPresence_styles__WEBPACK_IMPORTED_MODULE_2__[/* getStyles */ "a"], undefined, { scope: 'PersonaPresence' });
+//# sourceMappingURL=PersonaPresence.js.map
 
 /***/ }),
 
@@ -36575,6 +37812,268 @@ var getStyles = function (props) {
     };
 };
 //# sourceMappingURL=MessageBar.styles.js.map
+
+/***/ }),
+
+/***/ "YMdL":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/Persona.types.js ***!
+  \******************************************************************************/
+/*! exports provided: PersonaSize, PersonaPresence, PersonaInitialsColor */
+/*! exports used: PersonaInitialsColor, PersonaPresence, PersonaSize */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PersonaSize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PersonaPresence; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaInitialsColor; });
+/**
+ * {@docCategory Persona}
+ */
+var PersonaSize;
+(function (PersonaSize) {
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size8` instead.
+     */
+    PersonaSize[PersonaSize["tiny"] = 0] = "tiny";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size24` instead.
+     */
+    PersonaSize[PersonaSize["extraExtraSmall"] = 1] = "extraExtraSmall";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size32` instead.
+     */
+    PersonaSize[PersonaSize["extraSmall"] = 2] = "extraSmall";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size40` instead.
+     */
+    PersonaSize[PersonaSize["small"] = 3] = "small";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size48` instead.
+     */
+    PersonaSize[PersonaSize["regular"] = 4] = "regular";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size72` instead.
+     */
+    PersonaSize[PersonaSize["large"] = 5] = "large";
+    /**
+     * Deprecated in favor of standardized numeric sizing.
+     * @deprecated Use `size100` instead.
+     */
+    PersonaSize[PersonaSize["extraLarge"] = 6] = "extraLarge";
+    /**
+     * No `PersonaCoin` is rendered.
+     */
+    PersonaSize[PersonaSize["size8"] = 17] = "size8";
+    /**
+     * No `PersonaCoin` is rendered. Deprecated to align with design specifications.
+     * @deprecated Use `size8` instead.
+     */
+    PersonaSize[PersonaSize["size10"] = 9] = "size10";
+    /**
+     * Renders a 16px `PersonaCoin`.
+     * @deprecated Deprecated due to not being in the design specification.
+     */
+    PersonaSize[PersonaSize["size16"] = 8] = "size16";
+    /**
+     * Renders a 24px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size24"] = 10] = "size24";
+    /**
+     * Renders a 28px `PersonaCoin`.
+     * @deprecated Deprecated due to not being in the design specification.
+     */
+    PersonaSize[PersonaSize["size28"] = 7] = "size28";
+    /**
+     * Renders a 32px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size32"] = 11] = "size32";
+    /**
+     * Renders a 40px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size40"] = 12] = "size40";
+    /**
+     * Renders a 48px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size48"] = 13] = "size48";
+    /**
+     * Renders a 56px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size56"] = 16] = "size56";
+    /**
+     * Renders a 72px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size72"] = 14] = "size72";
+    /**
+     * Renders a 100px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size100"] = 15] = "size100";
+    /**
+     * Renders a 120px `PersonaCoin`.
+     */
+    PersonaSize[PersonaSize["size120"] = 18] = "size120";
+})(PersonaSize || (PersonaSize = {}));
+/**
+ * {@docCategory Persona}
+ */
+var PersonaPresence;
+(function (PersonaPresence) {
+    PersonaPresence[PersonaPresence["none"] = 0] = "none";
+    PersonaPresence[PersonaPresence["offline"] = 1] = "offline";
+    PersonaPresence[PersonaPresence["online"] = 2] = "online";
+    PersonaPresence[PersonaPresence["away"] = 3] = "away";
+    PersonaPresence[PersonaPresence["dnd"] = 4] = "dnd";
+    PersonaPresence[PersonaPresence["blocked"] = 5] = "blocked";
+    PersonaPresence[PersonaPresence["busy"] = 6] = "busy";
+})(PersonaPresence || (PersonaPresence = {}));
+/**
+ * {@docCategory Persona}
+ */
+var PersonaInitialsColor;
+(function (PersonaInitialsColor) {
+    PersonaInitialsColor[PersonaInitialsColor["lightBlue"] = 0] = "lightBlue";
+    PersonaInitialsColor[PersonaInitialsColor["blue"] = 1] = "blue";
+    PersonaInitialsColor[PersonaInitialsColor["darkBlue"] = 2] = "darkBlue";
+    PersonaInitialsColor[PersonaInitialsColor["teal"] = 3] = "teal";
+    PersonaInitialsColor[PersonaInitialsColor["lightGreen"] = 4] = "lightGreen";
+    PersonaInitialsColor[PersonaInitialsColor["green"] = 5] = "green";
+    PersonaInitialsColor[PersonaInitialsColor["darkGreen"] = 6] = "darkGreen";
+    PersonaInitialsColor[PersonaInitialsColor["lightPink"] = 7] = "lightPink";
+    PersonaInitialsColor[PersonaInitialsColor["pink"] = 8] = "pink";
+    PersonaInitialsColor[PersonaInitialsColor["magenta"] = 9] = "magenta";
+    PersonaInitialsColor[PersonaInitialsColor["purple"] = 10] = "purple";
+    /**
+     * @deprecated `black` is a color that can result in offensive persona coins with some initials combinations,
+     * so it can only be set with overrides. Will be removed in a future major release.
+     */
+    PersonaInitialsColor[PersonaInitialsColor["black"] = 11] = "black";
+    PersonaInitialsColor[PersonaInitialsColor["orange"] = 12] = "orange";
+    /**
+     * @deprecated `red` is a color that often has a special meaning, so it is considered a reserved color and
+     * can only be set with overrides. Will be removed in a future major release.
+     */
+    PersonaInitialsColor[PersonaInitialsColor["red"] = 13] = "red";
+    PersonaInitialsColor[PersonaInitialsColor["darkRed"] = 14] = "darkRed";
+    /**
+     * Transparent is not intended to be used with typical initials due to accessibility issues.
+     * Its primary use is for overflow buttons, so it is considered a reserved color and can only be set with overrides.
+     */
+    PersonaInitialsColor[PersonaInitialsColor["transparent"] = 15] = "transparent";
+    PersonaInitialsColor[PersonaInitialsColor["violet"] = 16] = "violet";
+    PersonaInitialsColor[PersonaInitialsColor["lightRed"] = 17] = "lightRed";
+    PersonaInitialsColor[PersonaInitialsColor["gold"] = 18] = "gold";
+    PersonaInitialsColor[PersonaInitialsColor["burgundy"] = 19] = "burgundy";
+    PersonaInitialsColor[PersonaInitialsColor["warmGray"] = 20] = "warmGray";
+    PersonaInitialsColor[PersonaInitialsColor["coolGray"] = 21] = "coolGray";
+    /**
+     * `gray` is a color that can result in offensive persona coins with some initials combinations,
+     * so it can only be set with overrides.
+     */
+    PersonaInitialsColor[PersonaInitialsColor["gray"] = 22] = "gray";
+    PersonaInitialsColor[PersonaInitialsColor["cyan"] = 23] = "cyan";
+    PersonaInitialsColor[PersonaInitialsColor["rust"] = 24] = "rust";
+})(PersonaInitialsColor || (PersonaInitialsColor = {}));
+//# sourceMappingURL=Persona.types.js.map
+
+/***/ }),
+
+/***/ "YO6B":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaPresence/PersonaPresence.base.js ***!
+  \*****************************************************************************************************/
+/*! exports provided: PersonaPresenceBase */
+/*! exports used: PersonaPresenceBase */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonaPresenceBase; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Utilities */ "9Ppb");
+/* harmony import */ var _Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Icon */ "htj1");
+/* harmony import */ var _Persona_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Persona.types */ "YMdL");
+/* harmony import */ var _PersonaConsts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../PersonaConsts */ "A98K");
+/* harmony import */ var _fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fluentui/react-hooks */ "4JwV");
+
+
+
+
+
+
+var coinSizeFontScaleFactor = 6;
+var coinSizePresenceScaleFactor = 3;
+var presenceMaxSize = 40;
+var presenceFontMaxSize = 20;
+var getClassNames = Object(_Utilities__WEBPACK_IMPORTED_MODULE_1__[/* classNamesFunction */ "a"])({
+    // There can be many PersonaPresence rendered with different sizes.
+    // Therefore setting a larger cache size.
+    cacheSize: 100,
+});
+/**
+ * PersonaPresence with no default styles.
+ * [Use the `getStyles` API to add your own styles.](https://github.com/microsoft/fluentui/wiki/Styling)
+ */
+var PersonaPresenceBase = react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"](function (props, forwardedRef) {
+    var coinSize = props.coinSize, isOutOfOffice = props.isOutOfOffice, styles = props.styles, // Use getStyles from props.
+    presence = props.presence, theme = props.theme, presenceTitle = props.presenceTitle, presenceColors = props.presenceColors;
+    var rootRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](null);
+    var mergedRootRef = Object(_fluentui_react_hooks__WEBPACK_IMPORTED_MODULE_5__[/* useMergedRefs */ "a"])(forwardedRef, rootRef);
+    var size = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_4__[/* sizeBoolean */ "d"])(props.size);
+    // Render Presence Icon if Persona is above size 32.
+    var renderIcon = !(size.isSize8 || size.isSize10 || size.isSize16 || size.isSize24 || size.isSize28 || size.isSize32) &&
+        (coinSize ? coinSize > 32 : true);
+    var presenceHeightWidth = coinSize
+        ? coinSize / coinSizePresenceScaleFactor < presenceMaxSize
+            ? coinSize / coinSizePresenceScaleFactor + 'px'
+            : presenceMaxSize + 'px'
+        : '';
+    var presenceFontSize = coinSize
+        ? coinSize / coinSizeFontScaleFactor < presenceFontMaxSize
+            ? coinSize / coinSizeFontScaleFactor + 'px'
+            : presenceFontMaxSize + 'px'
+        : '';
+    var coinSizeWithPresenceIconStyle = coinSize
+        ? { fontSize: presenceFontSize, lineHeight: presenceHeightWidth }
+        : undefined;
+    var coinSizeWithPresenceStyle = coinSize ? { width: presenceHeightWidth, height: presenceHeightWidth } : undefined;
+    // Use getStyles from props, or fall back to getStyles from styles file.
+    var classNames = getClassNames(styles, {
+        theme: theme,
+        presence: presence,
+        size: props.size,
+        isOutOfOffice: isOutOfOffice,
+        presenceColors: presenceColors,
+    });
+    if (presence === _Persona_types__WEBPACK_IMPORTED_MODULE_3__[/* PersonaPresence */ "b"].none) {
+        return null;
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { role: "presentation", className: classNames.presence, style: coinSizeWithPresenceStyle, title: presenceTitle, ref: mergedRootRef }, renderIcon && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_Icon__WEBPACK_IMPORTED_MODULE_2__[/* Icon */ "a"], { className: classNames.presenceIcon, iconName: determineIcon(props.presence, props.isOutOfOffice), style: coinSizeWithPresenceIconStyle }))));
+});
+PersonaPresenceBase.displayName = 'PersonaPresenceBase';
+function determineIcon(presence, isOutOfOffice) {
+    if (!presence) {
+        return undefined;
+    }
+    var oofIcon = 'SkypeArrow';
+    switch (_Persona_types__WEBPACK_IMPORTED_MODULE_3__[/* PersonaPresence */ "b"][presence]) {
+        case 'online':
+            return 'SkypeCheck';
+        case 'away':
+            return isOutOfOffice ? oofIcon : 'SkypeClock';
+        case 'dnd':
+            return 'SkypeMinus';
+        case 'offline':
+            return isOutOfOffice ? oofIcon : '';
+    }
+    return '';
+}
+//# sourceMappingURL=PersonaPresence.base.js.map
 
 /***/ }),
 
@@ -39176,6 +40675,77 @@ function isMac(reset) {
 
 /***/ }),
 
+/***/ "bGOj":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/Tooltip.styles.js ***!
+  \*******************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
+
+var getStyles = function (props) {
+    var className = props.className, _a = props.beakWidth, beakWidth = _a === void 0 ? 16 : _a, _b = props.gapSpace, gapSpace = _b === void 0 ? 0 : _b, maxWidth = props.maxWidth, theme = props.theme;
+    var semanticColors = theme.semanticColors, fonts = theme.fonts, effects = theme.effects;
+    // The math here is done to account for the 45 degree rotation of the beak
+    // and sub-pixel rounding that differs across browsers, which is more noticeable when
+    // the device pixel ratio is larger
+    var tooltipGapSpace = -(Math.sqrt((beakWidth * beakWidth) / 2) + gapSpace) + 1 / window.devicePixelRatio;
+    return {
+        root: [
+            'ms-Tooltip',
+            theme.fonts.medium,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* AnimationClassNames */ "a"].fadeIn200,
+            {
+                background: semanticColors.menuBackground,
+                boxShadow: effects.elevation8,
+                padding: '8px',
+                maxWidth: maxWidth,
+                selectors: {
+                    ':after': {
+                        content: "''",
+                        position: 'absolute',
+                        bottom: tooltipGapSpace,
+                        left: tooltipGapSpace,
+                        right: tooltipGapSpace,
+                        top: tooltipGapSpace,
+                        zIndex: 0,
+                    },
+                },
+            },
+            className,
+        ],
+        content: [
+            'ms-Tooltip-content',
+            fonts.small,
+            {
+                position: 'relative',
+                zIndex: 1,
+                color: semanticColors.menuItemText,
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+                overflow: 'hidden',
+            },
+        ],
+        subText: [
+            'ms-Tooltip-subtext',
+            {
+                // Using inherit here to avoid unintentional global overrides of the <p> tag.
+                fontSize: 'inherit',
+                fontWeight: 'inherit',
+                color: 'inherit',
+                margin: 0,
+            },
+        ],
+    };
+};
+//# sourceMappingURL=Tooltip.styles.js.map
+
+/***/ }),
+
 /***/ "bI/O":
 /*!***************************************************************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/ContextualMenu/ContextualMenuItemWrapper/ContextualMenuSplitButton.js ***!
@@ -41725,7 +43295,7 @@ function getStyles(props) {
             multiline && classNames.multiline,
             borderless && classNames.borderless,
             underlined && classNames.underlined,
-            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "D"],
+            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "E"],
             {
                 position: 'relative',
             },
@@ -41765,7 +43335,7 @@ function getStyles(props) {
         ],
         fieldGroup: [
             classNames.fieldGroup,
-            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "D"],
+            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "E"],
             {
                 border: "1px solid " + semanticColors.inputBorder,
                 borderRadius: effects.roundedCorner2,
@@ -41858,7 +43428,7 @@ function getStyles(props) {
         field: [
             fonts.medium,
             classNames.field,
-            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "D"],
+            _Styling__WEBPACK_IMPORTED_MODULE_1__[/* normalize */ "E"],
             {
                 borderRadius: 0,
                 border: 'none',
@@ -43716,6 +45286,9 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 /* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
 /* harmony import */ var _TableGridRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableGridRender */ "B0n2");
 /* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! luxon */ "ExVU");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_10__);
+
 
 
 
@@ -43852,7 +45425,7 @@ const TableViewerContainer = (props) => {
     //================================================================================================================= 
     const getItems = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
         try {
-            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode);
+            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "c"])(siteUrl, listId, viewXmlCode);
             setItems(Row);
         }
         catch (e) {
@@ -43866,7 +45439,7 @@ const TableViewerContainer = (props) => {
     //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
     const _containerClass = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableContainer, { height: contentHeight });
     //=================================================================================================================
-    // USE EFFECTS TO GET THE DATA AND SET UP THE TABS (lifecycle methods and reacting to data changes)
+    // USE EFFECTS TO GET THE DATA 
     //=================================================================================================================
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (!configured) {
@@ -43876,10 +45449,11 @@ const TableViewerContainer = (props) => {
             getItems();
         }
     }, [configured]);
+    // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE TABS AND THEN AGAIN TO FORMAT THE DATA
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         // Update tabData and updatedItems when items change
         // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-        // the one that shows counts, enumerates values idf it is selected  and the field it relates to 
+        // the one that shows counts, enumerates values if it is selected  and the field it relates to 
         const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
         console.log("TabFields", tabs);
         // get the unique values for each of the tab fields
@@ -43889,6 +45463,7 @@ const TableViewerContainer = (props) => {
             // assign the tabFieldData to the tabData object WITH the field name as the key
             tabData[field] = tabFieldData;
         });
+        // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
         console.log("ALL Tab data:", tabData);
         setTabData(tabData);
         // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
@@ -43903,23 +45478,32 @@ const TableViewerContainer = (props) => {
                         const suf = ColData.suffix || '';
                         const format = ColData.format || '';
                         const type = ColData.type || 'string';
-                        const rawValue = item[key];
+                        let rawValue = item[key];
                         let displayValue = rawValue;
                         // Format the value based on the type
                         if (type === 'number') {
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(rawValue, format);
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "f"])(rawValue, format);
                         }
                         else if (type === 'date') {
                             displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* dateFormat */ "a"])(rawValue, format, 'en-GB');
+                            rawValue = luxon__WEBPACK_IMPORTED_MODULE_10__["DateTime"].fromISO(rawValue);
                         }
                         else if (type === 'singlechoice') {
-                            displayValue = rawValue ? rawValue : 'Not selected';
+                            displayValue = rawValue ? rawValue : '-';
                         }
                         else if (type === 'multichoice') {
                             displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
                         }
                         else if (type === 'person') {
-                            displayValue = rawValue && typeof rawValue === 'object' && rawValue.email ? rawValue.email : 'No person';
+                            if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
+                                const email = rawValue[0].email || '';
+                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* toProperCase */ "g"])(email.split('@')[0].replace(/\./g, ' '));
+                                rawValue[0].name = name; // Add the name key to rawValue[0]
+                                displayValue = rawValue[0].title;
+                            }
+                            else {
+                                displayValue = '';
+                            }
                         }
                         newItem[key] = {
                             rawValue: rawValue,
@@ -46839,6 +48423,229 @@ function createTheme(theme, depComments) {
     return Object(_mergeThemes__WEBPACK_IMPORTED_MODULE_3__[/* mergeThemes */ "a"])(baseTheme, theme);
 }
 //# sourceMappingURL=createTheme.js.map
+
+/***/ }),
+
+/***/ "jRb8":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/PersonaPresence/PersonaPresence.styles.js ***!
+  \*******************************************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Styling */ "Dfs8");
+/* harmony import */ var _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../PersonaConsts */ "A98K");
+
+
+
+var GlobalClassNames = {
+    presence: 'ms-Persona-presence',
+    presenceIcon: 'ms-Persona-presenceIcon',
+};
+var getStyles = function (props) {
+    var _a, _b, _c, _d, _e, _f;
+    var theme = props.theme, presenceColors = props.presenceColors;
+    var semanticColors = theme.semanticColors, fonts = theme.fonts;
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
+    var size = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* sizeBoolean */ "d"])(props.size);
+    var presence = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* presenceBoolean */ "c"])(props.presence);
+    // Presence colors
+    var presenceColorAvailable = (presenceColors && presenceColors.available) || '#6BB700';
+    var presenceColorAway = (presenceColors && presenceColors.away) || '#FFAA44';
+    var presenceColorBusy = (presenceColors && presenceColors.busy) || '#C43148';
+    var presenceColorDnd = (presenceColors && presenceColors.dnd) || '#C50F1F';
+    var presenceColorOffline = (presenceColors && presenceColors.offline) || '#8A8886';
+    var presenceColorOof = (presenceColors && presenceColors.oof) || '#B4009E';
+    var presenceColorBackground = (presenceColors && presenceColors.background) || semanticColors.bodyBackground;
+    var isOpenCirclePresence = presence.isOffline ||
+        (props.isOutOfOffice && (presence.isAvailable || presence.isBusy || presence.isAway || presence.isDoNotDisturb));
+    var borderSizeForSmallPersonas = '1px';
+    var borderSizeForLargePersonas = '2px';
+    var borderSize = size.isSize72 || size.isSize100 ? borderSizeForLargePersonas : borderSizeForSmallPersonas;
+    return {
+        presence: [
+            classNames.presence,
+            Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ position: 'absolute', height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size12, width: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size12, borderRadius: '50%', top: 'auto', right: '-2px', bottom: '-2px', border: "2px solid " + presenceColorBackground, textAlign: 'center', boxSizing: 'content-box', backgroundClip: 'border-box' }, Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getHighContrastNoAdjustStyle */ "t"])()), { selectors: (_a = {},
+                    _a[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
+                        borderColor: 'Window',
+                        backgroundColor: 'WindowText',
+                    },
+                    _a) }),
+            (size.isSize8 || size.isSize10) && {
+                right: 'auto',
+                top: '7px',
+                left: 0,
+                border: 0,
+                selectors: (_b = {},
+                    _b[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
+                        top: '9px',
+                        border: '1px solid WindowText',
+                    },
+                    _b),
+            },
+            (size.isSize8 || size.isSize10 || size.isSize24 || size.isSize28 || size.isSize32) &&
+                makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size8),
+            (size.isSize40 || size.isSize48) && makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size12),
+            size.isSize16 && {
+                height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size6,
+                width: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size6,
+                borderWidth: '1.5px',
+            },
+            size.isSize56 && makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size16),
+            size.isSize72 && makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size20),
+            size.isSize100 && makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size28),
+            size.isSize120 && makeSizeStyle(_PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size32),
+            presence.isAvailable && {
+                backgroundColor: presenceColorAvailable,
+                selectors: (_c = {},
+                    _c[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = backgroundColor('Highlight'),
+                    _c),
+            },
+            presence.isAway && backgroundColor(presenceColorAway),
+            presence.isBlocked && [
+                {
+                    selectors: (_d = {
+                            // Only show :after at larger sizes
+                            ':after': size.isSize40 || size.isSize48 || size.isSize72 || size.isSize100
+                                ? {
+                                    content: '""',
+                                    width: '100%',
+                                    height: borderSize,
+                                    backgroundColor: presenceColorBusy,
+                                    transform: 'translateY(-50%) rotate(-45deg)',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: 0,
+                                }
+                                : undefined
+                        },
+                        _d[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
+                            selectors: {
+                                ':after': {
+                                    width: "calc(100% - 4px)",
+                                    left: '2px',
+                                    backgroundColor: 'Window',
+                                },
+                            },
+                        },
+                        _d),
+                },
+            ],
+            presence.isBusy && backgroundColor(presenceColorBusy),
+            presence.isDoNotDisturb && backgroundColor(presenceColorDnd),
+            presence.isOffline && backgroundColor(presenceColorOffline),
+            (isOpenCirclePresence || presence.isBlocked) && [
+                {
+                    backgroundColor: presenceColorBackground,
+                    selectors: (_e = {
+                            ':before': {
+                                content: '""',
+                                width: '100%',
+                                height: '100%',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                border: borderSize + " solid " + presenceColorBusy,
+                                borderRadius: '50%',
+                                boxSizing: 'border-box',
+                            }
+                        },
+                        _e[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
+                            backgroundColor: 'WindowText',
+                            selectors: {
+                                ':before': {
+                                    width: "calc(100% - 2px)",
+                                    height: "calc(100% - 2px)",
+                                    top: '1px',
+                                    left: '1px',
+                                    borderColor: 'Window',
+                                },
+                            },
+                        },
+                        _e),
+                },
+            ],
+            isOpenCirclePresence && presence.isAvailable && makeBeforeBorderStyle(borderSize, presenceColorAvailable),
+            isOpenCirclePresence && presence.isBusy && makeBeforeBorderStyle(borderSize, presenceColorBusy),
+            isOpenCirclePresence && presence.isAway && makeBeforeBorderStyle(borderSize, presenceColorOof),
+            isOpenCirclePresence && presence.isDoNotDisturb && makeBeforeBorderStyle(borderSize, presenceColorDnd),
+            isOpenCirclePresence && presence.isOffline && makeBeforeBorderStyle(borderSize, presenceColorOffline),
+            isOpenCirclePresence &&
+                presence.isOffline &&
+                props.isOutOfOffice &&
+                makeBeforeBorderStyle(borderSize, presenceColorOof),
+        ],
+        presenceIcon: [
+            classNames.presenceIcon,
+            {
+                color: presenceColorBackground,
+                fontSize: '6px',
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size12,
+                verticalAlign: 'top',
+                selectors: (_f = {},
+                    _f[_Styling__WEBPACK_IMPORTED_MODULE_1__[/* HighContrastSelector */ "d"]] = {
+                        color: 'Window',
+                    },
+                    _f),
+            },
+            size.isSize56 && {
+                fontSize: '8px',
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size16,
+            },
+            size.isSize72 && {
+                fontSize: fonts.small.fontSize,
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size20,
+            },
+            size.isSize100 && {
+                fontSize: fonts.medium.fontSize,
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size28,
+            },
+            size.isSize120 && {
+                fontSize: fonts.medium.fontSize,
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_2__[/* personaPresenceSize */ "a"].size32,
+            },
+            presence.isAway && {
+                position: 'relative',
+                left: isOpenCirclePresence ? undefined : '1px',
+            },
+            isOpenCirclePresence && presence.isAvailable && makeOpenCircleIconStyle(presenceColorAvailable),
+            isOpenCirclePresence && presence.isBusy && makeOpenCircleIconStyle(presenceColorBusy),
+            isOpenCirclePresence && presence.isAway && makeOpenCircleIconStyle(presenceColorOof),
+            isOpenCirclePresence && presence.isDoNotDisturb && makeOpenCircleIconStyle(presenceColorDnd),
+            isOpenCirclePresence && presence.isOffline && makeOpenCircleIconStyle(presenceColorOffline),
+            isOpenCirclePresence && presence.isOffline && props.isOutOfOffice && makeOpenCircleIconStyle(presenceColorOof),
+        ],
+    };
+};
+function makeOpenCircleIconStyle(color) {
+    return {
+        color: color,
+        borderColor: color,
+    };
+}
+function makeBeforeBorderStyle(borderSize, color) {
+    return {
+        selectors: {
+            ':before': {
+                border: borderSize + " solid " + color,
+            },
+        },
+    };
+}
+function makeSizeStyle(size) {
+    return {
+        height: size,
+        width: size,
+    };
+}
+function backgroundColor(color) {
+    return { backgroundColor: color };
+}
+//# sourceMappingURL=PersonaPresence.styles.js.map
 
 /***/ }),
 
@@ -50083,6 +51890,31 @@ var Queryable = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "oNb7":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/Tooltip.types.js ***!
+  \******************************************************************************/
+/*! exports provided: TooltipDelay */
+/*! exports used: TooltipDelay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TooltipDelay; });
+/**
+ * {@docCategory Tooltip}
+ */
+var TooltipDelay;
+(function (TooltipDelay) {
+    TooltipDelay[TooltipDelay["zero"] = 0] = "zero";
+    /** 300 ms delay before showing the tooltip */
+    TooltipDelay[TooltipDelay["medium"] = 1] = "medium";
+    /** 500 ms delay before showing the tooltip */
+    TooltipDelay[TooltipDelay["long"] = 2] = "long";
+})(TooltipDelay || (TooltipDelay = {}));
+//# sourceMappingURL=Tooltip.types.js.map
+
+/***/ }),
+
 /***/ "oX1k":
 /*!***************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types.js ***!
@@ -51811,6 +53643,51 @@ function concatStyleSetsWithProps(styleProps) {
 
 /***/ }),
 
+/***/ "qfZ8":
+/*!**********************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TabsRender/PersonCard.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonCard; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "YMdL");
+/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "9CMT");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../helpers/Utilities */ "t2W0");
+
+
+//  /_layouts/15/userphoto.aspx?AccountName=mail@domain.com
+
+function PersonCard({ email, name, title, format }) {
+    const [renderDetails, updateRenderDetails] = react__WEBPACK_IMPORTED_MODULE_0__["useState"](true);
+    const onChange = (ev, checked) => {
+        updateRenderDetails(!!checked);
+    };
+    const examplePersona = {
+        imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,
+        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "b"])(name),
+        text: name,
+        secondaryText: email
+    };
+    const sizes = {
+        "size8": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size8,
+        "size24": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size24,
+        "size32": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size32,
+        "size40": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size40,
+        "size48": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size48,
+        "size56": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size56
+    };
+    const cardSize = sizes[format || "size40"];
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, cardSize ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__[/* Persona */ "a"], Object.assign({}, examplePersona, { size: cardSize }))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, format === "email" ? email : format === "title" ? title : name))));
+}
+
+
+/***/ }),
+
 /***/ "qlID":
 /*!*******************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/utilities/lib/hoist.js ***!
@@ -52765,21 +54642,23 @@ function _merge(target, source, circularReferences) {
 /*!**********************************!*\
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
-/*! exports provided: dateFormat, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
-/*! exports used: dateFormat, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, numberFormat, validateSiteExists */
+/*! exports provided: dateFormat, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
+/*! exports used: dateFormat, getInitials, getItemsUsingRenderListDataAsStream, getListFields, getListViewXml, numberFormat, toProperCase, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dateFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return numberFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return validateSiteExists; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getInitials; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return toProperCase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return numberFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return validateSiteExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
 /* unused harmony export createSearchQueryViewXml */
 /* unused harmony export searchFieldTypes */
 /* unused harmony export getSiteLocale */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListViewXml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListFields; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getListViewXml; });
 /* unused harmony export getSearchFieldsFromOptions */
 /* unused harmony export updateListItem */
 /* unused harmony export addListItem */
@@ -52822,6 +54701,25 @@ const dateFormat = (value, format, locale) => {
     catch (e) {
         return value;
     }
+};
+// A FUNCTION TO work out number formats based on the locale and the currency symbol
+const getInitials = (name) => {
+    if (!name) {
+        return '';
+    }
+    return name
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .join('');
+};
+const toProperCase = (str) => {
+    if (!str) {
+        return '';
+    }
+    return str
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 };
 // A FUNCTION TO work out number formats based on the locale and the currency symbol
 const numberFormat = (value, format) => {
@@ -55037,6 +56935,39 @@ var getItemStyles = function (props) {
 
 /***/ }),
 
+/***/ "v9Qs":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Tooltip/TooltipHost.styles.js ***!
+  \***********************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
+
+var GlobalClassNames = {
+    root: 'ms-TooltipHost',
+    ariaPlaceholder: 'ms-TooltipHost-aria-placeholder',
+};
+var getStyles = function (props) {
+    var className = props.className, theme = props.theme;
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
+    return {
+        root: [
+            classNames.root,
+            {
+                display: 'inline',
+            },
+            className,
+        ],
+    };
+};
+//# sourceMappingURL=TooltipHost.styles.js.map
+
+/***/ }),
+
 /***/ "vAGa":
 /*!************************************************************************************!*\
   !*** ./node_modules/@fluentui/utilities/lib/customizations/mergeCustomizations.js ***!
@@ -56416,6 +58347,291 @@ function _renderSlot(ComponentType, componentProps, userProps, slotOptions, defa
 
 /***/ }),
 
+/***/ "y4tK":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@fluentui/react/lib/components/Persona/Persona.styles.js ***!
+  \*******************************************************************************/
+/*! exports provided: getStyles */
+/*! exports used: getStyles */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getStyles; });
+/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
+/* harmony import */ var _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonaConsts */ "A98K");
+
+
+var GlobalClassNames = {
+    root: 'ms-Persona',
+    size8: 'ms-Persona--size8',
+    size10: 'ms-Persona--size10',
+    size16: 'ms-Persona--size16',
+    size24: 'ms-Persona--size24',
+    size28: 'ms-Persona--size28',
+    size32: 'ms-Persona--size32',
+    size40: 'ms-Persona--size40',
+    size48: 'ms-Persona--size48',
+    size56: 'ms-Persona--size56',
+    size72: 'ms-Persona--size72',
+    size100: 'ms-Persona--size100',
+    size120: 'ms-Persona--size120',
+    available: 'ms-Persona--online',
+    away: 'ms-Persona--away',
+    blocked: 'ms-Persona--blocked',
+    busy: 'ms-Persona--busy',
+    doNotDisturb: 'ms-Persona--donotdisturb',
+    offline: 'ms-Persona--offline',
+    details: 'ms-Persona-details',
+    primaryText: 'ms-Persona-primaryText',
+    secondaryText: 'ms-Persona-secondaryText',
+    tertiaryText: 'ms-Persona-tertiaryText',
+    optionalText: 'ms-Persona-optionalText',
+    textContent: 'ms-Persona-textContent',
+};
+var getStyles = function (props) {
+    var className = props.className, showSecondaryText = props.showSecondaryText, theme = props.theme;
+    var semanticColors = theme.semanticColors, fonts = theme.fonts;
+    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
+    var size = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* sizeBoolean */ "d"])(props.size);
+    var presence = Object(_PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* presenceBoolean */ "c"])(props.presence);
+    var showSecondaryTextDefaultHeight = '16px';
+    var sharedTextStyles = {
+        color: semanticColors.bodySubtext,
+        fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_0__[/* FontWeights */ "c"].regular,
+        fontSize: fonts.small.fontSize,
+    };
+    return {
+        root: [
+            classNames.root,
+            theme.fonts.medium,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* normalize */ "E"],
+            {
+                color: semanticColors.bodyText,
+                position: 'relative',
+                height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size48,
+                minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size48,
+                display: 'flex',
+                alignItems: 'center',
+                selectors: {
+                    '.contextualHost': {
+                        display: 'none',
+                    },
+                },
+            },
+            size.isSize8 && [
+                classNames.size8,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size8,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size8,
+                },
+            ],
+            // TODO: Deprecated size and needs to be removed in a future major release.
+            size.isSize10 && [
+                classNames.size10,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size10,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size10,
+                },
+            ],
+            // TODO: Deprecated size and needs to be removed in a future major release.
+            size.isSize16 && [
+                classNames.size16,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size16,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size16,
+                },
+            ],
+            size.isSize24 && [
+                classNames.size24,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size24,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size24,
+                },
+            ],
+            size.isSize24 &&
+                showSecondaryText && {
+                height: '36px',
+            },
+            // TODO: Deprecated size and needs to be removed in a future major release.
+            size.isSize28 && [
+                classNames.size28,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size28,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size28,
+                },
+            ],
+            size.isSize28 &&
+                showSecondaryText && {
+                height: '32px',
+            },
+            size.isSize32 && [
+                classNames.size32,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size32,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size32,
+                },
+            ],
+            size.isSize40 && [
+                classNames.size40,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size40,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size40,
+                },
+            ],
+            size.isSize48 && classNames.size48,
+            size.isSize56 && [
+                classNames.size56,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size56,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size56,
+                },
+            ],
+            size.isSize72 && [
+                classNames.size72,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size72,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size72,
+                },
+            ],
+            size.isSize100 && [
+                classNames.size100,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size100,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size100,
+                },
+            ],
+            size.isSize120 && [
+                classNames.size120,
+                {
+                    height: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size120,
+                    minWidth: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size120,
+                },
+            ],
+            /**
+             * Modifiers: presence
+             */
+            presence.isAvailable && classNames.available,
+            presence.isAway && classNames.away,
+            presence.isBlocked && classNames.blocked,
+            presence.isBusy && classNames.busy,
+            presence.isDoNotDisturb && classNames.doNotDisturb,
+            presence.isOffline && classNames.offline,
+            className,
+        ],
+        details: [
+            classNames.details,
+            {
+                padding: '0 24px 0 16px',
+                minWidth: 0,
+                width: '100%',
+                textAlign: 'left',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+            },
+            (size.isSize8 || size.isSize10) && {
+                paddingLeft: 17, // increased padding because we don't render a coin at this size
+            },
+            (size.isSize24 || size.isSize28 || size.isSize32) && {
+                padding: '0 8px',
+            },
+            (size.isSize40 || size.isSize48) && {
+                padding: '0 12px',
+            },
+        ],
+        primaryText: [
+            classNames.primaryText,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* noWrap */ "D"],
+            {
+                color: semanticColors.bodyText,
+                fontWeight: _Styling__WEBPACK_IMPORTED_MODULE_0__[/* FontWeights */ "c"].regular,
+                fontSize: fonts.medium.fontSize,
+                selectors: {
+                    ':hover': {
+                        color: semanticColors.inputTextHovered,
+                    },
+                },
+            },
+            showSecondaryText && {
+                height: showSecondaryTextDefaultHeight,
+                lineHeight: showSecondaryTextDefaultHeight,
+                overflowX: 'hidden',
+            },
+            (size.isSize8 || size.isSize10) && {
+                fontSize: fonts.small.fontSize,
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size8,
+            },
+            size.isSize16 && {
+                lineHeight: _PersonaConsts__WEBPACK_IMPORTED_MODULE_1__[/* personaSize */ "b"].size28,
+            },
+            (size.isSize24 || size.isSize28 || size.isSize32 || size.isSize40 || size.isSize48) &&
+                showSecondaryText && {
+                height: 18,
+            },
+            (size.isSize56 || size.isSize72 || size.isSize100 || size.isSize120) && {
+                fontSize: fonts.xLarge.fontSize,
+            },
+            (size.isSize56 || size.isSize72 || size.isSize100 || size.isSize120) &&
+                showSecondaryText && {
+                height: 22,
+            },
+        ],
+        secondaryText: [
+            classNames.secondaryText,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* noWrap */ "D"],
+            sharedTextStyles,
+            (size.isSize8 || size.isSize10 || size.isSize16 || size.isSize24 || size.isSize28 || size.isSize32) && {
+                display: 'none',
+            },
+            showSecondaryText && {
+                display: 'block',
+                height: showSecondaryTextDefaultHeight,
+                lineHeight: showSecondaryTextDefaultHeight,
+                overflowX: 'hidden',
+            },
+            size.isSize24 &&
+                showSecondaryText && {
+                height: 18,
+            },
+            (size.isSize56 || size.isSize72 || size.isSize100 || size.isSize120) && {
+                fontSize: fonts.medium.fontSize,
+            },
+            (size.isSize56 || size.isSize72 || size.isSize100 || size.isSize120) &&
+                showSecondaryText && {
+                height: 18,
+            },
+        ],
+        tertiaryText: [
+            classNames.tertiaryText,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* noWrap */ "D"],
+            sharedTextStyles,
+            {
+                display: 'none',
+                fontSize: fonts.medium.fontSize,
+            },
+            (size.isSize72 || size.isSize100 || size.isSize120) && {
+                display: 'block',
+            },
+        ],
+        optionalText: [
+            classNames.optionalText,
+            _Styling__WEBPACK_IMPORTED_MODULE_0__[/* noWrap */ "D"],
+            sharedTextStyles,
+            {
+                display: 'none',
+                fontSize: fonts.medium.fontSize,
+            },
+            (size.isSize100 || size.isSize120) && {
+                display: 'block',
+            },
+        ],
+        textContent: [classNames.textContent, _Styling__WEBPACK_IMPORTED_MODULE_0__[/* noWrap */ "D"]],
+    };
+};
+//# sourceMappingURL=Persona.styles.js.map
+
+/***/ }),
+
 /***/ "yElR":
 /*!********************************************************!*\
   !*** ./node_modules/@fluentui/utilities/lib/dom/on.js ***!
@@ -56551,6 +58767,52 @@ var DefaultEffects = {
     roundedCorner6: '6px',
 };
 //# sourceMappingURL=DefaultEffects.js.map
+
+/***/ }),
+
+/***/ "ymW2":
+/*!**********************************************************!*\
+  !*** ./node_modules/@fluentui/utilities/lib/overflow.js ***!
+  \**********************************************************/
+/*! exports provided: hasHorizontalOverflow, hasVerticalOverflow, hasOverflow */
+/*! exports used: hasOverflow */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export hasHorizontalOverflow */
+/* unused harmony export hasVerticalOverflow */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return hasOverflow; });
+/**
+ * Detects whether an element's content has horizontal overflow
+ *
+ * @public
+ * @param element - Element to check for overflow
+ * @returns True if element's content overflows
+ */
+function hasHorizontalOverflow(element) {
+    return element.clientWidth < element.scrollWidth;
+}
+/**
+ * Detects whether an element's content has vertical overflow
+ *
+ * @public
+ * @param element - Element to check for overflow
+ * @returns True if element's content overflows
+ */
+function hasVerticalOverflow(element) {
+    return element.clientHeight < element.scrollHeight;
+}
+/**
+ * Detects whether an element's content has overflow in any direction
+ *
+ * @public
+ * @param element - Element to check for overflow
+ * @returns True if element's content overflows
+ */
+function hasOverflow(element) {
+    return hasHorizontalOverflow(element) || hasVerticalOverflow(element);
+}
+//# sourceMappingURL=overflow.js.map
 
 /***/ }),
 
