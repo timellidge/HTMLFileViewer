@@ -26,7 +26,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
 
 
-  // we ccan use the width directly from the column definition to set the grid template columns for the table
+  // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
   const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
   const _GridStyle = mergeStyles(styles.tableGrid, {gridTemplateColumns: _columnWidths});
   console.log(">>> grid info", _columnWidths, _GridStyle);
@@ -74,6 +74,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
 
    return (
     <>
+    {/* DRAW THE HEADER BAR with the column names and the sort icons? */}
       <div className={_GridStyle}>
         {_sortedColumns.map(({ key, column }) => (
           column.width > "0" && (
@@ -87,29 +88,63 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
                   ? 'SortDown'
                   : 'SortUp'
               }
-            
               className={styles.sortIcon}
               onClick={() => handleSortToggle(key)}/>
             )}
             </div>
           )
         ))}
-      </div>
-      {sortedItems.map((item, itemIndex) => (
-        <div key={itemIndex} className={_GridStyle}>
+  
+        {/* now spaff out the cells  they shoud just atack into the grid there are three pain types, string(number, string & Date) Person  and Stack */}
+        {sortedItems.map((item, itemIndex) => (
+        <React.Fragment key={itemIndex}>
           {_sortedColumns.map(({ key, column }) => (
             column.width > "0" && (
-              <div  key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`} >
-                {column.type === 'person' ? (
-                  <PersonCard email={item[key].rawValue[0].email} name={item[key].rawValue[0].name} title={item[key].rawValue[0].title} format={column.format}/>
+              <div key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`}>
+              {item[key] ? (
+                column.type === 'person' ? (
+                  <PersonCard
+                    email={item[key].rawValue[0].email}
+                    name={item[key].rawValue[0].name}
+                    title={item[key].rawValue[0].title}
+                    format={column.format}
+                  />
+                ) : column.type === 'stack' ? (
+                  <div>
+                    {column.fields.map((field, fieldIndex) => (
+                      item[field] ? (
+                        <div className={`stack ${field}`} key={fieldIndex}>{item[field].displayValue}</div>
+                      ) : (
+                        <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>
+                      )
+                    ))}
+                  </div>
+                ) : column.type === 'html' ? (
+                <div dangerouslySetInnerHTML={{ __html: item[key].displayValue }} />
                 ) : (
-                  item[key].displayValue
-                )}
-              </div>
+                item[key].displayValue
+                )
+              ) : (
+                column.type === 'stack' ? (
+                  <div>
+                    {column.fields.map((field, fieldIndex) => (
+                      item[field] ? (
+                        <div key={fieldIndex} className={`stack ${field}`}>{item[field].displayValue}</div>
+                      ) : (
+                        <div key={fieldIndex} className={`stack ${field}`}>No Data</div>
+                      )
+                    ))}
+                  </div>
+                ) : (
+                  <span>No Data</span>
+                )
+              )}
+            </div>
             )
           ))}
-        </div>
+        </React.Fragment>
       ))}
+      </div>
     </>
   );
 };

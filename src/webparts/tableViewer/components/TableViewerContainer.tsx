@@ -18,6 +18,7 @@ import { DateTime } from 'luxon';
 export interface IField {
   rawValue: any;
   displayValue: string;
+  className?: string;
 }
 
 export type ItemField = IField | any;
@@ -295,7 +296,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
             <TableViewerHeader  displayMode={displayMode} title={title} updateProperty={updateProperty} showTitle={showTitle} showFind={showFind} searchQuery={searchQuery} handleSearch={handleSearch}/>
             <div className={styles.tabBar}>
               {Object.keys(tabData).map((field) => (
-                <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} />
+                <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} tabBehaviour={tabBehaviour}/>
               ))}
             </div>
             <TableGridRender colJSON={ColumnsJSON} items={filteredItems} /> 

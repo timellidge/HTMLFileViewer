@@ -10512,7 +10512,7 @@ const TableGridRender = ({ colJSON, items }) => {
     const _sortedColumns = Object.keys(colJSON)
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
-    // we ccan use the width directly from the column definition to set the grid template columns for the table
+    // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
     const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
     console.log(">>> grid info", _columnWidths, _GridStyle);
@@ -10559,16 +10559,17 @@ const TableGridRender = ({ colJSON, items }) => {
         }
     }, [sortField, items]);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null,
-                " ",
-                column.name),
-            column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_3__[/* Icon */ "a"], { iconName: sortField.key !== key
-                    ? 'Sort'
-                    : sortField.direction
-                        ? 'SortDown'
-                        : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))))),
-        sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: itemIndex, className: _GridStyle }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, column.type === 'person' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format })) : (item[key].displayValue))))))))));
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle },
+            _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null,
+                    " ",
+                    column.name),
+                column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_3__[/* Icon */ "a"], { iconName: sortField.key !== key
+                        ? 'Sort'
+                        : sortField.direction
+                            ? 'SortDown'
+                            : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) })))))),
+            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, item[key] ? (column.type === 'person' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format })) : column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0")))))) : column.type === 'html' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } })) : (item[key].displayValue)) : (column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data")))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")))))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -45528,7 +45529,7 @@ const TableViewerContainer = (props) => {
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: webPartTag, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableViewer }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange })))),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { colJSON: ColumnsJSON, items: filteredItems })),
         globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { message: globalError, onDismiss: () => setGlobalError(null) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
 };
@@ -54288,15 +54289,25 @@ function _warnDuplicateIcon(iconName) {
 /* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
 
 
-function TabBarRender({ fieldName, tabs, handleTabChange }) {
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tabBar }, Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
-            marginRight: '8px',
-            backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
-            color: tabs[tab].selected ? '#fff' : '#000',
-            padding: '5px 10px',
-            border: 'none',
-            cursor: 'pointer',
-        } }, `${tab} (${tabs[tab].itemCount || 0})`)))));
+function TabBarRender({ fieldName, tabs, handleTabChange, tabBehaviour }) {
+    const isAnyTabSelected = Object.values(tabs).some(tab => tab.selected);
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tabBar },
+        Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
+                marginRight: '8px',
+                backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
+                color: tabs[tab].selected ? '#fff' : '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, `${tab} (${tabs[tab].itemCount || 0})`))),
+        !tabBehaviour && isAnyTabSelected && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(fieldName, null), title: "Clear filter", style: {
+                marginLeft: '8px',
+                backgroundColor: '#eaeaea',
+                color: '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, "Clear"))));
 }
 
 

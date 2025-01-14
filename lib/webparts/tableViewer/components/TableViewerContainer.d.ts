@@ -4,6 +4,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 export interface IField {
     rawValue: any;
     displayValue: string;
+    className?: string;
 }
 export declare type ItemField = IField | any;
 export interface ITableViewerContainerProps {
