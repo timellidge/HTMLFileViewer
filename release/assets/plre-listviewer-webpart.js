@@ -1,4 +1,4 @@
-define("2bd5605f-aeea-4184-b86e-13f5b97a7022_1.0.0", ["@microsoft/sp-property-pane","@microsoft/sp-component-base","@microsoft/sp-loader","ControlStrings","@microsoft/sp-core-library","@microsoft/sp-webpart-base","react","react-dom","camljs","PropertyControlStrings"], function(__WEBPACK_EXTERNAL_MODULE__26ea__, __WEBPACK_EXTERNAL_MODULE__7Awa__, __WEBPACK_EXTERNAL_MODULE_I6O9__, __WEBPACK_EXTERNAL_MODULE_Sgrz__, __WEBPACK_EXTERNAL_MODULE_UWqr__, __WEBPACK_EXTERNAL_MODULE_br4S__, __WEBPACK_EXTERNAL_MODULE_cDcd__, __WEBPACK_EXTERNAL_MODULE_faye__, __WEBPACK_EXTERNAL_MODULE_gLVe__, __WEBPACK_EXTERNAL_MODULE_zwa___) { return /******/ (function(modules) { // webpackBootstrap
+define("04eebb40-018f-4be0-8309-ff70ed83b5bc_1.0.0", ["@microsoft/sp-property-pane","@microsoft/sp-component-base","@microsoft/sp-loader","ControlStrings","@microsoft/sp-core-library","@microsoft/sp-webpart-base","react","react-dom","camljs","PropertyControlStrings"], function(__WEBPACK_EXTERNAL_MODULE__26ea__, __WEBPACK_EXTERNAL_MODULE__7Awa__, __WEBPACK_EXTERNAL_MODULE_I6O9__, __WEBPACK_EXTERNAL_MODULE_Sgrz__, __WEBPACK_EXTERNAL_MODULE_UWqr__, __WEBPACK_EXTERNAL_MODULE_br4S__, __WEBPACK_EXTERNAL_MODULE_cDcd__, __WEBPACK_EXTERNAL_MODULE_faye__, __WEBPACK_EXTERNAL_MODULE_gLVe__, __WEBPACK_EXTERNAL_MODULE_zwa___) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// install a JSONP callback for chunk loading
 /******/ 	function webpackJsonpCallback(data) {
 /******/ 		var chunkIds = data[0];
@@ -225,7 +225,7 @@ define("2bd5605f-aeea-4184-b86e-13f5b97a7022_1.0.0", ["@microsoft/sp-property-pa
 /******/ 	// on error function for async loading
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
-/******/ 	var jsonpArray = window["webpackJsonp_2bd5605f_aeea_4184_b86e_13f5b97a7022_1_0_0"] = window["webpackJsonp_2bd5605f_aeea_4184_b86e_13f5b97a7022_1_0_0"] || [];
+/******/ 	var jsonpArray = window["webpackJsonp_04eebb40_018f_4be0_8309_ff70ed83b5bc_1_0_0"] = window["webpackJsonp_04eebb40_018f_4be0_8309_ff70ed83b5bc_1_0_0"] || [];
 /******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
 /******/ 	jsonpArray.push = webpackJsonpCallback;
 /******/ 	jsonpArray = jsonpArray.slice();
@@ -10513,7 +10513,10 @@ const TableGridRender = ({ colJSON, items }) => {
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
     // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
-    const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
+    const _columnWidths = _sortedColumns
+        .filter(({ column }) => column.width !== '')
+        .map(({ column }) => column.width)
+        .join(' ');
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
     console.log(">>> grid info", _columnWidths, _GridStyle);
     // this function will toggle the sort state of a column (just one a time)
@@ -10559,13 +10562,35 @@ const TableGridRender = ({ colJSON, items }) => {
         }
     }, [sortField, items]);
     //=================================================================================================================
-    // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH ONE OUT INTO A FUNCTION
+    // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
     //=================================================================================================================
     const renderPersonCard = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format }));
+    // STACK OF FIELDS
     const renderStack = (item, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"))))));
+    // HTML FIELD
     const renderHtml = (item, key) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } }));
+    // DEFAULT RENDER FUNCTION WITH LINES CLAMP
     const renderDefault = (item, key, column) => (column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } }, item[key].displayValue)) : (item[key].displayValue));
-    const renderNoData = (column) => (column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")));
+    // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
+    const renderIcon = (item, key, column) => {
+        const displayValue = item[key].displayValue;
+        const iconData = column.icons[displayValue];
+        console.log(">>> iconData", displayValue, iconData);
+        if (iconData) {
+            const [iconName, iconColor] = iconData.split('|');
+            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_3__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue });
+        }
+        else {
+            return displayValue;
+        }
+    };
+    // CATCH ALL FOR NO DATA
+    const renderNoData = (column) => (
+    // even  though there is no field i still need to check if its a stack or not
+    column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")));
+    //=================================================================================================================
+    // THE RETURN FUNCTION
+    //=================================================================================================================
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle },
             _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
@@ -10575,9 +10600,9 @@ const TableGridRender = ({ colJSON, items }) => {
                         : sortField.direction
                             ? 'SortDown'
                             : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) })))))),
-            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, item[key] ? (column.type === 'person' ? renderPersonCard(item, key, column)
-                : column.type === 'stack' ? renderStack(item, column)
-                    : column.type === 'html' ? renderHtml(item, key)
+            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, column.type === 'stack' ? (renderStack(item, column)) : item[key] ? (column.type === 'person' ? renderPersonCard(item, key, column)
+                : column.type === 'html' ? renderHtml(item, key)
+                    : column.type === 'icon' ? renderIcon(item, key, column)
                         : renderDefault(item, key, column)) : (renderNoData(column))))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
@@ -29804,51 +29829,74 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             "ID": {
                 "name": "ID",
                 "width": "40px",
-                "tab": false,
                 "type": "number",
-                "prefix": "=",
                 "isSortable": true
             },
             "Title": {
-                "name": "title",
-                "width": "14%"
+                "name": "Title",
+                "width": "200px",
+                "isSortable": true,
+                "class": "titleclass"
             },
-            "BSAStrapline": {
-                "name": "StrapLine",
-                "width": "1fr",
-                "lines": 2
+            "Editor": {
+                "name": "Modified By",
+                "width": "1.5fr",
+                "type": "person",
+                "format": "size40"
             },
-            "BSADescription": {
-                "name": "desc",
-                "width": "2fr",
-                "lines": 3
-            },
-            "BSAColor": {
-                "name": "Color",
-                "width": "0.5fr",
-                "tab": true,
-                "isSortable": true
+            "Created": {
+                "name": "Created",
+                "width": "",
+                "type": "date",
+                "prefix": "Created: ",
+                "format": "f"
             },
             "Modified": {
                 "name": "Modified",
-                "width": "0.5fr",
+                "width": "",
                 "type": "date",
+                "prefix": "Modified: ",
                 "format": "f"
+            },
+            "Dates": {
+                "name": "Dates",
+                "width": "1fr",
+                "type": "stack",
+                "fields": [
+                    "Created",
+                    "Modified"
+                ]
+            },
+            "BSAColor": {
+                "name": "BSA Color",
+                "width": "1fr",
+                "tab": true,
+                "isSortable": true,
+                "type": "icon",
+                "icons": {
+                    "#ee4035": "CircleFill|#ff0000",
+                    "#f37736": "CircleFill|#00ff00",
+                    "#7bc043": "CircleFill|#7bc043",
+                    "#0392cf": "CircleFill|#0392cf",
+                    "#B22222": "CircleFill|#B22222"
+                }
             }
         };
+        // icon refernce for the icons in the table
+        // https://uifabricicons.azurewebsites.net/
         this.defaultCSS = `<style>
-  .testclass{color: #cc1111;}
-  .ID{border:1px solid yellow;}
-  .Title{border:1px solid rgb(0, 153, 255)};
-  .BSADescription{border:1px solid green;}
-  .singlechoice{border:1px solid #56acd1;}
-  .multichoice{border:1px solid #ff00f7;}
-  .BSAColor{border:1px solid rgb(121, 118, 118);}
-  .BSAStart{border:1px solid #ff7300;}
-  .BSAEnd{border:1px solid rgb(15, 15, 15);}
-  .PersonField{border:1px solid rgb(93, 17, 17);}
-  .Stack{border:1px solid rgb(0, 255, 64);}
-  </style>`;
+    .titleclass{
+        font-weight:600 !important; 
+        color:#aa0022; 
+        font-size: 0.9rem !important
+    }
+    .stack.Created{
+        color:#2211aa;
+    }
+    .stack.Modified{
+        color:#22aaaa;
+    }
+</style>`;
         this.hasAllValues = (strings) => strings.filter((i) => (i === '' || i === null)).length > 0;
         this.onConfigure = () => {
             this.context.propertyPane.open();

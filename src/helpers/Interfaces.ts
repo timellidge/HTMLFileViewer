@@ -5,8 +5,8 @@ export interface IColumnJSON {
     tab?: boolean | undefined | null;
     type?: string | undefined | null;
     class?: string | undefined | null;
-    isSortable?: boolean | undefined | null;
-    sortState?: boolean | undefined | null;
+    isSortable?:  boolean | undefined | null;
+    sortState?:   boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
     fields?: string[] | undefined | null;
     prefix?: string | undefined | null;
@@ -14,8 +14,13 @@ export interface IColumnJSON {
     format?: string | undefined | null;
     sequence?: number | 0;
     lines?: number | 0;
+    icons?: IconSettings ;
 }
   
+export interface IconSettings {
+    [key: string]: string;
+}
+
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;
 }

@@ -1,12 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "developer": {
-      "name": "JSP"
-    },
     "name": "TableViewer",
-    "id": "3344637a-673b-4949-b90a-8285254f9755",
-    "version": "1.0.2.10",
+    "id": "d63c415a-4843-49d9-82fc-b0575098f605",
+    "version": "1.0.2.13",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -24,10 +21,10 @@
       {
         "title": "Table Viewer Table Viewer Feature",
         "description": "The feature that activates Table Viewer from the Table Viewer solution.",
-        "id": "2bd5605f-aeea-4184-b86e-13f5b97a7022",
-        "version": "1.0.2.10",
+        "id": "04eebb40-018f-4be0-8309-ff70ed83b5bc",
+        "version": "1.0.2.13",
         "componentIds": [
-          "2bd5605f-aeea-4184-b86e-13f5b97a7022"
+          "04eebb40-018f-4be0-8309-ff70ed83b5bc"
         ]
       }
     ]

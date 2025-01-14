@@ -78,52 +78,75 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     "ID": {
       "name": "ID",
       "width": "40px",
-      "tab": false,
       "type": "number",
-      "prefix": "=",
       "isSortable": true
     },
     "Title": {
-      "name": "title",
-      "width": "14%"
+      "name": "Title",
+      "width": "200px",
+      "isSortable": true,
+      "class": "titleclass"
     },
-    "BSAStrapline": {
-      "name": "StrapLine",
-      "width": "1fr",
-      "lines": 2
+    "Editor": {
+      "name": "Modified By",
+      "width": "1.5fr",
+      "type": "person",
+      "format": "size40"
     },
-    "BSADescription": {
-      "name": "desc",
-      "width": "2fr",
-      "lines": 3
-    },
-    "BSAColor": {
-      "name": "Color",
-      "width": "0.5fr",
-      "tab": true,
-      "isSortable": true
+    "Created": {
+      "name": "Created",
+      "width": "",
+      "type": "date",
+      "prefix": "Created: ",
+      "format": "f"
     },
     "Modified": {
       "name": "Modified",
-      "width": "0.5fr",
+      "width": "",
       "type": "date",
+      "prefix": "Modified: ",
       "format": "f"
+    },
+    "Dates": {
+      "name": "Dates",
+      "width": "1fr",
+      "type": "stack",
+      "fields": [
+        "Created",
+        "Modified"
+      ]
+    },
+    "BSAColor": {
+      "name": "BSA Color",
+      "width": "1fr",
+      "tab": true,
+      "isSortable": true,
+      "type": "icon",
+      "icons": {
+        "#ee4035": "CircleFill|#ff0000",
+        "#f37736": "CircleFill|#00ff00",
+        "#7bc043": "CircleFill|#7bc043",
+        "#0392cf": "CircleFill|#0392cf",
+        "#B22222": "CircleFill|#B22222"
+      }
     }
-  }
+}
+  // icon refernce for the icons in the table
+  // https://uifabricicons.azurewebsites.net/
 
   private defaultCSS = `<style>
-  .testclass{color: #cc1111;}
-  .ID{border:1px solid yellow;}
-  .Title{border:1px solid rgb(0, 153, 255)};
-  .BSADescription{border:1px solid green;}
-  .singlechoice{border:1px solid #56acd1;}
-  .multichoice{border:1px solid #ff00f7;}
-  .BSAColor{border:1px solid rgb(121, 118, 118);}
-  .BSAStart{border:1px solid #ff7300;}
-  .BSAEnd{border:1px solid rgb(15, 15, 15);}
-  .PersonField{border:1px solid rgb(93, 17, 17);}
-  .Stack{border:1px solid rgb(0, 255, 64);}
-  </style>`;
+    .titleclass{
+        font-weight:600 !important; 
+        color:#aa0022; 
+        font-size: 0.9rem !important
+    }
+    .stack.Created{
+        color:#2211aa;
+    }
+    .stack.Modified{
+        color:#22aaaa;
+    }
+</style>`;
 
   // -----------------------------------------------------------------------------------------------------------------------------
   // SPFX type functions 

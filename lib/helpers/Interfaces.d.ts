@@ -13,6 +13,10 @@ export interface IColumnJSON {
     format?: string | undefined | null;
     sequence?: number | 0;
     lines?: number | 0;
+    icons?: IconSettings;
+}
+export interface IconSettings {
+    [key: string]: string;
 }
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;

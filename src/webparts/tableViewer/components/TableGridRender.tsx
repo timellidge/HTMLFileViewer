@@ -24,7 +24,10 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
 
   // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
-  const _columnWidths = _sortedColumns.map(({ column }) => column.width || '').join(' ');
+  const _columnWidths = _sortedColumns
+  .filter(({ column }) => column.width !== '')
+  .map(({ column }) => column.width)
+  .join(' ');
   const _GridStyle = mergeStyles(styles.tableGrid, {gridTemplateColumns: _columnWidths});
   console.log(">>> grid info", _columnWidths, _GridStyle);
 
@@ -71,9 +74,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
 
 
   //=================================================================================================================
-  // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH ONE OUT INTO A FUNCTION
+  // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
   //=================================================================================================================
-
   const renderPersonCard = (item:any, key:any, column : IColumnJSON) => (
     <PersonCard
       email={item[key].rawValue[0].email}
@@ -83,6 +85,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     />
   );
 
+// STACK OF FIELDS
   const renderStack = (item: any, column: IColumnJSON) => (
     <div>
       {column.fields.map((field:any, fieldIndex:number) => (
@@ -95,12 +98,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     </div>
   );
 
-
+ // HTML FIELD
   const renderHtml = (item: any, key: any) => (
     <div dangerouslySetInnerHTML={{ __html: item[key].displayValue }} />
   );
 
-
+// DEFAULT RENDER FUNCTION WITH LINES CLAMP
   const renderDefault = (item: any, key: any, column : IColumnJSON) => (
     column.lines ? (
       <div className={styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}>
@@ -111,8 +114,23 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     )
   );
 
+  // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
+  const renderIcon = (item: any, key: any, column: IColumnJSON) => {
+    const displayValue = item[key].displayValue;
+    const iconData = column.icons[displayValue];
+    console.log(">>> iconData", displayValue, iconData);
+  
+    if (iconData) {
+      const [iconName, iconColor] = iconData.split('|');
+      return <Icon iconName={iconName} style={{ color: iconColor }} title={displayValue}/>;
+    } else {
+      return displayValue;
+    }
+  };
 
+  // CATCH ALL FOR NO DATA
   const renderNoData = (column : IColumnJSON) => (
+    // even  though there is no field i still need to check if its a stack or not
     column.type === 'stack' ? (
       <div>
         {column.fields.map((field, fieldIndex) => (
@@ -124,6 +142,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     )
   );
 
+  //=================================================================================================================
+  // THE RETURN FUNCTION
+  //=================================================================================================================
   return (
     <>
       {/* DRAW THE HEADER BAR with the column names and the sort icons? */}
@@ -156,10 +177,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
             {_sortedColumns.map(({ key, column }) => (
               column.width > "0" && (
                 <div key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`}>
-                  {item[key] ? (
+                  {column.type === 'stack' ? (
+                    renderStack(item, column)
+                  ) : item[key] ? (
                     column.type === 'person' ? renderPersonCard(item, key, column)
-                    : column.type === 'stack' ? renderStack(item, column)
                     : column.type === 'html' ? renderHtml(item, key)
+                    : column.type === 'icon' ? renderIcon(item, key, column)
                     : renderDefault(item, key, column)
                   ) : (
                     renderNoData(column)
