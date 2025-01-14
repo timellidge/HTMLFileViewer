@@ -10558,18 +10558,27 @@ const TableGridRender = ({ colJSON, items }) => {
             setSortedItems(items);
         }
     }, [sortField, items]);
+    //=================================================================================================================
+    // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH ONE OUT INTO A FUNCTION
+    //=================================================================================================================
+    const renderPersonCard = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format }));
+    const renderStack = (item, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"))))));
+    const renderHtml = (item, key) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } }));
+    const renderDefault = (item, key, column) => (column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } }, item[key].displayValue)) : (item[key].displayValue));
+    const renderNoData = (column) => (column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")));
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle },
             _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null,
-                    " ",
-                    column.name),
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
                 column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_3__[/* Icon */ "a"], { iconName: sortField.key !== key
                         ? 'Sort'
                         : sortField.direction
                             ? 'SortDown'
                             : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) })))))),
-            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, item[key] ? (column.type === 'person' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format })) : column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0")))))) : column.type === 'html' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } })) : (item[key].displayValue)) : (column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, item[field].displayValue)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data")))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")))))))))))));
+            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}` }, item[key] ? (column.type === 'person' ? renderPersonCard(item, key, column)
+                : column.type === 'stack' ? renderStack(item, column)
+                    : column.type === 'html' ? renderHtml(item, key)
+                        : renderDefault(item, key, column)) : (renderNoData(column))))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
