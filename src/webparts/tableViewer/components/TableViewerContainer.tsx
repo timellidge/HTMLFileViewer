@@ -249,19 +249,29 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               // Format the value based on the type
               if (type === 'number') {
                 displayValue = numberFormat(rawValue, format);
+
               } else if (type === 'date') {
                 rawValue = parseDate(rawValue, 'en-GB'); 
                 displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
+
               } else if (type === 'singlechoice') {
                 displayValue = rawValue ? rawValue : '-';
+
               } else if (type === 'multichoice') {
                 displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
+
+              } else if (type === 'link') {
+                // the raw value is the link and the display value is the text to display whaic js theh name of the key +.desc
+                const tempkey = key+".desc";
+                displayValue =  item[tempkey]
+
               } else if (type === 'person') {
                 if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
                   const email = rawValue[0].email || '';
                   const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
                   rawValue[0].name = name; // Add the name key to rawValue[0]
                   displayValue = rawValue[0].title;
+
                 } else {
                   displayValue = '';
                 }

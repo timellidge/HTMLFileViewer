@@ -114,12 +114,17 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     )
   );
 
+  // DEFAULT RENDER FUNCTION WITH LINES CLAMP
+  const renderLink = (item: any, key: any, column : IColumnJSON) => (
+    <a href={item[key].rawValue} className={styles.tableDataContent}>
+      {item[key].displayValue}
+   </a>
+  );
+
   // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
   const renderIcon = (item: any, key: any, column: IColumnJSON) => {
     const displayValue = item[key].displayValue;
     const iconData = column.icons[displayValue];
-    console.log(">>> iconData", displayValue, iconData);
-  
     if (iconData) {
       const [iconName, iconColor] = iconData.split('|');
       return <Icon iconName={iconName} style={{ color: iconColor }} title={displayValue}/>;
@@ -183,6 +188,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
                     column.type === 'person' ? renderPersonCard(item, key, column)
                     : column.type === 'html' ? renderHtml(item, key)
                     : column.type === 'icon' ? renderIcon(item, key, column)
+                    : column.type === 'link' ? renderLink(item, key, column)
                     : renderDefault(item, key, column)
                   ) : (
                     renderNoData(column)

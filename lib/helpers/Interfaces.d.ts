@@ -11,7 +11,7 @@ export interface IColumnJSON {
     prefix?: string | undefined | null;
     suffix?: string | undefined | null;
     format?: string | undefined | null;
-    sequence?: number | 0;
+    sequence?: number | 99;
     lines?: number | 0;
     icons?: IconSettings;
 }
