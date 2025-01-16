@@ -73,6 +73,25 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   }, [sortField, items]);
 
 
+    const handleMouseEnter = (event:  React.MouseEvent<HTMLDivElement>) => {
+      const row = event.currentTarget.getAttribute('data-row');
+      const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
+      cellsInRow.forEach(cell => {
+        cell.classList.add(styles.highlight);
+      });
+    };
+  
+    const handleMouseLeave = (event:  React.MouseEvent<HTMLDivElement>) => {
+      const row = event.currentTarget.getAttribute('data-row');
+      const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
+      cellsInRow.forEach(cell => {
+        cell.classList.remove(styles.highlight);
+      });
+    };
+  
+   
+
+
   //=================================================================================================================
   // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
   //=================================================================================================================
@@ -181,7 +200,11 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
           <React.Fragment key={itemIndex}>
             {_sortedColumns.map(({ key, column }) => (
               column.width > "0" && (
-                <div key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`}>
+                <div key={`${itemIndex}-${key}`} className={`${styles.tableCell} ${column.class ? column.class : ''}`}  
+                data-row={item.ID.rawValue} 
+                onMouseEnter={(event) => handleMouseEnter(event)}
+                onMouseLeave={(event) => handleMouseLeave(event)}
+                >
                   {column.type === 'stack' ? (
                     renderStack(item, column)
                   ) : item[key] ? (

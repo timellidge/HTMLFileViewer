@@ -8,7 +8,9 @@ declare const styles: {
     tableHeaderCell: string;
     sortIcon: string;
     tableCell: string;
+    numberCell: string;
     tableDataContent: string;
+    highlight: string;
     error: string;
 };
 export default styles;
