@@ -39,15 +39,52 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     }));
   };
 
+  const handleMouseEnter = (event:  React.MouseEvent<HTMLDivElement>) => {
+    const row = event.currentTarget.getAttribute('data-row');
+    const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
+    cellsInRow.forEach(cell => {
+      cell.classList.add(styles.highlight);
+    });
+  };
+
+  const handleMouseLeave = (event:  React.MouseEvent<HTMLDivElement>) => {
+    const row = event.currentTarget.getAttribute('data-row');
+    const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
+    cellsInRow.forEach(cell => {
+      cell.classList.remove(styles.highlight);
+    });
+  };
+
+  //=================================================================================================================
+  // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
+  //=================================================================================================================
 
   useEffect(() => {
     if (sortField.key) {
+      
       const sorted = [...items].sort((a, b) => {
-        const aValue = a[sortField.key].rawValue;
-        const bValue = b[sortField.key].rawValue;
-  
+        
+        console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
+
+        let aValue;
+        let bValue;
+        // dependign on the type we must source the data differently for sorting 
+        if (colJSON[sortField.key].type == 'stack') {
+          aValue = a[colJSON[sortField.key].fields[0]].displayValue;
+          bValue = b[colJSON[sortField.key].fields[0]].displayValue;
+        } else {
+          if (colJSON[sortField.key].type === 'person') {
+            aValue = a[sortField.key].displayValue;
+            bValue = b[sortField.key].displayValue;
+          } else {
+            // its a stack to treat the sort so that it sorts on the first field in the stack
+            aValue = a[sortField.key].rawValue;
+            bValue = b[sortField.key].rawValue;
+          }
+        }
         if (aValue === null || aValue === undefined) return 1;
         if (bValue === null || bValue === undefined) return -1;
+
         //see if they are numbers even though they have a string type
         const aNumber = parseFloat(aValue);
         const bNumber = parseFloat(bValue);
@@ -73,21 +110,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   }, [sortField, items]);
 
 
-    const handleMouseEnter = (event:  React.MouseEvent<HTMLDivElement>) => {
-      const row = event.currentTarget.getAttribute('data-row');
-      const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
-      cellsInRow.forEach(cell => {
-        cell.classList.add(styles.highlight);
-      });
-    };
-  
-    const handleMouseLeave = (event:  React.MouseEvent<HTMLDivElement>) => {
-      const row = event.currentTarget.getAttribute('data-row');
-      const cellsInRow = document.querySelectorAll(`.${styles.tableCell}[data-row="${row}"]`);
-      cellsInRow.forEach(cell => {
-        cell.classList.remove(styles.highlight);
-      });
-    };
+
   
    
 

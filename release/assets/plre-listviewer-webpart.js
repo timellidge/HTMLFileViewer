@@ -10526,11 +10526,45 @@ const TableGridRender = ({ colJSON, items }) => {
             direction: prevState.key === columnKey ? !prevState.direction : true,
         }));
     };
+    const handleMouseEnter = (event) => {
+        const row = event.currentTarget.getAttribute('data-row');
+        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
+        cellsInRow.forEach(cell => {
+            cell.classList.add(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
+        });
+    };
+    const handleMouseLeave = (event) => {
+        const row = event.currentTarget.getAttribute('data-row');
+        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
+        cellsInRow.forEach(cell => {
+            cell.classList.remove(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
+        });
+    };
+    //=================================================================================================================
+    // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
+    //=================================================================================================================
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (sortField.key) {
             const sorted = [...items].sort((a, b) => {
-                const aValue = a[sortField.key].rawValue;
-                const bValue = b[sortField.key].rawValue;
+                console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
+                let aValue;
+                let bValue;
+                // dependign on the type we must source the data differently for sorting 
+                if (colJSON[sortField.key].type == 'stack') {
+                    aValue = a[colJSON[sortField.key].fields[0]].displayValue;
+                    bValue = b[colJSON[sortField.key].fields[0]].displayValue;
+                }
+                else {
+                    if (colJSON[sortField.key].type === 'person') {
+                        aValue = a[sortField.key].displayValue;
+                        bValue = b[sortField.key].displayValue;
+                    }
+                    else {
+                        // its a stack to treat the sort so that it sorts on the first field in the stack
+                        aValue = a[sortField.key].rawValue;
+                        bValue = b[sortField.key].rawValue;
+                    }
+                }
                 if (aValue === null || aValue === undefined)
                     return 1;
                 if (bValue === null || bValue === undefined)
@@ -10561,20 +10595,6 @@ const TableGridRender = ({ colJSON, items }) => {
             setSortedItems(items);
         }
     }, [sortField, items]);
-    const handleMouseEnter = (event) => {
-        const row = event.currentTarget.getAttribute('data-row');
-        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach(cell => {
-            cell.classList.add(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
-        });
-    };
-    const handleMouseLeave = (event) => {
-        const row = event.currentTarget.getAttribute('data-row');
-        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach(cell => {
-            cell.classList.remove(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
-        });
-    };
     //=================================================================================================================
     // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
     //=================================================================================================================
@@ -13889,7 +13909,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_98a343a8 .tableViewerHeader_98a343a8{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_98a343a8 .tableViewerHeader_98a343a8 .searchBox_98a343a8{margin:0}.tableViewer_98a343a8 .tabBar_98a343a8{background-color:#fff;margin-top:5px}.tableViewer_98a343a8 .tableContainer_98a343a8{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_98a343a8 .searchBox_98a343a8{margin:0}.tableViewer_98a343a8 .tableGrid_98a343a8{grid-gap:0;display:grid;width:100%}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableHeaderCell_98a343a8{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableHeaderCell_98a343a8 .sortIcon_98a343a8{color:grey;cursor:pointer;margin-left:5px}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableHeaderCell_98a343a8:hover{background-color:#d4d4d0}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableCell_98a343a8{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;margin-bottom:3px;padding:2px}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableCell_98a343a8 .numberCell_98a343a8{padding-right:10px;text-align:right}.tableViewer_98a343a8 .tableGrid_98a343a8 .tableDataContent_98a343a8{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_98a343a8 .tableGrid_98a343a8 .highlight_98a343a8{background-color:#ff7300}.error input:-ms-input-placeholder{color:red!important}.error_98a343a8 input::placeholder{color:red!important}.error_98a343a8 input:-ms-input-placeholder{color:red!important}.error_98a343a8 input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_530e723b .tableViewerHeader_530e723b{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_530e723b .tableViewerHeader_530e723b .searchBox_530e723b{margin:0}.tableViewer_530e723b .tabBar_530e723b{background-color:#fff;margin-top:5px}.tableViewer_530e723b .tableContainer_530e723b{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_530e723b .searchBox_530e723b{margin:0}.tableViewer_530e723b .tableGrid_530e723b{grid-gap:0;display:grid;width:100%}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b .sortIcon_530e723b{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b:hover{background-color:#d4d4d0}.tableViewer_530e723b .tableGrid_530e723b .tableCell_530e723b{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_530e723b .tableGrid_530e723b .tableCell_530e723b .numberCell_530e723b{padding-right:10px;text-align:right}.tableViewer_530e723b .tableGrid_530e723b .tableDataContent_530e723b{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_530e723b .tableGrid_530e723b .highlight_530e723b{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_530e723b input::placeholder{color:red!important}.error_530e723b input:-ms-input-placeholder{color:red!important}.error_530e723b input::-ms-input-placeholder{color:red!important}", ""]);
 // Exports
 module.exports = exports;
 
@@ -30689,19 +30709,19 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_98a343a8',
-    tableViewerHeader: 'tableViewerHeader_98a343a8',
-    searchBox: 'searchBox_98a343a8',
-    tabBar: 'tabBar_98a343a8',
-    tableContainer: 'tableContainer_98a343a8',
-    tableGrid: 'tableGrid_98a343a8',
-    tableHeaderCell: 'tableHeaderCell_98a343a8',
-    sortIcon: 'sortIcon_98a343a8',
-    tableCell: 'tableCell_98a343a8',
-    numberCell: 'numberCell_98a343a8',
-    tableDataContent: 'tableDataContent_98a343a8',
-    highlight: 'highlight_98a343a8',
-    error: 'error_98a343a8'
+    tableViewer: 'tableViewer_530e723b',
+    tableViewerHeader: 'tableViewerHeader_530e723b',
+    searchBox: 'searchBox_530e723b',
+    tabBar: 'tabBar_530e723b',
+    tableContainer: 'tableContainer_530e723b',
+    tableGrid: 'tableGrid_530e723b',
+    tableHeaderCell: 'tableHeaderCell_530e723b',
+    sortIcon: 'sortIcon_530e723b',
+    tableCell: 'tableCell_530e723b',
+    numberCell: 'numberCell_530e723b',
+    tableDataContent: 'tableDataContent_530e723b',
+    highlight: 'highlight_530e723b',
+    error: 'error_530e723b'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
