@@ -12,6 +12,7 @@ declare const styles: {
     tableDataContent: string;
     highlight: string;
     error: string;
+    workbenchPageContent: string;
 };
 export default styles;
 //# sourceMappingURL=TableViewer.module.scss.d.ts.map

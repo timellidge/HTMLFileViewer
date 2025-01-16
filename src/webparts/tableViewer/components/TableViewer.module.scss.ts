@@ -1,19 +1,20 @@
 /* tslint:disable */
 require("./TableViewer.module.css");
 const styles = {
-  tableViewer: 'tableViewer_530e723b',
-  tableViewerHeader: 'tableViewerHeader_530e723b',
-  searchBox: 'searchBox_530e723b',
-  tabBar: 'tabBar_530e723b',
-  tableContainer: 'tableContainer_530e723b',
-  tableGrid: 'tableGrid_530e723b',
-  tableHeaderCell: 'tableHeaderCell_530e723b',
-  sortIcon: 'sortIcon_530e723b',
-  tableCell: 'tableCell_530e723b',
-  numberCell: 'numberCell_530e723b',
-  tableDataContent: 'tableDataContent_530e723b',
-  highlight: 'highlight_530e723b',
-  error: 'error_530e723b'
+  tableViewer: 'tableViewer_db9e7889',
+  tableViewerHeader: 'tableViewerHeader_db9e7889',
+  searchBox: 'searchBox_db9e7889',
+  tabBar: 'tabBar_db9e7889',
+  tableContainer: 'tableContainer_db9e7889',
+  tableGrid: 'tableGrid_db9e7889',
+  tableHeaderCell: 'tableHeaderCell_db9e7889',
+  sortIcon: 'sortIcon_db9e7889',
+  tableCell: 'tableCell_db9e7889',
+  numberCell: 'numberCell_db9e7889',
+  tableDataContent: 'tableDataContent_db9e7889',
+  highlight: 'highlight_db9e7889',
+  error: 'error_db9e7889',
+  workbenchPageContent: 'workbenchPageContent_db9e7889'
 };
 
 export default styles;

@@ -10555,7 +10555,7 @@ const TableGridRender = ({ colJSON, items }) => {
                     bValue = b[colJSON[sortField.key].fields[0]].displayValue;
                 }
                 else {
-                    if (colJSON[sortField.key].type === 'person') {
+                    if (colJSON[sortField.key].type === 'person' || colJSON[sortField.key].type === 'multichoice') {
                         aValue = a[sortField.key].displayValue;
                         bValue = b[sortField.key].displayValue;
                     }
@@ -10605,6 +10605,8 @@ const TableGridRender = ({ colJSON, items }) => {
     const renderHtml = (item, key) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } }));
     // DEFAULT RENDER FUNCTION WITH LINES CLAMP
     const renderDefault = (item, key, column) => (column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } }, item[key].displayValue)) : (item[key].displayValue));
+    // NUMBER RENDER FUNCTION ALIGN 
+    const renderNumber = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell }, item[key].displayValue));
     // DEFAULT RENDER FUNCTION WITH LINES CLAMP
     const renderLink = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: item[key].rawValue, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent }, item[key].displayValue));
     // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
@@ -10639,7 +10641,8 @@ const TableGridRender = ({ colJSON, items }) => {
                 : column.type === 'html' ? renderHtml(item, key)
                     : column.type === 'icon' ? renderIcon(item, key, column)
                         : column.type === 'link' ? renderLink(item, key, column)
-                            : renderDefault(item, key, column)) : (renderNoData(column))))))))))));
+                            : column.type === 'number' ? renderNumber(item, key, column)
+                                : renderDefault(item, key, column)) : (renderNoData(column))))))))))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -13909,7 +13912,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_530e723b .tableViewerHeader_530e723b{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_530e723b .tableViewerHeader_530e723b .searchBox_530e723b{margin:0}.tableViewer_530e723b .tabBar_530e723b{background-color:#fff;margin-top:5px}.tableViewer_530e723b .tableContainer_530e723b{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_530e723b .searchBox_530e723b{margin:0}.tableViewer_530e723b .tableGrid_530e723b{grid-gap:0;display:grid;width:100%}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b .sortIcon_530e723b{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_530e723b .tableGrid_530e723b .tableHeaderCell_530e723b:hover{background-color:#d4d4d0}.tableViewer_530e723b .tableGrid_530e723b .tableCell_530e723b{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_530e723b .tableGrid_530e723b .tableCell_530e723b .numberCell_530e723b{padding-right:10px;text-align:right}.tableViewer_530e723b .tableGrid_530e723b .tableDataContent_530e723b{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_530e723b .tableGrid_530e723b .highlight_530e723b{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_530e723b input::placeholder{color:red!important}.error_530e723b input:-ms-input-placeholder{color:red!important}.error_530e723b input::-ms-input-placeholder{color:red!important}", ""]);
+exports.push([module.i, ".tableViewer_db9e7889 .tableViewerHeader_db9e7889{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_db9e7889 .tableViewerHeader_db9e7889 .searchBox_db9e7889{margin:0}.tableViewer_db9e7889 .tabBar_db9e7889{background-color:#fff;margin-top:5px}.tableViewer_db9e7889 .tableContainer_db9e7889{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_db9e7889 .searchBox_db9e7889{margin:0}.tableViewer_db9e7889 .tableGrid_db9e7889{grid-gap:0;display:grid;width:100%}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableHeaderCell_db9e7889{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableHeaderCell_db9e7889 .sortIcon_db9e7889{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableHeaderCell_db9e7889:hover{background-color:#d4d4d0}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableCell_db9e7889{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableCell_db9e7889 .numberCell_db9e7889{padding-right:10px;text-align:right}.tableViewer_db9e7889 .tableGrid_db9e7889 .tableDataContent_db9e7889{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_db9e7889 .tableGrid_db9e7889 .highlight_db9e7889{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_db9e7889 input::placeholder{color:red!important}.error_db9e7889 input:-ms-input-placeholder{color:red!important}.error_db9e7889 input::-ms-input-placeholder{color:red!important}#workbenchPageContent_db9e7889{max-width:1680px}", ""]);
 // Exports
 module.exports = exports;
 
@@ -30709,19 +30712,20 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_530e723b',
-    tableViewerHeader: 'tableViewerHeader_530e723b',
-    searchBox: 'searchBox_530e723b',
-    tabBar: 'tabBar_530e723b',
-    tableContainer: 'tableContainer_530e723b',
-    tableGrid: 'tableGrid_530e723b',
-    tableHeaderCell: 'tableHeaderCell_530e723b',
-    sortIcon: 'sortIcon_530e723b',
-    tableCell: 'tableCell_530e723b',
-    numberCell: 'numberCell_530e723b',
-    tableDataContent: 'tableDataContent_530e723b',
-    highlight: 'highlight_530e723b',
-    error: 'error_530e723b'
+    tableViewer: 'tableViewer_db9e7889',
+    tableViewerHeader: 'tableViewerHeader_db9e7889',
+    searchBox: 'searchBox_db9e7889',
+    tabBar: 'tabBar_db9e7889',
+    tableContainer: 'tableContainer_db9e7889',
+    tableGrid: 'tableGrid_db9e7889',
+    tableHeaderCell: 'tableHeaderCell_db9e7889',
+    sortIcon: 'sortIcon_db9e7889',
+    tableCell: 'tableCell_db9e7889',
+    numberCell: 'numberCell_db9e7889',
+    tableDataContent: 'tableDataContent_db9e7889',
+    highlight: 'highlight_db9e7889',
+    error: 'error_db9e7889',
+    workbenchPageContent: 'workbenchPageContent_db9e7889'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 

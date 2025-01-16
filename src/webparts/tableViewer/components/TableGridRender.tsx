@@ -73,7 +73,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
           aValue = a[colJSON[sortField.key].fields[0]].displayValue;
           bValue = b[colJSON[sortField.key].fields[0]].displayValue;
         } else {
-          if (colJSON[sortField.key].type === 'person') {
+          if (colJSON[sortField.key].type === 'person' || colJSON[sortField.key].type === 'multichoice') {
             aValue = a[sortField.key].displayValue;
             bValue = b[sortField.key].displayValue;
           } else {
@@ -156,6 +156,11 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     )
   );
 
+  // NUMBER RENDER FUNCTION ALIGN 
+  const renderNumber = (item: any, key: any, column : IColumnJSON) => (
+      <div className={styles.numberCell} >{item[key].displayValue}</div>
+  );
+
   // DEFAULT RENDER FUNCTION WITH LINES CLAMP
   const renderLink = (item: any, key: any, column : IColumnJSON) => (
     <a href={item[key].rawValue} className={styles.tableDataContent}>
@@ -235,6 +240,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
                     : column.type === 'html' ? renderHtml(item, key)
                     : column.type === 'icon' ? renderIcon(item, key, column)
                     : column.type === 'link' ? renderLink(item, key, column)
+                    : column.type === 'number' ? renderNumber(item, key, column)
                     : renderDefault(item, key, column)
                   ) : (
                     renderNoData(column)
