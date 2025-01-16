@@ -11,7 +11,6 @@ import { IDropdownOption } from 'office-ui-fabric-react';
 import { IViewInfo } from '@pnp/sp/views';
 import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
-import { IColumnsConfig } from './Interfaces';
 import {DateTime} from 'luxon';
 
 

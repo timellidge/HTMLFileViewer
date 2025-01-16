@@ -1,26 +1,17 @@
 import * as React from 'react';
-import { IPersonaSharedProps, Persona, PersonaSize, PersonaPresence } from '@fluentui/react/lib/Persona';
-import { Checkbox } from '@fluentui/react/lib/Checkbox';
-import { Label } from '@fluentui/react/lib/Label';
-import { Stack } from '@fluentui/react/lib/Stack';
+import { IPersonaSharedProps, Persona, PersonaSize} from '@fluentui/react/lib/Persona';
+
 //  /_layouts/15/userphoto.aspx?AccountName=mail@domain.com
 import { getInitials } from '../../../../helpers/Utilities';
-
 
 export interface IPersonCardProps  {
   email: string;
   name: string;
   title: string;
   format?: string;
-  
 }
 
 export default function  PersonCard({email, name, title, format} : IPersonCardProps){
-
-  const [renderDetails, updateRenderDetails] = React.useState(true);
-  const onChange = (ev: unknown, checked: boolean | undefined) => {
-    updateRenderDetails(!!checked);
-  };
 
   const examplePersona: IPersonaSharedProps = {
     imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,

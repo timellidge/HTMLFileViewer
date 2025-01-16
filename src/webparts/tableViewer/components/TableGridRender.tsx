@@ -157,12 +157,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   );
 
   // NUMBER RENDER FUNCTION ALIGN 
-  const renderNumber = (item: any, key: any, column : IColumnJSON) => (
+  const renderNumber = (item: any, key: any) => (
       <div className={styles.numberCell} >{item[key].displayValue}</div>
   );
 
-  // DEFAULT RENDER FUNCTION WITH LINES CLAMP
-  const renderLink = (item: any, key: any, column : IColumnJSON) => (
+  // REnder a link
+  const renderLink = (item: any, key: any) => (
     <a href={item[key].rawValue} className={styles.tableDataContent}>
       {item[key].displayValue}
    </a>
@@ -239,8 +239,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
                     column.type === 'person' ? renderPersonCard(item, key, column)
                     : column.type === 'html' ? renderHtml(item, key)
                     : column.type === 'icon' ? renderIcon(item, key, column)
-                    : column.type === 'link' ? renderLink(item, key, column)
-                    : column.type === 'number' ? renderNumber(item, key, column)
+                    : column.type === 'link' ? renderLink(item, key)
+                    : column.type === 'number' ? renderNumber(item, key)
                     : renderDefault(item, key, column)
                   ) : (
                     renderNoData(column)
