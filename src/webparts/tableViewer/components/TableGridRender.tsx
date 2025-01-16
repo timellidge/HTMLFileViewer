@@ -61,17 +61,20 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
 
   useEffect(() => {
     if (sortField.key) {
-      
       const sorted = [...items].sort((a, b) => {
-        
-        console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
-
+        //console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
         let aValue;
         let bValue;
-        // dependign on the type we must source the data differently for sorting 
+        // dependign on the type we must source the data differently for sorting also if its a stack we cant sort the date liek a string so we need to do a double lookup into the columns to get the info we need to make the choice
         if (colJSON[sortField.key].type == 'stack') {
-          aValue = a[colJSON[sortField.key].fields[0]].displayValue;
-          bValue = b[colJSON[sortField.key].fields[0]].displayValue;
+          // do the lookup into trhe stack to get the first field in the stack then look up its type
+          if(colJSON[colJSON[sortField.key].fields[0]].type === 'date') {
+            aValue = a[colJSON[sortField.key].fields[0]].rawValue;
+            bValue = b[colJSON[sortField.key].fields[0]].rawValue;
+          } else {
+            aValue = a[colJSON[sortField.key].fields[0]].displayValue;
+            bValue = b[colJSON[sortField.key].fields[0]].displayValue;
+          }
         } else {
           if (colJSON[sortField.key].type === 'person' || colJSON[sortField.key].type === 'multichoice') {
             aValue = a[sortField.key].displayValue;
@@ -82,8 +85,15 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
             bValue = b[sortField.key].rawValue;
           }
         }
+
         if (aValue === null || aValue === undefined) return 1;
         if (bValue === null || bValue === undefined) return -1;
+
+        // Check if the values are dates
+        if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue)) {
+          console.log(">>> sorting dates",  aValue, bValue);
+          return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+        }
 
         //see if they are numbers even though they have a string type
         const aNumber = parseFloat(aValue);
@@ -108,11 +118,6 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
       setSortedItems(items);
     }
   }, [sortField, items]);
-
-
-
-  
-   
 
 
   //=================================================================================================================

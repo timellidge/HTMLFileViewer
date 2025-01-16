@@ -245,6 +245,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               const type = ColData.type || 'string';
               let rawValue = item[key];
               let displayValue = rawValue;
+             // let sortValue = rawValue;
       
               // Format the value based on the type
               if (type === 'number') {
@@ -280,6 +281,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               newItem[key] = {
                 rawValue: rawValue,
                 displayValue: (pre + displayValue + suf),
+               // sortValue: sortValue,
               };
             }
           });
