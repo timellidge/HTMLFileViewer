@@ -22,7 +22,6 @@ export interface ITableViewerWebPartProps {
     webPartTag: string;
 }
 export default class TableViewerWebPart extends BaseClientSideWebPart<ITableViewerWebPartProps> {
-    private shouldRerender;
     private linkFieldOptions;
     private themeProvider;
     private themeVariant;
@@ -34,7 +33,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     private tableConfig;
     private defaultCSS;
     protected onInit(): Promise<void>;
-    protected onPropertyPaneConfigurationComplete(): void;
     private injectCSS;
     render(): void;
     protected onDispose(): void;
@@ -45,8 +43,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     private onPropertyFieldViewPickerChanged;
     private updateFieldViewPickerValue;
     private onPropertyFieldListPickerChanged;
-    private updateFieldListPickerOptions;
-    protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void;
     protected loadPropertyPaneResources(): Promise<void>;
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration;
 }

@@ -52,7 +52,7 @@ export interface ITableViewerWebPartProps {
 }
 export default class TableViewerWebPart extends BaseClientSideWebPart<ITableViewerWebPartProps> {
   //@typescript-eslint/no-unused-vars
-  private shouldRerender = false;
+ // private shouldRerender = false;
   private linkFieldOptions: IDropdownOption[];
 
   private themeProvider: ThemeProvider;
@@ -115,25 +115,10 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         "Created",
         "Modified"
       ]
-    },
-    "BSAColor": {
-      "name": "BSA Color",
-      "width": "1fr",
-      "tab": true,
-      "isSortable": true,
-      "type": "icon",
-      "icons": {
-        "#ee4035": "CircleFill|#ff0000",
-        "#f37736": "CircleFill|#00ff00",
-        "#7bc043": "CircleFill|#7bc043",
-        "#0392cf": "CircleFill|#0392cf",
-        "#B22222": "CircleFill|#B22222"
-      }
     }
 }
   // icon refernce for the icons in the table
   // https://uifabricicons.azurewebsites.net/
-
   private defaultCSS = `<style>
     .titleclass{
         font-weight:600 !important; 
@@ -172,16 +157,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
   }
 
-  protected onPropertyPaneConfigurationComplete(): void {
-    super.onPropertyPaneConfigurationComplete();
-    
-    // Toggle a variable to force re-render
-    this.shouldRerender = !this.shouldRerender;
-    
-    // Trigger the re-render
-    this.render();
-  }
-
   private injectCSS(css: string): void {
     // Remove the existing <style> element if it exists
     if(!this.properties.webPartTag || this.properties.webPartTag === undefined) {
@@ -215,7 +190,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     const element: React.ReactElement<ITableViewerContainerProps> = React.createElement(
       TableViewerContainer,
       {
-        key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2', // This forces React to re-render
+      //  key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2', // This forces React to re-render
         JSONCode: this.properties.JSONCode,
         webPartCSS: this.properties.webPartCSS,
         siteUrl: this.properties.siteUrl,
@@ -307,40 +282,25 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     this.onPropertyPaneFieldChanged(targetProperty as string, oldViewValue, newValue);
     
     if (newValue !== '') {
-      getListFields(this.properties.siteUrl, this.properties.list)
-        .then(this.updateFieldListPickerOptions.bind(this));
-    } else {
+     
       this.properties.view = '';
       this.context.propertyPane.refresh();
       this.render(); // Render the web part to reflect the list change
-    }
+    
   }
+}
   
-  private updateFieldListPickerOptions(result: IFieldInfo[]) {
-    const visibleFields: IFieldInfo[] = result.filter(
-      (field: IFieldInfo) => field.Hidden === false,
-    );
-  
-    const options: IDropdownOption[] = visibleFields.map((field: IFieldInfo, index: number) => ({
-      key: index,
-      text: `${field.Title} (${field.InternalName})`,
-      title: `${field.Title} (${field.InternalName})`,
-      data: field,
-    }));
-  
-    this.linkFieldOptions = options;
-    this.render(); // Re-render the web part to reflect the new field options
-  }
-  // General property change handler
-  protected onPropertyPaneFieldChanged(
-    propertyPath: string,
-    oldValue: any,
-    newValue: any
-  ): void {
-    super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
-    // Immediately reflect the property change
-    this.render();
-  }
+
+  // // General property change handler
+  // protected onPropertyPaneFieldChanged(
+  //   propertyPath: string,
+  //   oldValue: any,
+  //   newValue: any
+  // ): void {
+  //   super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+  //   // Immediately reflect the property change
+  //   this.render();
+  // }
 
   protected async loadPropertyPaneResources(): Promise<void> {
     const editorPropImport = import(

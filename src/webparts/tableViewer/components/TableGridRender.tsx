@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { IColumnsConfig, IColumnJSON } from '../../../helpers/Interfaces'; // Ensure this import is correct
 import styles from './TableViewer.module.scss';
 import { mergeStyles } from '@fluentui/react';
+import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import * as _ from 'lodash';
 import { Icon } from '@fluentui/react/lib/Icon';
 import PersonCard from './TabsRender/PersonCard';
@@ -18,6 +19,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   //we can only have one column sorted at a time so i need to know its name and its state
   const [sortField, setSortField] = useState<{ key: string; direction: boolean | null }>({ key: '', direction: null });
   const [sortedItems, setSortedItems] = useState<any[]>(items);
+  
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+
+  const toggleSidePanel = () => {
+    setIsSidePanelOpen(!isSidePanelOpen);
+  };
 
   const _sortedColumns = Object.keys(colJSON)
   .map((key) => ({ key, column: colJSON[key] }))
@@ -132,16 +139,37 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     />
   );
 
-// STACK OF FIELDS
-  const renderStack = (item: any, column: IColumnJSON) => (
+  // // STACK OF FIELDS
+  // const renderStack = (item: any, column: IColumnJSON, allcolJSON: IColumnsConfig) => (
+  //   <div>
+  //     {column.fields.map((field:any, fieldIndex:number) => (
+  //       item[field] ? (
+  //         <div className={`stack ${field}`} key={fieldIndex}>{item[field].displayValue}</div>
+  //       ) : (
+  //         <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>
+  //       )
+  //     ))}
+  //   </div>
+  // );
+
+  const renderStack = (item: any, column: IColumnJSON, allcolJSON: IColumnsConfig) => (
     <div>
-      {column.fields.map((field:any, fieldIndex:number) => (
-        item[field] ? (
-          <div className={`stack ${field}`} key={fieldIndex}>{item[field].displayValue}</div>
+      {column.fields.map((field: any, fieldIndex: number) => {
+        const fieldColumn = allcolJSON[field];
+        const prefix = fieldColumn?.prefix ? <span>{fieldColumn.prefix}</span> : null;
+        const suffix = fieldColumn?.suffix ? <span>{fieldColumn.suffix}</span> : null;
+        return item[field] ? (
+          <div className={`stack ${field}`} key={fieldIndex}>
+            {prefix}
+            {item[field].displayValue}
+            {suffix}
+          </div>
         ) : (
-          <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>
-        )
-      ))}
+          <div className={`stack ${field}`} key={fieldIndex}>
+            &nbsp;
+          </div>
+        );
+      })}
     </div>
   );
 
@@ -150,26 +178,41 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
     <div dangerouslySetInnerHTML={{ __html: item[key].displayValue }} />
   );
 
-// DEFAULT RENDER FUNCTION WITH LINES CLAMP
-  const renderDefault = (item: any, key: any, column : IColumnJSON) => (
-    column.lines ? (
-      <div className={styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}>
-        {item[key].displayValue}
-      </div>
-    ) : (
-      item[key].displayValue
-    )
+// DEFAULT RENDER FUNCTION WITH LINES CLAMP 
+//& EXTEND THIS IF THERE IS A PRE OR POST TO DANGEROUSLY INSERT INNER HTML
+const renderDefault = (content: string, column: IColumnJSON) => {
+  console.log('Item:', content);
+  console.log('Column:', column);
+  return column.lines ? (
+    <div className={styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}>
+      {column.prefix && <span>{column.prefix}</span>}
+      {content}
+      {column.suffix && <span>{column.suffix}</span>}
+    </div>
+  ) : (
+    <>
+      {column.prefix && <span>{column.prefix}</span>}
+      {content}
+      {column.suffix && <span>{column.suffix}</span>}
+    </>
   );
+};
 
   // NUMBER RENDER FUNCTION ALIGN 
-  const renderNumber = (item: any, key: any) => (
-      <div className={styles.numberCell} >{item[key].displayValue}</div>
+  const renderNumber = (item: any, key: any, column : IColumnJSON) => (
+    <div className={styles.numberCell} >
+      {column.prefix && <span>{column.prefix}</span>}
+      {item[key].displayValue}
+      {column.suffix && <span>{column.suffix}</span>}
+    </div>
   );
 
   // REnder a link
-  const renderLink = (item: any, key: any) => (
+  const renderLink = (item: any, key: any,  column : IColumnJSON) => (
     <a href={item[key].rawValue} className={styles.tableDataContent}>
-      {item[key].displayValue}
+        {column.prefix && <span>{column.prefix}</span>}
+        {item[key].displayValue}
+        {column.suffix && <span>{column.suffix}</span>}
    </a>
   );
 
@@ -239,14 +282,14 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
                 onMouseLeave={(event) => handleMouseLeave(event)}
                 >
                   {column.type === 'stack' ? (
-                    renderStack(item, column)
+                    renderStack(item, column, colJSON)
                   ) : item[key] ? (
                     column.type === 'person' ? renderPersonCard(item, key, column)
                     : column.type === 'html' ? renderHtml(item, key)
                     : column.type === 'icon' ? renderIcon(item, key, column)
-                    : column.type === 'link' ? renderLink(item, key)
-                    : column.type === 'number' ? renderNumber(item, key)
-                    : renderDefault(item, key, column)
+                    : column.type === 'link' ? renderLink(item, key, column)
+                    : column.type === 'number' ? renderNumber(item, key,  column)
+                    : renderDefault(item[key].displayValue, column)
                   ) : (
                     renderNoData(column)
                   )}
@@ -255,7 +298,21 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
             ))}
           </React.Fragment>
         ))}
+        
       </div>
+           {/* Button to toggle side panel */}
+           <button onClick={toggleSidePanel}>Toggle Side Panel</button>
+
+{/* Side panel */}
+<Panel
+  isOpen={isSidePanelOpen}
+  onDismiss={toggleSidePanel}
+  closeButtonAriaLabel="Close"
+  headerText="Side Panel"
+  type={PanelType.large} // Set the size of the panel
+>
+  <p>Content goes here...</p>
+</Panel>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { mergeStyles } from '@fluentui/react';
 import styles from './TableViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
@@ -8,12 +8,10 @@ import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
-import TableViewerRender from './TableViewerRender';
 import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
-import { DateTime } from 'luxon';
 
 export interface IField {
   rawValue: any;
@@ -239,8 +237,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
           Object.keys(item).forEach((key) => {
             if (ColumnsJSON[key]) {
               const ColData = ColumnsJSON[key];
-              const pre = ColData.prefix || '';
-              const suf = ColData.suffix || '';
               const format = ColData.format || '';
               const type = ColData.type || 'string';
               let rawValue = item[key];
@@ -250,7 +246,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               // Format the value based on the type
               if (type === 'number') {
                 displayValue = numberFormat(rawValue, format);
-
+                rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
               } else if (type === 'date') {
                 rawValue = parseDate(rawValue, 'en-GB'); 
                 displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
@@ -277,11 +273,15 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                   displayValue = '';
                 }
               }
-      
+              // clear it if the data is missign so we render nothing
+              if(rawValue === null || rawValue === undefined){
+                displayValue= "";
+              } 
+
               newItem[key] = {
                 rawValue: rawValue,
-                displayValue: (pre + displayValue + suf),
-               // sortValue: sortValue,
+                displayValue: displayValue,
+                // sortValue: sortValue,
               };
             }
           });
