@@ -10640,7 +10640,7 @@ const TableGridRender = ({ colJSON, items }) => {
             suffix)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
     })));
     // HTML FIELD
-    const renderHtml = (item, key) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: item[key].displayValue } }));
+    const renderHtml = (htmltext) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
     // DEFAULT RENDER FUNCTION WITH LINES CLAMP 
     //& EXTEND THIS IF THERE IS A PRE OR POST TO DANGEROUSLY INSERT INNER HTML
     const renderDefault = (content, column) => {
@@ -10655,18 +10655,17 @@ const TableGridRender = ({ colJSON, items }) => {
             column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     };
     // NUMBER RENDER FUNCTION ALIGN 
-    const renderNumber = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
+    const renderNumber = (displayText, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
         column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        item[key].displayValue,
+        displayText,
         column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     // REnder a link
-    const renderLink = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: item[key].rawValue, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
+    const renderLink = (link, displayText, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
         column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        item[key].displayValue,
+        displayText,
         column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
-    const renderIcon = (item, key, column) => {
-        const displayValue = item[key].displayValue;
+    const renderIcon = (displayValue, column) => {
         const iconData = column.icons[displayValue];
         if (iconData) {
             const [iconName, iconColor] = iconData.split('|');
@@ -10693,10 +10692,10 @@ const TableGridRender = ({ colJSON, items }) => {
                             ? 'SortDown'
                             : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) })))))),
             sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, column.type === 'stack' ? (renderStack(item, column, colJSON)) : item[key] ? (column.type === 'person' ? renderPersonCard(item, key, column)
-                : column.type === 'html' ? renderHtml(item, key)
-                    : column.type === 'icon' ? renderIcon(item, key, column)
-                        : column.type === 'link' ? renderLink(item, key, column)
-                            : column.type === 'number' ? renderNumber(item, key, column)
+                : column.type === 'html' ? renderHtml(item[key].rawValue)
+                    : column.type === 'icon' ? renderIcon(item[key].displayValue, column)
+                        : column.type === 'link' ? renderLink(item[key].rawValue, item[key].displayValue, column)
+                            : column.type === 'number' ? renderNumber(item[key].displayValue, column)
                                 : renderDefault(item[key].displayValue, column)) : (renderNoData(column)))))))))),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: toggleSidePanel }, "Toggle Side Panel"),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: toggleSidePanel, closeButtonAriaLabel: "Close", headerText: "Side Panel", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].large },

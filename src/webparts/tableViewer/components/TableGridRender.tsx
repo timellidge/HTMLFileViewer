@@ -174,8 +174,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   );
 
  // HTML FIELD
-  const renderHtml = (item: any, key: any) => (
-    <div dangerouslySetInnerHTML={{ __html: item[key].displayValue }} />
+  const renderHtml = (htmltext: string) => (
+    <div dangerouslySetInnerHTML={{ __html: htmltext }} />
   );
 
 // DEFAULT RENDER FUNCTION WITH LINES CLAMP 
@@ -199,26 +199,25 @@ const renderDefault = (content: string, column: IColumnJSON) => {
 };
 
   // NUMBER RENDER FUNCTION ALIGN 
-  const renderNumber = (item: any, key: any, column : IColumnJSON) => (
+  const renderNumber = (displayText: string, column : IColumnJSON) => (
     <div className={styles.numberCell} >
       {column.prefix && <span>{column.prefix}</span>}
-      {item[key].displayValue}
+      {displayText}
       {column.suffix && <span>{column.suffix}</span>}
     </div>
   );
 
   // REnder a link
-  const renderLink = (item: any, key: any,  column : IColumnJSON) => (
-    <a href={item[key].rawValue} className={styles.tableDataContent}>
+  const renderLink = (link: string, displayText: string ,  column : IColumnJSON) => (
+    <a href={link} className={styles.tableDataContent}>
         {column.prefix && <span>{column.prefix}</span>}
-        {item[key].displayValue}
+        {displayText}
         {column.suffix && <span>{column.suffix}</span>}
    </a>
   );
 
   // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
-  const renderIcon = (item: any, key: any, column: IColumnJSON) => {
-    const displayValue = item[key].displayValue;
+  const renderIcon = (displayValue: string, column: IColumnJSON) => {
     const iconData = column.icons[displayValue];
     if (iconData) {
       const [iconName, iconColor] = iconData.split('|');
@@ -285,10 +284,10 @@ const renderDefault = (content: string, column: IColumnJSON) => {
                     renderStack(item, column, colJSON)
                   ) : item[key] ? (
                     column.type === 'person' ? renderPersonCard(item, key, column)
-                    : column.type === 'html' ? renderHtml(item, key)
-                    : column.type === 'icon' ? renderIcon(item, key, column)
-                    : column.type === 'link' ? renderLink(item, key, column)
-                    : column.type === 'number' ? renderNumber(item, key,  column)
+                    : column.type === 'html' ? renderHtml(item[key].rawValue)
+                    : column.type === 'icon' ? renderIcon(item[key].displayValue, column)
+                    : column.type === 'link' ? renderLink(item[key].rawValue, item[key].displayValue, column)
+                    : column.type === 'number' ? renderNumber(item[key].displayValue, column)
                     : renderDefault(item[key].displayValue, column)
                   ) : (
                     renderNoData(column)
