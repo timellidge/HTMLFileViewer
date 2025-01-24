@@ -65,6 +65,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   //=================================================================================================================
   // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
   //=================================================================================================================
+  //& PROBLEM WITH NUMBER SORT 
 
   useEffect(() => {
     if (sortField.key) {
@@ -74,8 +75,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
         let bValue;
         // dependign on the type we must source the data differently for sorting also if its a stack we cant sort the date liek a string so we need to do a double lookup into the columns to get the info we need to make the choice
         if (colJSON[sortField.key].type == 'stack') {
-          // do the lookup into trhe stack to get the first field in the stack then look up its type
-          if(colJSON[colJSON[sortField.key].fields[0]].type === 'date') {
+          // do the lookup into trhe stack to get the first field in the stack then look up its type and sort accordingly
+          if(colJSON[colJSON[sortField.key].fields[0]].type === 'date' || colJSON[colJSON[sortField.key].fields[0]].type === 'number') {
             aValue = a[colJSON[sortField.key].fields[0]].rawValue;
             bValue = b[colJSON[sortField.key].fields[0]].rawValue;
           } else {
@@ -83,11 +84,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
             bValue = b[colJSON[sortField.key].fields[0]].displayValue;
           }
         } else {
+          // its not a stack so we can just look up the field and sort it
           if (colJSON[sortField.key].type === 'person' || colJSON[sortField.key].type === 'multichoice') {
             aValue = a[sortField.key].displayValue;
             bValue = b[sortField.key].displayValue;
           } else {
-            // its a stack to treat the sort so that it sorts on the first field in the stack
+            // its a number or a string or a date so we can sort it as is
             aValue = a[sortField.key].rawValue;
             bValue = b[sortField.key].rawValue;
           }
@@ -98,26 +100,14 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
 
         // Check if the values are dates
         if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue)) {
-          console.log(">>> sorting dates",  aValue, bValue);
           return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
         }
 
-        //see if they are numbers even though they have a string type
-        const aNumber = parseFloat(aValue);
-        const bNumber = parseFloat(bValue);
-  
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-          if (!isNaN(aNumber) && !isNaN(bNumber)) {
-            return sortField.direction ? aNumber - bNumber : bNumber - aNumber;
-          } else {  
-            return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-          }
+        // we have already dealt with Dates so everythign else is a strign or a number.  
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return sortField.direction ? aValue - bValue : bValue - aValue;
         } else {
-          if (DateTime.isDateTime(aValue) && DateTime.isDateTime(bValue))  {
-            return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
-          } else {
-              return 0;
-          }
+          return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
         }
       });
       setSortedItems(sorted);
@@ -179,10 +169,8 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ colJS
   );
 
 // DEFAULT RENDER FUNCTION WITH LINES CLAMP 
-//& EXTEND THIS IF THERE IS A PRE OR POST TO DANGEROUSLY INSERT INNER HTML
+//& EXTEND THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING
 const renderDefault = (content: string, column: IColumnJSON) => {
-  console.log('Item:', content);
-  console.log('Column:', column);
   return column.lines ? (
     <div className={styles.tableDataContent} style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}>
       {column.prefix && <span>{column.prefix}</span>}
