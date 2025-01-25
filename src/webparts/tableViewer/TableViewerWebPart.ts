@@ -75,52 +75,57 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
 
   private tableConfig: IColumnsConfig = {
-    "Edit": {
-      "name": "Edit",
-      "width": "40px",
-      "type": "edit"
-    },
-    "ID": {
-      "name": "ID",
-      "width": "40px",
-      "type": "number",
-      "isSortable": true
-    },
-    "Title": {
-      "name": "Title",
-      "width": "200px",
-      "isSortable": true,
-      "class": "titleclass"
-    },
-    "Editor": {
-      "name": "Modified By",
-      "width": "1.5fr",
-      "type": "person",
-      "format": "size40"
-    },
-    "Created": {
-      "name": "Created",
-      "width": "",
-      "type": "date",
-      "prefix": "Created: ",
-      "format": "f"
-    },
-    "Modified": {
-      "name": "Modified",
-      "width": "",
-      "type": "date",
-      "prefix": "Modified: ",
-      "format": "f"
-    },
-    "Dates": {
-      "name": "Dates",
-      "width": "1fr",
-      "type": "stack",
-      "fields": [
-        "Created",
-        "Modified"
-      ]
-    }
+    
+      "Edit": {
+        "name": "Edit",
+        "width": "40px",
+        "type": "edit",
+        "icons": {
+          "edit": "globe|#cc0000"
+        }
+      },
+      "ID": {
+        "name": "ID",
+        "width": "40px",
+        "type": "number",
+        "isSortable": true
+      },
+      "Title": {
+        "name": "Title",
+        "width": "200px",
+        "isSortable": true,
+        "class": "titleclass"
+      },
+      "Editor": {
+        "name": "Modified By",
+        "width": "1.5fr",
+        "type": "person",
+        "format": "size40"
+      },
+      "Created": {
+        "name": "Created",
+        "width": "",
+        "type": "date",
+        "prefix": "Created: ",
+        "format": "f"
+      },
+      "Modified": {
+        "name": "Modified",
+        "width": "",
+        "type": "date",
+        "prefix": "Modified: ",
+        "format": "f"
+      },
+      "Dates": {
+        "name": "Dates",
+        "width": "1fr",
+        "type": "stack",
+        "fields": [
+          "Created",
+          "Modified"
+        ]
+      }
+    
 }
   // icon refernce for the icons in the table
   // https://uifabricicons.azurewebsites.net/

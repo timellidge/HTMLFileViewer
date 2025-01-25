@@ -9,6 +9,7 @@ declare const styles: {
     sortIcon: string;
     tableCell: string;
     numberCell: string;
+    editCell: string;
     tableDataContent: string;
     highlight: string;
     error: string;

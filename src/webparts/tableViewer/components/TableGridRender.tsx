@@ -45,7 +45,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     gridTemplateColumns: _columnWidths,
   });
 
-  // this function will toggle the sort state of a column (just one a time)
+  //=================================================================================================================
+  // GENERAL INTERACTION FUNCTIONS
+  //=================================================================================================================
   const handleSortToggle = (columnKey: string) => {
     setSortField((prevState) => ({
       key: columnKey,
@@ -213,20 +215,24 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   );
 
   // EDIT FUNCTION
-  const renderEdit = ( id: number, displayText: string, column: IColumnJSON
-  ) => {
-    const iconData = column.icons[0];
-    let [iconName, iconColor] = ["edit", "black"];
-    if (iconData) {
-     [iconName, iconColor] = iconData.split("|");
+  const renderEdit = ( id: number, displayText: string, column: IColumnJSON) => {
+    let iconName="edit";
+    let iconColor = "#0078d4";
+
+    if (column.icons && typeof column.icons === 'object') {
+      const [firstIconName, firstIconColor] =  Object.entries(column.icons)[0];
+       [iconName, iconColor] = firstIconColor.split("|");
     }
+    
     return (
-      <Icon
-        iconName={iconName}
-        title={displayText}
-        style={{ color: iconColor }}
-        onClick={() => handleIconClick(id)}
-      />
+      <div className={styles.editCell}>
+        <Icon
+          iconName={iconName}
+          title={displayText}
+          style={{ color: iconColor }}
+          onClick={() => handleIconClick(id)}
+        />
+      </div>
     )
   };
 
@@ -341,7 +347,7 @@ const renderNoData = (column: IColumnJSON) =>
                   >
                     {column.type === "stack"
                       ? renderStack(item, column, colJSON)
-                      : item[key]
+                      : item[key] || column.type === "edit"
                       ? column.type === "person"
                         ? renderPersonCard(item, key, column)
                         : column.type === "html"
@@ -349,9 +355,9 @@ const renderNoData = (column: IColumnJSON) =>
                         : column.type === "icon"
                         ? renderIcon(item[key].displayValue, column)
                         : column.type === "link"
-                        ? renderLink( item[key].rawValue, item[key].displayValue,column )
+                        ? renderLink( item[key].rawValue, item[key].displayValue, column )
                         : column.type === "edit"
-                        ? renderEdit( item["ID"].rawValue, item[key].displayValue,column )
+                        ? renderEdit( item["ID"].rawValue, "Edit", column )
                         : column.type === "number"
                         ? renderNumber(item[key].displayValue, column)
                         : renderDefault(item[key].displayValue, column)

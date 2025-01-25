@@ -71,6 +71,16 @@
 
         }
 
+        .editCell{
+            text-align: center;
+            padding-right :10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: larger;
+            font-weight: 700;
+            padding:4px;
+        }
+
         // this is only needed as a class when lines > 0 or exists. 
         .tableDataContent{
             display: -webkit-box;

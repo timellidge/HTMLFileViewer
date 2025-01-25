@@ -1,20 +1,21 @@
 /* tslint:disable */
 require("./TableViewer.module.css");
 const styles = {
-  tableViewer: 'tableViewer_db9e7889',
-  tableViewerHeader: 'tableViewerHeader_db9e7889',
-  searchBox: 'searchBox_db9e7889',
-  tabBar: 'tabBar_db9e7889',
-  tableContainer: 'tableContainer_db9e7889',
-  tableGrid: 'tableGrid_db9e7889',
-  tableHeaderCell: 'tableHeaderCell_db9e7889',
-  sortIcon: 'sortIcon_db9e7889',
-  tableCell: 'tableCell_db9e7889',
-  numberCell: 'numberCell_db9e7889',
-  tableDataContent: 'tableDataContent_db9e7889',
-  highlight: 'highlight_db9e7889',
-  error: 'error_db9e7889',
-  workbenchPageContent: 'workbenchPageContent_db9e7889'
+  tableViewer: 'tableViewer_ea75fb81',
+  tableViewerHeader: 'tableViewerHeader_ea75fb81',
+  searchBox: 'searchBox_ea75fb81',
+  tabBar: 'tabBar_ea75fb81',
+  tableContainer: 'tableContainer_ea75fb81',
+  tableGrid: 'tableGrid_ea75fb81',
+  tableHeaderCell: 'tableHeaderCell_ea75fb81',
+  sortIcon: 'sortIcon_ea75fb81',
+  tableCell: 'tableCell_ea75fb81',
+  numberCell: 'numberCell_ea75fb81',
+  editCell: 'editCell_ea75fb81',
+  tableDataContent: 'tableDataContent_ea75fb81',
+  highlight: 'highlight_ea75fb81',
+  error: 'error_ea75fb81',
+  workbenchPageContent: 'workbenchPageContent_ea75fb81'
 };
 
 export default styles;
