@@ -5,7 +5,7 @@ export interface IColumnJSON {
     name: string;
     width: string;
     tab?: boolean | undefined | null;
-    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date' | 'string' | undefined | null;
+    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date' | 'string' | "edit" | undefined | null;
     class?: string | undefined | null;
     isSortable?: boolean | undefined | null;
     isMultiline?: boolean | undefined | null;

@@ -8,10 +8,11 @@ import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
-import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase } from '../../../helpers/Utilities';
+import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase, getListUrl } from '../../../helpers/Utilities';
 import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import { get } from 'lodash';
 
 export interface IField {
   rawValue: any;
@@ -64,6 +65,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const [ColumnsJSON, setColumnsJSON] = useState<IColumnsConfig>({});
   const [globalError, setGlobalError] = useState<Error>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [listPath, setListPath] = useState<string>('');
 
 
   //=================================================================================================================
@@ -191,6 +193,17 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     }
   }, [viewXmlCode, siteUrl, listId]);
 
+  const getListPath = React.useCallback(async () => {
+    try {
+      const listPath = await getListUrl(
+        siteUrl, listId
+      );
+      setListPath(listPath);
+    } catch (e) {
+      if (hideErrorEmpty) setGlobalError(e);
+    }
+  }, [siteUrl, listId]);
+
   //=================================================================================================================
   // CSS CONSTS AND STUFF
   //================================================================================================================= 
@@ -206,6 +219,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       const ColumnsJSON: IColumnsConfig = JSON.parse(JSONCode);
       console.log("ColumnsObject", ColumnsJSON);
       setColumnsJSON(ColumnsJSON);
+      getListPath();
       getItems();
     }
   }, [configured]);
@@ -311,7 +325,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} tabBehaviour={tabBehaviour}/>
               ))}
             </div>
-            <TableGridRender colJSON={ColumnsJSON} items={filteredItems} /> 
+            <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} /> 
           </TableViewer>
           {globalError && (
             <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />

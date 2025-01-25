@@ -75,6 +75,11 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
 
   private tableConfig: IColumnsConfig = {
+    "Edit": {
+      "name": "Edit",
+      "width": "40px",
+      "type": "edit"
+    },
     "ID": {
       "name": "ID",
       "width": "40px",
@@ -290,18 +295,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   }
 }
   
-
-  // // General property change handler
-  // protected onPropertyPaneFieldChanged(
-  //   propertyPath: string,
-  //   oldValue: any,
-  //   newValue: any
-  // ): void {
-  //   super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
-  //   // Immediately reflect the property change
-  //   this.render();
-  // }
-
   protected async loadPropertyPaneResources(): Promise<void> {
     const editorPropImport = import(
       /* webpackChunkName: 'plre-list-viewer' */

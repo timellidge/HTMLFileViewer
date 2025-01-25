@@ -10508,24 +10508,28 @@ var Position;
 
 
 
-const TableGridRender = ({ colJSON, items }) => {
+const TableGridRender = ({ listUrl, colJSON, items }) => {
     //we can only have one column sorted at a time so i need to know its name and its state
-    const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: '', direction: null });
+    const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
     const [sortedItems, setSortedItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(items);
     const [isSidePanelOpen, setIsSidePanelOpen] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
-    const toggleSidePanel = () => {
-        setIsSidePanelOpen(!isSidePanelOpen);
+    const iframeRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](null);
+    const [iframeUrl, setIframeUrl] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
+    const onLoad = (event) => {
+        const iframe = event.currentTarget;
+        iframe.contentWindow.addEventListener('beforeunload', closeSidePanel);
     };
     const _sortedColumns = Object.keys(colJSON)
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
     // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
     const _columnWidths = _sortedColumns
-        .filter(({ column }) => column.width !== '')
+        .filter(({ column }) => column.width !== "")
         .map(({ column }) => column.width)
-        .join(' ');
-    const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths });
-    console.log(">>> grid info", _columnWidths, _GridStyle);
+        .join(" ");
+    const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, {
+        gridTemplateColumns: _columnWidths,
+    });
     // this function will toggle the sort state of a column (just one a time)
     const handleSortToggle = (columnKey) => {
         setSortField((prevState) => ({
@@ -10534,23 +10538,39 @@ const TableGridRender = ({ colJSON, items }) => {
         }));
     };
     const handleMouseEnter = (event) => {
-        const row = event.currentTarget.getAttribute('data-row');
+        const row = event.currentTarget.getAttribute("data-row");
         const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach(cell => {
+        cellsInRow.forEach((cell) => {
             cell.classList.add(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
         });
     };
     const handleMouseLeave = (event) => {
-        const row = event.currentTarget.getAttribute('data-row');
+        const row = event.currentTarget.getAttribute("data-row");
         const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach(cell => {
+        cellsInRow.forEach((cell) => {
             cell.classList.remove(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
         });
+    };
+    const handleIconClick = (id) => {
+        // different list types have different edit forms so we need to check the url and adjust accordingly
+        console.log(`${listUrl}/EditForm.aspx?ID=${id}`);
+        if (listUrl.indexOf("/Lists/") > 0) {
+            setIframeUrl(`${listUrl}/EditForm.aspx?ID=${id}`);
+        }
+        else {
+            setIframeUrl(`${listUrl}/Forms/EditForm.aspx?ID=${id}`);
+        }
+        openSidePanel();
+    };
+    const closeSidePanel = () => {
+        setIsSidePanelOpen(false);
+    };
+    const openSidePanel = () => {
+        setIsSidePanelOpen(true);
     };
     //=================================================================================================================
     // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
     //=================================================================================================================
-    //& PROBLEM WITH NUMBER SORT 
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (sortField.key) {
             const sorted = [...items].sort((a, b) => {
@@ -10558,9 +10578,10 @@ const TableGridRender = ({ colJSON, items }) => {
                 let aValue;
                 let bValue;
                 // dependign on the type we must source the data differently for sorting also if its a stack we cant sort the date liek a string so we need to do a double lookup into the columns to get the info we need to make the choice
-                if (colJSON[sortField.key].type == 'stack') {
+                if (colJSON[sortField.key].type == "stack") {
                     // do the lookup into trhe stack to get the first field in the stack then look up its type and sort accordingly
-                    if (colJSON[colJSON[sortField.key].fields[0]].type === 'date' || colJSON[colJSON[sortField.key].fields[0]].type === 'number') {
+                    if (colJSON[colJSON[sortField.key].fields[0]].type === "date" ||
+                        colJSON[colJSON[sortField.key].fields[0]].type === "number") {
                         aValue = a[colJSON[sortField.key].fields[0]].rawValue;
                         bValue = b[colJSON[sortField.key].fields[0]].rawValue;
                     }
@@ -10571,7 +10592,8 @@ const TableGridRender = ({ colJSON, items }) => {
                 }
                 else {
                     // its not a stack so we can just look up the field and sort it
-                    if (colJSON[sortField.key].type === 'person' || colJSON[sortField.key].type === 'multichoice') {
+                    if (colJSON[sortField.key].type === "person" ||
+                        colJSON[sortField.key].type === "multichoice") {
                         aValue = a[sortField.key].displayValue;
                         bValue = b[sortField.key].displayValue;
                     }
@@ -10587,14 +10609,18 @@ const TableGridRender = ({ colJSON, items }) => {
                     return -1;
                 // Check if the values are dates
                 if (luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].isDateTime(bValue)) {
-                    return sortField.direction ? aValue.toMillis() - bValue.toMillis() : bValue.toMillis() - aValue.toMillis();
+                    return sortField.direction
+                        ? aValue.toMillis() - bValue.toMillis()
+                        : bValue.toMillis() - aValue.toMillis();
                 }
-                // we have already dealt with Dates so everythign else is a strign or a number.  
-                if (typeof aValue === 'number' && typeof bValue === 'number') {
+                // we have already dealt with Dates so everythign else is a strign or a number.
+                if (typeof aValue === "number" && typeof bValue === "number") {
                     return sortField.direction ? aValue - bValue : bValue - aValue;
                 }
                 else {
-                    return sortField.direction ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                    return sortField.direction
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
                 }
             });
             setSortedItems(sorted);
@@ -10607,31 +10633,9 @@ const TableGridRender = ({ colJSON, items }) => {
     // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
     //=================================================================================================================
     const renderPersonCard = (item, key, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format }));
-    // // STACK OF FIELDS
-    // const renderStack = (item: any, column: IColumnJSON, allcolJSON: IColumnsConfig) => (
-    //   <div>
-    //     {column.fields.map((field:any, fieldIndex:number) => (
-    //       item[field] ? (
-    //         <div className={`stack ${field}`} key={fieldIndex}>{item[field].displayValue}</div>
-    //       ) : (
-    //         <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>
-    //       )
-    //     ))}
-    //   </div>
-    // );
-    const renderStack = (item, column, allcolJSON) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => {
-        const fieldColumn = allcolJSON[field];
-        const prefix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.prefix) ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.prefix) : null;
-        const suffix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.suffix) ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.suffix) : null;
-        return item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex },
-            prefix,
-            item[field].displayValue,
-            suffix)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
-    })));
     // HTML FIELD
     const renderHtml = (htmltext) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
-    // DEFAULT RENDER FUNCTION WITH LINES CLAMP 
-    //& EXTEND THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING
+    // DEFAULT RENDER FUNCTION WITH LINES CLAMP EXTENDED THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING
     const renderDefault = (content, column) => {
         return column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
             column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
@@ -10641,52 +10645,83 @@ const TableGridRender = ({ colJSON, items }) => {
             content,
             column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     };
-    // NUMBER RENDER FUNCTION ALIGN 
+    // NUMBER RENDER FUNCTION ALIGN
     const renderNumber = (displayText, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
         column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
         displayText,
         column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-    // REnder a link
+    // RENDER LINK FUNCTION
     const renderLink = (link, displayText, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
         column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
         displayText,
         column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+    // EDIT FUNCTION
+    const renderEdit = (id, displayText, column) => {
+        const iconData = column.icons[0];
+        let [iconName, iconColor] = ["edit", "black"];
+        if (iconData) {
+            [iconName, iconColor] = iconData.split("|");
+        }
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: displayText, style: { color: iconColor }, onClick: () => handleIconClick(id) }));
+    };
     // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON
     const renderIcon = (displayValue, column) => {
         const iconData = column.icons[displayValue];
         if (iconData) {
-            const [iconName, iconColor] = iconData.split('|');
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue });
+            const [iconName, iconColor] = iconData.split("|");
+            return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue }));
         }
         else {
             return displayValue;
         }
     };
     // CATCH ALL FOR NO DATA
-    const renderNoData = (column) => (
+    const renderNoData = (column) => 
     // even  though there is no field i still need to check if its a stack or not
-    column.type === 'stack' ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data")));
+    column.type === "stack" ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data"));
+    //=================================================================================================================
+    // THIS IS THE STACK RENDER FUNCTION - IT WILL LOOP THROUGH THE FIELDS IN THE STACK AND RENDER THEM ACCORDINGLY
+    //=================================================================================================================
+    const renderStack = (item, column, allcolJSON) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => {
+        const fieldColumn = allcolJSON[field];
+        const prefix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.prefix) ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.prefix)) : null;
+        const suffix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.suffix) ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.suffix)) : null;
+        return item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex },
+            prefix,
+            item[field].displayValue,
+            suffix)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
+    })));
     //=================================================================================================================
     // THE RETURN FUNCTION
     //=================================================================================================================
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle },
-            _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
+            _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
                 column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: sortField.key !== key
-                        ? 'Sort'
+                        ? "Sort"
                         : sortField.direction
-                            ? 'SortDown'
-                            : 'SortUp', className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) })))))),
-            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => (column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ''}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, column.type === 'stack' ? (renderStack(item, column, colJSON)) : item[key] ? (column.type === 'person' ? renderPersonCard(item, key, column)
-                : column.type === 'html' ? renderHtml(item[key].rawValue)
-                    : column.type === 'icon' ? renderIcon(item[key].displayValue, column)
-                        : column.type === 'link' ? renderLink(item[key].rawValue, item[key].displayValue, column)
-                            : column.type === 'number' ? renderNumber(item[key].displayValue, column)
-                                : renderDefault(item[key].displayValue, column)) : (renderNoData(column)))))))))),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: toggleSidePanel }, "Toggle Side Panel"),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: toggleSidePanel, closeButtonAriaLabel: "Close", headerText: "Side Panel", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].large },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "Content goes here..."))));
+                            ? "SortDown"
+                            : "SortUp", className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))),
+            sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, column.type === "stack"
+                ? renderStack(item, column, colJSON)
+                : item[key]
+                    ? column.type === "person"
+                        ? renderPersonCard(item, key, column)
+                        : column.type === "html"
+                            ? renderHtml(item[key].rawValue)
+                            : column.type === "icon"
+                                ? renderIcon(item[key].displayValue, column)
+                                : column.type === "link"
+                                    ? renderLink(item[key].rawValue, item[key].displayValue, column)
+                                    : column.type === "edit"
+                                        ? renderEdit(item["ID"].rawValue, item[key].displayValue, column)
+                                        : column.type === "number"
+                                            ? renderNumber(item[key].displayValue, column)
+                                            : renderDefault(item[key].displayValue, column)
+                    : renderNoData(column)))))))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", headerText: "Magic Side Panel", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, width: "100%", height: "900px", style: { border: 'none' } }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -30359,6 +30394,11 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
         // -----------------------------------------------------------------------------------------------------------------------------
         this.tableConfig = {
+            "Edit": {
+                "name": "Edit",
+                "width": "40px",
+                "type": "edit"
+            },
             "ID": {
                 "name": "ID",
                 "width": "40px",
@@ -30519,7 +30559,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "c"])(this.properties.siteUrl, this.properties.list, this.properties.view)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getListViewXml */ "d"])(this.properties.siteUrl, this.properties.list, this.properties.view)
                 .then(this.updateFieldViewPickerValue.bind(this));
         }
         else {
@@ -30542,16 +30582,6 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
             this.render(); // Render the web part to reflect the list change
         }
     }
-    // // General property change handler
-    // protected onPropertyPaneFieldChanged(
-    //   propertyPath: string,
-    //   oldValue: any,
-    //   newValue: any
-    // ): void {
-    //   super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
-    //   // Immediately reflect the property change
-    //   this.render();
-    // }
     async loadPropertyPaneResources() {
         const editorPropImport = __webpack_require__.e(/*! import() | plre-list-viewer */ "vendors~plre-list-viewer").then(__webpack_require__.bind(null, /*! @pnp/spfx-property-controls/lib/PropertyFieldCodeEditor */ "0QME"));
         const listPropImport = __webpack_require__.e(/*! import() | plre-list-viewer */ "vendors~plre-list-viewer").then(__webpack_require__.bind(null, /*! @pnp/spfx-property-controls/lib/PropertyFieldListPicker */ "OHjh"));
@@ -30587,7 +30617,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                                 this.msProps.PropertyPaneTextField('siteUrl', {
                                     label: 'Site',
                                     value: this.properties.siteUrl,
-                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "g"],
+                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* validateSiteExists */ "h"],
                                     deferredValidationTime: 500,
                                 }),
                                 this.listProp.PropertyFieldListPicker('list', {
@@ -46282,6 +46312,7 @@ const TableViewerContainer = (props) => {
     const [ColumnsJSON, setColumnsJSON] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
     const [globalError, setGlobalError] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
     const [searchQuery, setSearchQuery] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
+    const [listPath, setListPath] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
     //=================================================================================================================
     // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
     //=================================================================================================================
@@ -46399,6 +46430,16 @@ const TableViewerContainer = (props) => {
                 setGlobalError(e);
         }
     }, [viewXmlCode, siteUrl, listId]);
+    const getListPath = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
+        try {
+            const listPath = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getListUrl */ "c"])(siteUrl, listId);
+            setListPath(listPath);
+        }
+        catch (e) {
+            if (hideErrorEmpty)
+                setGlobalError(e);
+        }
+    }, [siteUrl, listId]);
     //=================================================================================================================
     // CSS CONSTS AND STUFF
     //================================================================================================================= 
@@ -46412,6 +46453,7 @@ const TableViewerContainer = (props) => {
             const ColumnsJSON = JSON.parse(JSONCode);
             console.log("ColumnsObject", ColumnsJSON);
             setColumnsJSON(ColumnsJSON);
+            getListPath();
             getItems();
         }
     }, [configured]);
@@ -46447,11 +46489,11 @@ const TableViewerContainer = (props) => {
                         // let sortValue = rawValue;
                         // Format the value based on the type
                         if (type === 'number') {
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "d"])(rawValue, format);
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(rawValue, format);
                             rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
                         }
                         else if (type === 'date') {
-                            rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* parseDate */ "e"])(rawValue, 'en-GB');
+                            rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* parseDate */ "f"])(rawValue, 'en-GB');
                             displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
                         }
                         else if (type === 'singlechoice') {
@@ -46468,7 +46510,7 @@ const TableViewerContainer = (props) => {
                         else if (type === 'person') {
                             if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
                                 const email = rawValue[0].email || '';
-                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* toProperCase */ "f"])(email.split('@')[0].replace(/\./g, ' '));
+                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* toProperCase */ "g"])(email.split('@')[0].replace(/\./g, ' '));
                                 rawValue[0].name = name; // Add the name key to rawValue[0]
                                 displayValue = rawValue[0].title;
                             }
@@ -46503,7 +46545,7 @@ const TableViewerContainer = (props) => {
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { colJSON: ColumnsJSON, items: filteredItems })),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { listUrl: listPath, colJSON: ColumnsJSON, items: filteredItems })),
         globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { message: globalError, onDismiss: () => setGlobalError(null) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableViewerContainer);
@@ -55624,23 +55666,24 @@ function _merge(target, source, circularReferences) {
 /*!**********************************!*\
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
-/*! exports provided: parseDate, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
-/*! exports used: getInitials, getItemsUsingRenderListDataAsStream, getListViewXml, numberFormat, parseDate, toProperCase, validateSiteExists */
+/*! exports provided: parseDate, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListUrl, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
+/*! exports used: getInitials, getItemsUsingRenderListDataAsStream, getListUrl, getListViewXml, numberFormat, parseDate, toProperCase, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return parseDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return parseDate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getInitials; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return toProperCase; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return numberFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return validateSiteExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return toProperCase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return numberFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return validateSiteExists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
 /* unused harmony export createSearchQueryViewXml */
 /* unused harmony export searchFieldTypes */
 /* unused harmony export getSiteLocale */
 /* unused harmony export getListFields */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListViewXml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListViewXml; });
 /* unused harmony export getSearchFieldsFromOptions */
 /* unused harmony export updateListItem */
 /* unused harmony export addListItem */
@@ -55742,48 +55785,6 @@ const numberFormat = (value, format) => {
         return value.toString();
     }
 };
-//==================================================================================================================================
-// A FUNCTION TO HELP WITH WIDTH TO PX CONVERSION WHEN YOU NEED IT IN PX
-//==================================================================================================================================
-//  export const convertWidthToPx = (containerPX: number, ColJSON: IColumnsConfig ): IColumnsConfig => {
-//   //set my variables to  zero 
-//   let TotPX = 0, TotPer = 0, TotFR = 0;
-//   // two loops throrought the config json - first to get the total for the px the % and the fr columns
-//   Object.keys(ColJSON).forEach(key => {
-//     const width = ColJSON[key].width.toLowerCase();
-//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/); //regex to match the width value and the unit but also work with decimal numbers
-//     if (match) {
-//       const value = parseFloat(match[1]);
-//       switch (match[2]) {
-//         case 'px': TotPX  += value; break;
-//         case '%' : TotPer += value; break;
-//         case 'fr': TotFR  += value; break;  
-//       }
-//     }
-//   });
-//   // now calculate the px for % and fr columns based in the container width
-//   const percentPX = containerPX / 100; //one percent of the container width
-//   const percentTotPX = percentPX * TotPer; //total px for all % columns i ned this to see what is left tfor the FR as they ar a fractional remainder of the total px
-//   const FRpx = (containerPX - percentTotPX - TotPX) / TotFR; //so one fr is equal to this many px
-//   // NOW loop through again and set the CalculatedPixels field in the JSON
-//   Object.keys(ColJSON).forEach(key => {
-//     const width = ColJSON[key].width.toLowerCase();
-//     const match = width.match(/^(\d*\.?\d+)(px|%|fr)$/);
-//     if (match) {
-//       const value = parseFloat(match[1]);
-//       const unit = match[2];
-//       let calculatedPixels = 0;
-//       switch (unit) {
-//         case 'px': calculatedPixels = value; break;
-//         case '%' : calculatedPixels = value * percentPX; break;
-//         case 'fr': calculatedPixels = value * FRpx; break;
-//         default  : calculatedPixels = 0;
-//       }
-//       ColJSON[key].calculatedPX = calculatedPixels;
-//     }
-//   });
-//   return ColJSON;
-//  }
 //============================================================================================================
 const validateSiteExists = async (value) => {
     try {
@@ -55875,6 +55876,21 @@ const getSiteLocale = async (siteUrl) => {
 const getListFields = async (siteUrl, listId) => Object(_pnp_sp_webs__WEBPACK_IMPORTED_MODULE_3__[/* Web */ "a"])(siteUrl).lists
     .getById(listId).fields
     .get();
+const getListUrl = async (siteUrl, listId) => {
+    try {
+        const list = await Object(_pnp_sp_webs__WEBPACK_IMPORTED_MODULE_3__[/* Web */ "a"])(siteUrl).lists
+            .getById(listId)
+            .select('RootFolder/ServerRelativeUrl')
+            .expand('RootFolder')
+            .get();
+        const absoluteUrl = new URL(list.RootFolder.ServerRelativeUrl, siteUrl).href;
+        return absoluteUrl;
+    }
+    catch (error) {
+        console.error('Error fetching list URL:', error);
+        throw error;
+    }
+};
 const getListViewXml = async (siteUrl, listId, viewId) => Object(_pnp_sp_webs__WEBPACK_IMPORTED_MODULE_3__[/* Web */ "a"])(siteUrl).lists
     .getById(listId).views
     .getById(viewId)

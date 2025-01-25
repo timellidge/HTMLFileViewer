@@ -18,6 +18,7 @@ export declare const createSearchQueryViewXml: (viewXmlCode: string, searchField
 export declare const searchFieldTypes: FieldTypes[];
 export declare const getSiteLocale: (siteUrl: string) => Promise<string>;
 export declare const getListFields: (siteUrl: string, listId: string) => Promise<IFieldInfo[]>;
+export declare const getListUrl: (siteUrl: string, listId: string) => Promise<string>;
 export declare const getListViewXml: (siteUrl: string, listId: string, viewId: string) => Promise<IViewInfo>;
 export declare const getSearchFieldsFromOptions: (options: IDropdownOption[]) => IFieldInfo[];
 export declare const updateListItem: (siteUrl: string, listId: string, itemId: number, properties: ITypedHash<unknown>) => Promise<IItemUpdateResult>;
