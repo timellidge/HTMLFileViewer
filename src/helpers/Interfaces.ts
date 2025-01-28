@@ -1,5 +1,45 @@
+import { z } from 'zod';
 
-// thsi is the interface definition for the JSON control data that is used to configure the table
+//& NOW THE ZOD SCHEMA FOR THE CONFIG JSON
+// Define the zod schema for each event property the use of STRICT allows these keys and no others
+// Define the IconSettings schema
+// Define the IconSettings schema
+const IconSettingsSchema = z.record(
+    z.string().refine(value => value.includes('|#'), {
+      message: 'String must contain a "|" character followed by a color code',
+    })
+  );
+
+  const BarSettingsSchema = z.record(z.string());
+
+
+// Define the IColumnJSON schema
+const IColumnJSONSchema = z.object({
+  name: z.string(),
+  width: z.string(),
+  tab: z.boolean().optional().nullable(),
+  type: z.enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singlechoice', 'multichoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
+  class: z.string().optional().nullable(),
+  isSortable: z.boolean().optional().nullable(),
+  isMultiline: z.boolean().optional().nullable(),
+  rowMerge: z.boolean().optional().nullable(),
+  fields: z.array(z.string()).optional().nullable(),
+  prefix: z.string().optional().nullable(),
+  suffix: z.string().optional().nullable(),
+  format: z.string().optional().nullable(),
+  sequence: z.number().optional().default(99),
+  lines: z.number().optional().default(0),
+  icons: IconSettingsSchema.optional().nullable(),
+  barSettings: BarSettingsSchema.optional().nullable(),
+});
+
+// Define the IColumnsConfig schema
+export const testColumnsConfigSchema = z.record(IColumnJSONSchema);
+
+//& END OF ZOD SCHEMA FOR THE CONFIG JSON
+
+
+
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;
 }
@@ -8,7 +48,7 @@ export interface IColumnJSON {
     name: string;
     width: string;
     tab?: boolean | undefined | null;
-    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date'  | 'string' | "edit" | undefined | null;
+    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date'  | 'string' | "edit" | "bar" | undefined | null;
     class?: string | undefined | null;
     isSortable?:  boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
@@ -16,15 +56,20 @@ export interface IColumnJSON {
     prefix?: string | undefined | null;
     suffix?: string | undefined | null;
     format?: string | undefined | null;
+    rowMerge?: boolean | undefined | null;
     sequence?: number | 99;
     lines?: number | 0;
     icons?: IconSettings ;
+    barSettings?: BarSettings;
 }
   
 export interface IconSettings {
     [key: string]: string;
 }
 
+export interface BarSettings {
+  [key: string]: string;
+}
 
 
 // the info to draw and manage the tabs and state of the tabs

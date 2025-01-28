@@ -13,19 +13,19 @@ import {
 // PnP JS Imports
 import { sp } from '@pnp/sp';
 import { IViewInfo } from '@pnp/sp/views';
-import { IFieldInfo } from '@pnp/sp/fields';
+
 import '@pnp/sp/fields';
 import '@pnp/sp/views';
 // Fabric UI Imports
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 // Container Component Import
-import { IPropertyPaneConfiguration, IPropertyPanePage } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, IPropertyPanePage, IPropertyPaneSliderProps } from '@microsoft/sp-property-pane';
 import TableViewerContainer, { ITableViewerContainerProps } from './components/TableViewerContainer';
-import { IColumnsConfig } from '../../helpers/Interfaces';
+import { IColumnsConfig, testColumnsConfigSchema} from '../../helpers/Interfaces';
 // Utilities Import
 import {
-  getListFields, getListViewXml, validateSiteExists,
+  getListViewXml, validateSiteExists,
 } from '../../helpers/Utilities';
 
 
@@ -44,6 +44,7 @@ export interface ITableViewerWebPartProps {
   hideErrorEmpty:boolean;
   tabBehaviour: boolean;
   contentHeight: string;
+  sidePadding: number;
   configured: boolean;
   contextSiteUrl: string;
   contextUser: string;
@@ -75,57 +76,52 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
 
   private tableConfig: IColumnsConfig = {
-    
-      "Edit": {
-        "name": "Edit",
-        "width": "40px",
-        "type": "edit",
-        "icons": {
-          "edit": "globe|#cc0000"
-        }
-      },
-      "ID": {
-        "name": "ID",
-        "width": "40px",
-        "type": "number",
-        "isSortable": true
-      },
-      "Title": {
-        "name": "Title",
-        "width": "200px",
-        "isSortable": true,
-        "class": "titleclass"
-      },
-      "Editor": {
-        "name": "Modified By",
-        "width": "1.5fr",
-        "type": "person",
-        "format": "size40"
-      },
-      "Created": {
-        "name": "Created",
-        "width": "",
-        "type": "date",
-        "prefix": "Created: ",
-        "format": "f"
-      },
-      "Modified": {
-        "name": "Modified",
-        "width": "",
-        "type": "date",
-        "prefix": "Modified: ",
-        "format": "f"
-      },
-      "Dates": {
-        "name": "Dates",
-        "width": "1fr",
-        "type": "stack",
-        "fields": [
-          "Created",
-          "Modified"
-        ]
-      }
-    
+    "Edit": {
+      "name": "Edit",
+      "width": "25px",
+      "type": "edit"
+    },
+    "ID": {
+      "name": "",
+      "width": "40px",
+      "type": "number",
+      "isSortable": true
+    },
+    "Title": {
+      "name": "Title",
+      "width": "2fr",
+      "isSortable": true,
+      "class": "titleclass"
+    },
+    "Editor": {
+      "name": "Modified By",
+      "width": "1fr",
+      "type": "person",
+      "format": "size32"
+    },
+    "Created": {
+      "name": "Created",
+      "width": "",
+      "type": "date",
+      "prefix": "Created: ",
+      "format": "f"
+    },
+    "Modified": {
+      "name": "Modified",
+      "width": "",
+      "type": "date",
+      "prefix": "Modified: ",
+      "format": "f"
+    },
+    "Dates": {
+      "name": "Dates",
+      "width": "1fr",
+      "type": "stack",
+      "fields": [
+        "Created",
+        "Modified"
+      ]
+    } 
 }
   // icon refernce for the icons in the table
   // https://uifabricicons.azurewebsites.net/
@@ -217,6 +213,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         tabBehaviour: this.properties.tabBehaviour,
         themeVariant: this.themeVariant,
         contentHeight: this.properties.contentHeight,
+        sidePadding: this.properties.sidePadding,
         onConfigure: this.onConfigure,
         configured: this.hasAllValues([
           this.properties.siteUrl,
@@ -297,8 +294,29 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
       this.context.propertyPane.refresh();
       this.render(); // Render the web part to reflect the list change
     
+    }
   }
-}
+
+  private onPropertyPaneJSONChanged( propertyPath: string, oldValue: any,newValue: any
+  ): void {
+    //two separate tests as i dont want to nest them i need two vaildations, is it valid JSON and is it Valid Schema
+    let parsedJSON; // set up the variable i want to re use it so i dont have to declare it twice
+    try {
+      // Attempt to parse the JSON to see if its valid
+      parsedJSON = JSON.parse(newValue); // Attempt to parse the JSON to check for errors
+      // Validate the parsed JSON against the IConfigJSON schema
+      const validationResult = testColumnsConfigSchema.safeParse(parsedJSON);
+      if (!validationResult.success) {
+        throw new Error("JSON does not match the IConfigJSON interface");
+      } else {
+        // all good so pass it on to the default behaviour
+        super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+      }
+    } catch (error) {
+      alert("JSON is not valid: " + error); // use an alert as we alredy have the error
+      throw new Error("damn"); // throw an error to stop the default behaviour
+    }
+  }
   
   protected async loadPropertyPaneResources(): Promise<void> {
     const editorPropImport = import(
@@ -397,7 +415,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                   label: 'TableJSON',
                   panelTitle: 'Edit TableJSON',
                   initialValue: this.properties.JSONCode,
-                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  onPropertyChange: this.onPropertyPaneJSONChanged.bind(this),
                   properties: this.properties,
                   disabled: false,
                   key: 'JSONCode',
@@ -419,11 +437,19 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                   label: 'Hide On Error or Empty',
                   checked: this.properties.hideErrorEmpty,
                 }),
+                this.msProps.PropertyPaneSlider('sidePadding', {
+                  label: 'Set a gutter width (px)',
+                  min: 0,
+                  max: 200,
+                  step: 10,
+                  showValue: true,
+                  value: this.properties.sidePadding,
+                }),
                 this.msProps.PropertyPaneTextField('contentHeight', {
                   label: 'Content Height',
                   value: this.properties.contentHeight,
-                 
                 }),
+
               ],
             },
           ],

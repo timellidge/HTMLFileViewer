@@ -16,6 +16,7 @@ export interface ITableViewerWebPartProps {
     hideErrorEmpty: boolean;
     tabBehaviour: boolean;
     contentHeight: string;
+    sidePadding: number;
     configured: boolean;
     contextSiteUrl: string;
     contextUser: string;
@@ -43,6 +44,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     private onPropertyFieldViewPickerChanged;
     private updateFieldViewPickerValue;
     private onPropertyFieldListPickerChanged;
+    private onPropertyPaneJSONChanged;
     protected loadPropertyPaneResources(): Promise<void>;
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration;
 }

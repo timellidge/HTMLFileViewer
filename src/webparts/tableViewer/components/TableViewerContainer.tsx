@@ -37,6 +37,7 @@ export interface ITableViewerContainerProps {
   hideErrorEmpty: boolean;
   themeVariant: IReadonlyTheme | undefined;
   contentHeight: string;
+  sidePadding: number;
   configured: boolean;
   onConfigure(): void;
   contextSiteUrl: string;
@@ -52,7 +53,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   // pull out the properties from the props object
   const { displayMode, title, updateProperty, showTitle, showFind, configured, 
           onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty,
-          themeVariant, contentHeight, contextSiteUrl, contextUser, webPartTag , tabBehaviour 
+          themeVariant, contentHeight, contextSiteUrl, contextUser, sidePadding, webPartTag , tabBehaviour 
     } = props;
 
   //=================================================================================================================
@@ -66,6 +67,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const [globalError, setGlobalError] = useState<Error>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [listPath, setListPath] = useState<string>('');
+  const [maxBarValues, setMaxBarValues] = useState<{ [key: string]: number }>({});
+  //const [barMax, setBarMax] = useState<number>(0);
 
 
   //=================================================================================================================
@@ -208,7 +211,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   // CSS CONSTS AND STUFF
   //================================================================================================================= 
     //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
-    const _containerClass = mergeStyles(styles.tableContainer, { height: contentHeight});
+    const _containerClass = mergeStyles(styles.tableViewer, { marginRight: sidePadding + "px", marginLeft: sidePadding + "px" });
 
 
   //=================================================================================================================
@@ -227,6 +230,18 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE TABS AND THEN AGAIN TO FORMAT THE DATA
   useEffect(() => {
     // Update tabData and updatedItems when items change
+    const barColumns = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].type === 'bar');
+    console.log("Bar Cols", barColumns);
+    //get the MAX value for the bar chart
+    const maxValues: { [key: string]: number } = {};
+    barColumns.forEach((column) => {
+      const maxValue = Math.max(...items.map(item => parseFloat(item[column]) || 0));
+      maxValues[column] = maxValue;
+    });
+    console.log("Max Bar Values", maxValues);
+    setMaxBarValues(maxValues);
+   
+
     // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
     // the one that shows counts, enumerates values if it is selected  and the field it relates to 
     const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
@@ -315,7 +330,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   //=================================================================================================================
   console.log("Filtered Items",filteredItems);
   return (
-    <div id={webPartTag} className={styles.tableViewer}> 
+    <div id={webPartTag} className={_containerClass}> 
       {!configured ? (
         <>
           <TableViewer >
@@ -325,7 +340,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} tabBehaviour={tabBehaviour}/>
               ))}
             </div>
-            <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} /> 
+            <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} contentHeight={contentHeight} maxBarValues={maxBarValues}/> 
           </TableViewer>
           {globalError && (
             <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />

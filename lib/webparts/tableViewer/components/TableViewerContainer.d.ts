@@ -22,6 +22,7 @@ export interface ITableViewerContainerProps {
     hideErrorEmpty: boolean;
     themeVariant: IReadonlyTheme | undefined;
     contentHeight: string;
+    sidePadding: number;
     configured: boolean;
     onConfigure(): void;
     contextSiteUrl: string;

@@ -4,6 +4,10 @@ interface ITableGridRenderProps {
     listUrl: string;
     colJSON: IColumnsConfig;
     items: any[];
+    contentHeight: string;
+    maxBarValues?: {
+        [key: string]: number;
+    };
 }
 declare const TableGridRender: React.FunctionComponent<ITableGridRenderProps>;
 export default TableGridRender;
