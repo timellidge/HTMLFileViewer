@@ -3,7 +3,7 @@
   "solution": {
     "name": "TableViewer",
     "id": "d63c415a-4843-49d9-82fc-b0575098f605",
-    "version": "1.0.4.6",
+    "version": "1.0.4.7",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -22,7 +22,7 @@
         "title": "Table Viewer Table Viewer Feature",
         "description": "The feature that activates Table Viewer from the Table Viewer solution.",
         "id": "04eebb40-018f-4be0-8309-ff70ed83b5bc",
-        "version": "1.0.4.6",
+        "version": "1.0.4.7",
         "componentIds": [
           "04eebb40-018f-4be0-8309-ff70ed83b5bc"
         ]
