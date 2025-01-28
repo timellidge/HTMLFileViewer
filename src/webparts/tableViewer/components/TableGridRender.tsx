@@ -340,47 +340,32 @@ const renderNoData = (column: IColumnJSON) =>
     <div>
       {column.fields.map((field: any, fieldIndex: number) => {
         const fieldColumn = allcolJSON[field];
-        const prefix = fieldColumn?.prefix ? ( <span>{fieldColumn.prefix}</span> ) : null;
-        const suffix = fieldColumn?.suffix ? ( <span>{fieldColumn.suffix}</span> ) : null;
-
-        let content;
-        switch (fieldColumn.type) {
-          case 'bar':
-            content = renderBar(item[field].displayValue, field , fieldColumn);
-            break;
-          case 'date':
-            content = DateTime.fromISO(item[field].rawValue).toLocaleString(DateTime.DATE_MED);
-            break;
-          case 'number':
-            content = renderNumber(item[field].displayValue, fieldColumn, false);
-            break;
-          case 'html':
-            content = renderHtml(item[field].rawValue);
-            break;
-          case 'person':
-            content = renderPersonCard(item[field].displayValue, field, fieldColumn, false);
-            break;
-          default:
-            content = renderDefault(item[field].displayValue, fieldColumn, false);
-            break;
-        }
-
-
-        return item[field] ? (
+  
+        const content = (() => {
+          switch (fieldColumn.type) {
+            case 'bar':
+              return renderBar(item[field].displayValue, field, fieldColumn);
+            case 'number':
+              return renderNumber(item[field].displayValue, fieldColumn, false);
+            case 'html':
+              return renderHtml(item[field].rawValue);
+            case "link":
+              return renderLink(item[field].rawValue, item[field].displayValue, column);
+            case 'person':
+              return renderPersonCard(item[field].displayValue, field, fieldColumn, false);
+            default:
+              return renderDefault(item[field].displayValue, fieldColumn, false);
+          }
+        })();
+  
+        return (
           <div className={`stack ${field}`} key={fieldIndex}>
-            {prefix}
             {content}
-            {suffix}
-          </div>
-        ) : (
-          <div className={`stack ${field}`} key={fieldIndex}>
-            &nbsp;
           </div>
         );
       })}
     </div>
   );
-
   //=================================================================================================================
   // THE RETURN FUNCTION
   //=================================================================================================================
@@ -411,6 +396,7 @@ const renderNoData = (column: IColumnJSON) =>
         )}
         <div className={styles.tableHeaderCell}> &nbsp; </div>
       </div>
+      
       <div className={_GridStyle}>
         {/* Render the cells */}
         {sortedItems.map((item, itemIndex) => (
@@ -426,25 +412,28 @@ const renderNoData = (column: IColumnJSON) =>
                     onMouseEnter={(event) => handleMouseEnter(event)}
                     onMouseLeave={(event) => handleMouseLeave(event)}
                   >
-                    {column.type === "stack"
-                      ? renderStack(item, column, colJSON)
-                      : item[key] || column.type === "edit"
-                      ? column.type === "person"
-                        ? renderPersonCard(item, key, column, shouldMerge)
-                        : column.type === "html"
-                        ? renderHtml(item[key].rawValue)
-                        : column.type === "icon"
-                        ? renderIcon(item[key].displayValue, column)
-                        : column.type === "link"
-                        ? renderLink( item[key].rawValue, item[key].displayValue, column )
-                        : column.type === "edit"
-                        ? renderEdit( item["ID"].rawValue, "Edit", column )
-                        : column.type === "number"
-                        ? renderNumber(item[key].displayValue, column, shouldMerge)
-                        : column.type === "bar"
-                        ? renderBar(item[key].displayValue, key, column)
-                        : renderDefault(item[key].displayValue, column, shouldMerge)
-                      : renderNoData(column)}
+                    {(() => {
+                      switch (column.type) {
+                        case "stack":
+                          return renderStack(item, column, colJSON);
+                        case "person":
+                          return renderPersonCard(item, key, column, shouldMerge);
+                        case "html":
+                          return renderHtml(item[key].rawValue);
+                        case "icon":
+                          return renderIcon(item[key].displayValue, column);
+                        case "link":
+                          return renderLink(item[key].rawValue, item[key].displayValue, column);
+                        case "edit":
+                          return renderEdit(item["ID"].rawValue, "Edit", column);
+                        case "number":
+                          return renderNumber(item[key].displayValue, column, shouldMerge);
+                        case "bar":
+                          return renderBar(item[key].displayValue, key, column);
+                        default:
+                          return item[key] ? renderDefault(item[key].displayValue, column, shouldMerge) : renderNoData(column);
+                      }
+                    })()}
                   </div>
                 );
               }
