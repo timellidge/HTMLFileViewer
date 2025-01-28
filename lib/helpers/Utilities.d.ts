@@ -7,6 +7,7 @@ import { IViewInfo } from '@pnp/sp/views';
 import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
 import { DateTime } from 'luxon';
+export declare const getContrastingTextColor: (backgroundColor: string) => string;
 export declare const parseDate: (value: number | Date | string, locale: string) => string | number | Date | DateTime<boolean>;
 export declare const getInitials: (name: string | null | undefined) => string;
 export declare const toProperCase: (str: string | null | undefined) => string;

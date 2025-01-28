@@ -2902,12 +2902,12 @@ var getStyles = function (props) {
   !*** ./node_modules/@fluentui/merge-styles/lib/mergeStyles.js ***!
   \****************************************************************/
 /*! exports provided: mergeStyles, mergeCss */
-/*! exports used: mergeCss, mergeStyles */
+/*! exports used: mergeStyles */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mergeStyles; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeCss; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeStyles; });
+/* unused harmony export mergeCss */
 /* harmony import */ var _extractStyleParts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./extractStyleParts */ "gN5f");
 /* harmony import */ var _shadowConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shadowConfig */ "QKRC");
 /* harmony import */ var _StyleOptionsState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StyleOptionsState */ "Z+an");
@@ -14386,7 +14386,7 @@ function buildClassMap(styles) {
                 get: function () {
                     if (className_1 === undefined) {
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        className_1 = Object(_MergeStyles__WEBPACK_IMPORTED_MODULE_0__[/* mergeStyles */ "b"])(styles[styleName]).toString();
+                        className_1 = Object(_MergeStyles__WEBPACK_IMPORTED_MODULE_0__[/* mergeStyles */ "a"])(styles[styleName]).toString();
                     }
                     return className_1;
                 },
@@ -15004,6 +15004,7 @@ var Position;
 /* harmony import */ var _TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TabsRender/PersonCard */ "qfZ8");
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! luxon */ "ExVU");
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
 
 
 
@@ -15012,6 +15013,7 @@ var Position;
 
 
 
+ // Ensure this import is correct
 const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues }) => {
     //we can only have one column sorted at a time so i need to know its name and its state
     const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
@@ -15179,14 +15181,36 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
     };
     // BAR RENDER FUNCTION - THIS WILL RENDER A BAR BASED ON THE VALUE OF THE FIELD HAS ROWMERGE
     const renderBar = (value, name, column) => {
+        var _a, _b, _c;
         const rawValue = parseFloat(value) || 0;
-        const maxValue = maxBarValues[name] || 10; // Avoid division by zero
-        const percentage = (rawValue / maxValue) * 80;
-        console.log(">>> bar", rawValue, maxValue, percentage);
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].bar, style: { width: `${percentage}%`, backgroundColor: column.barSettings.color, height: column.barSettings.height, display: "inline-block" }, title: value },
-            " \u00A0 ",
-            percentage,
-            " "));
+        //const maxValue =  maxBarValues[name] || 10; // Avoid division by zero
+        const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[name] || 100; // Set a default height if not provided
+        const percentage = (rawValue / maxValue) * 100;
+        //console.log(">>> bar", rawValue, maxValue, percentage);
+        if (percentage < 0) {
+            return null;
+        }
+        // set up the layout for the bar container
+        const cell1Width = column.prefix && "15% " || "0 ";
+        const cell3Width = column.suffix && "15% " || "0 ";
+        const _barCellStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].barCell, { gridTemplateColumns: cell1Width + "auto " + cell3Width, maxHeight: contentHeight || "100%" });
+        // now do the same for the bar itself
+        const barcol = ((_b = column.barSettings) === null || _b === void 0 ? void 0 : _b.color) || "darkblue"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
+        const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
+        const textCol = percentage < 20 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's goiong inside else use black
+        const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].bar, { color: textCol, backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
+        // Set the position of the bar label based on the percentage (inside or outside)
+        const _barLabelStyle = percentage < 20
+            ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].barLabel, { left: '120%' })
+            : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].barLabel, { right: '5px' });
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barCellStyle },
+            column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value },
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
+                    " ",
+                    rawValue,
+                    " ")),
+            column.suffix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0")));
     };
     // NUMBER RENDER FUNCTION ALIGN HAS ROWMERGE BUT NOT SURE IF NEEDED
     const renderNumber = (displayText, column, shouldMerge) => {
@@ -15198,11 +15222,16 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
             displayText,
             column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     };
-    // RENDER LINK FUNCTION NO ROWMERGE
-    const renderLink = (link, displayText, column) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
-        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        displayText,
-        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+    // RENDER LINK FUNCTION NO ROWMERGE 
+    const renderLink = (link, displayText, column) => {
+        if (!link) {
+            return null;
+        }
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
+            column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link }, displayText),
+            column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+    };
     // EDIT RENDER FUNCTION NO ROWMERGE
     const renderEdit = (id, displayText, column) => {
         let iconName = "edit";
@@ -15235,33 +15264,27 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
     //=================================================================================================================
     const renderStack = (item, column, allcolJSON) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => {
         const fieldColumn = allcolJSON[field];
-        const prefix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.prefix) ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.prefix)) : null;
-        const suffix = (fieldColumn === null || fieldColumn === void 0 ? void 0 : fieldColumn.suffix) ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, fieldColumn.suffix)) : null;
-        let content;
-        switch (fieldColumn.type) {
-            case 'bar':
-                content = renderBar(item[field].displayValue, field, fieldColumn);
-                break;
-            case 'date':
-                content = luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].fromISO(item[field].rawValue).toLocaleString(luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].DATE_MED);
-                break;
-            case 'number':
-                content = renderNumber(item[field].displayValue, fieldColumn, false);
-                break;
-            case 'html':
-                content = renderHtml(item[field].rawValue);
-                break;
-            case 'person':
-                content = renderPersonCard(item[field].displayValue, field, fieldColumn, false);
-                break;
-            default:
-                content = renderDefault(item[field].displayValue, fieldColumn, false);
-                break;
+        if (!fieldColumn) {
+            return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
         }
-        return item[field] ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex },
-            prefix,
-            content,
-            suffix)) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
+        //console.log(">>> stack field:", field,  "  display:", item[field].displayValue, "  raw:", item[field].rawValue ,"  JSON:" ,fieldColumn);
+        const content = (() => {
+            switch (fieldColumn.type) {
+                case 'bar':
+                    return renderBar(item[field].displayValue, field, fieldColumn);
+                case 'number':
+                    return renderNumber(item[field].displayValue, fieldColumn, false);
+                case 'html':
+                    return renderHtml(item[field].rawValue);
+                case "link":
+                    return renderLink(item[field].rawValue, item[field].displayValue, fieldColumn);
+                case 'person':
+                    return renderPersonCard(item, field, fieldColumn, false);
+                default:
+                    return renderDefault(item[field].displayValue, fieldColumn, false);
+            }
+        })();
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
     })));
     //=================================================================================================================
     // THE RETURN FUNCTION
@@ -15279,25 +15302,28 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => {
             var _a, _b;
             const shouldMerge = column.rowMerge && itemIndex > 0 && ((_a = item[key]) === null || _a === void 0 ? void 0 : _a.displayValue) === ((_b = sortedItems[itemIndex - 1][key]) === null || _b === void 0 ? void 0 : _b.displayValue);
-            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, column.type === "stack"
-                ? renderStack(item, column, colJSON)
-                : item[key] || column.type === "edit"
-                    ? column.type === "person"
-                        ? renderPersonCard(item, key, column, shouldMerge)
-                        : column.type === "html"
-                            ? renderHtml(item[key].rawValue)
-                            : column.type === "icon"
-                                ? renderIcon(item[key].displayValue, column)
-                                : column.type === "link"
-                                    ? renderLink(item[key].rawValue, item[key].displayValue, column)
-                                    : column.type === "edit"
-                                        ? renderEdit(item["ID"].rawValue, "Edit", column)
-                                        : column.type === "number"
-                                            ? renderNumber(item[key].displayValue, column, shouldMerge)
-                                            : column.type === "bar"
-                                                ? renderBar(item[key].displayValue, key, column)
-                                                : renderDefault(item[key].displayValue, column, shouldMerge)
-                    : renderNoData(column)));
+            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, (() => {
+                switch (column.type) {
+                    case "stack":
+                        return renderStack(item, column, colJSON);
+                    case "person":
+                        return renderPersonCard(item, key, column, shouldMerge);
+                    case "html":
+                        return renderHtml(item[key].rawValue);
+                    case "icon":
+                        return renderIcon(item[key].displayValue, column);
+                    case "link":
+                        return renderLink(item[key].rawValue, item[key].displayValue, column);
+                    case "edit":
+                        return renderEdit(item["ID"].rawValue, "Edit", column);
+                    case "number":
+                        return renderNumber(item[key].displayValue, column, shouldMerge);
+                    case "bar":
+                        return renderBar(item[key].displayValue, key, column);
+                    default:
+                        return item[key] ? renderDefault(item[key].displayValue, column, shouldMerge) : renderNoData(column);
+                }
+            })()));
         }))))),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", headerText: "Magic Side Panel", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, width: "100%", height: "900px", style: { border: 'none' } }))));
@@ -15611,7 +15637,7 @@ function raiseClickFromKeyboardEvent(target, ev) {
 // Helper function that will return a class for when the root is focused
 function getRootClass() {
     if (!focusZoneStyles) {
-        focusZoneStyles = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_18__[/* mergeStyles */ "b"])({
+        focusZoneStyles = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_18__[/* mergeStyles */ "a"])({
             selectors: {
                 ':focus': {
                     outline: 'none',
@@ -18686,7 +18712,7 @@ var Icon = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"])(_Ic
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "B", function() { return _MergeStyles__WEBPACK_IMPORTED_MODULE_15__["b"]; });
 
 /* harmony import */ var _MergeStyles__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./MergeStyles */ "2w4G");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "C", function() { return _MergeStyles__WEBPACK_IMPORTED_MODULE_16__["b"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "C", function() { return _MergeStyles__WEBPACK_IMPORTED_MODULE_16__["a"]; });
 
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./version */ "YFv9");
 
@@ -18922,7 +18948,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_b1130a5c .tableViewerHeader_b1130a5c{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_b1130a5c .tableViewerHeader_b1130a5c .searchBox_b1130a5c{margin:0}.tableViewer_b1130a5c .tabBar_b1130a5c{background-color:#fff;margin-top:5px}.tableViewer_b1130a5c .bar_b1130a5c{background-color:#ff7300;height:20px}.tableViewer_b1130a5c .tableContainer_b1130a5c{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_b1130a5c .searchBox_b1130a5c{margin:0}.tableViewer_b1130a5c .headerGrid_b1130a5c{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_b1130a5c .headerGrid_b1130a5c .tableHeaderCell_b1130a5c{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_b1130a5c .headerGrid_b1130a5c .tableHeaderCell_b1130a5c .sortIcon_b1130a5c{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_b1130a5c .headerGrid_b1130a5c .tableHeaderCell_b1130a5c:hover{background-color:#d4d4d0}.tableViewer_b1130a5c .tableGrid_b1130a5c{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_b1130a5c .tableGrid_b1130a5c .tableCell_b1130a5c{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_b1130a5c .tableGrid_b1130a5c .tableCell_b1130a5c .numberCell_b1130a5c{padding-right:10px;text-align:right}.tableViewer_b1130a5c .tableGrid_b1130a5c .editCell_b1130a5c{cursor:pointer}.tableViewer_b1130a5c .tableGrid_b1130a5c .editCell_b1130a5c,.tableViewer_b1130a5c .tableGrid_b1130a5c .iconCell_b1130a5c{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_b1130a5c .tableGrid_b1130a5c .tableDataContent_b1130a5c{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_b1130a5c .tableGrid_b1130a5c .highlight_b1130a5c{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_b1130a5c input::placeholder{color:red!important}.error_b1130a5c input:-ms-input-placeholder{color:red!important}.error_b1130a5c input::-ms-input-placeholder{color:red!important}#workbenchPageContent_b1130a5c{max-width:1680px}", ""]);
+exports.push([module.i, ".tableViewer_5ff0a43d .tableViewerHeader_5ff0a43d{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_5ff0a43d .tableViewerHeader_5ff0a43d .searchBox_5ff0a43d{margin:0}.tableViewer_5ff0a43d .tabBar_5ff0a43d{background-color:#fff;margin-top:5px}.tableViewer_5ff0a43d .barCell_5ff0a43d{display:grid}.tableViewer_5ff0a43d .barCell_5ff0a43d .bar_5ff0a43d{border-right:3px solid #fff;margin:2px;padding:2px;position:relative;text-align:right}.tableViewer_5ff0a43d .barCell_5ff0a43d .bar_5ff0a43d .barLabel_5ff0a43d{position:absolute}.tableViewer_5ff0a43d .tableContainer_5ff0a43d{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_5ff0a43d .searchBox_5ff0a43d{margin:0}.tableViewer_5ff0a43d .headerGrid_5ff0a43d{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_5ff0a43d .headerGrid_5ff0a43d .tableHeaderCell_5ff0a43d{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:14px;font-weight:600;grid-template-columns:auto 24px;height:45px;padding:2px}.tableViewer_5ff0a43d .headerGrid_5ff0a43d .tableHeaderCell_5ff0a43d .sortIcon_5ff0a43d{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_5ff0a43d .headerGrid_5ff0a43d .tableHeaderCell_5ff0a43d:hover{background-color:#d4d4d0}.tableViewer_5ff0a43d .tableGrid_5ff0a43d{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .tableCell_5ff0a43d{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .tableCell_5ff0a43d .numberCell_5ff0a43d{padding-right:10px;text-align:right}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .editCell_5ff0a43d{cursor:pointer}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .editCell_5ff0a43d,.tableViewer_5ff0a43d .tableGrid_5ff0a43d .iconCell_5ff0a43d{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .tableDataContent_5ff0a43d{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_5ff0a43d .tableGrid_5ff0a43d .highlight_5ff0a43d{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_5ff0a43d input::placeholder{color:red!important}.error_5ff0a43d input:-ms-input-placeholder{color:red!important}.error_5ff0a43d input::-ms-input-placeholder{color:red!important}#workbenchPageContent_5ff0a43d{max-width:1680px}", ""]);
 // Exports
 module.exports = exports;
 
@@ -35141,7 +35167,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
         const oldViewValue = this.properties[targetProperty];
         this.onPropertyPaneFieldChanged(targetProperty, oldViewValue, newValue);
         if (newValue !== '') {
-            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_9__[/* getListViewXml */ "d"])(this.properties.siteUrl, this.properties.list, this.properties.view)
+            Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_9__[/* getListViewXml */ "e"])(this.properties.siteUrl, this.properties.list, this.properties.view)
                 .then(this.updateFieldViewPickerValue.bind(this));
         }
         else {
@@ -35220,7 +35246,7 @@ class TableViewerWebPart extends _microsoft_sp_webpart_base__WEBPACK_IMPORTED_MO
                                 this.msProps.PropertyPaneTextField('siteUrl', {
                                     label: 'Site',
                                     value: this.properties.siteUrl,
-                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_9__[/* validateSiteExists */ "h"],
+                                    onGetErrorMessage: _helpers_Utilities__WEBPACK_IMPORTED_MODULE_9__[/* validateSiteExists */ "i"],
                                     deferredValidationTime: 500,
                                 }),
                                 this.listProp.PropertyFieldListPicker('list', {
@@ -35815,24 +35841,26 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_b1130a5c',
-    tableViewerHeader: 'tableViewerHeader_b1130a5c',
-    searchBox: 'searchBox_b1130a5c',
-    tabBar: 'tabBar_b1130a5c',
-    bar: 'bar_b1130a5c',
-    tableContainer: 'tableContainer_b1130a5c',
-    headerGrid: 'headerGrid_b1130a5c',
-    tableHeaderCell: 'tableHeaderCell_b1130a5c',
-    sortIcon: 'sortIcon_b1130a5c',
-    tableGrid: 'tableGrid_b1130a5c',
-    tableCell: 'tableCell_b1130a5c',
-    numberCell: 'numberCell_b1130a5c',
-    editCell: 'editCell_b1130a5c',
-    iconCell: 'iconCell_b1130a5c',
-    tableDataContent: 'tableDataContent_b1130a5c',
-    highlight: 'highlight_b1130a5c',
-    error: 'error_b1130a5c',
-    workbenchPageContent: 'workbenchPageContent_b1130a5c'
+    tableViewer: 'tableViewer_5ff0a43d',
+    tableViewerHeader: 'tableViewerHeader_5ff0a43d',
+    searchBox: 'searchBox_5ff0a43d',
+    tabBar: 'tabBar_5ff0a43d',
+    barCell: 'barCell_5ff0a43d',
+    bar: 'bar_5ff0a43d',
+    barLabel: 'barLabel_5ff0a43d',
+    tableContainer: 'tableContainer_5ff0a43d',
+    headerGrid: 'headerGrid_5ff0a43d',
+    tableHeaderCell: 'tableHeaderCell_5ff0a43d',
+    sortIcon: 'sortIcon_5ff0a43d',
+    tableGrid: 'tableGrid_5ff0a43d',
+    tableCell: 'tableCell_5ff0a43d',
+    numberCell: 'numberCell_5ff0a43d',
+    editCell: 'editCell_5ff0a43d',
+    iconCell: 'iconCell_5ff0a43d',
+    tableDataContent: 'tableDataContent_5ff0a43d',
+    highlight: 'highlight_5ff0a43d',
+    error: 'error_5ff0a43d',
+    workbenchPageContent: 'workbenchPageContent_5ff0a43d'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
@@ -36858,132 +36886,6 @@ function values(obj) {
     }, []);
 }
 //# sourceMappingURL=object.js.map
-
-/***/ }),
-
-/***/ "QFdT":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@fluentui/foundation-legacy/lib/createComponent.js ***!
-  \*************************************************************************/
-/*! exports provided: createComponent */
-/*! exports used: createComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/style-utilities */ "Dfs8");
-/* harmony import */ var _fluentui_utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/utilities */ "g3rt");
-/* harmony import */ var _fluentui_utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/utilities */ "8GdW");
-/* harmony import */ var _slots__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./slots */ "xqms");
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utilities */ "xWQE");
-
-
-
-
-
-
-/**
- * Assembles a higher order component based on the following: styles, theme, view, and state.
- * Imposes a separation of concern and centralizes styling processing to increase ease of use and robustness
- * in how components use and apply styling and theming.
- *
- * Automatically merges and applies themes and styles with theme / styleprops having the highest priority.
- * State component, if provided, is passed in props for processing. Props from state / user are automatically processed
- * and styled before finally being passed to view.
- *
- * State components should contain all stateful behavior and should not generate any JSX, but rather simply call
- * the view prop.
- *
- * Views should simply be stateless pure functions that receive all props needed for rendering their output.
- *
- * State component is optional. If state is not provided, created component is essentially a functional
- * stateless component.
- *
- * @param options - component Component options. See IComponentOptions for more detail.
- */
-function createComponent(view, options) {
-    if (options === void 0) { options = {}; }
-    var _a = options.factoryOptions, factoryOptions = _a === void 0 ? {} : _a;
-    var defaultProp = factoryOptions.defaultProp;
-    var ResultComponent = function (componentProps) {
-        var settings = _getCustomizations(options.displayName, react__WEBPACK_IMPORTED_MODULE_1__["useContext"](_fluentui_utilities__WEBPACK_IMPORTED_MODULE_3__[/* CustomizerContext */ "a"]), options.fields);
-        var stateReducer = options.state;
-        if (stateReducer) {
-            // Don't assume state will return all props, so spread useState result over component props.
-            componentProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, componentProps), stateReducer(componentProps));
-        }
-        var theme = componentProps.theme || settings.theme;
-        var tokens = _resolveTokens(componentProps, theme, options.tokens, settings.tokens, componentProps.tokens);
-        var styles = _resolveStyles(componentProps, theme, tokens, options.styles, settings.styles, componentProps.styles);
-        var viewProps = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, componentProps), { styles: styles, tokens: tokens, _defaultStyles: styles, theme: theme });
-        return view(viewProps);
-    };
-    ResultComponent.displayName = options.displayName || view.name;
-    // If a shorthand prop is defined, create a factory for the component.
-    // TODO: This shouldn't be a concern of createComponent.. factoryOptions should just be forwarded.
-    //       Need to weigh creating default factories on component creation vs. memoizing them on use in slots.tsx.
-    if (defaultProp) {
-        ResultComponent.create = Object(_slots__WEBPACK_IMPORTED_MODULE_5__[/* createFactory */ "a"])(ResultComponent, { defaultProp: defaultProp });
-    }
-    Object(_utilities__WEBPACK_IMPORTED_MODULE_6__[/* assign */ "a"])(ResultComponent, options.statics);
-    // Later versions of TypeSript should allow us to merge objects in a type safe way and avoid this cast.
-    return ResultComponent;
-}
-/**
- * Resolve all styles functions with both props and tokens and flatten results along with all styles objects.
- */
-function _resolveStyles(props, theme, tokens) {
-    var allStyles = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        allStyles[_i - 3] = arguments[_i];
-    }
-    return _fluentui_style_utilities__WEBPACK_IMPORTED_MODULE_2__[/* concatStyleSets */ "o"].apply(void 0, allStyles.map(function (styles) {
-        return typeof styles === 'function' ? styles(props, theme, tokens) : styles;
-    }));
-}
-/**
- * Resolve all tokens functions with props flatten results along with all tokens objects.
- */
-function _resolveTokens(props, theme) {
-    var allTokens = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        allTokens[_i - 2] = arguments[_i];
-    }
-    var tokens = {};
-    for (var _a = 0, allTokens_1 = allTokens; _a < allTokens_1.length; _a++) {
-        var currentTokens = allTokens_1[_a];
-        if (currentTokens) {
-            // TODO: why is this cast needed? TS seems to think there is a (TToken | Function) union from somewhere.
-            currentTokens =
-                typeof currentTokens === 'function'
-                    ? currentTokens(props, theme)
-                    : currentTokens;
-            if (Array.isArray(currentTokens)) {
-                currentTokens = _resolveTokens.apply(void 0, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "e"])([props, theme], currentTokens, false));
-            }
-            Object(_utilities__WEBPACK_IMPORTED_MODULE_6__[/* assign */ "a"])(tokens, currentTokens);
-        }
-    }
-    return tokens;
-}
-/**
- * Helper function for calling Customizations.getSettings falling back to default fields.
- *
- * @param displayName Displayable name for component.
- * @param context React context passed to component containing contextual settings.
- * @param fields Optional list of properties to grab from global store and context.
- */
-function _getCustomizations(displayName, context, fields) {
-    // TODO: do we want field props? should fields be part of IComponent and used here?
-    // TODO: should we centrally define DefaultFields? (not exported from styling)
-    // TODO: tie this array to ICustomizationProps, such that each array element is keyof ICustomizationProps
-    var DefaultFields = ['theme', 'styles', 'tokens'];
-    return _fluentui_utilities__WEBPACK_IMPORTED_MODULE_4__[/* Customizations */ "a"].getSettings(fields || DefaultFields, displayName, context.customizations);
-}
-//# sourceMappingURL=createComponent.js.map
 
 /***/ }),
 
@@ -46323,26 +46225,6 @@ var ContextualMenuSplitButton = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "bkgf":
-/*!************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TableViewer.js ***!
-  \************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Stack */ "cXmr");
-
-
-const TableViewer = ({ children }) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Stack__WEBPACK_IMPORTED_MODULE_1__[/* Stack */ "a"], { horizontalAlign: "start" }, react__WEBPACK_IMPORTED_MODULE_0__["Children"].map(children, (child) => child)));
-/* harmony default export */ __webpack_exports__["a"] = (TableViewer);
-
-
-/***/ }),
-
 /***/ "br4S":
 /*!*********************************************!*\
   !*** external "@microsoft/sp-webpart-base" ***!
@@ -46673,99 +46555,6 @@ function getAriaDescribedBy(keySequences) {
     return describedby + ' ' + sequencesToID(keySequences);
 }
 //# sourceMappingURL=KeytipUtils.js.map
-
-/***/ }),
-
-/***/ "cXmr":
-/*!********************************************************************!*\
-  !*** ./node_modules/@fluentui/react/lib/components/Stack/Stack.js ***!
-  \********************************************************************/
-/*! exports provided: Stack, default */
-/*! exports used: Stack */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Stack; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/foundation-legacy */ "xqms");
-/* harmony import */ var _fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/foundation-legacy */ "QFdT");
-/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Utilities */ "i13s");
-/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Utilities */ "D9iZ");
-/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Utilities */ "XEit");
-/* harmony import */ var _Stack_styles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Stack.styles */ "tBdQ");
-/* harmony import */ var _StackItem_StackItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StackItem/StackItem */ "kaos");
-
-/** @jsxRuntime classic */
-/** @jsx withSlots */
-
-
-
-
-
-var StackView = function (props) {
-    var _a = props.as, RootType = _a === void 0 ? 'div' : _a, _b = props.disableShrink, disableShrink = _b === void 0 ? false : _b, _c = props.enableScopedSelectors, enableScopedSelectors = _c === void 0 ? false : _c, wrap = props.wrap, rest = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __rest */ "d"])(props, ["as", "disableShrink", "enableScopedSelectors", "wrap"]);
-    Object(_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* warnDeprecations */ "a"])('Stack', props, {
-        gap: 'tokens.childrenGap',
-        maxHeight: 'tokens.maxHeight',
-        maxWidth: 'tokens.maxWidth',
-        padding: 'tokens.padding',
-    });
-    var stackChildren = _processStackChildren(props.children, { disableShrink: disableShrink, enableScopedSelectors: enableScopedSelectors });
-    var nativeProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_5__[/* getNativeProps */ "d"])(rest, _Utilities__WEBPACK_IMPORTED_MODULE_5__[/* htmlElementProperties */ "e"]);
-    var Slots = Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__[/* getSlots */ "b"])(props, {
-        root: RootType,
-        inner: 'div',
-    });
-    if (wrap) {
-        return (Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__[/* withSlots */ "c"])(Slots.root, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, nativeProps),
-            Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__[/* withSlots */ "c"])(Slots.inner, null, stackChildren)));
-    }
-    return Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__[/* withSlots */ "c"])(Slots.root, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, nativeProps), stackChildren);
-};
-function _processStackChildren(children, _a) {
-    var disableShrink = _a.disableShrink, enableScopedSelectors = _a.enableScopedSelectors;
-    var childrenArray = react__WEBPACK_IMPORTED_MODULE_1__["Children"].toArray(children);
-    childrenArray = react__WEBPACK_IMPORTED_MODULE_1__["Children"].map(childrenArray, function (child) {
-        if (!child || !react__WEBPACK_IMPORTED_MODULE_1__["isValidElement"](child)) {
-            return child;
-        }
-        if (child.type === react__WEBPACK_IMPORTED_MODULE_1__["Fragment"]) {
-            return child.props.children
-                ? _processStackChildren(child.props.children, { disableShrink: disableShrink, enableScopedSelectors: enableScopedSelectors })
-                : null;
-        }
-        var childAsReactElement = child;
-        var defaultItemProps = {};
-        if (_isStackItem(child)) {
-            defaultItemProps = { shrink: !disableShrink };
-        }
-        var childClassName = childAsReactElement.props.className;
-        return react__WEBPACK_IMPORTED_MODULE_1__["cloneElement"](childAsReactElement, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, defaultItemProps), childAsReactElement.props), (childClassName && { className: childClassName })), (enableScopedSelectors && { className: Object(_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* css */ "a"])(_Stack_styles__WEBPACK_IMPORTED_MODULE_7__[/* GlobalClassNames */ "a"].child, childClassName) })));
-    });
-    return childrenArray;
-}
-function _isStackItem(item) {
-    // In theory, we should be able to just check item.type === StackItem.
-    // However, under certain unclear circumstances (see https://github.com/microsoft/fluentui/issues/10785),
-    // the object identity is different despite the function implementation being the same.
-    return (!!item &&
-        typeof item === 'object' &&
-        !!item.type &&
-        // StackItem is generated by createComponent, so we need to check its displayName instead of name
-        item.type.displayName === _StackItem_StackItem__WEBPACK_IMPORTED_MODULE_8__[/* StackItem */ "a"].displayName);
-}
-var StackStatics = {
-    Item: _StackItem_StackItem__WEBPACK_IMPORTED_MODULE_8__[/* StackItem */ "a"],
-};
-var Stack = Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_3__[/* createComponent */ "a"])(StackView, {
-    displayName: 'Stack',
-    styles: _Stack_styles__WEBPACK_IMPORTED_MODULE_7__[/* styles */ "b"],
-    statics: StackStatics,
-});
-/* unused harmony default export */ var _unused_webpack_default_export = (Stack);
-//# sourceMappingURL=Stack.js.map
 
 /***/ }),
 
@@ -50893,14 +50682,12 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
 /* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-/* harmony import */ var _TableViewer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TableViewer */ "bkgf");
-/* harmony import */ var _TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TableViewerHeader */ "laru");
-/* harmony import */ var _TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TableViewerPlaceholder */ "RVsW");
-/* harmony import */ var _TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TableViewerErrorMessage */ "VvtR");
-/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
-/* harmony import */ var _TableGridRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableGridRender */ "B0n2");
-/* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
-
+/* harmony import */ var _TableViewerHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TableViewerHeader */ "laru");
+/* harmony import */ var _TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TableViewerPlaceholder */ "RVsW");
+/* harmony import */ var _TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TableViewerErrorMessage */ "VvtR");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
+/* harmony import */ var _TableGridRender__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridRender */ "B0n2");
+/* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
 
 
 
@@ -50929,7 +50716,6 @@ const TableViewerContainer = (props) => {
     const [searchQuery, setSearchQuery] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
     const [listPath, setListPath] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
     const [maxBarValues, setMaxBarValues] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
-    //const [barMax, setBarMax] = useState<number>(0);
     //=================================================================================================================
     // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
     //=================================================================================================================
@@ -51039,7 +50825,7 @@ const TableViewerContainer = (props) => {
     //================================================================================================================= 
     const getItems = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
         try {
-            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getItemsUsingRenderListDataAsStream */ "b"])(siteUrl, listId, viewXmlCode);
+            const { Row } = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* getItemsUsingRenderListDataAsStream */ "c"])(siteUrl, listId, viewXmlCode);
             setItems(Row);
         }
         catch (e) {
@@ -51049,7 +50835,7 @@ const TableViewerContainer = (props) => {
     }, [viewXmlCode, siteUrl, listId]);
     const getListPath = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](async () => {
         try {
-            const listPath = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* getListUrl */ "c"])(siteUrl, listId);
+            const listPath = await Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* getListUrl */ "d"])(siteUrl, listId);
             setListPath(listPath);
         }
         catch (e) {
@@ -51116,11 +50902,11 @@ const TableViewerContainer = (props) => {
                         // let sortValue = rawValue;
                         // Format the value based on the type
                         if (type === 'number') {
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* numberFormat */ "e"])(rawValue, format);
+                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* numberFormat */ "f"])(rawValue, format);
                             rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
                         }
                         else if (type === 'date') {
-                            rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* parseDate */ "f"])(rawValue, 'en-GB');
+                            rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* parseDate */ "g"])(rawValue, 'en-GB');
                             displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
                         }
                         else if (type === 'singlechoice') {
@@ -51137,7 +50923,7 @@ const TableViewerContainer = (props) => {
                         else if (type === 'person') {
                             if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
                                 const email = rawValue[0].email || '';
-                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_7__[/* toProperCase */ "g"])(email.split('@')[0].replace(/\./g, ' '));
+                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* toProperCase */ "h"])(email.split('@')[0].replace(/\./g, ' '));
                                 rawValue[0].name = name; // Add the name key to rawValue[0]
                                 displayValue = rawValue[0].title;
                             }
@@ -51169,11 +50955,11 @@ const TableViewerContainer = (props) => {
     //=================================================================================================================
     console.log("Filtered Items", filteredItems);
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: webPartTag, className: _containerClass }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewer__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], null,
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { listUrl: listPath, colJSON: ColumnsJSON, items: filteredItems, contentHeight: contentHeight, maxBarValues: maxBarValues })),
-        globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { message: globalError, onDismiss: () => setGlobalError(null) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { listUrl: listPath, colJSON: ColumnsJSON, items: filteredItems, contentHeight: contentHeight, maxBarValues: maxBarValues })),
+        globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { message: globalError, onDismiss: () => setGlobalError(null) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableViewerContainer);
 
@@ -51576,66 +51362,6 @@ function _scopedSettingsMergeWith(scopedSettingsFromProps) {
     };
 }
 //# sourceMappingURL=mergeSettings.js.map
-
-/***/ }),
-
-/***/ "gsk6":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/@fluentui/react/lib/components/Stack/StackItem/StackItem.styles.js ***!
-  \*****************************************************************************************/
-/*! exports provided: GlobalClassNames, StackItemStyles */
-/*! exports used: GlobalClassNames, StackItemStyles */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalClassNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return StackItemStyles; });
-/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Styling */ "Dfs8");
-
-var GlobalClassNames = {
-    root: 'ms-StackItem',
-};
-var alignMap = {
-    start: 'flex-start',
-    end: 'flex-end',
-};
-var StackItemStyles = function (props, theme, tokens) {
-    var grow = props.grow, shrink = props.shrink, disableShrink = props.disableShrink, align = props.align, verticalFill = props.verticalFill, order = props.order, className = props.className, _a = props.basis, basis = _a === void 0 ? 'auto' : _a;
-    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_0__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
-    return {
-        root: [
-            theme.fonts.medium,
-            classNames.root,
-            {
-                flexBasis: basis,
-                margin: tokens.margin,
-                padding: tokens.padding,
-                height: verticalFill ? '100%' : 'auto',
-                width: 'auto',
-            },
-            grow && {
-                flexGrow: grow === true ? 1 : grow,
-            },
-            (disableShrink || (!grow && !shrink)) && {
-                flexShrink: 0,
-            },
-            shrink &&
-                !disableShrink && {
-                flexShrink: 1,
-            },
-            align && {
-                alignSelf: alignMap[align] || align,
-            },
-            order && {
-                order: order,
-            },
-            className,
-        ],
-        // TODO: this cast may be hiding some potential issues with styling and name
-        //        lookups and should be removed
-    };
-};
-//# sourceMappingURL=StackItem.styles.js.map
 
 /***/ }),
 
@@ -52751,116 +52477,6 @@ function warnDeprecations(componentName, props, deprecationMap) {
     }
 }
 //# sourceMappingURL=warnDeprecations.js.map
-
-/***/ }),
-
-/***/ "i5vC":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@fluentui/react/lib/components/Stack/StackUtils.js ***!
-  \*************************************************************************/
-/*! exports provided: parseGap, parsePadding */
-/*! exports used: parseGap, parsePadding */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return parseGap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return parsePadding; });
-// Helper function that converts a themed spacing key (if given) to the corresponding themed spacing value.
-var _getThemedSpacing = function (space, theme) {
-    if (theme.spacing.hasOwnProperty(space)) {
-        return theme.spacing[space];
-    }
-    return space;
-};
-// Helper function that takes a gap as a string and converts it into a { value, unit } representation.
-var _getValueUnitGap = function (gap) {
-    var numericalPart = parseFloat(gap);
-    var numericalValue = isNaN(numericalPart) ? 0 : numericalPart;
-    var numericalString = isNaN(numericalPart) ? '' : numericalPart.toString();
-    var unitPart = gap.substring(numericalString.toString().length);
-    return {
-        value: numericalValue,
-        unit: unitPart || 'px',
-    };
-};
-/**
- * Takes in a gap size in either a CSS-style format (e.g. 10 or "10px")
- *  or a key of a themed spacing value (e.g. "s1").
- * Returns the separate numerical value of the padding (e.g. 10)
- *  and the CSS unit (e.g. "px").
- */
-var parseGap = function (gap, theme) {
-    if (gap === undefined || gap === '') {
-        return {
-            rowGap: {
-                value: 0,
-                unit: 'px',
-            },
-            columnGap: {
-                value: 0,
-                unit: 'px',
-            },
-        };
-    }
-    if (typeof gap === 'number') {
-        return {
-            rowGap: {
-                value: gap,
-                unit: 'px',
-            },
-            columnGap: {
-                value: gap,
-                unit: 'px',
-            },
-        };
-    }
-    var splitGap = gap.split(' ');
-    // If the array has more than two values, then return 0px.
-    if (splitGap.length > 2) {
-        return {
-            rowGap: {
-                value: 0,
-                unit: 'px',
-            },
-            columnGap: {
-                value: 0,
-                unit: 'px',
-            },
-        };
-    }
-    // If the array has two values, then parse each one.
-    if (splitGap.length === 2) {
-        return {
-            rowGap: _getValueUnitGap(_getThemedSpacing(splitGap[0], theme)),
-            columnGap: _getValueUnitGap(_getThemedSpacing(splitGap[1], theme)),
-        };
-    }
-    // Else, parse the numerical value and pass it as both the vertical and horizontal gap.
-    var calculatedGap = _getValueUnitGap(_getThemedSpacing(gap, theme));
-    return {
-        rowGap: calculatedGap,
-        columnGap: calculatedGap,
-    };
-};
-/**
- * Takes in a padding in a CSS-style format (e.g. 10, "10px", "10px 10px", etc.)
- *  where the separate padding values can also be the key of a themed spacing value
- *  (e.g. "s1 m", "10px l1 20px l2", etc.).
- * Returns a CSS-style padding.
- */
-var parsePadding = function (padding, theme) {
-    if (padding === undefined || typeof padding === 'number' || padding === '') {
-        return padding;
-    }
-    var paddingValues = padding.split(' ');
-    if (paddingValues.length < 2) {
-        return _getThemedSpacing(padding, theme);
-    }
-    return paddingValues.reduce(function (padding1, padding2) {
-        return _getThemedSpacing(padding1, theme) + ' ' + _getThemedSpacing(padding2, theme);
-    });
-};
-//# sourceMappingURL=StackUtils.js.map
 
 /***/ }),
 
@@ -55032,46 +54648,6 @@ var getStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* memoizeFunctio
 
 /***/ }),
 
-/***/ "kaos":
-/*!**********************************************************************************!*\
-  !*** ./node_modules/@fluentui/react/lib/components/Stack/StackItem/StackItem.js ***!
-  \**********************************************************************************/
-/*! exports provided: StackItem, default */
-/*! exports used: StackItem */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StackItem; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var _fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/foundation-legacy */ "xqms");
-/* harmony import */ var _fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/foundation-legacy */ "QFdT");
-/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Utilities */ "D9iZ");
-/* harmony import */ var _StackItem_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StackItem.styles */ "gsk6");
-
-
-
-
-var StackItemView = function (props) {
-    var children = props.children;
-    var nativeProps = Object(_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getNativeProps */ "d"])(props, _Utilities__WEBPACK_IMPORTED_MODULE_3__[/* htmlElementProperties */ "e"]);
-    // eslint-disable-next-line eqeqeq
-    if (children == null) {
-        return null;
-    }
-    var Slots = Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_1__[/* getSlots */ "b"])(props, {
-        root: 'div',
-    });
-    return Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_1__[/* withSlots */ "c"])(Slots.root, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, nativeProps), children);
-};
-var StackItem = Object(_fluentui_foundation_legacy__WEBPACK_IMPORTED_MODULE_2__[/* createComponent */ "a"])(StackItemView, {
-    displayName: 'StackItem',
-    styles: _StackItem_styles__WEBPACK_IMPORTED_MODULE_4__[/* StackItemStyles */ "b"],
-});
-/* unused harmony default export */ var _unused_webpack_default_export = (StackItem);
-//# sourceMappingURL=StackItem.js.map
-
-/***/ }),
-
 /***/ "kawP":
 /*!**************************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Callout/CalloutContent.styles.js ***!
@@ -55824,6 +55400,1205 @@ var KeyCodes = {
     singleQuote: 222
 };
 //# sourceMappingURL=KeyCodes.js.map
+
+/***/ }),
+
+/***/ "lMfh":
+/*!**************************************************!*\
+  !*** ./node_modules/tinycolor2/cjs/tinycolor.js ***!
+  \**************************************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+// This file is autogenerated. It's used to publish CJS to npm.
+(function (global, factory) {
+   true ? module.exports = factory() :
+  undefined;
+})(this, (function () { 'use strict';
+
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
+  }
+
+  // https://github.com/bgrins/TinyColor
+  // Brian Grinstead, MIT License
+
+  var trimLeft = /^\s+/;
+  var trimRight = /\s+$/;
+  function tinycolor(color, opts) {
+    color = color ? color : "";
+    opts = opts || {};
+
+    // If input is already a tinycolor, return itself
+    if (color instanceof tinycolor) {
+      return color;
+    }
+    // If we are called as a function, call using new instead
+    if (!(this instanceof tinycolor)) {
+      return new tinycolor(color, opts);
+    }
+    var rgb = inputToRGB(color);
+    this._originalInput = color, this._r = rgb.r, this._g = rgb.g, this._b = rgb.b, this._a = rgb.a, this._roundA = Math.round(100 * this._a) / 100, this._format = opts.format || rgb.format;
+    this._gradientType = opts.gradientType;
+
+    // Don't let the range of [0,255] come back in [0,1].
+    // Potentially lose a little bit of precision here, but will fix issues where
+    // .5 gets interpreted as half of the total, instead of half of 1
+    // If it was supposed to be 128, this was already taken care of by `inputToRgb`
+    if (this._r < 1) this._r = Math.round(this._r);
+    if (this._g < 1) this._g = Math.round(this._g);
+    if (this._b < 1) this._b = Math.round(this._b);
+    this._ok = rgb.ok;
+  }
+  tinycolor.prototype = {
+    isDark: function isDark() {
+      return this.getBrightness() < 128;
+    },
+    isLight: function isLight() {
+      return !this.isDark();
+    },
+    isValid: function isValid() {
+      return this._ok;
+    },
+    getOriginalInput: function getOriginalInput() {
+      return this._originalInput;
+    },
+    getFormat: function getFormat() {
+      return this._format;
+    },
+    getAlpha: function getAlpha() {
+      return this._a;
+    },
+    getBrightness: function getBrightness() {
+      //http://www.w3.org/TR/AERT#color-contrast
+      var rgb = this.toRgb();
+      return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    },
+    getLuminance: function getLuminance() {
+      //http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+      var rgb = this.toRgb();
+      var RsRGB, GsRGB, BsRGB, R, G, B;
+      RsRGB = rgb.r / 255;
+      GsRGB = rgb.g / 255;
+      BsRGB = rgb.b / 255;
+      if (RsRGB <= 0.03928) R = RsRGB / 12.92;else R = Math.pow((RsRGB + 0.055) / 1.055, 2.4);
+      if (GsRGB <= 0.03928) G = GsRGB / 12.92;else G = Math.pow((GsRGB + 0.055) / 1.055, 2.4);
+      if (BsRGB <= 0.03928) B = BsRGB / 12.92;else B = Math.pow((BsRGB + 0.055) / 1.055, 2.4);
+      return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    },
+    setAlpha: function setAlpha(value) {
+      this._a = boundAlpha(value);
+      this._roundA = Math.round(100 * this._a) / 100;
+      return this;
+    },
+    toHsv: function toHsv() {
+      var hsv = rgbToHsv(this._r, this._g, this._b);
+      return {
+        h: hsv.h * 360,
+        s: hsv.s,
+        v: hsv.v,
+        a: this._a
+      };
+    },
+    toHsvString: function toHsvString() {
+      var hsv = rgbToHsv(this._r, this._g, this._b);
+      var h = Math.round(hsv.h * 360),
+        s = Math.round(hsv.s * 100),
+        v = Math.round(hsv.v * 100);
+      return this._a == 1 ? "hsv(" + h + ", " + s + "%, " + v + "%)" : "hsva(" + h + ", " + s + "%, " + v + "%, " + this._roundA + ")";
+    },
+    toHsl: function toHsl() {
+      var hsl = rgbToHsl(this._r, this._g, this._b);
+      return {
+        h: hsl.h * 360,
+        s: hsl.s,
+        l: hsl.l,
+        a: this._a
+      };
+    },
+    toHslString: function toHslString() {
+      var hsl = rgbToHsl(this._r, this._g, this._b);
+      var h = Math.round(hsl.h * 360),
+        s = Math.round(hsl.s * 100),
+        l = Math.round(hsl.l * 100);
+      return this._a == 1 ? "hsl(" + h + ", " + s + "%, " + l + "%)" : "hsla(" + h + ", " + s + "%, " + l + "%, " + this._roundA + ")";
+    },
+    toHex: function toHex(allow3Char) {
+      return rgbToHex(this._r, this._g, this._b, allow3Char);
+    },
+    toHexString: function toHexString(allow3Char) {
+      return "#" + this.toHex(allow3Char);
+    },
+    toHex8: function toHex8(allow4Char) {
+      return rgbaToHex(this._r, this._g, this._b, this._a, allow4Char);
+    },
+    toHex8String: function toHex8String(allow4Char) {
+      return "#" + this.toHex8(allow4Char);
+    },
+    toRgb: function toRgb() {
+      return {
+        r: Math.round(this._r),
+        g: Math.round(this._g),
+        b: Math.round(this._b),
+        a: this._a
+      };
+    },
+    toRgbString: function toRgbString() {
+      return this._a == 1 ? "rgb(" + Math.round(this._r) + ", " + Math.round(this._g) + ", " + Math.round(this._b) + ")" : "rgba(" + Math.round(this._r) + ", " + Math.round(this._g) + ", " + Math.round(this._b) + ", " + this._roundA + ")";
+    },
+    toPercentageRgb: function toPercentageRgb() {
+      return {
+        r: Math.round(bound01(this._r, 255) * 100) + "%",
+        g: Math.round(bound01(this._g, 255) * 100) + "%",
+        b: Math.round(bound01(this._b, 255) * 100) + "%",
+        a: this._a
+      };
+    },
+    toPercentageRgbString: function toPercentageRgbString() {
+      return this._a == 1 ? "rgb(" + Math.round(bound01(this._r, 255) * 100) + "%, " + Math.round(bound01(this._g, 255) * 100) + "%, " + Math.round(bound01(this._b, 255) * 100) + "%)" : "rgba(" + Math.round(bound01(this._r, 255) * 100) + "%, " + Math.round(bound01(this._g, 255) * 100) + "%, " + Math.round(bound01(this._b, 255) * 100) + "%, " + this._roundA + ")";
+    },
+    toName: function toName() {
+      if (this._a === 0) {
+        return "transparent";
+      }
+      if (this._a < 1) {
+        return false;
+      }
+      return hexNames[rgbToHex(this._r, this._g, this._b, true)] || false;
+    },
+    toFilter: function toFilter(secondColor) {
+      var hex8String = "#" + rgbaToArgbHex(this._r, this._g, this._b, this._a);
+      var secondHex8String = hex8String;
+      var gradientType = this._gradientType ? "GradientType = 1, " : "";
+      if (secondColor) {
+        var s = tinycolor(secondColor);
+        secondHex8String = "#" + rgbaToArgbHex(s._r, s._g, s._b, s._a);
+      }
+      return "progid:DXImageTransform.Microsoft.gradient(" + gradientType + "startColorstr=" + hex8String + ",endColorstr=" + secondHex8String + ")";
+    },
+    toString: function toString(format) {
+      var formatSet = !!format;
+      format = format || this._format;
+      var formattedString = false;
+      var hasAlpha = this._a < 1 && this._a >= 0;
+      var needsAlphaFormat = !formatSet && hasAlpha && (format === "hex" || format === "hex6" || format === "hex3" || format === "hex4" || format === "hex8" || format === "name");
+      if (needsAlphaFormat) {
+        // Special case for "transparent", all other non-alpha formats
+        // will return rgba when there is transparency.
+        if (format === "name" && this._a === 0) {
+          return this.toName();
+        }
+        return this.toRgbString();
+      }
+      if (format === "rgb") {
+        formattedString = this.toRgbString();
+      }
+      if (format === "prgb") {
+        formattedString = this.toPercentageRgbString();
+      }
+      if (format === "hex" || format === "hex6") {
+        formattedString = this.toHexString();
+      }
+      if (format === "hex3") {
+        formattedString = this.toHexString(true);
+      }
+      if (format === "hex4") {
+        formattedString = this.toHex8String(true);
+      }
+      if (format === "hex8") {
+        formattedString = this.toHex8String();
+      }
+      if (format === "name") {
+        formattedString = this.toName();
+      }
+      if (format === "hsl") {
+        formattedString = this.toHslString();
+      }
+      if (format === "hsv") {
+        formattedString = this.toHsvString();
+      }
+      return formattedString || this.toHexString();
+    },
+    clone: function clone() {
+      return tinycolor(this.toString());
+    },
+    _applyModification: function _applyModification(fn, args) {
+      var color = fn.apply(null, [this].concat([].slice.call(args)));
+      this._r = color._r;
+      this._g = color._g;
+      this._b = color._b;
+      this.setAlpha(color._a);
+      return this;
+    },
+    lighten: function lighten() {
+      return this._applyModification(_lighten, arguments);
+    },
+    brighten: function brighten() {
+      return this._applyModification(_brighten, arguments);
+    },
+    darken: function darken() {
+      return this._applyModification(_darken, arguments);
+    },
+    desaturate: function desaturate() {
+      return this._applyModification(_desaturate, arguments);
+    },
+    saturate: function saturate() {
+      return this._applyModification(_saturate, arguments);
+    },
+    greyscale: function greyscale() {
+      return this._applyModification(_greyscale, arguments);
+    },
+    spin: function spin() {
+      return this._applyModification(_spin, arguments);
+    },
+    _applyCombination: function _applyCombination(fn, args) {
+      return fn.apply(null, [this].concat([].slice.call(args)));
+    },
+    analogous: function analogous() {
+      return this._applyCombination(_analogous, arguments);
+    },
+    complement: function complement() {
+      return this._applyCombination(_complement, arguments);
+    },
+    monochromatic: function monochromatic() {
+      return this._applyCombination(_monochromatic, arguments);
+    },
+    splitcomplement: function splitcomplement() {
+      return this._applyCombination(_splitcomplement, arguments);
+    },
+    // Disabled until https://github.com/bgrins/TinyColor/issues/254
+    // polyad: function (number) {
+    //   return this._applyCombination(polyad, [number]);
+    // },
+    triad: function triad() {
+      return this._applyCombination(polyad, [3]);
+    },
+    tetrad: function tetrad() {
+      return this._applyCombination(polyad, [4]);
+    }
+  };
+
+  // If input is an object, force 1 into "1.0" to handle ratios properly
+  // String input requires "1.0" as input, so 1 will be treated as 1
+  tinycolor.fromRatio = function (color, opts) {
+    if (_typeof(color) == "object") {
+      var newColor = {};
+      for (var i in color) {
+        if (color.hasOwnProperty(i)) {
+          if (i === "a") {
+            newColor[i] = color[i];
+          } else {
+            newColor[i] = convertToPercentage(color[i]);
+          }
+        }
+      }
+      color = newColor;
+    }
+    return tinycolor(color, opts);
+  };
+
+  // Given a string or object, convert that input to RGB
+  // Possible string inputs:
+  //
+  //     "red"
+  //     "#f00" or "f00"
+  //     "#ff0000" or "ff0000"
+  //     "#ff000000" or "ff000000"
+  //     "rgb 255 0 0" or "rgb (255, 0, 0)"
+  //     "rgb 1.0 0 0" or "rgb (1, 0, 0)"
+  //     "rgba (255, 0, 0, 1)" or "rgba 255, 0, 0, 1"
+  //     "rgba (1.0, 0, 0, 1)" or "rgba 1.0, 0, 0, 1"
+  //     "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
+  //     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
+  //     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
+  //
+  function inputToRGB(color) {
+    var rgb = {
+      r: 0,
+      g: 0,
+      b: 0
+    };
+    var a = 1;
+    var s = null;
+    var v = null;
+    var l = null;
+    var ok = false;
+    var format = false;
+    if (typeof color == "string") {
+      color = stringInputToObject(color);
+    }
+    if (_typeof(color) == "object") {
+      if (isValidCSSUnit(color.r) && isValidCSSUnit(color.g) && isValidCSSUnit(color.b)) {
+        rgb = rgbToRgb(color.r, color.g, color.b);
+        ok = true;
+        format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
+      } else if (isValidCSSUnit(color.h) && isValidCSSUnit(color.s) && isValidCSSUnit(color.v)) {
+        s = convertToPercentage(color.s);
+        v = convertToPercentage(color.v);
+        rgb = hsvToRgb(color.h, s, v);
+        ok = true;
+        format = "hsv";
+      } else if (isValidCSSUnit(color.h) && isValidCSSUnit(color.s) && isValidCSSUnit(color.l)) {
+        s = convertToPercentage(color.s);
+        l = convertToPercentage(color.l);
+        rgb = hslToRgb(color.h, s, l);
+        ok = true;
+        format = "hsl";
+      }
+      if (color.hasOwnProperty("a")) {
+        a = color.a;
+      }
+    }
+    a = boundAlpha(a);
+    return {
+      ok: ok,
+      format: color.format || format,
+      r: Math.min(255, Math.max(rgb.r, 0)),
+      g: Math.min(255, Math.max(rgb.g, 0)),
+      b: Math.min(255, Math.max(rgb.b, 0)),
+      a: a
+    };
+  }
+
+  // Conversion Functions
+  // --------------------
+
+  // `rgbToHsl`, `rgbToHsv`, `hslToRgb`, `hsvToRgb` modified from:
+  // <http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript>
+
+  // `rgbToRgb`
+  // Handle bounds / percentage checking to conform to CSS color spec
+  // <http://www.w3.org/TR/css3-color/>
+  // *Assumes:* r, g, b in [0, 255] or [0, 1]
+  // *Returns:* { r, g, b } in [0, 255]
+  function rgbToRgb(r, g, b) {
+    return {
+      r: bound01(r, 255) * 255,
+      g: bound01(g, 255) * 255,
+      b: bound01(b, 255) * 255
+    };
+  }
+
+  // `rgbToHsl`
+  // Converts an RGB color value to HSL.
+  // *Assumes:* r, g, and b are contained in [0, 255] or [0, 1]
+  // *Returns:* { h, s, l } in [0,1]
+  function rgbToHsl(r, g, b) {
+    r = bound01(r, 255);
+    g = bound01(g, 255);
+    b = bound01(b, 255);
+    var max = Math.max(r, g, b),
+      min = Math.min(r, g, b);
+    var h,
+      s,
+      l = (max + min) / 2;
+    if (max == min) {
+      h = s = 0; // achromatic
+    } else {
+      var d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+    return {
+      h: h,
+      s: s,
+      l: l
+    };
+  }
+
+  // `hslToRgb`
+  // Converts an HSL color value to RGB.
+  // *Assumes:* h is contained in [0, 1] or [0, 360] and s and l are contained [0, 1] or [0, 100]
+  // *Returns:* { r, g, b } in the set [0, 255]
+  function hslToRgb(h, s, l) {
+    var r, g, b;
+    h = bound01(h, 360);
+    s = bound01(s, 100);
+    l = bound01(l, 100);
+    function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    }
+    if (s === 0) {
+      r = g = b = l; // achromatic
+    } else {
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      var p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1 / 3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1 / 3);
+    }
+    return {
+      r: r * 255,
+      g: g * 255,
+      b: b * 255
+    };
+  }
+
+  // `rgbToHsv`
+  // Converts an RGB color value to HSV
+  // *Assumes:* r, g, and b are contained in the set [0, 255] or [0, 1]
+  // *Returns:* { h, s, v } in [0,1]
+  function rgbToHsv(r, g, b) {
+    r = bound01(r, 255);
+    g = bound01(g, 255);
+    b = bound01(b, 255);
+    var max = Math.max(r, g, b),
+      min = Math.min(r, g, b);
+    var h,
+      s,
+      v = max;
+    var d = max - min;
+    s = max === 0 ? 0 : d / max;
+    if (max == min) {
+      h = 0; // achromatic
+    } else {
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+    return {
+      h: h,
+      s: s,
+      v: v
+    };
+  }
+
+  // `hsvToRgb`
+  // Converts an HSV color value to RGB.
+  // *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
+  // *Returns:* { r, g, b } in the set [0, 255]
+  function hsvToRgb(h, s, v) {
+    h = bound01(h, 360) * 6;
+    s = bound01(s, 100);
+    v = bound01(v, 100);
+    var i = Math.floor(h),
+      f = h - i,
+      p = v * (1 - s),
+      q = v * (1 - f * s),
+      t = v * (1 - (1 - f) * s),
+      mod = i % 6,
+      r = [v, q, p, p, t, v][mod],
+      g = [t, v, v, q, p, p][mod],
+      b = [p, p, t, v, v, q][mod];
+    return {
+      r: r * 255,
+      g: g * 255,
+      b: b * 255
+    };
+  }
+
+  // `rgbToHex`
+  // Converts an RGB color to hex
+  // Assumes r, g, and b are contained in the set [0, 255]
+  // Returns a 3 or 6 character hex
+  function rgbToHex(r, g, b, allow3Char) {
+    var hex = [pad2(Math.round(r).toString(16)), pad2(Math.round(g).toString(16)), pad2(Math.round(b).toString(16))];
+
+    // Return a 3 character hex if possible
+    if (allow3Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1)) {
+      return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
+    }
+    return hex.join("");
+  }
+
+  // `rgbaToHex`
+  // Converts an RGBA color plus alpha transparency to hex
+  // Assumes r, g, b are contained in the set [0, 255] and
+  // a in [0, 1]. Returns a 4 or 8 character rgba hex
+  function rgbaToHex(r, g, b, a, allow4Char) {
+    var hex = [pad2(Math.round(r).toString(16)), pad2(Math.round(g).toString(16)), pad2(Math.round(b).toString(16)), pad2(convertDecimalToHex(a))];
+
+    // Return a 4 character hex if possible
+    if (allow4Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1) && hex[3].charAt(0) == hex[3].charAt(1)) {
+      return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0) + hex[3].charAt(0);
+    }
+    return hex.join("");
+  }
+
+  // `rgbaToArgbHex`
+  // Converts an RGBA color to an ARGB Hex8 string
+  // Rarely used, but required for "toFilter()"
+  function rgbaToArgbHex(r, g, b, a) {
+    var hex = [pad2(convertDecimalToHex(a)), pad2(Math.round(r).toString(16)), pad2(Math.round(g).toString(16)), pad2(Math.round(b).toString(16))];
+    return hex.join("");
+  }
+
+  // `equals`
+  // Can be called with any tinycolor input
+  tinycolor.equals = function (color1, color2) {
+    if (!color1 || !color2) return false;
+    return tinycolor(color1).toRgbString() == tinycolor(color2).toRgbString();
+  };
+  tinycolor.random = function () {
+    return tinycolor.fromRatio({
+      r: Math.random(),
+      g: Math.random(),
+      b: Math.random()
+    });
+  };
+
+  // Modification Functions
+  // ----------------------
+  // Thanks to less.js for some of the basics here
+  // <https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js>
+
+  function _desaturate(color, amount) {
+    amount = amount === 0 ? 0 : amount || 10;
+    var hsl = tinycolor(color).toHsl();
+    hsl.s -= amount / 100;
+    hsl.s = clamp01(hsl.s);
+    return tinycolor(hsl);
+  }
+  function _saturate(color, amount) {
+    amount = amount === 0 ? 0 : amount || 10;
+    var hsl = tinycolor(color).toHsl();
+    hsl.s += amount / 100;
+    hsl.s = clamp01(hsl.s);
+    return tinycolor(hsl);
+  }
+  function _greyscale(color) {
+    return tinycolor(color).desaturate(100);
+  }
+  function _lighten(color, amount) {
+    amount = amount === 0 ? 0 : amount || 10;
+    var hsl = tinycolor(color).toHsl();
+    hsl.l += amount / 100;
+    hsl.l = clamp01(hsl.l);
+    return tinycolor(hsl);
+  }
+  function _brighten(color, amount) {
+    amount = amount === 0 ? 0 : amount || 10;
+    var rgb = tinycolor(color).toRgb();
+    rgb.r = Math.max(0, Math.min(255, rgb.r - Math.round(255 * -(amount / 100))));
+    rgb.g = Math.max(0, Math.min(255, rgb.g - Math.round(255 * -(amount / 100))));
+    rgb.b = Math.max(0, Math.min(255, rgb.b - Math.round(255 * -(amount / 100))));
+    return tinycolor(rgb);
+  }
+  function _darken(color, amount) {
+    amount = amount === 0 ? 0 : amount || 10;
+    var hsl = tinycolor(color).toHsl();
+    hsl.l -= amount / 100;
+    hsl.l = clamp01(hsl.l);
+    return tinycolor(hsl);
+  }
+
+  // Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
+  // Values outside of this range will be wrapped into this range.
+  function _spin(color, amount) {
+    var hsl = tinycolor(color).toHsl();
+    var hue = (hsl.h + amount) % 360;
+    hsl.h = hue < 0 ? 360 + hue : hue;
+    return tinycolor(hsl);
+  }
+
+  // Combination Functions
+  // ---------------------
+  // Thanks to jQuery xColor for some of the ideas behind these
+  // <https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js>
+
+  function _complement(color) {
+    var hsl = tinycolor(color).toHsl();
+    hsl.h = (hsl.h + 180) % 360;
+    return tinycolor(hsl);
+  }
+  function polyad(color, number) {
+    if (isNaN(number) || number <= 0) {
+      throw new Error("Argument to polyad must be a positive number");
+    }
+    var hsl = tinycolor(color).toHsl();
+    var result = [tinycolor(color)];
+    var step = 360 / number;
+    for (var i = 1; i < number; i++) {
+      result.push(tinycolor({
+        h: (hsl.h + i * step) % 360,
+        s: hsl.s,
+        l: hsl.l
+      }));
+    }
+    return result;
+  }
+  function _splitcomplement(color) {
+    var hsl = tinycolor(color).toHsl();
+    var h = hsl.h;
+    return [tinycolor(color), tinycolor({
+      h: (h + 72) % 360,
+      s: hsl.s,
+      l: hsl.l
+    }), tinycolor({
+      h: (h + 216) % 360,
+      s: hsl.s,
+      l: hsl.l
+    })];
+  }
+  function _analogous(color, results, slices) {
+    results = results || 6;
+    slices = slices || 30;
+    var hsl = tinycolor(color).toHsl();
+    var part = 360 / slices;
+    var ret = [tinycolor(color)];
+    for (hsl.h = (hsl.h - (part * results >> 1) + 720) % 360; --results;) {
+      hsl.h = (hsl.h + part) % 360;
+      ret.push(tinycolor(hsl));
+    }
+    return ret;
+  }
+  function _monochromatic(color, results) {
+    results = results || 6;
+    var hsv = tinycolor(color).toHsv();
+    var h = hsv.h,
+      s = hsv.s,
+      v = hsv.v;
+    var ret = [];
+    var modification = 1 / results;
+    while (results--) {
+      ret.push(tinycolor({
+        h: h,
+        s: s,
+        v: v
+      }));
+      v = (v + modification) % 1;
+    }
+    return ret;
+  }
+
+  // Utility Functions
+  // ---------------------
+
+  tinycolor.mix = function (color1, color2, amount) {
+    amount = amount === 0 ? 0 : amount || 50;
+    var rgb1 = tinycolor(color1).toRgb();
+    var rgb2 = tinycolor(color2).toRgb();
+    var p = amount / 100;
+    var rgba = {
+      r: (rgb2.r - rgb1.r) * p + rgb1.r,
+      g: (rgb2.g - rgb1.g) * p + rgb1.g,
+      b: (rgb2.b - rgb1.b) * p + rgb1.b,
+      a: (rgb2.a - rgb1.a) * p + rgb1.a
+    };
+    return tinycolor(rgba);
+  };
+
+  // Readability Functions
+  // ---------------------
+  // <http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef (WCAG Version 2)
+
+  // `contrast`
+  // Analyze the 2 colors and returns the color contrast defined by (WCAG Version 2)
+  tinycolor.readability = function (color1, color2) {
+    var c1 = tinycolor(color1);
+    var c2 = tinycolor(color2);
+    return (Math.max(c1.getLuminance(), c2.getLuminance()) + 0.05) / (Math.min(c1.getLuminance(), c2.getLuminance()) + 0.05);
+  };
+
+  // `isReadable`
+  // Ensure that foreground and background color combinations meet WCAG2 guidelines.
+  // The third argument is an optional Object.
+  //      the 'level' property states 'AA' or 'AAA' - if missing or invalid, it defaults to 'AA';
+  //      the 'size' property states 'large' or 'small' - if missing or invalid, it defaults to 'small'.
+  // If the entire object is absent, isReadable defaults to {level:"AA",size:"small"}.
+
+  // *Example*
+  //    tinycolor.isReadable("#000", "#111") => false
+  //    tinycolor.isReadable("#000", "#111",{level:"AA",size:"large"}) => false
+  tinycolor.isReadable = function (color1, color2, wcag2) {
+    var readability = tinycolor.readability(color1, color2);
+    var wcag2Parms, out;
+    out = false;
+    wcag2Parms = validateWCAG2Parms(wcag2);
+    switch (wcag2Parms.level + wcag2Parms.size) {
+      case "AAsmall":
+      case "AAAlarge":
+        out = readability >= 4.5;
+        break;
+      case "AAlarge":
+        out = readability >= 3;
+        break;
+      case "AAAsmall":
+        out = readability >= 7;
+        break;
+    }
+    return out;
+  };
+
+  // `mostReadable`
+  // Given a base color and a list of possible foreground or background
+  // colors for that base, returns the most readable color.
+  // Optionally returns Black or White if the most readable color is unreadable.
+  // *Example*
+  //    tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:false}).toHexString(); // "#112255"
+  //    tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:true}).toHexString();  // "#ffffff"
+  //    tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"large"}).toHexString(); // "#faf3f3"
+  //    tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"small"}).toHexString(); // "#ffffff"
+  tinycolor.mostReadable = function (baseColor, colorList, args) {
+    var bestColor = null;
+    var bestScore = 0;
+    var readability;
+    var includeFallbackColors, level, size;
+    args = args || {};
+    includeFallbackColors = args.includeFallbackColors;
+    level = args.level;
+    size = args.size;
+    for (var i = 0; i < colorList.length; i++) {
+      readability = tinycolor.readability(baseColor, colorList[i]);
+      if (readability > bestScore) {
+        bestScore = readability;
+        bestColor = tinycolor(colorList[i]);
+      }
+    }
+    if (tinycolor.isReadable(baseColor, bestColor, {
+      level: level,
+      size: size
+    }) || !includeFallbackColors) {
+      return bestColor;
+    } else {
+      args.includeFallbackColors = false;
+      return tinycolor.mostReadable(baseColor, ["#fff", "#000"], args);
+    }
+  };
+
+  // Big List of Colors
+  // ------------------
+  // <https://www.w3.org/TR/css-color-4/#named-colors>
+  var names = tinycolor.names = {
+    aliceblue: "f0f8ff",
+    antiquewhite: "faebd7",
+    aqua: "0ff",
+    aquamarine: "7fffd4",
+    azure: "f0ffff",
+    beige: "f5f5dc",
+    bisque: "ffe4c4",
+    black: "000",
+    blanchedalmond: "ffebcd",
+    blue: "00f",
+    blueviolet: "8a2be2",
+    brown: "a52a2a",
+    burlywood: "deb887",
+    burntsienna: "ea7e5d",
+    cadetblue: "5f9ea0",
+    chartreuse: "7fff00",
+    chocolate: "d2691e",
+    coral: "ff7f50",
+    cornflowerblue: "6495ed",
+    cornsilk: "fff8dc",
+    crimson: "dc143c",
+    cyan: "0ff",
+    darkblue: "00008b",
+    darkcyan: "008b8b",
+    darkgoldenrod: "b8860b",
+    darkgray: "a9a9a9",
+    darkgreen: "006400",
+    darkgrey: "a9a9a9",
+    darkkhaki: "bdb76b",
+    darkmagenta: "8b008b",
+    darkolivegreen: "556b2f",
+    darkorange: "ff8c00",
+    darkorchid: "9932cc",
+    darkred: "8b0000",
+    darksalmon: "e9967a",
+    darkseagreen: "8fbc8f",
+    darkslateblue: "483d8b",
+    darkslategray: "2f4f4f",
+    darkslategrey: "2f4f4f",
+    darkturquoise: "00ced1",
+    darkviolet: "9400d3",
+    deeppink: "ff1493",
+    deepskyblue: "00bfff",
+    dimgray: "696969",
+    dimgrey: "696969",
+    dodgerblue: "1e90ff",
+    firebrick: "b22222",
+    floralwhite: "fffaf0",
+    forestgreen: "228b22",
+    fuchsia: "f0f",
+    gainsboro: "dcdcdc",
+    ghostwhite: "f8f8ff",
+    gold: "ffd700",
+    goldenrod: "daa520",
+    gray: "808080",
+    green: "008000",
+    greenyellow: "adff2f",
+    grey: "808080",
+    honeydew: "f0fff0",
+    hotpink: "ff69b4",
+    indianred: "cd5c5c",
+    indigo: "4b0082",
+    ivory: "fffff0",
+    khaki: "f0e68c",
+    lavender: "e6e6fa",
+    lavenderblush: "fff0f5",
+    lawngreen: "7cfc00",
+    lemonchiffon: "fffacd",
+    lightblue: "add8e6",
+    lightcoral: "f08080",
+    lightcyan: "e0ffff",
+    lightgoldenrodyellow: "fafad2",
+    lightgray: "d3d3d3",
+    lightgreen: "90ee90",
+    lightgrey: "d3d3d3",
+    lightpink: "ffb6c1",
+    lightsalmon: "ffa07a",
+    lightseagreen: "20b2aa",
+    lightskyblue: "87cefa",
+    lightslategray: "789",
+    lightslategrey: "789",
+    lightsteelblue: "b0c4de",
+    lightyellow: "ffffe0",
+    lime: "0f0",
+    limegreen: "32cd32",
+    linen: "faf0e6",
+    magenta: "f0f",
+    maroon: "800000",
+    mediumaquamarine: "66cdaa",
+    mediumblue: "0000cd",
+    mediumorchid: "ba55d3",
+    mediumpurple: "9370db",
+    mediumseagreen: "3cb371",
+    mediumslateblue: "7b68ee",
+    mediumspringgreen: "00fa9a",
+    mediumturquoise: "48d1cc",
+    mediumvioletred: "c71585",
+    midnightblue: "191970",
+    mintcream: "f5fffa",
+    mistyrose: "ffe4e1",
+    moccasin: "ffe4b5",
+    navajowhite: "ffdead",
+    navy: "000080",
+    oldlace: "fdf5e6",
+    olive: "808000",
+    olivedrab: "6b8e23",
+    orange: "ffa500",
+    orangered: "ff4500",
+    orchid: "da70d6",
+    palegoldenrod: "eee8aa",
+    palegreen: "98fb98",
+    paleturquoise: "afeeee",
+    palevioletred: "db7093",
+    papayawhip: "ffefd5",
+    peachpuff: "ffdab9",
+    peru: "cd853f",
+    pink: "ffc0cb",
+    plum: "dda0dd",
+    powderblue: "b0e0e6",
+    purple: "800080",
+    rebeccapurple: "663399",
+    red: "f00",
+    rosybrown: "bc8f8f",
+    royalblue: "4169e1",
+    saddlebrown: "8b4513",
+    salmon: "fa8072",
+    sandybrown: "f4a460",
+    seagreen: "2e8b57",
+    seashell: "fff5ee",
+    sienna: "a0522d",
+    silver: "c0c0c0",
+    skyblue: "87ceeb",
+    slateblue: "6a5acd",
+    slategray: "708090",
+    slategrey: "708090",
+    snow: "fffafa",
+    springgreen: "00ff7f",
+    steelblue: "4682b4",
+    tan: "d2b48c",
+    teal: "008080",
+    thistle: "d8bfd8",
+    tomato: "ff6347",
+    turquoise: "40e0d0",
+    violet: "ee82ee",
+    wheat: "f5deb3",
+    white: "fff",
+    whitesmoke: "f5f5f5",
+    yellow: "ff0",
+    yellowgreen: "9acd32"
+  };
+
+  // Make it easy to access colors via `hexNames[hex]`
+  var hexNames = tinycolor.hexNames = flip(names);
+
+  // Utilities
+  // ---------
+
+  // `{ 'name1': 'val1' }` becomes `{ 'val1': 'name1' }`
+  function flip(o) {
+    var flipped = {};
+    for (var i in o) {
+      if (o.hasOwnProperty(i)) {
+        flipped[o[i]] = i;
+      }
+    }
+    return flipped;
+  }
+
+  // Return a valid alpha value [0,1] with all invalid values being set to 1
+  function boundAlpha(a) {
+    a = parseFloat(a);
+    if (isNaN(a) || a < 0 || a > 1) {
+      a = 1;
+    }
+    return a;
+  }
+
+  // Take input from [0, n] and return it as [0, 1]
+  function bound01(n, max) {
+    if (isOnePointZero(n)) n = "100%";
+    var processPercent = isPercentage(n);
+    n = Math.min(max, Math.max(0, parseFloat(n)));
+
+    // Automatically convert percentage into number
+    if (processPercent) {
+      n = parseInt(n * max, 10) / 100;
+    }
+
+    // Handle floating point rounding errors
+    if (Math.abs(n - max) < 0.000001) {
+      return 1;
+    }
+
+    // Convert into [0, 1] range if it isn't already
+    return n % max / parseFloat(max);
+  }
+
+  // Force a number between 0 and 1
+  function clamp01(val) {
+    return Math.min(1, Math.max(0, val));
+  }
+
+  // Parse a base-16 hex value into a base-10 integer
+  function parseIntFromHex(val) {
+    return parseInt(val, 16);
+  }
+
+  // Need to handle 1.0 as 100%, since once it is a number, there is no difference between it and 1
+  // <http://stackoverflow.com/questions/7422072/javascript-how-to-detect-number-as-a-decimal-including-1-0>
+  function isOnePointZero(n) {
+    return typeof n == "string" && n.indexOf(".") != -1 && parseFloat(n) === 1;
+  }
+
+  // Check to see if string passed in is a percentage
+  function isPercentage(n) {
+    return typeof n === "string" && n.indexOf("%") != -1;
+  }
+
+  // Force a hex value to have 2 characters
+  function pad2(c) {
+    return c.length == 1 ? "0" + c : "" + c;
+  }
+
+  // Replace a decimal with it's percentage value
+  function convertToPercentage(n) {
+    if (n <= 1) {
+      n = n * 100 + "%";
+    }
+    return n;
+  }
+
+  // Converts a decimal to a hex value
+  function convertDecimalToHex(d) {
+    return Math.round(parseFloat(d) * 255).toString(16);
+  }
+  // Converts a hex value to a decimal
+  function convertHexToDecimal(h) {
+    return parseIntFromHex(h) / 255;
+  }
+  var matchers = function () {
+    // <http://www.w3.org/TR/css3-values/#integers>
+    var CSS_INTEGER = "[-\\+]?\\d+%?";
+
+    // <http://www.w3.org/TR/css3-values/#number-value>
+    var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
+
+    // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
+    var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
+
+    // Actual matching.
+    // Parentheses and commas are optional, but not required.
+    // Whitespace can take the place of commas or opening paren
+    var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+    var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+    return {
+      CSS_UNIT: new RegExp(CSS_UNIT),
+      rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
+      rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
+      hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
+      hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
+      hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
+      hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
+      hex3: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+      hex6: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+      hex4: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+      hex8: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+    };
+  }();
+
+  // `isValidCSSUnit`
+  // Take in a single string / number and check to see if it looks like a CSS unit
+  // (see `matchers` above for definition).
+  function isValidCSSUnit(color) {
+    return !!matchers.CSS_UNIT.exec(color);
+  }
+
+  // `stringInputToObject`
+  // Permissive string parsing.  Take in a number of formats, and output an object
+  // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
+  function stringInputToObject(color) {
+    color = color.replace(trimLeft, "").replace(trimRight, "").toLowerCase();
+    var named = false;
+    if (names[color]) {
+      color = names[color];
+      named = true;
+    } else if (color == "transparent") {
+      return {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0,
+        format: "name"
+      };
+    }
+
+    // Try to match string input using regular expressions.
+    // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
+    // Just return an object and let the conversion functions handle that.
+    // This way the result will be the same whether the tinycolor is initialized with string or object.
+    var match;
+    if (match = matchers.rgb.exec(color)) {
+      return {
+        r: match[1],
+        g: match[2],
+        b: match[3]
+      };
+    }
+    if (match = matchers.rgba.exec(color)) {
+      return {
+        r: match[1],
+        g: match[2],
+        b: match[3],
+        a: match[4]
+      };
+    }
+    if (match = matchers.hsl.exec(color)) {
+      return {
+        h: match[1],
+        s: match[2],
+        l: match[3]
+      };
+    }
+    if (match = matchers.hsla.exec(color)) {
+      return {
+        h: match[1],
+        s: match[2],
+        l: match[3],
+        a: match[4]
+      };
+    }
+    if (match = matchers.hsv.exec(color)) {
+      return {
+        h: match[1],
+        s: match[2],
+        v: match[3]
+      };
+    }
+    if (match = matchers.hsva.exec(color)) {
+      return {
+        h: match[1],
+        s: match[2],
+        v: match[3],
+        a: match[4]
+      };
+    }
+    if (match = matchers.hex8.exec(color)) {
+      return {
+        r: parseIntFromHex(match[1]),
+        g: parseIntFromHex(match[2]),
+        b: parseIntFromHex(match[3]),
+        a: convertHexToDecimal(match[4]),
+        format: named ? "name" : "hex8"
+      };
+    }
+    if (match = matchers.hex6.exec(color)) {
+      return {
+        r: parseIntFromHex(match[1]),
+        g: parseIntFromHex(match[2]),
+        b: parseIntFromHex(match[3]),
+        format: named ? "name" : "hex"
+      };
+    }
+    if (match = matchers.hex4.exec(color)) {
+      return {
+        r: parseIntFromHex(match[1] + "" + match[1]),
+        g: parseIntFromHex(match[2] + "" + match[2]),
+        b: parseIntFromHex(match[3] + "" + match[3]),
+        a: convertHexToDecimal(match[4] + "" + match[4]),
+        format: named ? "name" : "hex8"
+      };
+    }
+    if (match = matchers.hex3.exec(color)) {
+      return {
+        r: parseIntFromHex(match[1] + "" + match[1]),
+        g: parseIntFromHex(match[2] + "" + match[2]),
+        b: parseIntFromHex(match[3] + "" + match[3]),
+        format: named ? "name" : "hex"
+      };
+    }
+    return false;
+  }
+  function validateWCAG2Parms(parms) {
+    // return valid WCAG2 parms for isReadable.
+    // If input parms are invalid, return {"level":"AA", "size":"small"}
+    var level, size;
+    parms = parms || {
+      level: "AA",
+      size: "small"
+    };
+    level = (parms.level || "AA").toUpperCase();
+    size = (parms.size || "small").toLowerCase();
+    if (level !== "AA" && level !== "AAA") {
+      level = "AA";
+    }
+    if (size !== "small" && size !== "large") {
+      size = "small";
+    }
+    return {
+      level: level,
+      size: size
+    };
+  }
+
+  return tinycolor;
+
+}));
+
 
 /***/ }),
 
@@ -59310,7 +60085,7 @@ function concatStyleSetsWithProps(styleProps) {
 function PersonCard({ email, name, title, format }) {
     const examplePersona = {
         imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,
-        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "a"])(name),
+        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "b"])(name),
         text: name,
         secondaryText: email
     };
@@ -59427,7 +60202,7 @@ function unhoistMethods(source, methodNames) {
 
 var _scrollbarWidth;
 var _bodyScrollDisabledCount = 0;
-var DisabledScrollClassName = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "b"])({
+var DisabledScrollClassName = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "a"])({
     overflow: 'hidden !important',
 });
 /**
@@ -59862,7 +60637,7 @@ function getIcon(name) {
                     subset.isRegistered = true;
                 }
                 if (!subset.className) {
-                    subset.className = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_5__[/* mergeStyles */ "b"])(subset.style, {
+                    subset.className = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_5__[/* mergeStyles */ "a"])(subset.style, {
                         fontFamily: subset.fontFace.fontFamily,
                         fontWeight: subset.fontFace.fontWeight || 'normal',
                         fontStyle: subset.fontFace.fontStyle || 'normal',
@@ -60293,24 +61068,25 @@ function _merge(target, source, circularReferences) {
 /*!**********************************!*\
   !*** ./lib/helpers/Utilities.js ***!
   \**********************************/
-/*! exports provided: parseDate, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListUrl, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
-/*! exports used: getInitials, getItemsUsingRenderListDataAsStream, getListUrl, getListViewXml, numberFormat, parseDate, toProperCase, validateSiteExists */
+/*! exports provided: getContrastingTextColor, parseDate, getInitials, toProperCase, numberFormat, validateSiteExists, getItemsUsingRenderListDataAsStream, useDebounce, createSearchQueryViewXml, searchFieldTypes, getSiteLocale, getListFields, getListUrl, getListViewXml, getSearchFieldsFromOptions, updateListItem, addListItem, getNamedAttributeValue */
+/*! exports used: getContrastingTextColor, getInitials, getItemsUsingRenderListDataAsStream, getListUrl, getListViewXml, numberFormat, parseDate, toProperCase, validateSiteExists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return parseDate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getInitials; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return toProperCase; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return numberFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return validateSiteExists; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getItemsUsingRenderListDataAsStream; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getContrastingTextColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return parseDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getInitials; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return toProperCase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return numberFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return validateSiteExists; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getItemsUsingRenderListDataAsStream; });
 /* unused harmony export useDebounce */
 /* unused harmony export createSearchQueryViewXml */
 /* unused harmony export searchFieldTypes */
 /* unused harmony export getSiteLocale */
 /* unused harmony export getListFields */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getListUrl; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListViewXml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getListUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getListViewXml; });
 /* unused harmony export getSearchFieldsFromOptions */
 /* unused harmony export updateListItem */
 /* unused harmony export addListItem */
@@ -60325,6 +61101,8 @@ function _merge(target, source, circularReferences) {
 /* harmony import */ var camljs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(camljs__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! luxon */ "ExVU");
 /* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var tinycolor2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tinycolor2 */ "lMfh");
+/* harmony import */ var tinycolor2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(tinycolor2__WEBPACK_IMPORTED_MODULE_7__);
 
 // PnPJS Imports
 
@@ -60333,6 +61111,12 @@ function _merge(target, source, circularReferences) {
 
 
 
+
+// Function to get a contrasting text color
+const getContrastingTextColor = (backgroundColor) => {
+    const color = tinycolor2__WEBPACK_IMPORTED_MODULE_7__(backgroundColor);
+    return color.isLight() ? '#080820' : '#F8F8F6';
+};
 //==================================================================================================================================
 // A FUNCTION TO work out date formats based on the locale adn will try 12 and 24 hour formats
 //==================================================================================================================================
@@ -60560,183 +61344,6 @@ function toResourcePath(url) {
     };
 }
 //# sourceMappingURL=toResourcePath.js.map
-
-/***/ }),
-
-/***/ "tBdQ":
-/*!***************************************************************************!*\
-  !*** ./node_modules/@fluentui/react/lib/components/Stack/Stack.styles.js ***!
-  \***************************************************************************/
-/*! exports provided: GlobalClassNames, styles */
-/*! exports used: GlobalClassNames, styles */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalClassNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return styles; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var _Styling__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Styling */ "Dfs8");
-/* harmony import */ var _StackItem_StackItem_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StackItem/StackItem.styles */ "gsk6");
-/* harmony import */ var _StackUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./StackUtils */ "i5vC");
-
-
-
-
-var nameMap = {
-    start: 'flex-start',
-    end: 'flex-end',
-};
-var GlobalClassNames = {
-    root: 'ms-Stack',
-    inner: 'ms-Stack-inner',
-    child: 'ms-Stack-child',
-};
-var styles = function (props, theme, tokens) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-    var className = props.className, disableShrink = props.disableShrink, enableScopedSelectors = props.enableScopedSelectors, grow = props.grow, horizontal = props.horizontal, horizontalAlign = props.horizontalAlign, reversed = props.reversed, verticalAlign = props.verticalAlign, verticalFill = props.verticalFill, wrap = props.wrap;
-    var classNames = Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* getGlobalClassNames */ "s"])(GlobalClassNames, theme);
-    /* eslint-disable deprecation/deprecation */
-    var childrenGap = tokens && tokens.childrenGap ? tokens.childrenGap : props.gap;
-    var maxHeight = tokens && tokens.maxHeight ? tokens.maxHeight : props.maxHeight;
-    var maxWidth = tokens && tokens.maxWidth ? tokens.maxWidth : props.maxWidth;
-    var padding = tokens && tokens.padding ? tokens.padding : props.padding;
-    /* eslint-enable deprecation/deprecation */
-    var _p = Object(_StackUtils__WEBPACK_IMPORTED_MODULE_3__[/* parseGap */ "a"])(childrenGap, theme), rowGap = _p.rowGap, columnGap = _p.columnGap;
-    var horizontalMargin = "" + -0.5 * columnGap.value + columnGap.unit;
-    var verticalMargin = "" + -0.5 * rowGap.value + rowGap.unit;
-    // styles to be applied to all direct children regardless of wrap or direction
-    var childStyles = {
-        textOverflow: 'ellipsis',
-    };
-    var childSelector = '> ' + (enableScopedSelectors ? '.' + GlobalClassNames.child : '*');
-    var disableShrinkStyles = (_a = {},
-        // flexShrink styles are applied by the StackItem
-        _a[childSelector + ":not(." + _StackItem_StackItem_styles__WEBPACK_IMPORTED_MODULE_2__[/* GlobalClassNames */ "a"].root + ")"] = {
-            flexShrink: 0,
-        },
-        _a);
-    if (wrap) {
-        return {
-            root: [
-                classNames.root,
-                {
-                    flexWrap: 'wrap',
-                    maxWidth: maxWidth,
-                    maxHeight: maxHeight,
-                    width: 'auto',
-                    overflow: 'visible',
-                    height: '100%',
-                },
-                horizontalAlign && (_b = {},
-                    _b[horizontal ? 'justifyContent' : 'alignItems'] = nameMap[horizontalAlign] || horizontalAlign,
-                    _b),
-                verticalAlign && (_c = {},
-                    _c[horizontal ? 'alignItems' : 'justifyContent'] = nameMap[verticalAlign] || verticalAlign,
-                    _c),
-                className,
-                {
-                    // not allowed to be overridden by className
-                    // since this is necessary in order to prevent collapsing margins
-                    display: 'flex',
-                },
-                horizontal && {
-                    height: verticalFill ? '100%' : 'auto',
-                },
-            ],
-            inner: [
-                classNames.inner,
-                (_d = {
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        marginLeft: horizontalMargin,
-                        marginRight: horizontalMargin,
-                        marginTop: verticalMargin,
-                        marginBottom: verticalMargin,
-                        overflow: 'visible',
-                        boxSizing: 'border-box',
-                        padding: Object(_StackUtils__WEBPACK_IMPORTED_MODULE_3__[/* parsePadding */ "b"])(padding, theme),
-                        // avoid unnecessary calc() calls if horizontal gap is 0
-                        width: columnGap.value === 0 ? '100%' : "calc(100% + " + columnGap.value + columnGap.unit + ")",
-                        maxWidth: '100vw'
-                    },
-                    _d[childSelector] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({ margin: "" + 0.5 * rowGap.value + rowGap.unit + " " + 0.5 * columnGap.value + columnGap.unit }, childStyles),
-                    _d),
-                disableShrink && disableShrinkStyles,
-                horizontalAlign && (_e = {},
-                    _e[horizontal ? 'justifyContent' : 'alignItems'] = nameMap[horizontalAlign] || horizontalAlign,
-                    _e),
-                verticalAlign && (_f = {},
-                    _f[horizontal ? 'alignItems' : 'justifyContent'] = nameMap[verticalAlign] || verticalAlign,
-                    _f),
-                horizontal && (_g = {
-                        flexDirection: reversed ? 'row-reverse' : 'row',
-                        // avoid unnecessary calc() calls if vertical gap is 0
-                        height: rowGap.value === 0 ? '100%' : "calc(100% + " + rowGap.value + rowGap.unit + ")"
-                    },
-                    _g[childSelector] = {
-                        maxWidth: columnGap.value === 0 ? '100%' : "calc(100% - " + columnGap.value + columnGap.unit + ")",
-                    },
-                    _g),
-                !horizontal && (_h = {
-                        flexDirection: reversed ? 'column-reverse' : 'column',
-                        height: "calc(100% + " + rowGap.value + rowGap.unit + ")"
-                    },
-                    _h[childSelector] = {
-                        maxHeight: rowGap.value === 0 ? '100%' : "calc(100% - " + rowGap.value + rowGap.unit + ")",
-                    },
-                    _h),
-            ],
-        };
-    }
-    return {
-        root: [
-            classNames.root,
-            (_j = {
-                    display: 'flex',
-                    flexDirection: horizontal ? (reversed ? 'row-reverse' : 'row') : reversed ? 'column-reverse' : 'column',
-                    flexWrap: 'nowrap',
-                    width: 'auto',
-                    height: verticalFill ? '100%' : 'auto',
-                    maxWidth: maxWidth,
-                    maxHeight: maxHeight,
-                    padding: Object(_StackUtils__WEBPACK_IMPORTED_MODULE_3__[/* parsePadding */ "b"])(padding, theme),
-                    boxSizing: 'border-box'
-                },
-                _j[childSelector] = childStyles,
-                _j),
-            disableShrink && disableShrinkStyles,
-            grow && {
-                flexGrow: grow === true ? 1 : grow,
-            },
-            horizontalAlign && (_k = {},
-                _k[horizontal ? 'justifyContent' : 'alignItems'] = nameMap[horizontalAlign] || horizontalAlign,
-                _k),
-            verticalAlign && (_l = {},
-                _l[horizontal ? 'alignItems' : 'justifyContent'] = nameMap[verticalAlign] || verticalAlign,
-                _l),
-            horizontal &&
-                columnGap.value > 0 && (_m = {},
-                // apply gap margin to every direct child except the first direct child if the direction is not reversed,
-                // and the last direct one if it is
-                _m[reversed ? childSelector + ":not(:last-child)" : childSelector + ":not(:first-child)"] = {
-                    marginLeft: "" + columnGap.value + columnGap.unit,
-                },
-                _m),
-            !horizontal &&
-                rowGap.value > 0 && (_o = {},
-                // apply gap margin to every direct child except the first direct child if the direction is not reversed,
-                // and the last direct one if it is
-                _o[reversed ? childSelector + ":not(:last-child)" : childSelector + ":not(:first-child)"] = {
-                    marginTop: "" + rowGap.value + rowGap.unit,
-                },
-                _o),
-            className,
-        ],
-        // TODO: this cast may be hiding some potential issues with styling and name
-        //        lookups and should be removed
-    };
-};
-//# sourceMappingURL=Stack.styles.js.map
 
 /***/ }),
 
@@ -63332,7 +63939,12 @@ var useUnmount = function (callback) {
 const IconSettingsSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].record(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().refine(value => value.includes('|#'), {
     message: 'String must contain a "|" character followed by a color code',
 }));
-const BarSettingsSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].record(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string());
+// Define the BarSettings schema
+const BarSettingsSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].object({
+    color: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional(),
+    height: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional(),
+    limit: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].number().optional(),
+});
 // Define the IColumnJSON schema
 const IColumnJSONSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].object({
     name: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string(),
@@ -63805,23 +64417,6 @@ function getGlobalClassNames(classNames, theme, disableGlobalClassNames) {
 
 /***/ }),
 
-/***/ "xWQE":
-/*!*******************************************************************!*\
-  !*** ./node_modules/@fluentui/foundation-legacy/lib/utilities.js ***!
-  \*******************************************************************/
-/*! exports provided: assign */
-/*! exports used: assign */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return assign; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-
-var assign = tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"];
-//# sourceMappingURL=utilities.js.map
-
-/***/ }),
-
 /***/ "xcww":
 /*!**********************************************************!*\
   !*** ./node_modules/@fluentui/utilities/lib/modalize.js ***!
@@ -64214,213 +64809,6 @@ var PanelBase = /** @class */ (function (_super) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
 
 //# sourceMappingURL=Panel.base.js.map
-
-/***/ }),
-
-/***/ "xqms":
-/*!***************************************************************!*\
-  !*** ./node_modules/@fluentui/foundation-legacy/lib/slots.js ***!
-  \***************************************************************/
-/*! exports provided: withSlots, createFactory, getSlots */
-/*! exports used: createFactory, getSlots, withSlots */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return withSlots; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createFactory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getSlots; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/merge-styles */ "2w4G");
-/* harmony import */ var _fluentui_utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/utilities */ "GJV8");
-/* harmony import */ var _fluentui_utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/utilities */ "Bo8X");
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utilities */ "xWQE");
-
-
-
-
-
-/**
- * This function is required for any module that uses slots.
- *
- * This function is a slot resolver that automatically evaluates slot functions to generate React elements.
- * A byproduct of this resolver is that it removes slots from the React hierarchy by bypassing React.createElement.
- *
- * To use this function on a per-file basis, use the jsx directive targeting withSlots.
- * This directive must be the FIRST LINE in the file to work correctly.
- * Usage of this pragma also requires withSlots import statement.
- *
- * See React.createElement
- */
-// Can't use typeof on React.createElement since it's overloaded. Approximate createElement's signature for now
-// and widen as needed.
-function withSlots(type, props) {
-    var children = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
-    }
-    var slotType = type;
-    if (slotType.isSlot) {
-        // Since we are bypassing createElement, use React.Children.toArray to make sure children are
-        // properly assigned keys.
-        // TODO: should this be mutating? does React mutate children subprop with createElement?
-        // TODO: will toArray clobber existing keys?
-        // TODO: React generates warnings because it doesn't detect hidden member _store that is set in createElement.
-        //        Even children passed to createElement without keys don't generate this warning.
-        //        Is there a better way to prevent slots from appearing in hierarchy? toArray doesn't address root issue.
-        children = react__WEBPACK_IMPORTED_MODULE_1__["Children"].toArray(children);
-        // TODO: There is something weird going on here with children embedded in props vs. rest args.
-        // Comment out these lines to see. Make sure this function is doing the right things.
-        if (children.length === 0) {
-            return slotType(props);
-        }
-        return slotType(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, props), { children: children }));
-    }
-    else {
-        // TODO: Are there some cases where children should NOT be spread? Also, spreading reraises perf question.
-        //        Children had to be spread to avoid breaking KeytipData in Toggle.view:
-        //        react-dom.development.js:18931 Uncaught TypeError: children is not a function
-        //        Without spread, function child is a child array of one element
-        // TODO: is there a reason this can't be:
-        // return React.createElement.apply(this, arguments);
-        return react__WEBPACK_IMPORTED_MODULE_1__["createElement"].apply(react__WEBPACK_IMPORTED_MODULE_1__, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "e"])([type, props], children, false));
-    }
-}
-/**
- * This function creates factories that render ouput depending on the user ISlotProp props passed in.
- * @param DefaultComponent - Base component to render when not overridden by user props.
- * @param options - Factory options, including defaultProp value for shorthand prop mapping.
- * @returns ISlotFactory function used for rendering slots.
- */
-function createFactory(DefaultComponent, options) {
-    if (options === void 0) { options = {}; }
-    var _a = options.defaultProp, defaultProp = _a === void 0 ? 'children' : _a;
-    var result = function (componentProps, userProps, userSlotOptions, defaultStyles, theme) {
-        // If they passed in raw JSX, just return that.
-        if (react__WEBPACK_IMPORTED_MODULE_1__["isValidElement"](userProps)) {
-            return userProps;
-        }
-        var flattenedUserProps = _translateShorthand(defaultProp, userProps);
-        var finalProps = _constructFinalProps(defaultStyles, theme, componentProps, flattenedUserProps);
-        if (userSlotOptions) {
-            if (userSlotOptions.component) {
-                // TODO: Remove cast if possible. This cast is needed because TS errors on the intrinsic portion of ReactType.
-                // return <userSlotOptions.component {...finalProps} />;
-                var UserComponent = userSlotOptions.component;
-                return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](UserComponent, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, finalProps));
-            }
-            if (userSlotOptions.render) {
-                return userSlotOptions.render(finalProps, DefaultComponent);
-            }
-        }
-        return react__WEBPACK_IMPORTED_MODULE_1__["createElement"](DefaultComponent, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, finalProps));
-    };
-    return result;
-}
-/**
- * Default factory for components without explicit factories.
- */
-var defaultFactory = Object(_fluentui_utilities__WEBPACK_IMPORTED_MODULE_3__[/* memoizeFunction */ "b"])(function (type) { return createFactory(type); });
-/**
- * This function generates slots that can be used in JSX given a definition of slots and their corresponding types.
- * @param userProps - Props as pass to component.
- * @param slots - Slot definition object defining the default slot component for each slot.
- * @returns A set of created slots that components can render in JSX.
- */
-function getSlots(userProps, slots) {
-    var result = {};
-    // userProps already has default props mixed in by createComponent. Recast here to gain typing for this function.
-    var mixedProps = userProps;
-    var _loop_1 = function (name_1) {
-        if (slots.hasOwnProperty(name_1)) {
-            // This closure method requires the use of withSlots to prevent unnecessary rerenders. This is because React
-            // detects each closure as a different component (since it is a new instance) from the previous one and then
-            // forces a rerender of the entire slot subtree. For now, the only way to avoid this is to use withSlots, which
-            // bypasses the call to React.createElement.
-            var slot = function (componentProps) {
-                var args = [];
-                for (var _i = 1; _i < arguments.length; _i++) {
-                    args[_i - 1] = arguments[_i];
-                }
-                if (args.length > 0) {
-                    // If React.createElement is being incorrectly used with slots, there will be additional arguments.
-                    // We can detect these additional arguments and error on their presence.
-                    throw new Error('Any module using getSlots must use withSlots. Please see withSlots javadoc for more info.');
-                }
-                // TODO: having TS infer types here seems to cause infinite loop.
-                //   use explicit types or casting to preserve typing if possible.
-                // TODO: this should be a lookup on TProps property instead of being TProps directly, which is probably
-                //   causing the infinite loop
-                return _renderSlot(slots[name_1], 
-                // TODO: this cast to any is hiding a relationship issue between the first two args
-                componentProps, mixedProps[name_1], mixedProps.slots && mixedProps.slots[name_1], 
-                // _defaultStyles should always be present, but a check for existence is added to make view tests
-                // easier to use.
-                mixedProps._defaultStyles && mixedProps._defaultStyles[name_1], mixedProps.theme);
-            };
-            slot.isSlot = true;
-            result[name_1] = slot;
-        }
-    };
-    for (var name_1 in slots) {
-        _loop_1(name_1);
-    }
-    return result;
-}
-/**
- * Helper function that translates shorthand as needed.
- * @param defaultProp
- * @param slotProps
- */
-function _translateShorthand(defaultProp, slotProps) {
-    var _a;
-    var transformedProps;
-    if (typeof slotProps === 'string' || typeof slotProps === 'number' || typeof slotProps === 'boolean') {
-        transformedProps = (_a = {},
-            _a[defaultProp] = slotProps,
-            _a);
-    }
-    else {
-        transformedProps = slotProps;
-    }
-    return transformedProps;
-}
-/**
- * Helper function that constructs final styles and props given a series of props ordered by increasing priority.
- */
-function _constructFinalProps(defaultStyles, theme) {
-    var allProps = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        allProps[_i - 2] = arguments[_i];
-    }
-    var finalProps = {};
-    var classNames = [];
-    for (var _a = 0, allProps_1 = allProps; _a < allProps_1.length; _a++) {
-        var props = allProps_1[_a];
-        classNames.push(props && props.className);
-        Object(_utilities__WEBPACK_IMPORTED_MODULE_5__[/* assign */ "a"])(finalProps, props);
-    }
-    finalProps.className = Object(_fluentui_merge_styles__WEBPACK_IMPORTED_MODULE_2__[/* mergeCss */ "a"])([defaultStyles, classNames], { rtl: Object(_fluentui_utilities__WEBPACK_IMPORTED_MODULE_4__[/* getRTL */ "a"])(theme) });
-    return finalProps;
-}
-/**
- * Render a slot given component and user props. Uses component factory if available, otherwise falls back
- * to default factory.
- * @param ComponentType Factory component type.
- * @param componentProps The properties passed into slot from within the component.
- * @param userProps The user properties passed in from outside of the component.
- */
-function _renderSlot(ComponentType, componentProps, userProps, slotOptions, defaultStyles, theme) {
-    if (ComponentType.create !== undefined) {
-        return ComponentType.create(componentProps, userProps, slotOptions, defaultStyles);
-    }
-    else {
-        // TODO: need to resolve typing / generic issues passing through memoizeFunction. for now, cast to 'unknown'
-        return defaultFactory(ComponentType)(componentProps, userProps, slotOptions, defaultStyles, theme);
-    }
-}
-//# sourceMappingURL=slots.js.map
 
 /***/ }),
 

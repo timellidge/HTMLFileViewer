@@ -1,24 +1,26 @@
 /* tslint:disable */
 require("./TableViewer.module.css");
 const styles = {
-  tableViewer: 'tableViewer_b1130a5c',
-  tableViewerHeader: 'tableViewerHeader_b1130a5c',
-  searchBox: 'searchBox_b1130a5c',
-  tabBar: 'tabBar_b1130a5c',
-  bar: 'bar_b1130a5c',
-  tableContainer: 'tableContainer_b1130a5c',
-  headerGrid: 'headerGrid_b1130a5c',
-  tableHeaderCell: 'tableHeaderCell_b1130a5c',
-  sortIcon: 'sortIcon_b1130a5c',
-  tableGrid: 'tableGrid_b1130a5c',
-  tableCell: 'tableCell_b1130a5c',
-  numberCell: 'numberCell_b1130a5c',
-  editCell: 'editCell_b1130a5c',
-  iconCell: 'iconCell_b1130a5c',
-  tableDataContent: 'tableDataContent_b1130a5c',
-  highlight: 'highlight_b1130a5c',
-  error: 'error_b1130a5c',
-  workbenchPageContent: 'workbenchPageContent_b1130a5c'
+  tableViewer: 'tableViewer_5ff0a43d',
+  tableViewerHeader: 'tableViewerHeader_5ff0a43d',
+  searchBox: 'searchBox_5ff0a43d',
+  tabBar: 'tabBar_5ff0a43d',
+  barCell: 'barCell_5ff0a43d',
+  bar: 'bar_5ff0a43d',
+  barLabel: 'barLabel_5ff0a43d',
+  tableContainer: 'tableContainer_5ff0a43d',
+  headerGrid: 'headerGrid_5ff0a43d',
+  tableHeaderCell: 'tableHeaderCell_5ff0a43d',
+  sortIcon: 'sortIcon_5ff0a43d',
+  tableGrid: 'tableGrid_5ff0a43d',
+  tableCell: 'tableCell_5ff0a43d',
+  numberCell: 'numberCell_5ff0a43d',
+  editCell: 'editCell_5ff0a43d',
+  iconCell: 'iconCell_5ff0a43d',
+  tableDataContent: 'tableDataContent_5ff0a43d',
+  highlight: 'highlight_5ff0a43d',
+  error: 'error_5ff0a43d',
+  workbenchPageContent: 'workbenchPageContent_5ff0a43d'
 };
 
 export default styles;

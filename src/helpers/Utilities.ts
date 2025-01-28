@@ -13,6 +13,18 @@ import { IItemUpdateResult } from '@pnp/sp/items';
 import { ITypedHash } from '@pnp/common';
 import {DateTime} from 'luxon';
 
+import * as tinycolor from 'tinycolor2';
+
+// Function to get a contrasting text color
+export const getContrastingTextColor = (backgroundColor: string): string => {
+  const color = tinycolor(backgroundColor);
+  return color.isLight() ? '#080820' : '#F8F8F6';
+};
+
+
+
+
+
 
 //==================================================================================================================================
 // A FUNCTION TO work out date formats based on the locale adn will try 12 and 24 hour formats

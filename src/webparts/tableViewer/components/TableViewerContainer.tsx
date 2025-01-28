@@ -4,7 +4,6 @@ import { mergeStyles } from '@fluentui/react';
 import styles from './TableViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-import TableViewer from './TableViewer';
 import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
@@ -12,7 +11,6 @@ import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperC
 import TableGridRender from './TableGridRender';
 import TabBarRender from './TabsRender/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
-import { get } from 'lodash';
 
 export interface IField {
   rawValue: any;
@@ -68,8 +66,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [listPath, setListPath] = useState<string>('');
   const [maxBarValues, setMaxBarValues] = useState<{ [key: string]: number }>({});
-  //const [barMax, setBarMax] = useState<number>(0);
-
 
   //=================================================================================================================
   // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
@@ -333,7 +329,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     <div id={webPartTag} className={_containerClass}> 
       {!configured ? (
         <>
-          <TableViewer >
+          <div >
             <TableViewerHeader  displayMode={displayMode} title={title} updateProperty={updateProperty} showTitle={showTitle} showFind={showFind} searchQuery={searchQuery} handleSearch={handleSearch}/>
             <div className={styles.tabBar}>
               {Object.keys(tabData).map((field) => (
@@ -341,7 +337,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               ))}
             </div>
             <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} contentHeight={contentHeight} maxBarValues={maxBarValues}/> 
-          </TableViewer>
+          </div>
           {globalError && (
             <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />
           )}

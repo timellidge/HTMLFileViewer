@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { Icon } from '@fluentui/react/lib/Icon';
 import PersonCard from './TabsRender/PersonCard';
 import { DateTime } from 'luxon';
+import { getContrastingTextColor } from '../../../helpers/Utilities'; // Ensure this import is correct
 
 interface ITableGridRenderProps {
   listUrl: string;  
@@ -232,17 +233,40 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   // BAR RENDER FUNCTION - THIS WILL RENDER A BAR BASED ON THE VALUE OF THE FIELD HAS ROWMERGE
   const renderBar = (value: string , name : string, column: IColumnJSON) => {
     const rawValue = parseFloat(value) || 0;
-    const maxValue = maxBarValues[name] || 10; // Avoid division by zero
-    const percentage = (rawValue / maxValue) * 80;
-    console.log(">>> bar", rawValue, maxValue, percentage);
+    //const maxValue =  maxBarValues[name] || 10; // Avoid division by zero
+    const maxValue = column.barSettings?.limit ||  maxBarValues[name] || 100; // Set a default height if not provided
+    const percentage = (rawValue / maxValue) * 100;
+    //console.log(">>> bar", rawValue, maxValue, percentage);
+
+    if (percentage < 0) {
+      return null;
+    }
+
+    // set up the layout for the bar container
+    const cell1Width = column.prefix && "15% " || "0 ";
+    const cell3Width = column.suffix && "15% " || "0 ";
+    const _barCellStyle = mergeStyles(styles.barCell, { gridTemplateColumns: cell1Width + "auto " + cell3Width, maxHeight: contentHeight || "100%" });
+
+    // now do the same for the bar itself
+    const barcol = column.barSettings?.color || "darkblue"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
+    const barHeight = column.barSettings?.height || "20px"; // Set a default height if not provided
+    const textCol = percentage < 20 ? "#000000" : getContrastingTextColor(barcol); // get a contrast if it's goiong inside else use black
+    const _barStyle = mergeStyles(styles.bar, { color: textCol,  backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
+
+
+  // Set the position of the bar label based on the percentage (inside or outside)
+  const _barLabelStyle = percentage < 20
+    ? mergeStyles(styles.barLabel, { left: '120%' })
+    : mergeStyles(styles.barLabel, { right: '5px' });
+   
     return (
-
-        <span
-          className={styles.bar}
-          style={{ width: `${percentage}%`, backgroundColor: column.barSettings.color,  height: column.barSettings.height, display: "inline-block" }}
-          title={value}
-        > &nbsp; {percentage} </span>
-
+      <div className={_barCellStyle}>
+        {column.prefix ? <span>{column.prefix}</span> : <span>&nbsp;</span>}
+        <div className={_barStyle} title={value}> 
+          <div className = {_barLabelStyle}> {rawValue} </div> 
+        </div>
+        {column.suffix ? <span>{column.suffix}</span> : <span>&nbsp;</span>}
+      </div>
     );
   };
 
@@ -262,15 +286,19 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     )
   };
 
-  // RENDER LINK FUNCTION NO ROWMERGE
-  const renderLink = ( link: string, displayText: string, column: IColumnJSON
-  ) => (
-    <a href={link} className={styles.tableDataContent}>
-      {column.prefix && <span>{column.prefix}</span>}
-      {displayText}
-      {column.suffix && <span>{column.suffix}</span>}
-    </a>
-  );
+  // RENDER LINK FUNCTION NO ROWMERGE 
+  const renderLink = ( link: string, displayText: string, column: IColumnJSON) => {
+    if (!link) {
+      return null;
+    }
+    return (
+      <div className={styles.tableDataContent}>
+        {column.prefix && <span>{column.prefix}</span>}
+        <a href={link} >{displayText}</a>
+        {column.suffix && <span>{column.suffix}</span>}
+      </div>
+    );
+  };
 
   // EDIT RENDER FUNCTION NO ROWMERGE
   const renderEdit = ( id: number, displayText: string, column: IColumnJSON) => {
@@ -338,8 +366,12 @@ const renderNoData = (column: IColumnJSON) =>
     allcolJSON: IColumnsConfig
   ) => (
     <div>
-      {column.fields.map((field: any, fieldIndex: number) => {
+      {column.fields.map((field: string, fieldIndex: number) => {
         const fieldColumn = allcolJSON[field];
+        if (!fieldColumn) {
+          return ( <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>);
+        }
+        //console.log(">>> stack field:", field,  "  display:", item[field].displayValue, "  raw:", item[field].rawValue ,"  JSON:" ,fieldColumn);
   
         const content = (() => {
           switch (fieldColumn.type) {
@@ -350,9 +382,9 @@ const renderNoData = (column: IColumnJSON) =>
             case 'html':
               return renderHtml(item[field].rawValue);
             case "link":
-              return renderLink(item[field].rawValue, item[field].displayValue, column);
+              return renderLink(item[field].rawValue, item[field].displayValue, fieldColumn);
             case 'person':
-              return renderPersonCard(item[field].displayValue, field, fieldColumn, false);
+              return renderPersonCard(item, field, fieldColumn, false);
             default:
               return renderDefault(item[field].displayValue, fieldColumn, false);
           }

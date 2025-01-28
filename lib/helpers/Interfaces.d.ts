@@ -15,7 +15,19 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     sequence: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     lines: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     icons: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodEffects<z.ZodString, string, string>>>>;
-    barSettings: z.ZodNullable<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodString>>>;
+    barSettings: z.ZodNullable<z.ZodOptional<z.ZodObject<{
+        color: z.ZodOptional<z.ZodString>;
+        height: z.ZodOptional<z.ZodString>;
+        limit: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        color?: string;
+        height?: string;
+        limit?: number;
+    }, {
+        color?: string;
+        height?: string;
+        limit?: number;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     type?: "string" | "number" | "date" | "link" | "person" | "stack" | "html" | "icon" | "singlechoice" | "multichoice" | "edit" | "bar";
     name?: string;
@@ -32,7 +44,11 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     sequence?: number;
     lines?: number;
     icons?: Record<string, string>;
-    barSettings?: Record<string, string>;
+    barSettings?: {
+        color?: string;
+        height?: string;
+        limit?: number;
+    };
 }, {
     type?: "string" | "number" | "date" | "link" | "person" | "stack" | "html" | "icon" | "singlechoice" | "multichoice" | "edit" | "bar";
     name?: string;
@@ -49,7 +65,11 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     sequence?: number;
     lines?: number;
     icons?: Record<string, string>;
-    barSettings?: Record<string, string>;
+    barSettings?: {
+        color?: string;
+        height?: string;
+        limit?: number;
+    };
 }>>;
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;
@@ -76,7 +96,9 @@ export interface IconSettings {
     [key: string]: string;
 }
 export interface BarSettings {
-    [key: string]: string;
+    "color"?: string;
+    "height"?: string;
+    "limit"?: number;
 }
 export interface ITabData {
     [key: string]: ITabDataDetail;

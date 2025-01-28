@@ -19,9 +19,20 @@
         margin-top:  5px; 
     }
 
-    .bar{
-        background-color: #ff7300;
-        height: 20px;
+    .barCell{
+        display: grid;
+
+        .bar{
+            border-right: 3px solid white;
+            margin: 2px;
+            padding: 2px;
+            text-align: right;
+            position: relative;
+
+            .barLabel{
+                position:absolute;
+            }       
+         }
     }
 
     .tableContainer {

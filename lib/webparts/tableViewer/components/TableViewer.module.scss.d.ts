@@ -3,7 +3,9 @@ declare const styles: {
     tableViewerHeader: string;
     searchBox: string;
     tabBar: string;
+    barCell: string;
     bar: string;
+    barLabel: string;
     tableContainer: string;
     headerGrid: string;
     tableHeaderCell: string;

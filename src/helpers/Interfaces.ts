@@ -10,7 +10,12 @@ const IconSettingsSchema = z.record(
     })
   );
 
-  const BarSettingsSchema = z.record(z.string());
+// Define the BarSettings schema
+const BarSettingsSchema = z.object({
+  color: z.string().optional(),
+  height: z.string().optional(),
+  limit: z.number().optional(),
+});
 
 
 // Define the IColumnJSON schema
@@ -68,7 +73,9 @@ export interface IconSettings {
 }
 
 export interface BarSettings {
-  [key: string]: string;
+  "color"?: string;
+  "height"?: string;
+  "limit"?: number;
 }
 
 
