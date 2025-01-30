@@ -102,22 +102,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   };
 
   //=================================================================================================================
-  // USE EFFECT - the first checks if there is a Scrollbar and sets the state accordingly
+  //^ USE EFFECTS SORT & SCROLL - 
   //=================================================================================================================  
-  useEffect(() => {
-    const checkForScrollbar = () => {
-      if (gridRef.current) {
-        setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
-        console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
-      }
-    };
 
-    checkForScrollbar();
-    window.addEventListener('resize', checkForScrollbar);
-    return () => {
-      window.removeEventListener('resize', checkForScrollbar);
-    };
-  }, []);
 
  // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
   useEffect(() => {
@@ -179,8 +166,24 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     }
   }, [sortField, items]);
 
+  // does the main section have a scroll BAr if so then we need to adjust the width of the grid to allow for it
+  useEffect(() => {
+    const checkForScrollbar = () => {
+      if (gridRef.current) {
+        setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
+        console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
+      }
+    };
+
+    checkForScrollbar();
+    window.addEventListener('resize', checkForScrollbar);
+    return () => {
+      window.removeEventListener('resize', checkForScrollbar);
+    };
+  }, []);
+
   //=================================================================================================================
-  // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
+  //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
   //=================================================================================================================
 
   //=================================================================================================================
@@ -294,7 +297,6 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     )
   };
 
- 
   //=================================================================================================================
   // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON NO ROWMERGE
   //=================================================================================================================
@@ -332,10 +334,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     const _barStyle = mergeStyles(styles.chartBar, {backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
 
     const textCol = percentage < 50 ? "#000000" : getContrastingTextColor(barcol); // get a contrast if it's goiong inside else use black
-    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color)
+    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more paddign to the right)
+
+    const labelPadding = column.barSettings?.icon ? "20px" : "5px";
     const _barLabelStyle = percentage < 50
-      ? mergeStyles(styles.chartLabel, { width:`${100-percentage}%`, left:`${percentage}%`, textAlign: 'left' , color: textCol })
-      : mergeStyles(styles.chartLabel, { width: `${percentage}%`, textAlign: 'right', color: textCol });
+      ? mergeStyles(styles.chartLabel, { width:`${100-percentage}%`, left:`${percentage}%`, textAlign: 'left' , color: textCol }) //outside One
+      : mergeStyles(styles.chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); //Inside one
    
     // Determine the label content based on barSettings if its not spacififed then just use the raw value
     let labelContent = null;
@@ -351,13 +355,16 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
       labelContent = rawValue
     }
 
-   const [iconName, iconColor] = column.barSettings.icon?.split("|");
-
+    let iconName = null;
+    let iconColor = null; 
+    if(column.barSettings.icon){
+      [iconName, iconColor] = column.barSettings?.icon?.split("|"); // does thismake it super conditional on the icon being there?
+    }
     return (
       <div className={styles.barGrid}>
         {column.prefix ? <span className={styles.chartPrefix} >{column.prefix}</span> : <span>&nbsp;</span>}
         <div className={_barStyle} title={value}> 
-          {column.barSettings?.icon ? (
+          {iconName ? (
             <Icon 
               iconName={iconName}     
               title={rawValue.toString()}
@@ -432,7 +439,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   );
   
   //=================================================================================================================
-  // THE RETURN FUNCTION
+  //^  THE RETURN FUNCTION
   //=================================================================================================================
   return (
     <>

@@ -15080,21 +15080,8 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
         setIsSidePanelOpen(true);
     };
     //=================================================================================================================
-    // USE EFFECT - the first checks if there is a Scrollbar and sets the state accordingly
+    //^ USE EFFECTS SORT & SCROLL - 
     //=================================================================================================================  
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        const checkForScrollbar = () => {
-            if (gridRef.current) {
-                setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
-                console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
-            }
-        };
-        checkForScrollbar();
-        window.addEventListener('resize', checkForScrollbar);
-        return () => {
-            window.removeEventListener('resize', checkForScrollbar);
-        };
-    }, []);
     // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (sortField.key) {
@@ -15154,8 +15141,22 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
             setSortedItems(items);
         }
     }, [sortField, items]);
+    // does the main section have a scroll BAr if so then we need to adjust the width of the grid to allow for it
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        const checkForScrollbar = () => {
+            if (gridRef.current) {
+                setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
+                console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
+            }
+        };
+        checkForScrollbar();
+        window.addEventListener('resize', checkForScrollbar);
+        return () => {
+            window.removeEventListener('resize', checkForScrollbar);
+        };
+    }, []);
     //=================================================================================================================
-    // A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
+    //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
     //=================================================================================================================
     //=================================================================================================================
     // PERSON CARD WITH ROWMERGE
@@ -15240,7 +15241,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
     // BAR RENDER FUNCTION - THIS WILL RENDER A BAR BASED ON THE VALUE OF THE FIELD HAS ROWMERGE IGNORES SUFFIX
     //=================================================================================================================
     const renderBar = (value, name, column) => {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
         const rawValue = parseFloat(value) || 0;
         const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[name] || 100; // Set a default height if not provided
         const percentage = (rawValue / maxValue) * 100;
@@ -15253,30 +15254,35 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
         const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
         const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartBar, { backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
         const textCol = percentage < 50 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's goiong inside else use black
-        // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color)
+        // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more paddign to the right)
+        const labelPadding = ((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.icon) ? "20px" : "5px";
         const _barLabelStyle = percentage < 50
-            ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol })
-            : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', color: textCol });
+            ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol }) //outside One
+            : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); //Inside one
         // Determine the label content based on barSettings if its not spacififed then just use the raw value
         let labelContent = null;
         if (column.barSettings) {
-            if (((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.showValue) && ((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showPercentage)) {
+            if (((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showValue) && ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showPercentage)) {
                 labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
             }
-            else if ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showValue) {
+            else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showValue) {
                 labelContent = `${rawValue}`;
             }
-            else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showPercentage) {
+            else if ((_h = column.barSettings) === null || _h === void 0 ? void 0 : _h.showPercentage) {
                 labelContent = `${percentage.toFixed(0)}%`;
             }
         }
         else {
             labelContent = rawValue;
         }
-        const [iconName, iconColor] = (_h = column.barSettings.icon) === null || _h === void 0 ? void 0 : _h.split("|");
+        let iconName = null;
+        let iconColor = null;
+        if (column.barSettings.icon) {
+            [iconName, iconColor] = (_k = (_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) === null || _k === void 0 ? void 0 : _k.split("|"); // does thismake it super conditional on the icon being there?
+        }
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].barGrid },
             column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartPrefix }, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, ((_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, iconName ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
                 " ",
                 labelContent,
@@ -15316,7 +15322,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues 
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
     })));
     //=================================================================================================================
-    // THE RETURN FUNCTION
+    //^  THE RETURN FUNCTION
     //=================================================================================================================
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _HeadStyle },
@@ -18977,7 +18983,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_6d1c5e5f .tableViewerHeader_6d1c5e5f{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_6d1c5e5f .tableViewerHeader_6d1c5e5f .searchBox_6d1c5e5f{margin:0}.tableViewer_6d1c5e5f .tabBar_6d1c5e5f{background-color:#fff;margin-top:5px}.tableViewer_6d1c5e5f .barGrid_6d1c5e5f{-ms-flex-align:center;align-items:center;display:grid;grid-template-areas:\"prefix bar\";grid-template-columns:auto 1fr;position:relative;text-align:left}.tableViewer_6d1c5e5f .barGrid_6d1c5e5f .chartPrefix_6d1c5e5f{grid-area:prefix;padding-right:5px}.tableViewer_6d1c5e5f .barGrid_6d1c5e5f .chartBar_6d1c5e5f{font-size:larger;grid-area:bar;padding-top:2px;text-align:right}.tableViewer_6d1c5e5f .barGrid_6d1c5e5f .chartLabel_6d1c5e5f{box-sizing:border-box;grid-area:bar;padding:0 5px;position:relative}.tableViewer_6d1c5e5f .barCell_6d1c5e5f{display:grid}.tableViewer_6d1c5e5f .barCell_6d1c5e5f .bar_6d1c5e5f{border-right:3px solid #fff;margin:2px;padding:2px;position:relative;text-align:right}.tableViewer_6d1c5e5f .barCell_6d1c5e5f .bar_6d1c5e5f .barLabel_6d1c5e5f{position:absolute}.tableViewer_6d1c5e5f .tableContainer_6d1c5e5f{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_6d1c5e5f .searchBox_6d1c5e5f{margin:0}.tableViewer_6d1c5e5f .headerGrid_6d1c5e5f{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_6d1c5e5f .headerGrid_6d1c5e5f .tableHeaderCell_6d1c5e5f{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:15px;font-weight:600;grid-template-columns:auto 1fr;height:45px;padding:2px}.tableViewer_6d1c5e5f .headerGrid_6d1c5e5f .tableHeaderCell_6d1c5e5f .sortIcon_6d1c5e5f{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_6d1c5e5f .headerGrid_6d1c5e5f .tableHeaderCell_6d1c5e5f:hover{background-color:#d4d4d0}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .tableCell_6d1c5e5f{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .tableCell_6d1c5e5f .numberCell_6d1c5e5f{padding-right:10px;text-align:right}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .editCell_6d1c5e5f{cursor:pointer}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .editCell_6d1c5e5f,.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .iconCell_6d1c5e5f{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .tableDataContent_6d1c5e5f{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_6d1c5e5f .tableGrid_6d1c5e5f .highlight_6d1c5e5f{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_6d1c5e5f input::placeholder{color:red!important}.error_6d1c5e5f input:-ms-input-placeholder{color:red!important}.error_6d1c5e5f input::-ms-input-placeholder{color:red!important}#workbenchPageContent_6d1c5e5f{max-width:1680px}", ""]);
+exports.push([module.i, ".tableViewer_f101df36 .tableViewerHeader_f101df36{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_f101df36 .tableViewerHeader_f101df36 .searchBox_f101df36{margin:0}.tableViewer_f101df36 .tabBar_f101df36{background-color:#fff;margin-top:5px}.tableViewer_f101df36 .barGrid_f101df36{-ms-flex-align:center;align-items:center;display:grid;grid-template-areas:\"prefix bar\";grid-template-columns:auto 1fr;position:relative;text-align:left}.tableViewer_f101df36 .barGrid_f101df36 .chartPrefix_f101df36{grid-area:prefix;padding-right:5px}.tableViewer_f101df36 .barGrid_f101df36 .chartBar_f101df36{font-size:larger;grid-area:bar;padding-top:2px;text-align:right}.tableViewer_f101df36 .barGrid_f101df36 .chartLabel_f101df36{box-sizing:border-box;grid-area:bar;padding-left:5px;position:relative}.tableViewer_f101df36 .barCell_f101df36{display:grid}.tableViewer_f101df36 .barCell_f101df36 .bar_f101df36{border-right:3px solid #fff;margin:2px;padding:2px;position:relative;text-align:right}.tableViewer_f101df36 .barCell_f101df36 .bar_f101df36 .barLabel_f101df36{position:absolute}.tableViewer_f101df36 .tableContainer_f101df36{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_f101df36 .searchBox_f101df36{margin:0}.tableViewer_f101df36 .headerGrid_f101df36{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:15px;font-weight:600;grid-template-columns:auto 1fr;height:45px;padding:2px}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36 .sortIcon_f101df36{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36:hover{background-color:#d4d4d0}.tableViewer_f101df36 .tableGrid_f101df36{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_f101df36 .tableGrid_f101df36 .tableCell_f101df36{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_f101df36 .tableGrid_f101df36 .tableCell_f101df36 .numberCell_f101df36{padding-right:10px;text-align:right}.tableViewer_f101df36 .tableGrid_f101df36 .editCell_f101df36{cursor:pointer}.tableViewer_f101df36 .tableGrid_f101df36 .editCell_f101df36,.tableViewer_f101df36 .tableGrid_f101df36 .iconCell_f101df36{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_f101df36 .tableGrid_f101df36 .tableDataContent_f101df36{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_f101df36 .tableGrid_f101df36 .highlight_f101df36{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_f101df36 input::placeholder{color:red!important}.error_f101df36 input:-ms-input-placeholder{color:red!important}.error_f101df36 input::-ms-input-placeholder{color:red!important}#workbenchPageContent_f101df36{max-width:1680px}", ""]);
 // Exports
 module.exports = exports;
 
@@ -35875,30 +35881,30 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_6d1c5e5f',
-    tableViewerHeader: 'tableViewerHeader_6d1c5e5f',
-    searchBox: 'searchBox_6d1c5e5f',
-    tabBar: 'tabBar_6d1c5e5f',
-    barGrid: 'barGrid_6d1c5e5f',
-    chartPrefix: 'chartPrefix_6d1c5e5f',
-    chartBar: 'chartBar_6d1c5e5f',
-    chartLabel: 'chartLabel_6d1c5e5f',
-    barCell: 'barCell_6d1c5e5f',
-    bar: 'bar_6d1c5e5f',
-    barLabel: 'barLabel_6d1c5e5f',
-    tableContainer: 'tableContainer_6d1c5e5f',
-    headerGrid: 'headerGrid_6d1c5e5f',
-    tableHeaderCell: 'tableHeaderCell_6d1c5e5f',
-    sortIcon: 'sortIcon_6d1c5e5f',
-    tableGrid: 'tableGrid_6d1c5e5f',
-    tableCell: 'tableCell_6d1c5e5f',
-    numberCell: 'numberCell_6d1c5e5f',
-    editCell: 'editCell_6d1c5e5f',
-    iconCell: 'iconCell_6d1c5e5f',
-    tableDataContent: 'tableDataContent_6d1c5e5f',
-    highlight: 'highlight_6d1c5e5f',
-    error: 'error_6d1c5e5f',
-    workbenchPageContent: 'workbenchPageContent_6d1c5e5f'
+    tableViewer: 'tableViewer_f101df36',
+    tableViewerHeader: 'tableViewerHeader_f101df36',
+    searchBox: 'searchBox_f101df36',
+    tabBar: 'tabBar_f101df36',
+    barGrid: 'barGrid_f101df36',
+    chartPrefix: 'chartPrefix_f101df36',
+    chartBar: 'chartBar_f101df36',
+    chartLabel: 'chartLabel_f101df36',
+    barCell: 'barCell_f101df36',
+    bar: 'bar_f101df36',
+    barLabel: 'barLabel_f101df36',
+    tableContainer: 'tableContainer_f101df36',
+    headerGrid: 'headerGrid_f101df36',
+    tableHeaderCell: 'tableHeaderCell_f101df36',
+    sortIcon: 'sortIcon_f101df36',
+    tableGrid: 'tableGrid_f101df36',
+    tableCell: 'tableCell_f101df36',
+    numberCell: 'numberCell_f101df36',
+    editCell: 'editCell_f101df36',
+    iconCell: 'iconCell_f101df36',
+    tableDataContent: 'tableDataContent_f101df36',
+    highlight: 'highlight_f101df36',
+    error: 'error_f101df36',
+    workbenchPageContent: 'workbenchPageContent_f101df36'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
