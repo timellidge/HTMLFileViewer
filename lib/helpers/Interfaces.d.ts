@@ -19,17 +19,26 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         color: z.ZodOptional<z.ZodString>;
         height: z.ZodOptional<z.ZodString>;
         limit: z.ZodOptional<z.ZodNumber>;
+        icon: z.ZodOptional<z.ZodString>;
+        showValue: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+        showPercentage: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     }, "strip", z.ZodTypeAny, {
         color?: string;
         height?: string;
         limit?: number;
+        icon?: string;
+        showValue?: boolean;
+        showPercentage?: boolean;
     }, {
         color?: string;
         height?: string;
         limit?: number;
+        icon?: string;
+        showValue?: boolean;
+        showPercentage?: boolean;
     }>>>;
 }, "strip", z.ZodTypeAny, {
-    type?: "string" | "number" | "date" | "link" | "person" | "stack" | "html" | "icon" | "singlechoice" | "multichoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singlechoice" | "multichoice" | "edit" | "bar";
     name?: string;
     width?: string;
     tab?: boolean;
@@ -48,9 +57,12 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         color?: string;
         height?: string;
         limit?: number;
+        icon?: string;
+        showValue?: boolean;
+        showPercentage?: boolean;
     };
 }, {
-    type?: "string" | "number" | "date" | "link" | "person" | "stack" | "html" | "icon" | "singlechoice" | "multichoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singlechoice" | "multichoice" | "edit" | "bar";
     name?: string;
     width?: string;
     tab?: boolean;
@@ -69,6 +81,9 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         color?: string;
         height?: string;
         limit?: number;
+        icon?: string;
+        showValue?: boolean;
+        showPercentage?: boolean;
     };
 }>>;
 export interface IColumnsConfig {
@@ -99,6 +114,9 @@ export interface BarSettings {
     "color"?: string;
     "height"?: string;
     "limit"?: number;
+    "icon"?: string;
+    "showValue"?: boolean;
+    "showPercentage"?: boolean;
 }
 export interface ITabData {
     [key: string]: ITabDataDetail;

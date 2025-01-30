@@ -89,15 +89,20 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     },
     "Title": {
       "name": "Title",
-      "width": "2fr",
+      "width": "1fr",
       "isSortable": true,
       "class": "titleclass"
     },
-    "Editor": {
-      "name": "Modified By",
-      "width": "1fr",
-      "type": "person",
-      "format": "size32"
+    "BSAPanelContent": {
+      "name": "bar",
+      "width": "2fr",
+      "type": "bar",
+      "barSettings": {
+        "showPercentage": true,
+        "showValue": true,
+        "icon": "globe|#cc2222",
+        "color": "transparent"
+      }
     },
     "Created": {
       "name": "Created",
@@ -121,7 +126,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         "Created",
         "Modified"
       ]
-    } 
+    }
 }
   // icon refernce for the icons in the table
   // https://uifabricicons.azurewebsites.net/

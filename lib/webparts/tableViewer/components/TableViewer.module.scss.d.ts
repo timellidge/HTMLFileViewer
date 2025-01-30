@@ -3,6 +3,10 @@ declare const styles: {
     tableViewerHeader: string;
     searchBox: string;
     tabBar: string;
+    barGrid: string;
+    chartPrefix: string;
+    chartBar: string;
+    chartLabel: string;
     barCell: string;
     bar: string;
     barLabel: string;

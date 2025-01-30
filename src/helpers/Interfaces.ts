@@ -15,6 +15,9 @@ const BarSettingsSchema = z.object({
   color: z.string().optional(),
   height: z.string().optional(),
   limit: z.number().optional(),
+  icon: z.string().optional(),
+  showValue: z.boolean().optional().nullable(),
+  showPercentage: z.boolean().optional().nullable(),
 });
 
 
@@ -42,8 +45,6 @@ const IColumnJSONSchema = z.object({
 export const testColumnsConfigSchema = z.record(IColumnJSONSchema);
 
 //& END OF ZOD SCHEMA FOR THE CONFIG JSON
-
-
 
 export interface IColumnsConfig {
     [key: string]: IColumnJSON;
@@ -76,6 +77,9 @@ export interface BarSettings {
   "color"?: string;
   "height"?: string;
   "limit"?: number;
+  "icon"?: string;
+  "showValue"?: boolean;
+  "showPercentage"?: boolean;
 }
 
 
