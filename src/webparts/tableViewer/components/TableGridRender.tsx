@@ -221,6 +221,10 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
       return <span>&nbsp;</span>;
     }
 
+    if (!content) {
+      return <span>&nbsp;</span>;
+    }
+
     return column.lines ? (
       <div
         className={styles.tableDataContent}

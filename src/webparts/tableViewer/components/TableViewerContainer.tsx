@@ -270,8 +270,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       
               // Format the value based on the type
               if (type === 'number') {
-                displayValue = numberFormat(rawValue, format);
                 rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
+                displayValue = numberFormat(rawValue, format);
               } else if (type === 'date') {
                 rawValue = parseDate(rawValue, 'en-GB'); 
                 displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
