@@ -16,9 +16,10 @@ interface ITableGridRenderProps {
   items: any[];
   contentHeight: string;
   maxBarValues?: { [key: string]: number };
+  height:number | 800;
 }
 
-const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listUrl, colJSON, items, contentHeight, maxBarValues }) => {
+const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listUrl, colJSON, items, contentHeight, maxBarValues, height }) => {
   //we can only have one column sorted at a time so i need to know its name and its state
   const [sortField, setSortField] = useState<{
     key: string;
@@ -523,17 +524,14 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
         isOpen={isSidePanelOpen}
         onDismiss={closeSidePanel}
         closeButtonAriaLabel="Close"
-        headerText="Magic Side Panel"
-        type={PanelType.largeFixed} // Set the size of the panel
+        type={PanelType.largeFixed} // Set the size of the panel    
       >
         <iframe
           id="iframePanel"
           src={iframeUrl}
           ref={iframeRef}
           onLoad={onLoad}
-          width="100%"
-          height="900px"
-          style={{ border: 'none' }}
+          style={{border: 'none', height: height + 'px', width: '100%'}}
         />
       </Panel>
     </>

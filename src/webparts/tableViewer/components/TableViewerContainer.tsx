@@ -66,6 +66,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [listPath, setListPath] = useState<string>('');
   const [maxBarValues, setMaxBarValues] = useState<{ [key: string]: number }>({});
+  const [windowDimensions, setWindowDimensions] = useState<{ width: number, height: number }>({ width: window.innerWidth, height: window.innerHeight });
+
 
   //=================================================================================================================
   // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
@@ -321,6 +323,25 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     updateData();
   }, [items]);
 
+
+  useEffect(() => {
+    // Get the width and height of the window on load
+    const handleResize = () => {
+      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Call handleResize to set initial dimensions
+    handleResize();
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   //=================================================================================================================
   // RENDER THE COMPONENT TREE :-)
   //=================================================================================================================
@@ -336,7 +357,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 <TabBarRender key={field} fieldName={field} tabs={tabData[field]} handleTabChange={handleTabChange} tabBehaviour={tabBehaviour}/>
               ))}
             </div>
-            <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} contentHeight={contentHeight} maxBarValues={maxBarValues}/> 
+            <TableGridRender listUrl={listPath} colJSON={ColumnsJSON} items={filteredItems} contentHeight={contentHeight} maxBarValues={maxBarValues} height={windowDimensions.height}/> 
           </div>
           {globalError && (
             <TableViewerErrorMessage message={globalError} onDismiss={() => setGlobalError(null)} />

@@ -8,6 +8,7 @@ interface ITableGridRenderProps {
     maxBarValues?: {
         [key: string]: number;
     };
+    height: number | 800;
 }
 declare const TableGridRender: React.FunctionComponent<ITableGridRenderProps>;
 export default TableGridRender;
