@@ -5,7 +5,7 @@ import { z } from 'zod';
 // Define the IconSettings schema
 // Define the IconSettings schema
 const IconSettingsSchema = z.record(
-    z.string().refine(value => value.includes('|#'), {
+    z.string().refine(value => value.includes('|'), {
       message: 'String must contain a "|" character followed by a color code',
     })
   );
@@ -26,10 +26,11 @@ const IColumnJSONSchema = z.object({
   name: z.string(),
   width: z.string(),
   tab: z.boolean().optional().nullable(),
-  type: z.enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singlechoice', 'multichoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
+  type: z.enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singleChoice', 'multiChoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
   class: z.string().optional().nullable(),
   isSortable: z.boolean().optional().nullable(),
   isMultiline: z.boolean().optional().nullable(),
+  total: z.boolean().optional().nullable(),
   rowMerge: z.boolean().optional().nullable(),
   fields: z.array(z.string()).optional().nullable(),
   prefix: z.string().optional().nullable(),
@@ -54,7 +55,7 @@ export interface IColumnJSON {
     name: string;
     width: string;
     tab?: boolean | undefined | null;
-    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date'  | 'string' | "edit" | "bar" | undefined | null;
+    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singleChoice' | 'multiChoice' | 'date'  | 'string' | "edit" | "bar" | undefined | null;
     class?: string | undefined | null;
     isSortable?:  boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
@@ -67,6 +68,7 @@ export interface IColumnJSON {
     lines?: number | 0;
     icons?: IconSettings ;
     barSettings?: BarSettings;
+    total?: boolean;
 }
   
 export interface IconSettings {

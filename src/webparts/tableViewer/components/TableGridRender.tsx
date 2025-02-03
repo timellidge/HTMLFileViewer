@@ -6,9 +6,13 @@ import { mergeStyles } from '@fluentui/react';
 import { Panel, PanelType } from '@fluentui/react/lib/Panel';
 import * as _ from 'lodash';
 import { Icon } from '@fluentui/react/lib/Icon';
-import PersonCard from './TabsRender/PersonCard';
+
 import { DateTime } from 'luxon';
-import { getContrastingTextColor } from '../../../helpers/Utilities'; // Ensure this import is correct
+import { getContrastingTextColor, numberFormat } from '../../../helpers/Utilities'; // Ensure this import is correct
+import TableGridHeader from './TableGridHeader';
+import TableGridFooter from './TableGridFooter';
+import renderPersonCard from './RenderPersonCard';
+import renderBar from './RenderBar';
 
 interface ITableGridRenderProps {
   listUrl: string;  
@@ -32,6 +36,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   const [iframeUrl, setIframeUrl] = useState<string>('');
   const [hasVerticalScrollbar, setHasVerticalScrollbar] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+  const [itemTotals, setItemTotals] =  useState<{ [key: string]: number }>({});
 
   const onLoad = (event: React.SyntheticEvent<HTMLIFrameElement>) => {
     const iframe = event.currentTarget as HTMLIFrameElement;
@@ -43,6 +48,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     .map((key) => ({ key, column: colJSON[key] }))
     .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
 
+  // check if any of the columns have a total set to true if so we need to display a footer row with the totals for those columns
+  const hasTotal =  _sortedColumns.some(({ key, column }) => column.width > "0" && column.total);
+
   // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
   const _columnWidths = _sortedColumns
     .filter(({ column }) => column.width !== "")
@@ -52,6 +60,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   const scrollbarWidth = hasVerticalScrollbar ? "17px" : "0px";
   const _GridStyle = mergeStyles(styles.tableGrid, { gridTemplateColumns: _columnWidths, maxHeight: contentHeight || "100%" });
   const _HeadStyle = mergeStyles(styles.headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
+  const _FootStyle = mergeStyles(styles.headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
   
   //=================================================================================================================
   // GENERAL INTERACTION FUNCTIONS
@@ -106,6 +115,23 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //^ USE EFFECTS SORT & SCROLL - 
   //=================================================================================================================  
 
+  useEffect(() => {
+    // Calculate totals after items have been processed
+    const totals: { [key: string]: number } = {};
+    items.forEach(item => {
+      Object.keys(colJSON).forEach(key => {
+        const column = colJSON[key];
+        if (column.total) {
+          const rawValue = parseFloat(item[key]?.rawValue) || 0;
+          totals[key] = (totals[key] || 0) + rawValue;
+        }
+      });
+    });
+
+    console.log(">>> totals", totals);
+    setItemTotals(totals);
+  }, [items, colJSON]);
+
 
  // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
   useEffect(() => {
@@ -131,7 +157,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
           // its not a stack so we can just look up the field and sort it
           if (
             colJSON[sortField.key].type === "person" ||
-            colJSON[sortField.key].type === "multichoice"
+            colJSON[sortField.key].type === "multiChoice"
           ) {
             aValue = a[sortField.key].displayValue;
             bValue = b[sortField.key].displayValue;
@@ -187,41 +213,28 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
   //=================================================================================================================
 
-  //=================================================================================================================
-  // PERSON CARD WITH ROWMERGE
-  //=================================================================================================================
-  const renderPersonCard = (item: any, key: any, column: IColumnJSON, shouldMerge: boolean) => {
 
-    if (shouldMerge) {
-      return <span>&nbsp;</span>;
-    }
-
-    return (
-      <PersonCard
-        email={item[key].rawValue[0].email}
-        name={item[key].rawValue[0].name}
-        title={item[key].rawValue[0].title}
-        format={column.format}
-      />
-    );
-  };
 
   //=================================================================================================================
   // HTML FIELD NO ROWMERGE
   //=================================================================================================================
-  const renderHtml = (htmltext: string) => (
-    <div dangerouslySetInnerHTML={{ __html: htmltext }} />
-  );
+  const renderHtml = (item:any, field: string) => {
+    const htmltext = item[field].rawValue;
+    return (
+      <div dangerouslySetInnerHTML={{ __html: htmltext }} />
+    )
+  };
 
   //=================================================================================================================
   // DEFAULT RENDER FUNCTION WITH LINES CLAMP EXTENDED THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING HAS ROWMERGE  
   //=================================================================================================================
-  const renderDefault = (content: string, column: IColumnJSON, shouldMerge: boolean) => {
+  const renderDefault = (item: any, field: string, column: IColumnJSON, shouldMerge: boolean) => {
 
     if (shouldMerge) {
       return <span>&nbsp;</span>;
     }
-
+    
+    const content = item[field].displayValue;
     if (!content) {
       return <span>&nbsp;</span>;
     }
@@ -247,7 +260,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //=================================================================================================================
   // NUMBER RENDER FUNCTION ALIGN HAS ROWMERGE BUT NOT SURE IF NEEDED
   //=================================================================================================================
-  const renderNumber = (displayText: string, column: IColumnJSON, shouldMerge:boolean) => { 
+  const renderNumber = (item: any, field: string, column: IColumnJSON, shouldMerge:boolean) => { 
 
     if (shouldMerge) {
       return <span>&nbsp;</span>;
@@ -256,7 +269,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     return(
       <div className={styles.numberCell}>
         {column.prefix && <span>{column.prefix}</span>}
-        {displayText}
+        {item[field].displayValue}
         {column.suffix && <span>{column.suffix}</span>}
       </div>
     )
@@ -265,7 +278,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //=================================================================================================================
   // RENDER LINK FUNCTION NO ROWMERGE 
   //=================================================================================================================
-  const renderLink = ( link: string, displayText: string, column: IColumnJSON) => {
+  const renderLink = ( item: any, field: string, column: IColumnJSON) => {
+    const link = item[field].rawValue;
+    const displayText = item[field].displayValue;
     if (!link) {
       return null;
     }
@@ -281,7 +296,9 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //=================================================================================================================
   // EDIT RENDER FUNCTION NO ROWMERGE THIS ALSE HAS A DEFAULT ICON AND COLOR IF NONE IS SPECIFIED
   //=================================================================================================================
-  const renderEdit = ( id: number, displayText: string, column: IColumnJSON) => {
+  const renderEdit = ( item: any, field: string, column: IColumnJSON) => {
+    const id = item[field].rawValue;
+ 
     let iconName="edit";
     let iconColor = "#0078d4";
 
@@ -294,7 +311,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
       <div className={styles.editCell}>
         <Icon
           iconName={iconName}
-          title={displayText}
+          title="Edit"
           style={{ color: iconColor }}
           onClick={() => handleIconClick(id)}
         />
@@ -305,8 +322,10 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   //=================================================================================================================
   // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON NO ROWMERGE
   //=================================================================================================================
-  const renderIcon = (displayValue: string, column: IColumnJSON) => {
-    const iconData = column.icons[displayValue];
+  const renderIcon = ( item: any, field: string, column: IColumnJSON) => {
+
+    const displayValue = item[field].displayValue;
+    const iconData = column.icons?.[displayValue];
     if (iconData) {
       const [iconName, iconColor] = iconData.split("|");
       return (
@@ -316,72 +335,12 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
             style={{ color: iconColor }}
             title={displayValue}
           />
+          
         </div>
       );
     } else {
       return displayValue;
     }
-  };
-
-  //=================================================================================================================
-  // BAR RENDER FUNCTION - THIS WILL RENDER A BAR BASED ON THE VALUE OF THE FIELD HAS ROWMERGE IGNORES SUFFIX
-  //=================================================================================================================
-  const renderBar = (value: string , name : string, column: IColumnJSON) => {
-    const rawValue = parseFloat(value) || 0;
-    const maxValue = column.barSettings?.limit ||  maxBarValues[name] || 100; // Set a default height if not provided
-    const percentage = (rawValue / maxValue) * 100;
-    //console.log(">>> bar", rawValue, maxValue, percentage);
-    if (percentage < 0) { return null; }
-
-    // now do the styling for the bar
-    const barcol = column.barSettings?.color || "#d0d0d0"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
-    const barHeight = column.barSettings?.height || "20px"; // Set a default height if not provided
-    const _barStyle = mergeStyles(styles.chartBar, {backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
-
-    const textCol = percentage < 50 ? "#000000" : getContrastingTextColor(barcol); // get a contrast if it's goiong inside else use black
-    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more paddign to the right)
-
-    const labelPadding = column.barSettings?.icon ? "20px" : "5px";
-    const _barLabelStyle = percentage < 50
-      ? mergeStyles(styles.chartLabel, { width:`${100-percentage}%`, left:`${percentage}%`, textAlign: 'left' , color: textCol }) //outside One
-      : mergeStyles(styles.chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); //Inside one
-   
-    // Determine the label content based on barSettings if its not spacififed then just use the raw value
-    let labelContent = null;
-    if(column.barSettings) {
-      if (column.barSettings?.showValue && column.barSettings?.showPercentage) {
-        labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
-      } else if (column.barSettings?.showValue) {
-        labelContent = `${rawValue}`;
-      } else if (column.barSettings?.showPercentage) {
-        labelContent = `${percentage.toFixed(0)}%`;
-      }
-    } else{
-      labelContent = rawValue
-    }
-
-    let iconName = null;
-    let iconColor = null; 
-    if(column.barSettings.icon){
-      [iconName, iconColor] = column.barSettings?.icon?.split("|"); // does thismake it super conditional on the icon being there?
-    }
-    return (
-      <div className={styles.barGrid}>
-        {column.prefix ? <span className={styles.chartPrefix} >{column.prefix}</span> : <span>&nbsp;</span>}
-        <div className={_barStyle} title={value}> 
-          {iconName ? (
-            <Icon 
-              iconName={iconName}     
-              title={rawValue.toString()}
-              style={{ color: iconColor }} 
-            />
-          ) : (
-            <span>&nbsp;</span>
-          )}
-        </div>
-        <div className = {_barLabelStyle}> {labelContent} </div> 
-      </div>
-    );
   };
 
  
@@ -412,25 +371,25 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   ) => (
     <div>
       {column.fields.map((field: string, fieldIndex: number) => {
-        const fieldColumn = allcolJSON[field];
-        if (!fieldColumn) {
+        const column = allcolJSON[field];
+        if (!column) {
           return ( <div className={`stack ${field}`} key={fieldIndex}>&nbsp;</div>);
         }
         //console.log(">>> stack field:", field,  "  display:", item[field].displayValue, "  raw:", item[field].rawValue ,"  JSON:" ,fieldColumn);
         const content = (() => {
-          switch (fieldColumn.type) {
+          switch (column.type) {
             case 'bar':
-              return renderBar(item[field].displayValue, field, fieldColumn);
+              return renderBar({ item, field, column, maxBarValues });
             case 'number':
-              return renderNumber(item[field].displayValue, fieldColumn, false);
+              return renderNumber(item, field, column, false);
             case 'html':
-              return renderHtml(item[field].rawValue);
+              return renderHtml(item, field);
             case "link":
-              return renderLink(item[field].rawValue, item[field].displayValue, fieldColumn);
+              return renderLink(item, field, column);
             case 'person':
-              return renderPersonCard(item, field, fieldColumn, false);
+              return renderPersonCard({ item, field, column, shouldMerge: false });
             default:
-              return renderDefault(item[field].displayValue, fieldColumn, false);
+              return renderDefault(item, field, column, false);
           }
         })();
   
@@ -449,30 +408,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
   return (
     <>
       {/* DRAW THE HEADER BAR with the column names and the sort icons? */}
-      <div className={_HeadStyle}>
-        {_sortedColumns.map(
-          ({ key, column }) =>
-            column.width > "0" && (
-              <div key={key} className={styles.tableHeaderCell}>
-                <span>{column.name}</span>
-                {column.isSortable && (
-                  <Icon
-                    iconName={
-                      sortField.key !== key
-                        ? "Sort"
-                        : sortField.direction
-                        ? "SortDown"
-                        : "SortUp"
-                    }
-                    className={styles.sortIcon}
-                    onClick={() => handleSortToggle(key)}
-                  />
-                )}
-              </div>
-            )
-        )}
-        <div className={styles.tableHeaderCell}> &nbsp; </div>
-      </div>
+      <TableGridHeader  _sortedColumns={_sortedColumns} sortField={sortField}  handleSortToggle={handleSortToggle} _headStyle={_HeadStyle} />
       
       <div className={_GridStyle}>
         {/* Render the cells */}
@@ -480,12 +416,13 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
           <React.Fragment key={itemIndex}>
              {_sortedColumns.map(
               ({ key, column }) => {
-                const shouldMerge = column.rowMerge && itemIndex > 0 && item[key]?.displayValue === sortedItems[itemIndex - 1][key]?.displayValue;
+                const field = key;
+                const shouldMerge = column.rowMerge && itemIndex > 0 && item[field]?.displayValue === sortedItems[itemIndex - 1][field]?.displayValue;
                 return column.width > "0" && (
                   <div
-                    key={`${itemIndex}-${key}`}
+                    key={`${itemIndex}-${field}`}
                     className={`${styles.tableCell} ${ column.class ? column.class : "" }`}
-                    data-row={item.ID.rawValue}
+                    data-row={itemIndex}
                     onMouseEnter={(event) => handleMouseEnter(event)}
                     onMouseLeave={(event) => handleMouseLeave(event)}
                   >
@@ -494,21 +431,21 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                         case "stack":
                           return renderStack(item, column, colJSON);
                         case "person":
-                          return renderPersonCard(item, key, column, shouldMerge);
+                          return renderPersonCard({ item, field, column, shouldMerge: false });
                         case "html":
-                          return renderHtml(item[key].rawValue);
+                          return renderHtml(item, field);
                         case "icon":
-                          return renderIcon(item[key].displayValue, column);
+                          return renderIcon(item, field, column);
                         case "link":
-                          return renderLink(item[key].rawValue, item[key].displayValue, column);
+                          return renderLink(item, field, column);
                         case "edit":
-                          return renderEdit(item["ID"].rawValue, "Edit", column);
+                          return renderEdit(item, "ID", column);
                         case "number":
-                          return renderNumber(item[key].displayValue, column, shouldMerge);
+                          return renderNumber(item, field, column, shouldMerge);
                         case "bar":
-                          return renderBar(item[key].displayValue, key, column);
+                          return renderBar({ item, field, column, maxBarValues });
                         default:
-                          return item[key] ? renderDefault(item[key].displayValue, column, shouldMerge) : renderNoData(column);
+                          return item[field] ? renderDefault(item, field, column, shouldMerge) : renderNoData(column);
                       }
                     })()}
                   </div>
@@ -518,6 +455,10 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
           </React.Fragment>
         ))}
       </div>
+
+      {hasTotal && (
+        <TableGridFooter _sortedColumns={_sortedColumns} itemTotals={itemTotals}  _footStyle={_FootStyle}/>
+      )}
      
       {/* Side panel */}
       <Panel
@@ -531,7 +472,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
           src={iframeUrl}
           ref={iframeRef}
           onLoad={onLoad}
-          style={{border: 'none', height: height + 'px', width: '100%'}}
+          style={{border: 'none', height: (height-90) + 'px', width: '100%'}}
         />
       </Panel>
     </>

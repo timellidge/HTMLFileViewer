@@ -15001,10 +15001,12 @@ var Position;
 /* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "aPh5");
 /* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "KCyg");
 /* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var _TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TabsRender/PersonCard */ "qfZ8");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! luxon */ "ExVU");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! luxon */ "ExVU");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _TableGridHeader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridHeader */ "M/0f");
+/* harmony import */ var _TableGridFooter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableGridFooter */ "BjlE");
+/* harmony import */ var _RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RenderPersonCard */ "H6Mf");
+/* harmony import */ var _RenderBar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RenderBar */ "YzGI");
 
 
 
@@ -15013,7 +15015,9 @@ var Position;
 
 
 
- // Ensure this import is correct
+
+
+
 const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues, height }) => {
     //we can only have one column sorted at a time so i need to know its name and its state
     const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
@@ -15023,6 +15027,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     const [iframeUrl, setIframeUrl] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
     const [hasVerticalScrollbar, setHasVerticalScrollbar] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
     const gridRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+    const [itemTotals, setItemTotals] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
     const onLoad = (event) => {
         const iframe = event.currentTarget;
         iframe.contentWindow.addEventListener('beforeunload', closeSidePanel);
@@ -15031,6 +15036,8 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     const _sortedColumns = Object.keys(colJSON)
         .map((key) => ({ key, column: colJSON[key] }))
         .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
+    // check if any of the columns have a total set to true if so we need to display a footer row with the totals for those columns
+    const hasTotal = _sortedColumns.some(({ key, column }) => column.width > "0" && column.total);
     // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
     const _columnWidths = _sortedColumns
         .filter(({ column }) => column.width !== "")
@@ -15039,6 +15046,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     const scrollbarWidth = hasVerticalScrollbar ? "17px" : "0px";
     const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths, maxHeight: contentHeight || "100%" });
     const _HeadStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
+    const _FootStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
     //=================================================================================================================
     // GENERAL INTERACTION FUNCTIONS
     //=================================================================================================================
@@ -15082,6 +15090,22 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //=================================================================================================================
     //^ USE EFFECTS SORT & SCROLL - 
     //=================================================================================================================  
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        // Calculate totals after items have been processed
+        const totals = {};
+        items.forEach(item => {
+            Object.keys(colJSON).forEach(key => {
+                var _a;
+                const column = colJSON[key];
+                if (column.total) {
+                    const rawValue = parseFloat((_a = item[key]) === null || _a === void 0 ? void 0 : _a.rawValue) || 0;
+                    totals[key] = (totals[key] || 0) + rawValue;
+                }
+            });
+        });
+        console.log(">>> totals", totals);
+        setItemTotals(totals);
+    }, [items, colJSON]);
     // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (sortField.key) {
@@ -15105,7 +15129,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
                 else {
                     // its not a stack so we can just look up the field and sort it
                     if (colJSON[sortField.key].type === "person" ||
-                        colJSON[sortField.key].type === "multichoice") {
+                        colJSON[sortField.key].type === "multiChoice") {
                         aValue = a[sortField.key].displayValue;
                         bValue = b[sortField.key].displayValue;
                     }
@@ -15120,7 +15144,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
                 if (bValue === null || bValue === undefined)
                     return -1;
                 // Check if the values are dates
-                if (luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_7__["DateTime"].isDateTime(bValue)) {
+                if (luxon__WEBPACK_IMPORTED_MODULE_6__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_6__["DateTime"].isDateTime(bValue)) {
                     return sortField.direction
                         ? aValue.toMillis() - bValue.toMillis()
                         : bValue.toMillis() - aValue.toMillis();
@@ -15159,25 +15183,20 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
     //=================================================================================================================
     //=================================================================================================================
-    // PERSON CARD WITH ROWMERGE
-    //=================================================================================================================
-    const renderPersonCard = (item, key, column, shouldMerge) => {
-        if (shouldMerge) {
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { email: item[key].rawValue[0].email, name: item[key].rawValue[0].name, title: item[key].rawValue[0].title, format: column.format }));
-    };
-    //=================================================================================================================
     // HTML FIELD NO ROWMERGE
     //=================================================================================================================
-    const renderHtml = (htmltext) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
+    const renderHtml = (item, field) => {
+        const htmltext = item[field].rawValue;
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
+    };
     //=================================================================================================================
     // DEFAULT RENDER FUNCTION WITH LINES CLAMP EXTENDED THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING HAS ROWMERGE  
     //=================================================================================================================
-    const renderDefault = (content, column, shouldMerge) => {
+    const renderDefault = (item, field, column, shouldMerge) => {
         if (shouldMerge) {
             return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
         }
+        const content = item[field].displayValue;
         if (!content) {
             return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
         }
@@ -15192,19 +15211,21 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //=================================================================================================================
     // NUMBER RENDER FUNCTION ALIGN HAS ROWMERGE BUT NOT SURE IF NEEDED
     //=================================================================================================================
-    const renderNumber = (displayText, column, shouldMerge) => {
+    const renderNumber = (item, field, column, shouldMerge) => {
         if (shouldMerge) {
             return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
         }
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
             column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-            displayText,
+            item[field].displayValue,
             column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
     };
     //=================================================================================================================
     // RENDER LINK FUNCTION NO ROWMERGE 
     //=================================================================================================================
-    const renderLink = (link, displayText, column) => {
+    const renderLink = (item, field, column) => {
+        const link = item[field].rawValue;
+        const displayText = item[field].displayValue;
         if (!link) {
             return null;
         }
@@ -15216,7 +15237,8 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //=================================================================================================================
     // EDIT RENDER FUNCTION NO ROWMERGE THIS ALSE HAS A DEFAULT ICON AND COLOR IF NONE IS SPECIFIED
     //=================================================================================================================
-    const renderEdit = (id, displayText, column) => {
+    const renderEdit = (item, field, column) => {
+        const id = item[field].rawValue;
         let iconName = "edit";
         let iconColor = "#0078d4";
         if (column.icons && typeof column.icons === 'object') {
@@ -15224,13 +15246,15 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
             [iconName, iconColor] = firstIconColor.split("|");
         }
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].editCell },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: displayText, style: { color: iconColor }, onClick: () => handleIconClick(id) })));
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: "Edit", style: { color: iconColor }, onClick: () => handleIconClick(id) })));
     };
     //=================================================================================================================
     // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON NO ROWMERGE
     //=================================================================================================================
-    const renderIcon = (displayValue, column) => {
-        const iconData = column.icons[displayValue];
+    const renderIcon = (item, field, column) => {
+        var _a;
+        const displayValue = item[field].displayValue;
+        const iconData = (_a = column.icons) === null || _a === void 0 ? void 0 : _a[displayValue];
         if (iconData) {
             const [iconName, iconColor] = iconData.split("|");
             return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].iconCell },
@@ -15239,57 +15263,6 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
         else {
             return displayValue;
         }
-    };
-    //=================================================================================================================
-    // BAR RENDER FUNCTION - THIS WILL RENDER A BAR BASED ON THE VALUE OF THE FIELD HAS ROWMERGE IGNORES SUFFIX
-    //=================================================================================================================
-    const renderBar = (value, name, column) => {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-        const rawValue = parseFloat(value) || 0;
-        const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[name] || 100; // Set a default height if not provided
-        const percentage = (rawValue / maxValue) * 100;
-        //console.log(">>> bar", rawValue, maxValue, percentage);
-        if (percentage < 0) {
-            return null;
-        }
-        // now do the styling for the bar
-        const barcol = ((_b = column.barSettings) === null || _b === void 0 ? void 0 : _b.color) || "#d0d0d0"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
-        const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
-        const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartBar, { backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
-        const textCol = percentage < 50 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_8__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's goiong inside else use black
-        // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more paddign to the right)
-        const labelPadding = ((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.icon) ? "20px" : "5px";
-        const _barLabelStyle = percentage < 50
-            ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol }) //outside One
-            : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); //Inside one
-        // Determine the label content based on barSettings if its not spacififed then just use the raw value
-        let labelContent = null;
-        if (column.barSettings) {
-            if (((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showValue) && ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showPercentage)) {
-                labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
-            }
-            else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showValue) {
-                labelContent = `${rawValue}`;
-            }
-            else if ((_h = column.barSettings) === null || _h === void 0 ? void 0 : _h.showPercentage) {
-                labelContent = `${percentage.toFixed(0)}%`;
-            }
-        }
-        else {
-            labelContent = rawValue;
-        }
-        let iconName = null;
-        let iconColor = null;
-        if (column.barSettings.icon) {
-            [iconName, iconColor] = (_k = (_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) === null || _k === void 0 ? void 0 : _k.split("|"); // does thismake it super conditional on the icon being there?
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].barGrid },
-            column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].chartPrefix }, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, iconName ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
-                " ",
-                labelContent,
-                " ")));
     };
     //=================================================================================================================
     // CATCH ALL FOR NO DATA
@@ -15301,25 +15274,25 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     // THIS IS THE STACK RENDER FUNCTION - IT WILL LOOP THROUGH THE FIELDS IN THE STACK AND RENDER THEM ACCORDINGLY
     //=================================================================================================================
     const renderStack = (item, column, allcolJSON) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => {
-        const fieldColumn = allcolJSON[field];
-        if (!fieldColumn) {
+        const column = allcolJSON[field];
+        if (!column) {
             return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
         }
         //console.log(">>> stack field:", field,  "  display:", item[field].displayValue, "  raw:", item[field].rawValue ,"  JSON:" ,fieldColumn);
         const content = (() => {
-            switch (fieldColumn.type) {
+            switch (column.type) {
                 case 'bar':
-                    return renderBar(item[field].displayValue, field, fieldColumn);
+                    return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field, column, maxBarValues });
                 case 'number':
-                    return renderNumber(item[field].displayValue, fieldColumn, false);
+                    return renderNumber(item, field, column, false);
                 case 'html':
-                    return renderHtml(item[field].rawValue);
+                    return renderHtml(item, field);
                 case "link":
-                    return renderLink(item[field].rawValue, item[field].displayValue, fieldColumn);
+                    return renderLink(item, field, column);
                 case 'person':
-                    return renderPersonCard(item, field, fieldColumn, false);
+                    return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, shouldMerge: false });
                 default:
-                    return renderDefault(item[field].displayValue, fieldColumn, false);
+                    return renderDefault(item, field, column, false);
             }
         })();
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
@@ -15328,43 +15301,37 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //^  THE RETURN FUNCTION
     //=================================================================================================================
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _HeadStyle },
-            _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
-                column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: sortField.key !== key
-                        ? "Sort"
-                        : sortField.direction
-                            ? "SortDown"
-                            : "SortUp", className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridHeader__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { _sortedColumns: _sortedColumns, sortField: sortField, handleSortToggle: handleSortToggle, _headStyle: _HeadStyle }),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => {
             var _a, _b;
-            const shouldMerge = column.rowMerge && itemIndex > 0 && ((_a = item[key]) === null || _a === void 0 ? void 0 : _a.displayValue) === ((_b = sortedItems[itemIndex - 1][key]) === null || _b === void 0 ? void 0 : _b.displayValue);
-            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${key}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": item.ID.rawValue, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, (() => {
+            const field = key;
+            const shouldMerge = column.rowMerge && itemIndex > 0 && ((_a = item[field]) === null || _a === void 0 ? void 0 : _a.displayValue) === ((_b = sortedItems[itemIndex - 1][field]) === null || _b === void 0 ? void 0 : _b.displayValue);
+            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${field}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": itemIndex, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, (() => {
                 switch (column.type) {
                     case "stack":
                         return renderStack(item, column, colJSON);
                     case "person":
-                        return renderPersonCard(item, key, column, shouldMerge);
+                        return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, shouldMerge: false });
                     case "html":
-                        return renderHtml(item[key].rawValue);
+                        return renderHtml(item, field);
                     case "icon":
-                        return renderIcon(item[key].displayValue, column);
+                        return renderIcon(item, field, column);
                     case "link":
-                        return renderLink(item[key].rawValue, item[key].displayValue, column);
+                        return renderLink(item, field, column);
                     case "edit":
-                        return renderEdit(item["ID"].rawValue, "Edit", column);
+                        return renderEdit(item, "ID", column);
                     case "number":
-                        return renderNumber(item[key].displayValue, column, shouldMerge);
+                        return renderNumber(item, field, column, shouldMerge);
                     case "bar":
-                        return renderBar(item[key].displayValue, key, column);
+                        return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field, column, maxBarValues });
                     default:
-                        return item[key] ? renderDefault(item[key].displayValue, column, shouldMerge) : renderNoData(column);
+                        return item[field] ? renderDefault(item, field, column, shouldMerge) : renderNoData(column);
                 }
             })()));
         }))))),
+        hasTotal && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridFooter__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { _sortedColumns: _sortedColumns, itemTotals: itemTotals, _footStyle: _FootStyle })),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, style: { border: 'none', height: height + 'px', width: '100%' } }))));
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, style: { border: 'none', height: (height - 90) + 'px', width: '100%' } }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
 
@@ -15464,6 +15431,32 @@ var getStyles = function (props) {
     };
 };
 //# sourceMappingURL=ContextualMenu.styles.js.map
+
+/***/ }),
+
+/***/ "BjlE":
+/*!****************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableGridFooter.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableGridFooter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
+
+
+
+function TableGridFooter({ _sortedColumns, itemTotals, _footStyle }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _footStyle },
+        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, column.total ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* numberFormat */ "f"])(itemTotals[key], column.format))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")));
+}
+
 
 /***/ }),
 
@@ -30658,6 +30651,31 @@ function getDefaultValue(style, direction) {
 
 /***/ }),
 
+/***/ "H6Mf":
+/*!*****************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderPersonCard.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderPersonCard; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TabsRender/PersonCard */ "qfZ8");
+
+
+function renderPersonCard({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"], { email: item[field].rawValue[0].email, name: item[field].rawValue[0].name, title: item[field].rawValue[0].title, format: column.format || 'size32' }));
+}
+
+
+/***/ }),
+
 /***/ "H9cq":
 /*!********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/utilities/lib/classNamesFunction.js ***!
@@ -34844,6 +34862,38 @@ var FocusZoneDirection;
     FocusZoneDirection[FocusZoneDirection["domOrder"] = 3] = "domOrder";
 })(FocusZoneDirection || (FocusZoneDirection = {}));
 //# sourceMappingURL=FocusZone.types.js.map
+
+/***/ }),
+
+/***/ "M/0f":
+/*!****************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableGridHeader.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableGridFooter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+
+function TableGridFooter({ _sortedColumns, sortField, handleSortToggle, _headStyle }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _headStyle },
+        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
+            column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: sortField.key !== key
+                    ? "Sort"
+                    : sortField.direction
+                        ? "SortDown"
+                        : "SortUp", className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")));
+}
+
 
 /***/ }),
 
@@ -44520,6 +44570,79 @@ function setVendorSettings(vendorSettings) {
 
 /***/ }),
 
+/***/ "YzGI":
+/*!**********************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderBar.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderBar; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
+
+
+
+
+ // Ensure this import is correct
+function renderBar({ item, field, column, maxBarValues }) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    const value = item[field].rawValue;
+    const rawValue = parseFloat(value) || 0;
+    const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[field] || 100; // Set a default height if not provided
+    const percentage = (rawValue / maxValue) * 100;
+    if (percentage < 0) {
+        return null;
+    }
+    // now do the styling for the bar
+    const barcol = ((_b = column.barSettings) === null || _b === void 0 ? void 0 : _b.color) || "#d0d0d0"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
+    const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
+    const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartBar, { backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
+    const textCol = percentage < 50 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's going inside else use black (black for transparent too)
+    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more padding to the right)
+    const labelPadding = ((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.icon) ? "20px" : "5px";
+    const _barLabelStyle = percentage < 50
+        ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol }) // outside One
+        : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); // Inside one
+    // Determine the label content based on barSettings if it's not specified then just use the raw value
+    let labelContent = null;
+    if (column.barSettings) {
+        if (((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showValue) && ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showPercentage)) {
+            labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
+        }
+        else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showValue) {
+            labelContent = `${rawValue}`;
+        }
+        else if ((_h = column.barSettings) === null || _h === void 0 ? void 0 : _h.showPercentage) {
+            labelContent = `${percentage.toFixed(0)}%`;
+        }
+    }
+    else {
+        labelContent = rawValue;
+    }
+    let iconName = null;
+    let iconColor = null;
+    if (column.barSettings.icon) {
+        [iconName, iconColor] = (_k = (_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) === null || _k === void 0 ? void 0 : _k.split("|"); // does this make it super conditional on the icon being there?
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].barGrid },
+        column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartPrefix }, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, iconName ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
+            " ",
+            labelContent,
+            " ")));
+}
+
+
+/***/ }),
+
 /***/ "Z+an":
 /*!**********************************************************************!*\
   !*** ./node_modules/@fluentui/merge-styles/lib/StyleOptionsState.js ***!
@@ -50922,7 +51045,7 @@ const TableViewerContainer = (props) => {
         console.log("Max Bar Values", maxValues);
         setMaxBarValues(maxValues);
         // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-        // the one that shows counts, enumerates values if it is selected  and the field it relates to 
+        // the one that shows counts, enumerates values if it is selected and the field it relates to 
         const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
         console.log("TabFields", tabs);
         // get the unique values for each of the tab fields
@@ -50935,6 +51058,12 @@ const TableViewerContainer = (props) => {
         // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
         console.log("ALL Tab data:", tabData);
         setTabData(tabData);
+        // DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
+        // Check if all fields in the JSON code are in the data
+        const missingFields = Object.keys(ColumnsJSON).filter((key) => !(key in items[0]));
+        if (missingFields.length > 0) {
+            console.error("The following fields are missing from the data:", missingFields);
+        }
         // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
         const updateData = async () => {
             // Prepare the data by identifying if it has a prefix or a suffix or a specific format and then render the data in the table
@@ -50950,21 +51079,24 @@ const TableViewerContainer = (props) => {
                         // let sortValue = rawValue;
                         // Format the value based on the type
                         if (type === 'number') {
-                            rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
+                            rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any commas and convert to a number
+                            if (isNaN(rawValue)) {
+                                rawValue = 0;
+                            }
                             displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* numberFormat */ "f"])(rawValue, format);
                         }
                         else if (type === 'date') {
                             rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* parseDate */ "g"])(rawValue, 'en-GB');
                             displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
                         }
-                        else if (type === 'singlechoice') {
+                        else if (type === 'singleChoice') {
                             displayValue = rawValue ? rawValue : '-';
                         }
-                        else if (type === 'multichoice') {
+                        else if (type === 'multiChoice') {
                             displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
                         }
                         else if (type === 'link') {
-                            // the raw value is the link and the display value is the text to display whaic js theh name of the key +.desc
+                            // the raw value is the link and the display value is the text to display which is the name of the key +.desc
                             const tempkey = key + ".desc";
                             displayValue = item[tempkey];
                         }
@@ -50980,7 +51112,7 @@ const TableViewerContainer = (props) => {
                             }
                         }
                         // clear it if the data is missign so we render nothing
-                        if (rawValue === null || rawValue === undefined) {
+                        if (rawValue === null) {
                             displayValue = "";
                         }
                         newItem[key] = {
@@ -61174,8 +61306,11 @@ function _merge(target, source, circularReferences) {
 
 
 
-// Function to get a contrasting text color
+// Function to get a contrasting text color that copes with "transprent" 
 const getContrastingTextColor = (backgroundColor) => {
+    if (backgroundColor.toLowerCase() == "transparent") {
+        return '#080820'; // Return black if the color is transparent
+    }
     const color = tinycolor2__WEBPACK_IMPORTED_MODULE_7__(backgroundColor);
     return color.isLight() ? '#080820' : '#F8F8F6';
 };
@@ -63998,7 +64133,7 @@ var useUnmount = function (callback) {
 // Define the zod schema for each event property the use of STRICT allows these keys and no others
 // Define the IconSettings schema
 // Define the IconSettings schema
-const IconSettingsSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].record(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().refine(value => value.includes('|#'), {
+const IconSettingsSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].record(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().refine(value => value.includes('|'), {
     message: 'String must contain a "|" character followed by a color code',
 }));
 // Define the BarSettings schema
@@ -64015,10 +64150,11 @@ const IColumnJSONSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].object({
     name: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string(),
     width: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string(),
     tab: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
-    type: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singlechoice', 'multichoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
+    type: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singleChoice', 'multiChoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
     class: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional().nullable(),
     isSortable: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     isMultiline: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
+    total: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     rowMerge: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     fields: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].array(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string()).optional().nullable(),
     prefix: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional().nullable(),

@@ -15,14 +15,14 @@ import {DateTime} from 'luxon';
 
 import * as tinycolor from 'tinycolor2';
 
-// Function to get a contrasting text color
+// Function to get a contrasting text color that copes with "transprent" 
 export const getContrastingTextColor = (backgroundColor: string): string => {
+  if (backgroundColor.toLowerCase() == "transparent") {
+    return '#080820'; // Return black if the color is transparent
+  }
   const color = tinycolor(backgroundColor);
   return color.isLight() ? '#080820' : '#F8F8F6';
 };
-
-
-
 
 
 
@@ -82,8 +82,8 @@ export const numberFormat = (value: number, format: string) => {
   // Parse the format string
   if (format.includes('$')) { style = 'currency'; currency = 'USD';
   } else if (format.includes('£')) { style = 'currency'; currency = 'GBP';
-  } else if (format.includes('€')) {style = 'currency'; currency = 'EUR';
-  } else if (format.includes('¥')) { style = 'currency';currency = 'JPY'; }
+  } else if (format.includes('€')) { style = 'currency'; currency = 'EUR';
+  } else if (format.includes('¥')) { style = 'currency'; currency = 'JPY'; }
 
   if (format.includes(',')) {
     useGrouping = true;

@@ -241,7 +241,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
    
 
     // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-    // the one that shows counts, enumerates values if it is selected  and the field it relates to 
+    // the one that shows counts, enumerates values if it is selected and the field it relates to 
     const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
     console.log("TabFields",tabs);
     // get the unique values for each of the tab fields
@@ -254,6 +254,16 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
     console.log("ALL Tab data:",tabData);
     setTabData(tabData);
+
+// DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
+    // Check if all fields in the JSON code are in the data
+    const missingFields = Object.keys(ColumnsJSON).filter((key) => !(key in items[0]));
+    if (missingFields.length > 0) { 
+      console.error("The following fields are missing from the data:", missingFields);
+    }
+
+
+
 
       // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
       const updateData = async () => {
@@ -269,39 +279,36 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
               let rawValue = item[key];
               let displayValue = rawValue;
              // let sortValue = rawValue;
-      
-              // Format the value based on the type
-              if (type === 'number') {
-                rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any coommas and convert to a number
-                displayValue = numberFormat(rawValue, format);
-              } else if (type === 'date') {
-                rawValue = parseDate(rawValue, 'en-GB'); 
-                displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
-
-              } else if (type === 'singlechoice') {
-                displayValue = rawValue ? rawValue : '-';
-
-              } else if (type === 'multichoice') {
-                displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
-
-              } else if (type === 'link') {
-                // the raw value is the link and the display value is the text to display whaic js theh name of the key +.desc
-                const tempkey = key+".desc";
-                displayValue =  item[tempkey]
-
-              } else if (type === 'person') {
-                if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
-                  const email = rawValue[0].email || '';
-                  const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
-                  rawValue[0].name = name; // Add the name key to rawValue[0]
-                  displayValue = rawValue[0].title;
-
-                } else {
-                  displayValue = '';
+    
+                // Format the value based on the type
+                if (type === 'number') {
+                  rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any commas and convert to a number
+                  if (isNaN(rawValue)) { rawValue = 0 }
+                  displayValue = numberFormat(rawValue, format);
+                } else if (type === 'date') {
+                  rawValue = parseDate(rawValue, 'en-GB');
+                  displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
+                } else if (type === 'singleChoice') {
+                  displayValue = rawValue ? rawValue : '-';
+                } else if (type === 'multiChoice') {
+                  displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
+                } else if (type === 'link') {
+                  // the raw value is the link and the display value is the text to display which is the name of the key +.desc
+                  const tempkey = key + ".desc";
+                  displayValue = item[tempkey];
+                } else if (type === 'person') {
+                  if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
+                    const email = rawValue[0].email || '';
+                    const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
+                    rawValue[0].name = name; // Add the name key to rawValue[0]
+                    displayValue = rawValue[0].title;
+                  } else {
+                    displayValue = '';
+                  }
                 }
-              }
+              
               // clear it if the data is missign so we render nothing
-              if(rawValue === null || rawValue === undefined){
+              if(rawValue === null ){
                 displayValue= "";
               } 
 

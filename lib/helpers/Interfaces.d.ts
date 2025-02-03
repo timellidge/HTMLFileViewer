@@ -3,10 +3,11 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     name: z.ZodString;
     width: z.ZodString;
     tab: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
-    type: z.ZodNullable<z.ZodOptional<z.ZodEnum<["person", "stack", "html", "icon", "link", "number", "singlechoice", "multichoice", "date", "string", "edit", "bar"]>>>;
+    type: z.ZodNullable<z.ZodOptional<z.ZodEnum<["person", "stack", "html", "icon", "link", "number", "singleChoice", "multiChoice", "date", "string", "edit", "bar"]>>>;
     class: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     isSortable: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     isMultiline: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    total: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     rowMerge: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     fields: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     prefix: z.ZodNullable<z.ZodOptional<z.ZodString>>;
@@ -38,13 +39,14 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         showPercentage?: boolean;
     }>>>;
 }, "strip", z.ZodTypeAny, {
-    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singlechoice" | "multichoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar";
     name?: string;
     width?: string;
     tab?: boolean;
     class?: string;
     isSortable?: boolean;
     isMultiline?: boolean;
+    total?: boolean;
     rowMerge?: boolean;
     fields?: string[];
     prefix?: string;
@@ -62,13 +64,14 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         showPercentage?: boolean;
     };
 }, {
-    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singlechoice" | "multichoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar";
     name?: string;
     width?: string;
     tab?: boolean;
     class?: string;
     isSortable?: boolean;
     isMultiline?: boolean;
+    total?: boolean;
     rowMerge?: boolean;
     fields?: string[];
     prefix?: string;
@@ -93,7 +96,7 @@ export interface IColumnJSON {
     name: string;
     width: string;
     tab?: boolean | undefined | null;
-    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singlechoice' | 'multichoice' | 'date' | 'string' | "edit" | "bar" | undefined | null;
+    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singleChoice' | 'multiChoice' | 'date' | 'string' | "edit" | "bar" | undefined | null;
     class?: string | undefined | null;
     isSortable?: boolean | undefined | null;
     isMultiline?: boolean | undefined | null;
@@ -106,6 +109,7 @@ export interface IColumnJSON {
     lines?: number | 0;
     icons?: IconSettings;
     barSettings?: BarSettings;
+    total?: boolean;
 }
 export interface IconSettings {
     [key: string]: string;
