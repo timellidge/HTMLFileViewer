@@ -3116,6 +3116,41 @@ var ImageBase = /** @class */ (function (_super) {
 
 /***/ }),
 
+/***/ "32Oj":
+/*!**************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/renderDefault.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderDefault; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+function renderDefault({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    const content = item[field].displayValue;
+    if (!content) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    return column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        content,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        content,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
+
+/***/ }),
+
 /***/ "32VY":
 /*!*********************************************!*\
   !*** ./node_modules/@pnp/sp/views/types.js ***!
@@ -15000,13 +15035,18 @@ var Position;
 /* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
 /* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "aPh5");
 /* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "KCyg");
-/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! luxon */ "ExVU");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _TableGridHeader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridHeader */ "M/0f");
-/* harmony import */ var _TableGridFooter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableGridFooter */ "BjlE");
-/* harmony import */ var _RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RenderPersonCard */ "H6Mf");
-/* harmony import */ var _RenderBar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RenderBar */ "YzGI");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! luxon */ "ExVU");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _TableGridHeader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TableGridHeader */ "M/0f");
+/* harmony import */ var _TableGridFooter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridFooter */ "BjlE");
+/* harmony import */ var _RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./RenderPersonCard */ "H6Mf");
+/* harmony import */ var _RenderBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RenderBar */ "YzGI");
+/* harmony import */ var _RenderIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RenderIcon */ "jwtg");
+/* harmony import */ var _RenderEdit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./RenderEdit */ "HBDo");
+/* harmony import */ var _renderNumber__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./renderNumber */ "tG9h");
+/* harmony import */ var _renderDefault__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./renderDefault */ "32Oj");
+/* harmony import */ var _renderNoData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./renderNoData */ "pzTe");
+/* harmony import */ var _renderLink__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./renderLink */ "Cxem");
 
 
 
@@ -15018,6 +15058,11 @@ var Position;
 
 
 
+
+ // Import the renderNumber function
+ // Import the renderDefault function
+ // Import the renderNoData function
+ // Import the renderLink function
 const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues, height }) => {
     //we can only have one column sorted at a time so i need to know its name and its state
     const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
@@ -15144,7 +15189,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
                 if (bValue === null || bValue === undefined)
                     return -1;
                 // Check if the values are dates
-                if (luxon__WEBPACK_IMPORTED_MODULE_6__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_6__["DateTime"].isDateTime(bValue)) {
+                if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
                     return sortField.direction
                         ? aValue.toMillis() - bValue.toMillis()
                         : bValue.toMillis() - aValue.toMillis();
@@ -15180,96 +15225,12 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
         };
     }, []);
     //=================================================================================================================
-    //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
-    //=================================================================================================================
-    //=================================================================================================================
-    // HTML FIELD NO ROWMERGE
+    // HTML FIELD NO ROWMERGE TO TRIVIAL TO MOVE TO A COMPONENT
     //=================================================================================================================
     const renderHtml = (item, field) => {
         const htmltext = item[field].rawValue;
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
     };
-    //=================================================================================================================
-    // DEFAULT RENDER FUNCTION WITH LINES CLAMP EXTENDED THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING HAS ROWMERGE  
-    //=================================================================================================================
-    const renderDefault = (item, field, column, shouldMerge) => {
-        if (shouldMerge) {
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-        }
-        const content = item[field].displayValue;
-        if (!content) {
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-        }
-        return column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
-            column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-            content,
-            column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-            column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-            content,
-            column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-    };
-    //=================================================================================================================
-    // NUMBER RENDER FUNCTION ALIGN HAS ROWMERGE BUT NOT SURE IF NEEDED
-    //=================================================================================================================
-    const renderNumber = (item, field, column, shouldMerge) => {
-        if (shouldMerge) {
-            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
-            column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-            item[field].displayValue,
-            column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-    };
-    //=================================================================================================================
-    // RENDER LINK FUNCTION NO ROWMERGE 
-    //=================================================================================================================
-    const renderLink = (item, field, column) => {
-        const link = item[field].rawValue;
-        const displayText = item[field].displayValue;
-        if (!link) {
-            return null;
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
-            column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link }, displayText),
-            column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-    };
-    //=================================================================================================================
-    // EDIT RENDER FUNCTION NO ROWMERGE THIS ALSE HAS A DEFAULT ICON AND COLOR IF NONE IS SPECIFIED
-    //=================================================================================================================
-    const renderEdit = (item, field, column) => {
-        const id = item[field].rawValue;
-        let iconName = "edit";
-        let iconColor = "#0078d4";
-        if (column.icons && typeof column.icons === 'object') {
-            const [firstIconName, firstIconColor] = Object.entries(column.icons)[0];
-            [iconName, iconColor] = firstIconColor.split("|");
-        }
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].editCell },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, title: "Edit", style: { color: iconColor }, onClick: () => handleIconClick(id) })));
-    };
-    //=================================================================================================================
-    // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON NO ROWMERGE
-    //=================================================================================================================
-    const renderIcon = (item, field, column) => {
-        var _a;
-        const displayValue = item[field].displayValue;
-        const iconData = (_a = column.icons) === null || _a === void 0 ? void 0 : _a[displayValue];
-        if (iconData) {
-            const [iconName, iconColor] = iconData.split("|");
-            return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].iconCell },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_5__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue })));
-        }
-        else {
-            return displayValue;
-        }
-    };
-    //=================================================================================================================
-    // CATCH ALL FOR NO DATA
-    //=================================================================================================================
-    const renderNoData = (column) => 
-    // even  though there is no field i still need to check if its a stack or not
-    column.type === "stack" ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data"));
     //=================================================================================================================
     // THIS IS THE STACK RENDER FUNCTION - IT WILL LOOP THROUGH THE FIELDS IN THE STACK AND RENDER THEM ACCORDINGLY
     //=================================================================================================================
@@ -15282,17 +15243,17 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
         const content = (() => {
             switch (column.type) {
                 case 'bar':
-                    return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field, column, maxBarValues });
+                    return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, maxBarValues });
                 case 'number':
-                    return renderNumber(item, field, column, false);
+                    return Object(_renderNumber__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])({ item, field, column, shouldMerge: false });
                 case 'html':
                     return renderHtml(item, field);
                 case "link":
-                    return renderLink(item, field, column);
+                    return Object(_renderLink__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"])({ item, field, column });
                 case 'person':
-                    return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, shouldMerge: false });
+                    return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])({ item, field, column, shouldMerge: false });
                 default:
-                    return renderDefault(item, field, column, false);
+                    return Object(_renderDefault__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"])({ item, field, column, shouldMerge: false });
             }
         })();
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
@@ -15301,7 +15262,7 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
     //^  THE RETURN FUNCTION
     //=================================================================================================================
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridHeader__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { _sortedColumns: _sortedColumns, sortField: sortField, handleSortToggle: handleSortToggle, _headStyle: _HeadStyle }),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridHeader__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { _sortedColumns: _sortedColumns, sortField: sortField, handleSortToggle: handleSortToggle, _headStyle: _HeadStyle }),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => {
             var _a, _b;
             const field = key;
@@ -15311,25 +15272,25 @@ const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues,
                     case "stack":
                         return renderStack(item, column, colJSON);
                     case "person":
-                        return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, shouldMerge: false });
+                        return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])({ item, field, column, shouldMerge: false });
                     case "html":
                         return renderHtml(item, field);
                     case "icon":
-                        return renderIcon(item, field, column);
+                        return Object(_RenderIcon__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field: key, column });
                     case "link":
-                        return renderLink(item, field, column);
+                        return Object(_renderLink__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"])({ item, field, column });
                     case "edit":
-                        return renderEdit(item, "ID", column);
+                        return Object(_RenderEdit__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"])({ item, field: "ID", column, handleIconClick });
                     case "number":
-                        return renderNumber(item, field, column, shouldMerge);
+                        return Object(_renderNumber__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])({ item, field, column, shouldMerge });
                     case "bar":
-                        return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field, column, maxBarValues });
+                        return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, maxBarValues });
                     default:
-                        return item[field] ? renderDefault(item, field, column, shouldMerge) : renderNoData(column);
+                        return item[field] ? Object(_renderDefault__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"])({ item, field, column, shouldMerge }) : Object(_renderNoData__WEBPACK_IMPORTED_MODULE_14__[/* default */ "a"])({ column });
                 }
             })()));
         }))))),
-        hasTotal && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridFooter__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { _sortedColumns: _sortedColumns, itemTotals: itemTotals, _footStyle: _FootStyle })),
+        hasTotal && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridFooter__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { _sortedColumns: _sortedColumns, itemTotals: itemTotals, _footStyle: _FootStyle })),
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, style: { border: 'none', height: (height - 90) + 'px', width: '100%' } }))));
 };
@@ -17353,6 +17314,36 @@ var LogLevel;
     LogLevel[LogLevel["Off"] = 99] = "Off";
 })(LogLevel || (LogLevel = {}));
 //# sourceMappingURL=logger.js.map
+
+/***/ }),
+
+/***/ "Cxem":
+/*!***********************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/renderLink.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderLink; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+function renderLink({ item, field, column }) {
+    const link = item[field].rawValue;
+    const displayText = item[field].displayValue;
+    if (!link) {
+        return null;
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link }, displayText),
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
 
 /***/ }),
 
@@ -30804,6 +30795,38 @@ function _normalizeValue(value) {
     }
 }
 //# sourceMappingURL=classNamesFunction.js.map
+
+/***/ }),
+
+/***/ "HBDo":
+/*!***********************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderEdit.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderEdit; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+
+function renderEdit({ item, field, column, handleIconClick }) {
+    const id = item[field].rawValue;
+    let iconName = "edit";
+    let iconColor = "#0078d4";
+    if (column.icons && typeof column.icons === 'object') {
+        const [firstIconName, firstIconColor] = Object.entries(column.icons)[0];
+        [iconName, iconColor] = firstIconColor.split("|");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].editCell },
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, title: "Edit", style: { color: iconColor }, onClick: () => handleIconClick(id) })));
+}
+
 
 /***/ }),
 
@@ -54362,6 +54385,40 @@ var ContextualMenuItem = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* style
 
 /***/ }),
 
+/***/ "jwtg":
+/*!***********************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderIcon.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderIcon; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+
+function renderIcon({ item, field, column }) {
+    var _a;
+    const displayValue = item[field].displayValue;
+    const iconData = (_a = column.icons) === null || _a === void 0 ? void 0 : _a[displayValue];
+    if (iconData) {
+        const [iconName, iconColor] = iconData.split("|");
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].iconCell },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue })));
+    }
+    else {
+        return displayValue;
+    }
+}
+
+
+/***/ }),
+
 /***/ "k/69":
 /*!*********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/components/Button/DefaultButton/DefaultButton.styles.js ***!
@@ -59882,6 +59939,27 @@ function getWindow(rootElement) {
 
 /***/ }),
 
+/***/ "pzTe":
+/*!*************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/renderNoData.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNoData; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function renderNoData({ column }) {
+    var _a;
+    return column.type === "stack" ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, (_a = column.fields) === null || _a === void 0 ? void 0 : _a.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data"));
+}
+
+
+/***/ }),
+
 /***/ "q1Lp":
 /*!***********************************************************!*\
   !*** ./node_modules/@pnp/sp/utils/escapeQueryStrValue.js ***!
@@ -61635,6 +61713,34 @@ var PageType;
     PageType[PageType["PAGE_MAXITEMS"] = 11] = "PAGE_MAXITEMS";
 })(PageType || (PageType = {}));
 //# sourceMappingURL=types.js.map
+
+/***/ }),
+
+/***/ "tG9h":
+/*!*************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/renderNumber.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNumber; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+
+
+function renderNumber({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        item[field].displayValue,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
 
 /***/ }),
 

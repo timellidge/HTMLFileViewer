@@ -13,6 +13,12 @@ import TableGridHeader from './TableGridHeader';
 import TableGridFooter from './TableGridFooter';
 import renderPersonCard from './RenderPersonCard';
 import renderBar from './RenderBar';
+import renderIcon from './RenderIcon';
+import renderEdit from './RenderEdit';
+import renderNumber from './renderNumber'; // Import the renderNumber function
+import renderDefault from './renderDefault'; // Import the renderDefault function
+import renderNoData from './renderNoData'; // Import the renderNoData function
+import renderLink from './renderLink'; // Import the renderLink function
 
 interface ITableGridRenderProps {
   listUrl: string;  
@@ -209,14 +215,11 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     };
   }, []);
 
-  //=================================================================================================================
-  //^ A LOAD OF RENDER FUNCTIONS TO SIMPLIFY THE RETURN LOGIC BY SPLITTING EACH TYPE OUT INTO A FUNCTION
-  //=================================================================================================================
 
 
 
   //=================================================================================================================
-  // HTML FIELD NO ROWMERGE
+  // HTML FIELD NO ROWMERGE TO TRIVIAL TO MOVE TO A COMPONENT
   //=================================================================================================================
   const renderHtml = (item:any, field: string) => {
     const htmltext = item[field].rawValue;
@@ -225,141 +228,6 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     )
   };
 
-  //=================================================================================================================
-  // DEFAULT RENDER FUNCTION WITH LINES CLAMP EXTENDED THIS IF THERE IS A PRE OR POST TO INCLUDE SOME SPANS FOR STYLING HAS ROWMERGE  
-  //=================================================================================================================
-  const renderDefault = (item: any, field: string, column: IColumnJSON, shouldMerge: boolean) => {
-
-    if (shouldMerge) {
-      return <span>&nbsp;</span>;
-    }
-    
-    const content = item[field].displayValue;
-    if (!content) {
-      return <span>&nbsp;</span>;
-    }
-
-    return column.lines ? (
-      <div
-        className={styles.tableDataContent}
-        style={{ WebkitLineClamp: column.lines, lineClamp: column.lines }}
-      >
-        {column.prefix && <span>{column.prefix}</span>}
-        {content} 
-        {column.suffix && <span>{column.suffix}</span>}
-      </div>
-    ) : (
-      <>
-        {column.prefix && <span>{column.prefix}</span>}
-        {content} 
-        {column.suffix && <span>{column.suffix}</span>}
-      </>
-    );
-  };
-
-  //=================================================================================================================
-  // NUMBER RENDER FUNCTION ALIGN HAS ROWMERGE BUT NOT SURE IF NEEDED
-  //=================================================================================================================
-  const renderNumber = (item: any, field: string, column: IColumnJSON, shouldMerge:boolean) => { 
-
-    if (shouldMerge) {
-      return <span>&nbsp;</span>;
-    }
-
-    return(
-      <div className={styles.numberCell}>
-        {column.prefix && <span>{column.prefix}</span>}
-        {item[field].displayValue}
-        {column.suffix && <span>{column.suffix}</span>}
-      </div>
-    )
-  };
-
-  //=================================================================================================================
-  // RENDER LINK FUNCTION NO ROWMERGE 
-  //=================================================================================================================
-  const renderLink = ( item: any, field: string, column: IColumnJSON) => {
-    const link = item[field].rawValue;
-    const displayText = item[field].displayValue;
-    if (!link) {
-      return null;
-    }
-    return (
-      <div className={styles.tableDataContent}>
-        {column.prefix && <span>{column.prefix}</span>}
-        <a href={link} >{displayText}</a>
-        {column.suffix && <span>{column.suffix}</span>}
-      </div>
-    );
-  };
-
-  //=================================================================================================================
-  // EDIT RENDER FUNCTION NO ROWMERGE THIS ALSE HAS A DEFAULT ICON AND COLOR IF NONE IS SPECIFIED
-  //=================================================================================================================
-  const renderEdit = ( item: any, field: string, column: IColumnJSON) => {
-    const id = item[field].rawValue;
- 
-    let iconName="edit";
-    let iconColor = "#0078d4";
-
-    if (column.icons && typeof column.icons === 'object') {
-      const [firstIconName, firstIconColor] =  Object.entries(column.icons)[0];
-       [iconName, iconColor] = firstIconColor.split("|");
-    }
-    
-    return (
-      <div className={styles.editCell}>
-        <Icon
-          iconName={iconName}
-          title="Edit"
-          style={{ color: iconColor }}
-          onClick={() => handleIconClick(id)}
-        />
-      </div>
-    )
-  };
-
-  //=================================================================================================================
-  // ICON RENDER FUNCTION - ICONS ARE DEFINED IN THE COLUMN JSON NO ROWMERGE
-  //=================================================================================================================
-  const renderIcon = ( item: any, field: string, column: IColumnJSON) => {
-
-    const displayValue = item[field].displayValue;
-    const iconData = column.icons?.[displayValue];
-    if (iconData) {
-      const [iconName, iconColor] = iconData.split("|");
-      return (
-        <div className={styles.iconCell}>
-          <Icon
-            iconName={iconName}
-            style={{ color: iconColor }}
-            title={displayValue}
-          />
-          
-        </div>
-      );
-    } else {
-      return displayValue;
-    }
-  };
-
- 
-  //=================================================================================================================
-  // CATCH ALL FOR NO DATA
-  //=================================================================================================================
-  const renderNoData = (column: IColumnJSON) =>
-    // even  though there is no field i still need to check if its a stack or not
-    column.type === "stack" ? (
-      <div>
-        {column.fields.map((field, fieldIndex) => (
-          <div key={fieldIndex} className={`stack ${field}`}>
-            No Data
-          </div>
-        ))}
-      </div>
-    ) : (
-      <span>No Data</span>
-  );
 
   //=================================================================================================================
   // THIS IS THE STACK RENDER FUNCTION - IT WILL LOOP THROUGH THE FIELDS IN THE STACK AND RENDER THEM ACCORDINGLY
@@ -381,15 +249,15 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
             case 'bar':
               return renderBar({ item, field, column, maxBarValues });
             case 'number':
-              return renderNumber(item, field, column, false);
+              return renderNumber({ item, field, column, shouldMerge: false });
             case 'html':
               return renderHtml(item, field);
             case "link":
-              return renderLink(item, field, column);
+              return renderLink({ item, field, column });
             case 'person':
               return renderPersonCard({ item, field, column, shouldMerge: false });
             default:
-              return renderDefault(item, field, column, false);
+              return renderDefault({ item, field, column, shouldMerge:false })
           }
         })();
   
@@ -435,17 +303,17 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                         case "html":
                           return renderHtml(item, field);
                         case "icon":
-                          return renderIcon(item, field, column);
+                          return renderIcon({ item, field: key, column });
                         case "link":
-                          return renderLink(item, field, column);
+                          return renderLink({ item, field, column });
                         case "edit":
-                          return renderEdit(item, "ID", column);
+                          return renderEdit({ item, field: "ID", column, handleIconClick });
                         case "number":
-                          return renderNumber(item, field, column, shouldMerge);
+                          return renderNumber({ item, field, column, shouldMerge });
                         case "bar":
                           return renderBar({ item, field, column, maxBarValues });
                         default:
-                          return item[field] ? renderDefault(item, field, column, shouldMerge) : renderNoData(column);
+                          return item[field] ? renderDefault({ item, field, column, shouldMerge }) : renderNoData({ column });
                       }
                     })()}
                   </div>
