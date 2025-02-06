@@ -79,20 +79,22 @@ export const numberFormat = (value: number, format: string) => {
   let minimumFractionDigits = 0;
   let maximumFractionDigits = 0;
 
-  // Parse the format string
-  if (format.includes('$')) { style = 'currency'; currency = 'USD';
-  } else if (format.includes('£')) { style = 'currency'; currency = 'GBP';
-  } else if (format.includes('€')) { style = 'currency'; currency = 'EUR';
-  } else if (format.includes('¥')) { style = 'currency'; currency = 'JPY'; }
+  // Parse the format string if it exists
+  if (format) {
+    if (format.includes('$')) { style = 'currency'; currency = 'USD';
+    } else if (format.includes('£')) { style = 'currency'; currency = 'GBP';
+    } else if (format.includes('€')) { style = 'currency'; currency = 'EUR';
+    } else if (format.includes('¥')) { style = 'currency'; currency = 'JPY'; }
 
-  if (format.includes(',')) {
-    useGrouping = true;
-  }
+    if (format.includes(',')) {
+      useGrouping = true;
+    }
 
-  const decimalMatch = format.match(/\d+/);
-  if (decimalMatch) {
-    minimumFractionDigits = parseInt(decimalMatch[0], 10);
-    maximumFractionDigits = minimumFractionDigits;
+    const decimalMatch = format.match(/\d+/);
+    if (decimalMatch) {
+      minimumFractionDigits = parseInt(decimalMatch[0], 10);
+      maximumFractionDigits = minimumFractionDigits;
+    }
   }
 
   try {

@@ -7,7 +7,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     class: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     isSortable: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     isMultiline: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
-    total: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    showTotal: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     rowMerge: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     fields: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     prefix: z.ZodNullable<z.ZodOptional<z.ZodString>>;
@@ -46,7 +46,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     class?: string;
     isSortable?: boolean;
     isMultiline?: boolean;
-    total?: boolean;
+    showTotal?: boolean;
     rowMerge?: boolean;
     fields?: string[];
     prefix?: string;
@@ -71,7 +71,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     class?: string;
     isSortable?: boolean;
     isMultiline?: boolean;
-    total?: boolean;
+    showTotal?: boolean;
     rowMerge?: boolean;
     fields?: string[];
     prefix?: string;
@@ -109,7 +109,7 @@ export interface IColumnJSON {
     lines?: number | 0;
     icons?: IconSettings;
     barSettings?: BarSettings;
-    total?: boolean;
+    showTotal?: boolean;
 }
 export interface IconSettings {
     [key: string]: string;

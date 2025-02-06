@@ -1771,6 +1771,27 @@ function _onKeyDown(ev) {
 
 /***/ }),
 
+/***/ "0DWH":
+/*!***************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderHtml.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderHtml; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function renderHtml({ item, field }) {
+    const htmltext = item[field].rawValue;
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } });
+}
+
+
+/***/ }),
+
 /***/ "0dZV":
 /*!******************************************************************!*\
   !*** ./node_modules/@pnp/spfx-controls-react/lib/Placeholder.js ***!
@@ -2522,6 +2543,63 @@ var MessageBar = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* styled */ "a"
 
 /***/ }),
 
+/***/ "2Kse":
+/*!*********************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderPersonCard.js ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RenderPersonCard; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "YMdL");
+/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "9CMT");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../helpers/Utilities */ "t2W0");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+
+
+function RenderPersonCard({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    const rawValue = item[field].rawValue;
+    // so see if it has any value and if not or its not an array bail out 
+    if (!rawValue || !Array.isArray(rawValue)) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    // so we are goign to try render at least one card so letsa set up our sizes. 
+    const sizes = {
+        "size8": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size8,
+        "size24": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size24,
+        "size32": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size32,
+        "size40": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size40,
+        "size48": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size48,
+        "size56": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size56
+    };
+    const format = column.format;
+    const cardSize = sizes[format || "size40"];
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, rawValue.map((entry, index) => {
+        const email = entry === null || entry === void 0 ? void 0 : entry.email;
+        const name = entry === null || entry === void 0 ? void 0 : entry.value;
+        const title = entry === null || entry === void 0 ? void 0 : entry.title;
+        const examplePersona = {
+            imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,
+            imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "b"])(name),
+            text: name,
+            secondaryText: email
+        };
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: index, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"].personHolder }, cardSize ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__[/* Persona */ "a"], Object.assign({}, examplePersona, { size: cardSize }))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, format === "email" ? email : format === "title" ? title : name))));
+    })));
+}
+
+
+/***/ }),
+
 /***/ "2Phr":
 /*!*****************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Tooltip/Tooltip.base.js ***!
@@ -3113,41 +3191,6 @@ var ImageBase = /** @class */ (function (_super) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
 
 //# sourceMappingURL=Image.base.js.map
-
-/***/ }),
-
-/***/ "32Oj":
-/*!**************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/renderDefault.js ***!
-  \**************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderDefault; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-
-
-function renderDefault({ item, field, column, shouldMerge }) {
-    if (shouldMerge) {
-        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-    }
-    const content = item[field].displayValue;
-    if (!content) {
-        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-    }
-    return column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
-        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        content,
-        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        content,
-        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-}
-
 
 /***/ }),
 
@@ -10185,6 +10228,36 @@ var ContextualMenuItemType;
 
 /***/ }),
 
+/***/ "5ZP+":
+/*!***************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderLink.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderLink; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+function renderLink({ item, field, column }) {
+    const link = item[field].rawValue;
+    const displayText = item[field].displayValue;
+    if (!link) {
+        return null;
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link }, displayText),
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
+
+/***/ }),
+
 /***/ "5dQz":
 /*!***************************************!*\
   !*** ./node_modules/@pnp/sp/odata.js ***!
@@ -14154,6 +14227,34 @@ var _a;
 
 /***/ }),
 
+/***/ "9yNZ":
+/*!*****************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderNumber.js ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNumber; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+function renderNumber({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        item[field].displayValue,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
+
+/***/ }),
+
 /***/ "9z8q":
 /*!*********************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.js ***!
@@ -15020,285 +15121,6 @@ var Position;
 
 /***/ }),
 
-/***/ "B0n2":
-/*!****************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TableGridRender.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
-/* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "aPh5");
-/* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "KCyg");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! luxon */ "ExVU");
-/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _TableGridHeader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TableGridHeader */ "M/0f");
-/* harmony import */ var _TableGridFooter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridFooter */ "BjlE");
-/* harmony import */ var _RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./RenderPersonCard */ "H6Mf");
-/* harmony import */ var _RenderBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RenderBar */ "YzGI");
-/* harmony import */ var _RenderIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RenderIcon */ "jwtg");
-/* harmony import */ var _RenderEdit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./RenderEdit */ "HBDo");
-/* harmony import */ var _renderNumber__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./renderNumber */ "tG9h");
-/* harmony import */ var _renderDefault__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./renderDefault */ "32Oj");
-/* harmony import */ var _renderNoData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./renderNoData */ "pzTe");
-/* harmony import */ var _renderLink__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./renderLink */ "Cxem");
-
-
-
-
-
-
-
-
-
-
-
-
- // Import the renderNumber function
- // Import the renderDefault function
- // Import the renderNoData function
- // Import the renderLink function
-const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues, height }) => {
-    //we can only have one column sorted at a time so i need to know its name and its state
-    const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
-    const [sortedItems, setSortedItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(items);
-    const [isSidePanelOpen, setIsSidePanelOpen] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
-    const iframeRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](null);
-    const [iframeUrl, setIframeUrl] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
-    const [hasVerticalScrollbar, setHasVerticalScrollbar] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
-    const gridRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
-    const [itemTotals, setItemTotals] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
-    const onLoad = (event) => {
-        const iframe = event.currentTarget;
-        iframe.contentWindow.addEventListener('beforeunload', closeSidePanel);
-    };
-    // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
-    const _sortedColumns = Object.keys(colJSON)
-        .map((key) => ({ key, column: colJSON[key] }))
-        .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
-    // check if any of the columns have a total set to true if so we need to display a footer row with the totals for those columns
-    const hasTotal = _sortedColumns.some(({ key, column }) => column.width > "0" && column.total);
-    // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
-    const _columnWidths = _sortedColumns
-        .filter(({ column }) => column.width !== "")
-        .map(({ column }) => column.width)
-        .join(" ");
-    const scrollbarWidth = hasVerticalScrollbar ? "17px" : "0px";
-    const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths, maxHeight: contentHeight || "100%" });
-    const _HeadStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
-    const _FootStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
-    //=================================================================================================================
-    // GENERAL INTERACTION FUNCTIONS
-    //=================================================================================================================
-    const handleSortToggle = (columnKey) => {
-        setSortField((prevState) => ({
-            key: columnKey,
-            direction: prevState.key === columnKey ? !prevState.direction : true,
-        }));
-    };
-    const handleMouseEnter = (event) => {
-        const row = event.currentTarget.getAttribute("data-row");
-        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach((cell) => {
-            cell.classList.add(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
-        });
-    };
-    const handleMouseLeave = (event) => {
-        const row = event.currentTarget.getAttribute("data-row");
-        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
-        cellsInRow.forEach((cell) => {
-            cell.classList.remove(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
-        });
-    };
-    const handleIconClick = (id) => {
-        // different list types have different edit forms so we need to check the url and adjust accordingly
-        console.log(`${listUrl}/EditForm.aspx?ID=${id}`);
-        if (listUrl.indexOf("/Lists/") > 0) {
-            setIframeUrl(`${listUrl}/EditForm.aspx?ID=${id}`);
-        }
-        else {
-            setIframeUrl(`${listUrl}/Forms/EditForm.aspx?ID=${id}`);
-        }
-        openSidePanel();
-    };
-    const closeSidePanel = () => {
-        setIsSidePanelOpen(false);
-    };
-    const openSidePanel = () => {
-        setIsSidePanelOpen(true);
-    };
-    //=================================================================================================================
-    //^ USE EFFECTS SORT & SCROLL - 
-    //=================================================================================================================  
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        // Calculate totals after items have been processed
-        const totals = {};
-        items.forEach(item => {
-            Object.keys(colJSON).forEach(key => {
-                var _a;
-                const column = colJSON[key];
-                if (column.total) {
-                    const rawValue = parseFloat((_a = item[key]) === null || _a === void 0 ? void 0 : _a.rawValue) || 0;
-                    totals[key] = (totals[key] || 0) + rawValue;
-                }
-            });
-        });
-        console.log(">>> totals", totals);
-        setItemTotals(totals);
-    }, [items, colJSON]);
-    // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        if (sortField.key) {
-            const sorted = [...items].sort((a, b) => {
-                //console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
-                let aValue;
-                let bValue;
-                // dependign on the type we must source the data differently for sorting also if its a stack we cant sort the date liek a string so we need to do a double lookup into the columns to get the info we need to make the choice
-                if (colJSON[sortField.key].type == "stack") {
-                    // do the lookup into trhe stack to get the first field in the stack then look up its type and sort accordingly
-                    if (colJSON[colJSON[sortField.key].fields[0]].type === "date" ||
-                        colJSON[colJSON[sortField.key].fields[0]].type === "number") {
-                        aValue = a[colJSON[sortField.key].fields[0]].rawValue;
-                        bValue = b[colJSON[sortField.key].fields[0]].rawValue;
-                    }
-                    else {
-                        aValue = a[colJSON[sortField.key].fields[0]].displayValue;
-                        bValue = b[colJSON[sortField.key].fields[0]].displayValue;
-                    }
-                }
-                else {
-                    // its not a stack so we can just look up the field and sort it
-                    if (colJSON[sortField.key].type === "person" ||
-                        colJSON[sortField.key].type === "multiChoice") {
-                        aValue = a[sortField.key].displayValue;
-                        bValue = b[sortField.key].displayValue;
-                    }
-                    else {
-                        // its a number or a string or a date so we can sort it as is
-                        aValue = a[sortField.key].rawValue;
-                        bValue = b[sortField.key].rawValue;
-                    }
-                }
-                if (aValue === null || aValue === undefined)
-                    return 1;
-                if (bValue === null || bValue === undefined)
-                    return -1;
-                // Check if the values are dates
-                if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
-                    return sortField.direction
-                        ? aValue.toMillis() - bValue.toMillis()
-                        : bValue.toMillis() - aValue.toMillis();
-                }
-                // we have already dealt with Dates so everythign else is a strign or a number.
-                if (typeof aValue === "number" && typeof bValue === "number") {
-                    return sortField.direction ? aValue - bValue : bValue - aValue;
-                }
-                else {
-                    return sortField.direction
-                        ? aValue.localeCompare(bValue)
-                        : bValue.localeCompare(aValue);
-                }
-            });
-            setSortedItems(sorted);
-        }
-        else {
-            setSortedItems(items);
-        }
-    }, [sortField, items]);
-    // does the main section have a scroll BAr if so then we need to adjust the width of the grid to allow for it
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        const checkForScrollbar = () => {
-            if (gridRef.current) {
-                setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
-                console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
-            }
-        };
-        checkForScrollbar();
-        window.addEventListener('resize', checkForScrollbar);
-        return () => {
-            window.removeEventListener('resize', checkForScrollbar);
-        };
-    }, []);
-    //=================================================================================================================
-    // HTML FIELD NO ROWMERGE TO TRIVIAL TO MOVE TO A COMPONENT
-    //=================================================================================================================
-    const renderHtml = (item, field) => {
-        const htmltext = item[field].rawValue;
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { dangerouslySetInnerHTML: { __html: htmltext } }));
-    };
-    //=================================================================================================================
-    // THIS IS THE STACK RENDER FUNCTION - IT WILL LOOP THROUGH THE FIELDS IN THE STACK AND RENDER THEM ACCORDINGLY
-    //=================================================================================================================
-    const renderStack = (item, column, allcolJSON) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, column.fields.map((field, fieldIndex) => {
-        const column = allcolJSON[field];
-        if (!column) {
-            return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0"));
-        }
-        //console.log(">>> stack field:", field,  "  display:", item[field].displayValue, "  raw:", item[field].rawValue ,"  JSON:" ,fieldColumn);
-        const content = (() => {
-            switch (column.type) {
-                case 'bar':
-                    return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, maxBarValues });
-                case 'number':
-                    return Object(_renderNumber__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])({ item, field, column, shouldMerge: false });
-                case 'html':
-                    return renderHtml(item, field);
-                case "link":
-                    return Object(_renderLink__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"])({ item, field, column });
-                case 'person':
-                    return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])({ item, field, column, shouldMerge: false });
-                default:
-                    return Object(_renderDefault__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"])({ item, field, column, shouldMerge: false });
-            }
-        })();
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
-    })));
-    //=================================================================================================================
-    //^  THE RETURN FUNCTION
-    //=================================================================================================================
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridHeader__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { _sortedColumns: _sortedColumns, sortField: sortField, handleSortToggle: handleSortToggle, _headStyle: _HeadStyle }),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => {
-            var _a, _b;
-            const field = key;
-            const shouldMerge = column.rowMerge && itemIndex > 0 && ((_a = item[field]) === null || _a === void 0 ? void 0 : _a.displayValue) === ((_b = sortedItems[itemIndex - 1][field]) === null || _b === void 0 ? void 0 : _b.displayValue);
-            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${field}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": itemIndex, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, (() => {
-                switch (column.type) {
-                    case "stack":
-                        return renderStack(item, column, colJSON);
-                    case "person":
-                        return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])({ item, field, column, shouldMerge: false });
-                    case "html":
-                        return renderHtml(item, field);
-                    case "icon":
-                        return Object(_RenderIcon__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field: key, column });
-                    case "link":
-                        return Object(_renderLink__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"])({ item, field, column });
-                    case "edit":
-                        return Object(_RenderEdit__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"])({ item, field: "ID", column, handleIconClick });
-                    case "number":
-                        return Object(_renderNumber__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])({ item, field, column, shouldMerge });
-                    case "bar":
-                        return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, maxBarValues });
-                    default:
-                        return item[field] ? Object(_renderDefault__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"])({ item, field, column, shouldMerge }) : Object(_renderNoData__WEBPACK_IMPORTED_MODULE_14__[/* default */ "a"])({ column });
-                }
-            })()));
-        }))))),
-        hasTotal && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridFooter__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { _sortedColumns: _sortedColumns, itemTotals: itemTotals, _footStyle: _FootStyle })),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, style: { border: 'none', height: (height - 90) + 'px', width: '100%' } }))));
-};
-/* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
-
-
-/***/ }),
-
 /***/ "BcPn":
 /*!*********************************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/ContextualMenu/ContextualMenu.styles.js ***!
@@ -15392,32 +15214,6 @@ var getStyles = function (props) {
     };
 };
 //# sourceMappingURL=ContextualMenu.styles.js.map
-
-/***/ }),
-
-/***/ "BjlE":
-/*!****************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TableGridFooter.js ***!
-  \****************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableGridFooter; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
-
-
-
-function TableGridFooter({ _sortedColumns, itemTotals, _footStyle }) {
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _footStyle },
-        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, column.total ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* numberFormat */ "f"])(itemTotals[key], column.format))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))))),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")));
-}
-
 
 /***/ }),
 
@@ -17317,36 +17113,6 @@ var LogLevel;
 
 /***/ }),
 
-/***/ "Cxem":
-/*!***********************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/renderLink.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderLink; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-
-
-function renderLink({ item, field, column }) {
-    const link = item[field].rawValue;
-    const displayText = item[field].displayValue;
-    if (!link) {
-        return null;
-    }
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
-        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: link }, displayText),
-        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-}
-
-
-/***/ }),
-
 /***/ "CypO":
 /*!*********************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Layer/Layer.notification.js ***!
@@ -18970,7 +18736,7 @@ function getDigestFactory(client) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".tableViewer_f101df36 .tableViewerHeader_f101df36{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_f101df36 .tableViewerHeader_f101df36 .searchBox_f101df36{margin:0}.tableViewer_f101df36 .tabBar_f101df36{background-color:#fff;margin-top:5px}.tableViewer_f101df36 .barGrid_f101df36{-ms-flex-align:center;align-items:center;display:grid;grid-template-areas:\"prefix bar\";grid-template-columns:auto 1fr;position:relative;text-align:left}.tableViewer_f101df36 .barGrid_f101df36 .chartPrefix_f101df36{grid-area:prefix;padding-right:5px}.tableViewer_f101df36 .barGrid_f101df36 .chartBar_f101df36{font-size:larger;grid-area:bar;padding-top:2px;text-align:right}.tableViewer_f101df36 .barGrid_f101df36 .chartLabel_f101df36{box-sizing:border-box;grid-area:bar;padding-left:5px;position:relative}.tableViewer_f101df36 .barCell_f101df36{display:grid}.tableViewer_f101df36 .barCell_f101df36 .bar_f101df36{border-right:3px solid #fff;margin:2px;padding:2px;position:relative;text-align:right}.tableViewer_f101df36 .barCell_f101df36 .bar_f101df36 .barLabel_f101df36{position:absolute}.tableViewer_f101df36 .tableContainer_f101df36{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_f101df36 .searchBox_f101df36{margin:0}.tableViewer_f101df36 .headerGrid_f101df36{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:15px;font-weight:600;grid-template-columns:auto 1fr;height:45px;padding:2px}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36 .sortIcon_f101df36{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_f101df36 .headerGrid_f101df36 .tableHeaderCell_f101df36:hover{background-color:#d4d4d0}.tableViewer_f101df36 .tableGrid_f101df36{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_f101df36 .tableGrid_f101df36 .tableCell_f101df36{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_f101df36 .tableGrid_f101df36 .tableCell_f101df36 .numberCell_f101df36{padding-right:10px;text-align:right}.tableViewer_f101df36 .tableGrid_f101df36 .editCell_f101df36{cursor:pointer}.tableViewer_f101df36 .tableGrid_f101df36 .editCell_f101df36,.tableViewer_f101df36 .tableGrid_f101df36 .iconCell_f101df36{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_f101df36 .tableGrid_f101df36 .tableDataContent_f101df36{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_f101df36 .tableGrid_f101df36 .highlight_f101df36{background-color:#eceff3}.error input:-ms-input-placeholder{color:red!important}.error_f101df36 input::placeholder{color:red!important}.error_f101df36 input:-ms-input-placeholder{color:red!important}.error_f101df36 input::-ms-input-placeholder{color:red!important}#workbenchPageContent_f101df36{max-width:1680px}", ""]);
+exports.push([module.i, ".tableViewer_083b2d0f .tableViewerHeader_083b2d0f{background-color:#fff;display:grid;grid-template-columns:3fr 1fr;height:35px;padding:3px;width:100%}.tableViewer_083b2d0f .tableViewerHeader_083b2d0f .searchBox_083b2d0f{margin:0}.tableViewer_083b2d0f .tabBar_083b2d0f{background-color:#fff;margin-top:5px}.tableViewer_083b2d0f .barGrid_083b2d0f{-ms-flex-align:center;align-items:center;display:grid;grid-template-areas:\"prefix bar\";grid-template-columns:auto 1fr;position:relative;text-align:left}.tableViewer_083b2d0f .barGrid_083b2d0f .chartPrefix_083b2d0f{grid-area:prefix;padding-right:5px}.tableViewer_083b2d0f .barGrid_083b2d0f .chartBar_083b2d0f{font-size:larger;grid-area:bar;padding-top:2px;text-align:right}.tableViewer_083b2d0f .barGrid_083b2d0f .chartLabel_083b2d0f{box-sizing:border-box;grid-area:bar;padding-left:5px;position:relative}.tableViewer_083b2d0f .barCell_083b2d0f{display:grid}.tableViewer_083b2d0f .barCell_083b2d0f .bar_083b2d0f{border-right:3px solid #fff;margin:2px;padding:2px;position:relative;text-align:right}.tableViewer_083b2d0f .barCell_083b2d0f .bar_083b2d0f .barLabel_083b2d0f{position:absolute}.tableViewer_083b2d0f .tableContainer_083b2d0f{background-color:#ff7300;margin:0;overflow-y:scroll;width:100%}.tableViewer_083b2d0f .searchBox_083b2d0f{margin:0}.tableViewer_083b2d0f .headerGrid_083b2d0f{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_083b2d0f .headerGrid_083b2d0f .tableHeaderCell_083b2d0f{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:15px;font-weight:600;grid-template-columns:auto 1fr;height:45px;padding:2px}.tableViewer_083b2d0f .headerGrid_083b2d0f .tableHeaderCell_083b2d0f .sortIcon_083b2d0f{color:#6e6e6e;cursor:pointer;margin-left:5px}.tableViewer_083b2d0f .headerGrid_083b2d0f .tableHeaderCell_083b2d0f:hover{background-color:#d4d4d0}.tableViewer_083b2d0f .footerGrid_083b2d0f{grid-gap:0;display:grid;overflow:hidden;width:100%}.tableViewer_083b2d0f .footerGrid_083b2d0f .tableFooterCell_083b2d0f{-ms-flex-align:center;align-items:center;background-color:#fafafa;border-bottom:1px solid #b4b4b4;border-top:1px solid #b4b4b4;box-sizing:border-box;display:grid;font-size:12px;font-weight:500;grid-template-columns:auto 1fr;height:30px;padding:2px}.tableViewer_083b2d0f .tableGrid_083b2d0f{grid-gap:0;display:grid;overflow-x:hidden;overflow-y:auto;width:100%}.tableViewer_083b2d0f .tableGrid_083b2d0f .tableCell_083b2d0f{background-color:#fafafa;border-bottom:1px solid #dfdfdf;box-sizing:border-box;font-size:12px;font-weight:400;padding:2px}.tableViewer_083b2d0f .tableGrid_083b2d0f .tableCell_083b2d0f .numberCell_083b2d0f{padding-right:10px;text-align:right}.tableViewer_083b2d0f .tableGrid_083b2d0f .editCell_083b2d0f{cursor:pointer}.tableViewer_083b2d0f .tableGrid_083b2d0f .editCell_083b2d0f,.tableViewer_083b2d0f .tableGrid_083b2d0f .iconCell_083b2d0f{font-size:larger;font-weight:700;padding-right:10px;padding:4px;text-align:center;width:100%}.tableViewer_083b2d0f .tableGrid_083b2d0f .tableDataContent_083b2d0f{-webkit-box-orient:vertical;box-sizing:border-box;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.tableViewer_083b2d0f .tableGrid_083b2d0f .highlight_083b2d0f{background-color:#eceff3}.tableViewer_083b2d0f .tableGrid_083b2d0f .personHolder_083b2d0f{margin:3px 2px}.error input:-ms-input-placeholder{color:red!important}.error_083b2d0f input::placeholder{color:red!important}.error_083b2d0f input:-ms-input-placeholder{color:red!important}.error_083b2d0f input::-ms-input-placeholder{color:red!important}#workbenchPageContent_083b2d0f{max-width:1680px}", ""]);
 // Exports
 module.exports = exports;
 
@@ -19041,6 +18807,40 @@ var FabricBase = /** @class */ (function (_super) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]));
 
 //# sourceMappingURL=Fabric.base.js.map
+
+/***/ }),
+
+/***/ "E+N+":
+/*!***************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderIcon.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderIcon; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+
+function renderIcon({ item, field, column }) {
+    var _a;
+    const displayValue = item[field].displayValue;
+    const iconData = (_a = column.icons) === null || _a === void 0 ? void 0 : _a[displayValue];
+    if (iconData) {
+        const [iconName, iconColor, iconSize] = iconData.split("|");
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].iconCell },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor, fontSize: iconSize || "1rem" }, title: displayValue })));
+    }
+    else {
+        return displayValue;
+    }
+}
+
 
 /***/ }),
 
@@ -30642,31 +30442,6 @@ function getDefaultValue(style, direction) {
 
 /***/ }),
 
-/***/ "H6Mf":
-/*!*****************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/RenderPersonCard.js ***!
-  \*****************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderPersonCard; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TabsRender/PersonCard */ "qfZ8");
-
-
-function renderPersonCard({ item, field, column, shouldMerge }) {
-    if (shouldMerge) {
-        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-    }
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_PersonCard__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"], { email: item[field].rawValue[0].email, name: item[field].rawValue[0].name, title: item[field].rawValue[0].title, format: column.format || 'size32' }));
-}
-
-
-/***/ }),
-
 /***/ "H9cq":
 /*!********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/utilities/lib/classNamesFunction.js ***!
@@ -30795,38 +30570,6 @@ function _normalizeValue(value) {
     }
 }
 //# sourceMappingURL=classNamesFunction.js.map
-
-/***/ }),
-
-/***/ "HBDo":
-/*!***********************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/RenderEdit.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderEdit; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-
-
-
-function renderEdit({ item, field, column, handleIconClick }) {
-    const id = item[field].rawValue;
-    let iconName = "edit";
-    let iconColor = "#0078d4";
-    if (column.icons && typeof column.icons === 'object') {
-        const [firstIconName, firstIconColor] = Object.entries(column.icons)[0];
-        [iconName, iconColor] = firstIconColor.split("|");
-    }
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].editCell },
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, title: "Edit", style: { color: iconColor }, onClick: () => handleIconClick(id) })));
-}
-
 
 /***/ }),
 
@@ -31927,6 +31670,45 @@ var getMenuItemStyles = Object(_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* memoiz
     return Object(_Styling__WEBPACK_IMPORTED_MODULE_1__[/* concatStyleSets */ "o"])(menuItemStyles);
 });
 //# sourceMappingURL=ContextualMenu.cnstyles.js.map
+
+/***/ }),
+
+/***/ "IxOr":
+/*!***************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableElements/TabBarRender.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabBarRender; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+function TabBarRender({ fieldName, tabs, handleTabChange, tabBehaviour }) {
+    const isAnyTabSelected = Object.values(tabs).some(tab => tab.selected);
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tabBar },
+        Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
+                marginRight: '8px',
+                backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
+                color: tabs[tab].selected ? '#fff' : '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, `${tab} (${tabs[tab].itemCount || 0})`))),
+        !tabBehaviour && isAnyTabSelected && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(fieldName, null), title: "Clear filter", style: {
+                marginLeft: '8px',
+                backgroundColor: '#eaeaea',
+                color: '#000',
+                padding: '5px 10px',
+                border: 'none',
+                cursor: 'pointer',
+            } }, "Clear"))));
+}
+
 
 /***/ }),
 
@@ -34264,6 +34046,41 @@ function nullRender() {
 
 /***/ }),
 
+/***/ "LCmk":
+/*!******************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderDefault.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderDefault; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+function renderDefault({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    const content = item[field].displayValue;
+    if (!content) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    return column.lines ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent, style: { WebkitLineClamp: column.lines, lineClamp: column.lines } },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        content,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        content,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
+
+/***/ }),
+
 /***/ "LI1r":
 /*!*********************************************************************************!*\
   !*** ./node_modules/@fluentui/react/lib/components/Tooltip/TooltipHost.base.js ***!
@@ -34888,10 +34705,10 @@ var FocusZoneDirection;
 
 /***/ }),
 
-/***/ "M/0f":
-/*!****************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TableGridHeader.js ***!
-  \****************************************************************/
+/***/ "Lurk":
+/*!******************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableElements/TableGridFooter.js ***!
+  \******************************************************************************/
 /*! exports provided: default */
 /*! exports used: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -34900,21 +34717,15 @@ var FocusZoneDirection;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableGridFooter; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../helpers/Utilities */ "t2W0");
 
 
 
-function TableGridFooter({ _sortedColumns, sortField, handleSortToggle, _headStyle }) {
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _headStyle },
-        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
-            column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: sortField.key !== key
-                    ? "Sort"
-                    : sortField.direction
-                        ? "SortDown"
-                        : "SortUp", className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")));
+function TableGridFooter({ _sortedColumns, itemTotals, _footStyle }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _footStyle },
+        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableFooterCell }, column.showTotal ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* numberFormat */ "f"])(isNaN(itemTotals[key]) ? 0 : itemTotals[key], column.format))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableFooterCell }, " \u00A0 ")));
 }
 
 
@@ -35957,30 +35768,33 @@ function elementContainsAttribute(element, attribute) {
 /* tslint:disable */
 __webpack_require__(/*! ./TableViewer.module.css */ "mJzx");
 const styles = {
-    tableViewer: 'tableViewer_f101df36',
-    tableViewerHeader: 'tableViewerHeader_f101df36',
-    searchBox: 'searchBox_f101df36',
-    tabBar: 'tabBar_f101df36',
-    barGrid: 'barGrid_f101df36',
-    chartPrefix: 'chartPrefix_f101df36',
-    chartBar: 'chartBar_f101df36',
-    chartLabel: 'chartLabel_f101df36',
-    barCell: 'barCell_f101df36',
-    bar: 'bar_f101df36',
-    barLabel: 'barLabel_f101df36',
-    tableContainer: 'tableContainer_f101df36',
-    headerGrid: 'headerGrid_f101df36',
-    tableHeaderCell: 'tableHeaderCell_f101df36',
-    sortIcon: 'sortIcon_f101df36',
-    tableGrid: 'tableGrid_f101df36',
-    tableCell: 'tableCell_f101df36',
-    numberCell: 'numberCell_f101df36',
-    editCell: 'editCell_f101df36',
-    iconCell: 'iconCell_f101df36',
-    tableDataContent: 'tableDataContent_f101df36',
-    highlight: 'highlight_f101df36',
-    error: 'error_f101df36',
-    workbenchPageContent: 'workbenchPageContent_f101df36'
+    tableViewer: 'tableViewer_083b2d0f',
+    tableViewerHeader: 'tableViewerHeader_083b2d0f',
+    searchBox: 'searchBox_083b2d0f',
+    tabBar: 'tabBar_083b2d0f',
+    barGrid: 'barGrid_083b2d0f',
+    chartPrefix: 'chartPrefix_083b2d0f',
+    chartBar: 'chartBar_083b2d0f',
+    chartLabel: 'chartLabel_083b2d0f',
+    barCell: 'barCell_083b2d0f',
+    bar: 'bar_083b2d0f',
+    barLabel: 'barLabel_083b2d0f',
+    tableContainer: 'tableContainer_083b2d0f',
+    headerGrid: 'headerGrid_083b2d0f',
+    tableHeaderCell: 'tableHeaderCell_083b2d0f',
+    sortIcon: 'sortIcon_083b2d0f',
+    footerGrid: 'footerGrid_083b2d0f',
+    tableFooterCell: 'tableFooterCell_083b2d0f',
+    tableGrid: 'tableGrid_083b2d0f',
+    tableCell: 'tableCell_083b2d0f',
+    numberCell: 'numberCell_083b2d0f',
+    editCell: 'editCell_083b2d0f',
+    iconCell: 'iconCell_083b2d0f',
+    tableDataContent: 'tableDataContent_083b2d0f',
+    highlight: 'highlight_083b2d0f',
+    personHolder: 'personHolder_083b2d0f',
+    error: 'error_083b2d0f',
+    workbenchPageContent: 'workbenchPageContent_083b2d0f'
 };
 /* harmony default export */ __webpack_exports__["a"] = (styles);
 /* tslint:enable */ 
@@ -37046,6 +36860,27 @@ var getStyles = function (props) {
     };
 };
 //# sourceMappingURL=Fabric.styles.js.map
+
+/***/ }),
+
+/***/ "QK8n":
+/*!*****************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderNoData.js ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNoData; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function renderNoData({ column }) {
+    var _a;
+    return column.type === "stack" ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, (_a = column.fields) === null || _a === void 0 ? void 0 : _a.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data"));
+}
+
 
 /***/ }),
 
@@ -39740,6 +39575,260 @@ function hoistStatics(source, dest) {
 
 /***/ }),
 
+/***/ "U4v2":
+/*!******************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableElements/TableGridRender.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
+/* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "aPh5");
+/* harmony import */ var _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fluentui/react/lib/Panel */ "KCyg");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! luxon */ "ExVU");
+/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(luxon__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _TableGridHeader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TableGridHeader */ "ghY7");
+/* harmony import */ var _TableGridFooter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridFooter */ "Lurk");
+/* harmony import */ var _RenderFragments_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../RenderFragments/RenderPersonCard */ "2Kse");
+/* harmony import */ var _RenderFragments_RenderBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../RenderFragments/RenderBar */ "mKHb");
+/* harmony import */ var _RenderFragments_RenderIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../RenderFragments/RenderIcon */ "E+N+");
+/* harmony import */ var _RenderFragments_RenderEdit__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../RenderFragments/RenderEdit */ "Uxcn");
+/* harmony import */ var _RenderFragments_RenderNumber__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../RenderFragments/RenderNumber */ "9yNZ");
+/* harmony import */ var _RenderFragments_RenderDefault__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../RenderFragments/RenderDefault */ "LCmk");
+/* harmony import */ var _RenderFragments_RenderNoData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../RenderFragments/RenderNoData */ "QK8n");
+/* harmony import */ var _RenderFragments_RenderLink__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../RenderFragments/RenderLink */ "5ZP+");
+/* harmony import */ var _RenderFragments_RenderHtml__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../RenderFragments/RenderHtml */ "0DWH");
+/* harmony import */ var _RenderFragments_RenderMultiChoice__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../RenderFragments/RenderMultiChoice */ "y7Ml");
+/* harmony import */ var _RenderFragments_RenderStack__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../RenderFragments/RenderStack */ "wYiv");
+
+
+
+
+
+
+
+
+
+
+
+
+ // Import the renderNumber function
+ // Import the renderDefault function
+ // Import the renderNoData function
+ // Import the renderLink function
+ // Import the RenderHTML function
+ // Import the renderMultiChoice function
+ // Import the RenderStack function
+const TableGridRender = ({ listUrl, colJSON, items, contentHeight, maxBarValues, height }) => {
+    //we can only have one column sorted at a time so i need to know its name and its state
+    const [sortField, setSortField] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({ key: "", direction: null });
+    const [sortedItems, setSortedItems] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(items);
+    const [isSidePanelOpen, setIsSidePanelOpen] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+    const iframeRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](null);
+    const [iframeUrl, setIframeUrl] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
+    const [hasVerticalScrollbar, setHasVerticalScrollbar] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+    const gridRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
+    const [itemTotals, setItemTotals] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({});
+    const onLoad = (event) => {
+        const iframe = event.currentTarget;
+        iframe.contentWindow.addEventListener('beforeunload', closeSidePanel);
+    };
+    // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
+    const _sortedColumns = Object.keys(colJSON)
+        .map((key) => ({ key, column: colJSON[key] }))
+        .sort((a, b) => (a.column.sequence || 99) - (b.column.sequence || 99));
+    // check if any of the columns have a total set to true if so we need to display a footer row with the totals for those columns
+    const hasTotal = _sortedColumns.some(({ key, column }) => column.width > "0" && column.type === 'number' && column.showTotal);
+    // we can use the width directly from the column definition to set the grid template columns for the table but dont include the "" ones as they are hidden
+    const _columnWidths = _sortedColumns
+        .filter(({ column }) => column.width !== "")
+        .map(({ column }) => column.width)
+        .join(" ");
+    const scrollbarWidth = hasVerticalScrollbar ? "17px" : "0px";
+    const _GridStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableGrid, { gridTemplateColumns: _columnWidths, maxHeight: contentHeight || "100%" });
+    const _HeadStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].headerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
+    const _FootStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_2__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].footerGrid, { gridTemplateColumns: `${_columnWidths} ${scrollbarWidth}` });
+    //=================================================================================================================
+    // GENERAL INTERACTION FUNCTIONS
+    //=================================================================================================================
+    const handleSortToggle = (columnKey) => {
+        setSortField((prevState) => ({
+            key: columnKey,
+            direction: prevState.key === columnKey ? !prevState.direction : true,
+        }));
+    };
+    const handleMouseEnter = (event) => {
+        const row = event.currentTarget.getAttribute("data-row");
+        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
+        cellsInRow.forEach((cell) => {
+            cell.classList.add(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
+        });
+    };
+    const handleMouseLeave = (event) => {
+        const row = event.currentTarget.getAttribute("data-row");
+        const cellsInRow = document.querySelectorAll(`.${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell}[data-row="${row}"]`);
+        cellsInRow.forEach((cell) => {
+            cell.classList.remove(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].highlight);
+        });
+    };
+    const handleIconClick = (id) => {
+        // different list types have different edit forms so we need to check the url and adjust accordingly
+        console.log(`${listUrl}/EditForm.aspx?ID=${id}`);
+        if (listUrl.indexOf("/Lists/") > 0) {
+            setIframeUrl(`${listUrl}/EditForm.aspx?ID=${id}`);
+        }
+        else {
+            setIframeUrl(`${listUrl}/Forms/EditForm.aspx?ID=${id}`);
+        }
+        openSidePanel();
+    };
+    const closeSidePanel = () => {
+        setIsSidePanelOpen(false);
+    };
+    const openSidePanel = () => {
+        setIsSidePanelOpen(true);
+    };
+    //=================================================================================================================
+    //^ USE EFFECTS SORT & SCROLL - 
+    //=================================================================================================================  
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        // Calculate totals after items (filtered items by time we get here) have been processed
+        // BUT only for the columns that are set to show totals of type number and have a width > 0
+        const totals = {};
+        items.forEach(item => {
+            Object.keys(colJSON).forEach(key => {
+                var _a;
+                const column = colJSON[key];
+                if (column.showTotal && column.type === "number" && column.width > '0') {
+                    const rawValue = parseFloat((_a = item[key]) === null || _a === void 0 ? void 0 : _a.rawValue) || 0;
+                    totals[key] = (totals[key] || 0) + rawValue;
+                }
+            });
+        });
+        console.log(">>> totals", totals);
+        setItemTotals(totals);
+    }, [items, colJSON]);
+    // THE SORT USE EFFECT - THIS WILL SORT THE ITEMS BASED ON THE SORT FIELD, FIELD TYPE AND DIRECTION
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        if (sortField.key) {
+            const sorted = [...items].sort((a, b) => {
+                //console.log(">>> sorting", sortField.key, "which is a ", colJSON[sortField.key].type, "in direction", sortField.direction);
+                let aValue;
+                let bValue;
+                // dependign on the type we must source the data differently for sorting also if its a stack we cant sort the date liek a string so we need to do a double lookup into the columns to get the info we need to make the choice
+                if (colJSON[sortField.key].type == "stack") {
+                    // do the lookup into trhe stack to get the first field in the stack then look up its type and sort accordingly
+                    if (colJSON[colJSON[sortField.key].fields[0]].type === "date" ||
+                        colJSON[colJSON[sortField.key].fields[0]].type === "number") {
+                        aValue = a[colJSON[sortField.key].fields[0]].rawValue;
+                        bValue = b[colJSON[sortField.key].fields[0]].rawValue;
+                    }
+                    else {
+                        aValue = a[colJSON[sortField.key].fields[0]].displayValue;
+                        bValue = b[colJSON[sortField.key].fields[0]].displayValue;
+                    }
+                }
+                else {
+                    // its not a stack so we can just look up the field and sort it
+                    if (colJSON[sortField.key].type === "person" ||
+                        colJSON[sortField.key].type === "multiChoice") {
+                        aValue = a[sortField.key].displayValue;
+                        bValue = b[sortField.key].displayValue;
+                    }
+                    else {
+                        // its a number or a string or a date so we can sort it as is
+                        aValue = a[sortField.key].rawValue;
+                        bValue = b[sortField.key].rawValue;
+                    }
+                }
+                if (aValue === null || aValue === undefined)
+                    return 1;
+                if (bValue === null || bValue === undefined)
+                    return -1;
+                // Check if the values are dates
+                if (luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(aValue) && luxon__WEBPACK_IMPORTED_MODULE_5__["DateTime"].isDateTime(bValue)) {
+                    return sortField.direction
+                        ? aValue.toMillis() - bValue.toMillis()
+                        : bValue.toMillis() - aValue.toMillis();
+                }
+                // we have already dealt with Dates so everythign else is a strign or a number.
+                if (typeof aValue === "number" && typeof bValue === "number") {
+                    return sortField.direction ? aValue - bValue : bValue - aValue;
+                }
+                else {
+                    return sortField.direction
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
+                }
+            });
+            setSortedItems(sorted);
+        }
+        else {
+            setSortedItems(items);
+        }
+    }, [sortField, items]);
+    // does the main section have a scroll Bar if so then we need to adjust the width of the grid to allow for it
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+        const checkForScrollbar = () => {
+            if (gridRef.current) {
+                setHasVerticalScrollbar(gridRef.current.scrollHeight > gridRef.current.clientHeight);
+                console.log(">>> scrollbar", gridRef.current.scrollHeight, gridRef.current.clientHeight);
+            }
+        };
+        checkForScrollbar();
+        window.addEventListener('resize', checkForScrollbar);
+        return () => {
+            window.removeEventListener('resize', checkForScrollbar);
+        };
+    }, []);
+    //=================================================================================================================
+    //^  THE RETURN FUNCTION
+    //=================================================================================================================
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridHeader__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], { _sortedColumns: _sortedColumns, sortField: sortField, handleSortToggle: handleSortToggle, _headStyle: _HeadStyle }),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _GridStyle }, sortedItems.map((item, itemIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], { key: itemIndex }, _sortedColumns.map(({ key, column }) => {
+            var _a, _b;
+            const field = key;
+            const shouldMerge = column.rowMerge && itemIndex > 0 && ((_a = item[field]) === null || _a === void 0 ? void 0 : _a.displayValue) === ((_b = sortedItems[itemIndex - 1][field]) === null || _b === void 0 ? void 0 : _b.displayValue);
+            return column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: `${itemIndex}-${field}`, className: `${_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableCell} ${column.class ? column.class : ""}`, "data-row": itemIndex, onMouseEnter: (event) => handleMouseEnter(event), onMouseLeave: (event) => handleMouseLeave(event) }, (() => {
+                switch (column.type) {
+                    case "stack":
+                        return Object(_RenderFragments_RenderStack__WEBPACK_IMPORTED_MODULE_18__[/* default */ "a"])({ item, column, allcolJSON: colJSON, maxBarValues });
+                    case "person":
+                        return Object(_RenderFragments_RenderPersonCard__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])({ item, field, column, shouldMerge: false });
+                    case "html":
+                        return Object(_RenderFragments_RenderHtml__WEBPACK_IMPORTED_MODULE_16__[/* default */ "a"])({ item, field });
+                    case "icon":
+                        return Object(_RenderFragments_RenderIcon__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"])({ item, field: key, column });
+                    case "link":
+                        return Object(_RenderFragments_RenderLink__WEBPACK_IMPORTED_MODULE_15__[/* default */ "a"])({ item, field, column });
+                    case "edit":
+                        return Object(_RenderFragments_RenderEdit__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"])({ item, field: "ID", column, handleIconClick });
+                    case "number":
+                        return Object(_RenderFragments_RenderNumber__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])({ item, field, column, shouldMerge });
+                    case "multiChoice":
+                        return Object(_RenderFragments_RenderMultiChoice__WEBPACK_IMPORTED_MODULE_17__[/* default */ "a"])({ item, field, column, shouldMerge });
+                    case "bar":
+                        return Object(_RenderFragments_RenderBar__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"])({ item, field, column, maxBarValues });
+                    default:
+                        return item[field] ? Object(_RenderFragments_RenderDefault__WEBPACK_IMPORTED_MODULE_13__[/* default */ "a"])({ item, field, column, shouldMerge }) : Object(_RenderFragments_RenderNoData__WEBPACK_IMPORTED_MODULE_14__[/* default */ "a"])({ column });
+                }
+            })()));
+        }))))),
+        hasTotal && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridFooter__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { _sortedColumns: _sortedColumns, itemTotals: itemTotals, _footStyle: _FootStyle })),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_3__[/* Panel */ "a"], { isOpen: isSidePanelOpen, onDismiss: closeSidePanel, closeButtonAriaLabel: "Close", type: _fluentui_react_lib_Panel__WEBPACK_IMPORTED_MODULE_4__[/* PanelType */ "a"].largeFixed },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("iframe", { id: "iframePanel", src: iframeUrl, ref: iframeRef, onLoad: onLoad, style: { border: 'none', height: (height - 90) + 'px', width: '100%' } }))));
+};
+/* harmony default export */ __webpack_exports__["a"] = (TableGridRender);
+
+
+/***/ }),
+
 /***/ "U5it":
 /*!************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/node_modules/@uifabric/utilities/lib/properties.js ***!
@@ -40603,6 +40692,39 @@ function setPortalAttribute(element) {
     element.setAttribute(DATA_PORTAL_ATTRIBUTE, 'true');
 }
 //# sourceMappingURL=setPortalAttribute.js.map
+
+/***/ }),
+
+/***/ "Uxcn":
+/*!***************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderEdit.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderEdit; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+
+function renderEdit({ item, field, column, handleIconClick }) {
+    const id = item[field].rawValue;
+    let iconName = "edit";
+    let iconColor = "#0078d4";
+    let iconSize = "1rem";
+    if (column.icons && typeof column.icons === 'object') {
+        const [firstIconName, firstIconColor] = Object.entries(column.icons)[0];
+        [iconName, iconColor, iconSize] = firstIconColor.split("|");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].editCell },
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, title: "Edit", style: { color: iconColor, fontSize: iconSize || "1rem" }, onClick: () => handleIconClick(id) })));
+}
+
 
 /***/ }),
 
@@ -44590,79 +44712,6 @@ function setVendorSettings(vendorSettings) {
     _vendorSettings = vendorSettings;
 }
 //# sourceMappingURL=getVendorSettings.js.map
-
-/***/ }),
-
-/***/ "YzGI":
-/*!**********************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/RenderBar.js ***!
-  \**********************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderBar; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
-/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
-
-
-
-
- // Ensure this import is correct
-function renderBar({ item, field, column, maxBarValues }) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    const value = item[field].rawValue;
-    const rawValue = parseFloat(value) || 0;
-    const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[field] || 100; // Set a default height if not provided
-    const percentage = (rawValue / maxValue) * 100;
-    if (percentage < 0) {
-        return null;
-    }
-    // now do the styling for the bar
-    const barcol = ((_b = column.barSettings) === null || _b === void 0 ? void 0 : _b.color) || "#d0d0d0"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
-    const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
-    const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartBar, { backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
-    const textCol = percentage < 50 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's going inside else use black (black for transparent too)
-    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more padding to the right)
-    const labelPadding = ((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.icon) ? "20px" : "5px";
-    const _barLabelStyle = percentage < 50
-        ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol }) // outside One
-        : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); // Inside one
-    // Determine the label content based on barSettings if it's not specified then just use the raw value
-    let labelContent = null;
-    if (column.barSettings) {
-        if (((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showValue) && ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showPercentage)) {
-            labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
-        }
-        else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showValue) {
-            labelContent = `${rawValue}`;
-        }
-        else if ((_h = column.barSettings) === null || _h === void 0 ? void 0 : _h.showPercentage) {
-            labelContent = `${percentage.toFixed(0)}%`;
-        }
-    }
-    else {
-        labelContent = rawValue;
-    }
-    let iconName = null;
-    let iconColor = null;
-    if (column.barSettings.icon) {
-        [iconName, iconColor] = (_k = (_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) === null || _k === void 0 ? void 0 : _k.split("|"); // does this make it super conditional on the icon being there?
-    }
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].barGrid },
-        column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartPrefix }, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, iconName ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
-        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
-            " ",
-            labelContent,
-            " ")));
-}
-
 
 /***/ }),
 
@@ -50879,8 +50928,8 @@ var ContextualMenuAnchor = /** @class */ (function (_super) {
 /* harmony import */ var _TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TableViewerPlaceholder */ "RVsW");
 /* harmony import */ var _TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TableViewerErrorMessage */ "VvtR");
 /* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/Utilities */ "t2W0");
-/* harmony import */ var _TableGridRender__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableGridRender */ "B0n2");
-/* harmony import */ var _TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TabsRender/TabBarRender */ "s8/t");
+/* harmony import */ var _TableElements_TableGridRender__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TableElements/TableGridRender */ "U4v2");
+/* harmony import */ var _TableElements_TabBarRender__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TableElements/TabBarRender */ "IxOr");
 
 
 
@@ -50913,20 +50962,46 @@ const TableViewerContainer = (props) => {
     //=================================================================================================================
     // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
     //=================================================================================================================
-    const getFilterValues = (items, columnName) => {
+    const getFilterValues = (items, columnName, column) => {
         // This gets a list of the unique values in the data structure and indicates how many items have that value, and sets selected to false
+        console.log(">>> GetFilterValues", columnName, column);
         const tabData = {};
         items.forEach((item) => {
             const tabValue = item[columnName];
             if (tabValue) {
-                // If the tabValue exists, increase the count
-                if (tabData[tabValue]) {
-                    tabData[tabValue].itemCount++;
+                if (column.type === 'multiChoice') {
+                    // If the tabValue is an array, loop through each value in the array
+                    tabValue.forEach((value) => {
+                        if (tabData[value]) {
+                            tabData[value].itemCount++;
+                        }
+                        else {
+                            tabData[value] = { itemCount: 1, selected: false };
+                        }
+                    });
                 }
                 else {
-                    // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected
-                    // This defines the structure and initial content of the tabData object
-                    tabData[tabValue] = { itemCount: 1, selected: false };
+                    if (column.type === 'person') {
+                        tabValue.forEach((value) => {
+                            if (tabData[value.title]) {
+                                tabData[value.title].itemCount++;
+                            }
+                            else {
+                                tabData[value.title] = { itemCount: 1, selected: false };
+                            }
+                        });
+                    }
+                    else {
+                        // If the tabValue exists, increase the count
+                        if (tabData[tabValue]) {
+                            tabData[tabValue].itemCount++;
+                        }
+                        else {
+                            // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected
+                            // This defines the structure and initial content of the tabData object
+                            tabData[tabValue] = { itemCount: 1, selected: false };
+                        }
+                    }
                 }
             }
         });
@@ -50984,7 +51059,12 @@ const TableViewerContainer = (props) => {
         applyFilter();
     };
     const applyFilter = () => {
+        console.log(">>> ApplyFilter", tabData);
         const selectedKeys = Object.keys(tabData).filter((fieldName) => Object.values(tabData[fieldName]).some((tab) => tab.selected));
+        //TODO MAKE THE FILTER WORK ON MULTI ITEM FIELDS AND PEOPLE FIELDS THREE TYPES OF FIELD TO HANDLE
+        // Plain old string fields or numbers or dates then attays of people objects
+        // Then we have multi select fields which are arrays of strings 
+        console.log(">>> Selected Keys", selectedKeys);
         let newFilteredItems;
         if (selectedKeys.length === 0) {
             newFilteredItems = updatedItems;
@@ -50993,16 +51073,30 @@ const TableViewerContainer = (props) => {
             const filteredItemsSet = new Set();
             selectedKeys.forEach((fieldKey) => {
                 const selectedTabs = Object.keys(tabData[fieldKey]).filter((key) => tabData[fieldKey][key].selected);
-                console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
+                const column = ColumnsJSON[fieldKey];
+                console.log(">>> Search ", fieldKey, " values to search for ", selectedTabs);
                 updatedItems.forEach((item) => {
-                    if (selectedTabs.includes(item[fieldKey].rawValue)) {
-                        filteredItemsSet.add(item);
+                    const fieldValue = item[fieldKey];
+                    // so maybe i need to look at the jsontype to determine this 
+                    if (Array.isArray(fieldValue.rawValue)) {
+                        // Handle person, multi-select fields
+                        console.log(">>> its a person on multi ", fieldValue);
+                        if (selectedTabs.includes(fieldValue.displayValue)) {
+                            filteredItemsSet.add(item);
+                        }
+                    }
+                    else {
+                        // Handle non-person, non-multi-select field
+                        console.log(">>> its just ordinary ", fieldValue);
+                        if (selectedTabs.includes(fieldValue.rawValue)) {
+                            filteredItemsSet.add(item);
+                        }
                     }
                 });
             });
             newFilteredItems = Array.from(filteredItemsSet);
         }
-        // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
+        // now if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
         if (searchQuery) {
             const filteredItems = newFilteredItems.filter((item) => Object.values(item).some((field) => {
                 const fieldValue = field;
@@ -51054,12 +51148,10 @@ const TableViewerContainer = (props) => {
             getItems();
         }
     }, [configured]);
-    // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE TABS AND THEN AGAIN TO FORMAT THE DATA
+    // AND THEN LOOP THROUGH AGAIN TO FORMAT THE DATA
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-        // Update tabData and updatedItems when items change
+        // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE MAX VALUES FOR THE BAR CHARTS 
         const barColumns = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].type === 'bar');
-        console.log("Bar Cols", barColumns);
-        //get the MAX value for the bar chart
         const maxValues = {};
         barColumns.forEach((column) => {
             const maxValue = Math.max(...items.map(item => parseFloat(item[column]) || 0));
@@ -51067,20 +51159,19 @@ const TableViewerContainer = (props) => {
         });
         console.log("Max Bar Values", maxValues);
         setMaxBarValues(maxValues);
-        // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-        // the one that shows counts, enumerates values if it is selected and the field it relates to 
+        // GET THE TAB VALUES THIS IS DIFFERENT FOR MULTI SELECT ABD PEOPLE AS THEY NEED ENUMERATING
         const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
         console.log("TabFields", tabs);
         // get the unique values for each of the tab fields
-        const tabData = {};
+        const newtabData = {};
         tabs.forEach((field) => {
-            const tabFieldData = getFilterValues(items, field);
+            const tabFieldData = getFilterValues(items, field, ColumnsJSON[field]);
             // assign the tabFieldData to the tabData object WITH the field name as the key
-            tabData[field] = tabFieldData;
+            newtabData[field] = tabFieldData;
         });
         // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
-        console.log("ALL Tab data:", tabData);
-        setTabData(tabData);
+        console.log("ALL Tab data:", newtabData);
+        setTabData(newtabData);
         // DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
         // Check if all fields in the JSON code are in the data
         const missingFields = Object.keys(ColumnsJSON).filter((key) => !(key in items[0]));
@@ -51088,14 +51179,14 @@ const TableViewerContainer = (props) => {
             console.error("The following fields are missing from the data:", missingFields);
         }
         // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
+        // we also do soem specific things if its people or multi values or links etc
         const updateData = async () => {
-            // Prepare the data by identifying if it has a prefix or a suffix or a specific format and then render the data in the table
             const newTabData = items.map(item => {
                 const newItem = Object.assign({}, item);
                 Object.keys(item).forEach((key) => {
                     if (ColumnsJSON[key]) {
                         const ColData = ColumnsJSON[key];
-                        const format = ColData.format || '';
+                        const format = ColData.format || '0';
                         const type = ColData.type || 'string';
                         let rawValue = item[key];
                         let displayValue = rawValue;
@@ -51105,8 +51196,11 @@ const TableViewerContainer = (props) => {
                             rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any commas and convert to a number
                             if (isNaN(rawValue)) {
                                 rawValue = 0;
+                                displayValue = '';
                             }
-                            displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* numberFormat */ "f"])(rawValue, format);
+                            else {
+                                displayValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* numberFormat */ "f"])(rawValue, format);
+                            }
                         }
                         else if (type === 'date') {
                             rawValue = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* parseDate */ "g"])(rawValue, 'en-GB');
@@ -51125,10 +51219,15 @@ const TableViewerContainer = (props) => {
                         }
                         else if (type === 'person') {
                             if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
-                                const email = rawValue[0].email || '';
-                                const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* toProperCase */ "h"])(email.split('@')[0].replace(/\./g, ' '));
-                                rawValue[0].name = name; // Add the name key to rawValue[0]
-                                displayValue = rawValue[0].title;
+                                displayValue = '';
+                                rawValue.forEach((person) => {
+                                    const email = (person === null || person === void 0 ? void 0 : person.email) || '';
+                                    const name = Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_6__[/* toProperCase */ "h"])(email.split('@')[0].replace(/\./g, ' '));
+                                    person.name = name; // Add the name key to person
+                                    displayValue += `${name}, `;
+                                });
+                                // Remove the trailing comma and space
+                                displayValue = displayValue.slice(0, -2);
                             }
                             else {
                                 displayValue = '';
@@ -51141,7 +51240,6 @@ const TableViewerContainer = (props) => {
                         newItem[key] = {
                             rawValue: rawValue,
                             displayValue: displayValue,
-                            // sortValue: sortValue,
                         };
                     }
                 });
@@ -51174,8 +51272,8 @@ const TableViewerContainer = (props) => {
     return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { id: webPartTag, className: _containerClass }, !configured ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null,
         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerHeader__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"], { displayMode: displayMode, title: title, updateProperty: updateProperty, showTitle: showTitle, showFind: showFind, searchQuery: searchQuery, handleSearch: handleSearch }),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TabsRender_TabBarRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableGridRender__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { listUrl: listPath, colJSON: ColumnsJSON, items: filteredItems, contentHeight: contentHeight, maxBarValues: maxBarValues, height: windowDimensions.height })),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tabBar }, Object.keys(tabData).map((field) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableElements_TabBarRender__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], { key: field, fieldName: field, tabs: tabData[field], handleTabChange: handleTabChange, tabBehaviour: tabBehaviour })))),
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableElements_TableGridRender__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], { listUrl: listPath, colJSON: ColumnsJSON, items: filteredItems, contentHeight: contentHeight, maxBarValues: maxBarValues, height: windowDimensions.height })),
         globalError && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerErrorMessage__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"], { message: globalError, onDismiss: () => setGlobalError(null) })))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_TableViewerPlaceholder__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"], { displayMode: displayMode, onConfigure: onConfigure }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (TableViewerContainer);
@@ -51527,6 +51625,38 @@ var BaseDecorator = /** @class */ (function (_super) {
 }(_Utilities__WEBPACK_IMPORTED_MODULE_2__[/* BaseComponent */ "a"]));
 
 //# sourceMappingURL=BaseDecorator.js.map
+
+/***/ }),
+
+/***/ "ghY7":
+/*!******************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/TableElements/TableGridHeader.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TableGridFooter; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+
+function TableGridFooter({ _sortedColumns, sortField, handleSortToggle, _headStyle }) {
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _headStyle },
+        _sortedColumns.map(({ key, column }) => column.width > "0" && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: key, className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell },
+            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.name),
+            column.isSortable && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: sortField.key !== key
+                    ? "Sort"
+                    : sortField.direction
+                        ? "SortDown"
+                        : "SortUp", className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].sortIcon, onClick: () => handleSortToggle(key) }))))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].tableHeaderCell }, " \u00A0 ")));
+}
+
 
 /***/ }),
 
@@ -54385,40 +54515,6 @@ var ContextualMenuItem = Object(_Utilities__WEBPACK_IMPORTED_MODULE_0__[/* style
 
 /***/ }),
 
-/***/ "jwtg":
-/*!***********************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/RenderIcon.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderIcon; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-
-
-
-function renderIcon({ item, field, column }) {
-    var _a;
-    const displayValue = item[field].displayValue;
-    const iconData = (_a = column.icons) === null || _a === void 0 ? void 0 : _a[displayValue];
-    if (iconData) {
-        const [iconName, iconColor] = iconData.split("|");
-        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].iconCell },
-            react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_1__[/* Icon */ "a"], { iconName: iconName, style: { color: iconColor }, title: displayValue })));
-    }
-    else {
-        return displayValue;
-    }
-}
-
-
-/***/ }),
-
 /***/ "k/69":
 /*!*********************************************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/components/Button/DefaultButton/DefaultButton.styles.js ***!
@@ -57005,6 +57101,80 @@ if(typeof content === "string") content = [[module.i, content]];
 for (var i = 0; i < content.length; i++) loader.loadStyles(content[i][1], true);
 
 if(content.locals) module.exports = content.locals;
+
+/***/ }),
+
+/***/ "mKHb":
+/*!**************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderBar.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderBar; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fluentui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react */ "Dfs8");
+/* harmony import */ var _fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Icon */ "htj1");
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../helpers/Utilities */ "t2W0");
+
+
+
+
+ // Ensure this import is correct
+function renderBar({ item, field, column, maxBarValues }) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    const value = item[field].rawValue;
+    const rawValue = parseFloat(value) || 0;
+    const maxValue = ((_a = column.barSettings) === null || _a === void 0 ? void 0 : _a.limit) || maxBarValues[field] || 100; // Set a default height if not provided
+    const percentage = (rawValue / maxValue) * 100;
+    if (percentage < 0) {
+        return null;
+    }
+    // now do the styling for the bar
+    const barcol = ((_b = column.barSettings) === null || _b === void 0 ? void 0 : _b.color) || "#d0d0d0"; // Set barcol to column.barSettings.color if it exists, otherwise "darkblue"
+    const barHeight = ((_c = column.barSettings) === null || _c === void 0 ? void 0 : _c.height) || "20px"; // Set a default height if not provided
+    const _barStyle = Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartBar, { backgroundColor: barcol, height: barHeight, width: `${percentage}%` });
+    const textCol = percentage < 50 ? "#000000" : Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_4__[/* getContrastingTextColor */ "a"])(barcol); // get a contrast if it's going inside else use black (black for transparent too)
+    // Set the position of the bar label based on the percentage ( < 50 its outside >50 its inside in a contrasting color but if there is an icon add more padding to the right)
+    const labelPadding = ((_d = column.barSettings) === null || _d === void 0 ? void 0 : _d.icon) ? "20px" : "5px";
+    const _barLabelStyle = percentage < 50
+        ? Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${100 - percentage}%`, left: `${percentage}%`, textAlign: 'left', color: textCol }) // outside One
+        : Object(_fluentui_react__WEBPACK_IMPORTED_MODULE_1__[/* mergeStyles */ "C"])(_TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartLabel, { width: `${percentage}%`, textAlign: 'right', paddingRight: labelPadding, color: textCol }); // Inside one
+    // Determine the label content based on barSettings if it's not specified then just use the raw value
+    let labelContent = null;
+    if (column.barSettings) {
+        if (((_e = column.barSettings) === null || _e === void 0 ? void 0 : _e.showValue) && ((_f = column.barSettings) === null || _f === void 0 ? void 0 : _f.showPercentage)) {
+            labelContent = `${rawValue} (${percentage.toFixed(0)}%)`;
+        }
+        else if ((_g = column.barSettings) === null || _g === void 0 ? void 0 : _g.showValue) {
+            labelContent = `${rawValue}`;
+        }
+        else if ((_h = column.barSettings) === null || _h === void 0 ? void 0 : _h.showPercentage) {
+            labelContent = `${percentage.toFixed(0)}%`;
+        }
+    }
+    else {
+        labelContent = rawValue;
+    }
+    let iconName = null;
+    let iconColor = null;
+    let iconSize = null;
+    if ((_j = column.barSettings) === null || _j === void 0 ? void 0 : _j.icon) {
+        [iconName, iconColor, iconSize] = column.barSettings.icon.split("|"); // does this make it super conditional on the icon being there?
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].barGrid },
+        column.prefix ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].chartPrefix }, column.prefix) : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barStyle, title: value }, iconName ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Icon__WEBPACK_IMPORTED_MODULE_2__[/* Icon */ "a"], { iconName: iconName, title: rawValue.toString(), style: { color: iconColor, fontSize: iconSize || "1rem" } })) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0"))),
+        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _barLabelStyle },
+            " ",
+            labelContent,
+            " ")));
+}
+
 
 /***/ }),
 
@@ -59939,27 +60109,6 @@ function getWindow(rootElement) {
 
 /***/ }),
 
-/***/ "pzTe":
-/*!*************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/renderNoData.js ***!
-  \*************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNoData; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-function renderNoData({ column }) {
-    var _a;
-    return column.type === "stack" ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, (_a = column.fields) === null || _a === void 0 ? void 0 : _a.map((field, fieldIndex) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: fieldIndex, className: `stack ${field}` }, "No Data"))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "No Data"));
-}
-
-
-/***/ }),
-
 /***/ "q1Lp":
 /*!***********************************************************!*\
   !*** ./node_modules/@pnp/sp/utils/escapeQueryStrValue.js ***!
@@ -60332,47 +60481,6 @@ function concatStyleSetsWithProps(styleProps) {
     return {};
 }
 //# sourceMappingURL=concatStyleSetsWithProps.js.map
-
-/***/ }),
-
-/***/ "qfZ8":
-/*!**********************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TabsRender/PersonCard.js ***!
-  \**********************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonCard; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "YMdL");
-/* harmony import */ var _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fluentui/react/lib/Persona */ "9CMT");
-/* harmony import */ var _helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../helpers/Utilities */ "t2W0");
-
-
-//  /_layouts/15/userphoto.aspx?AccountName=mail@domain.com
-
-function PersonCard({ email, name, title, format }) {
-    const examplePersona = {
-        imageUrl: `/_layouts/15/userphoto.aspx?AccountName=${email}`,
-        imageInitials: Object(_helpers_Utilities__WEBPACK_IMPORTED_MODULE_3__[/* getInitials */ "b"])(name),
-        text: name,
-        secondaryText: email
-    };
-    const sizes = {
-        "size8": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size8,
-        "size24": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size24,
-        "size32": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size32,
-        "size40": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size40,
-        "size48": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size48,
-        "size56": _fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_1__[/* PersonaSize */ "c"].size56
-    };
-    const cardSize = sizes[format || "size40"];
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, cardSize ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_fluentui_react_lib_Persona__WEBPACK_IMPORTED_MODULE_2__[/* Persona */ "a"], Object.assign({}, examplePersona, { size: cardSize }))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, format === "email" ? email : format === "title" ? title : name))));
-}
-
 
 /***/ }),
 
@@ -60959,45 +61067,6 @@ function _warnDuplicateIcon(iconName) {
 
 /***/ }),
 
-/***/ "s8/t":
-/*!************************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/TabsRender/TabBarRender.js ***!
-  \************************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabBarRender; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
-
-
-function TabBarRender({ fieldName, tabs, handleTabChange, tabBehaviour }) {
-    const isAnyTabSelected = Object.values(tabs).some(tab => tab.selected);
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tabBar },
-        Object.keys(tabs).map(tab => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { key: tab, onClick: () => handleTabChange(fieldName, tab), title: `Click to filter on ${fieldName}: ${tab}`, style: {
-                marginRight: '8px',
-                backgroundColor: tabs[tab].selected ? '#0078d4' : '#eaeaea',
-                color: tabs[tab].selected ? '#fff' : '#000',
-                padding: '5px 10px',
-                border: 'none',
-                cursor: 'pointer',
-            } }, `${tab} (${tabs[tab].itemCount || 0})`))),
-        !tabBehaviour && isAnyTabSelected && (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { onClick: () => handleTabChange(fieldName, null), title: "Clear filter", style: {
-                marginLeft: '8px',
-                backgroundColor: '#eaeaea',
-                color: '#000',
-                padding: '5px 10px',
-                border: 'none',
-                cursor: 'pointer',
-            } }, "Clear"))));
-}
-
-
-/***/ }),
-
 /***/ "sB8u":
 /*!*****************************************************************************!*\
   !*** ./node_modules/office-ui-fabric-react/lib/components/Fabric/Fabric.js ***!
@@ -61439,30 +61508,32 @@ const numberFormat = (value, format) => {
     let useGrouping = false;
     let minimumFractionDigits = 0;
     let maximumFractionDigits = 0;
-    // Parse the format string
-    if (format.includes('$')) {
-        style = 'currency';
-        currency = 'USD';
-    }
-    else if (format.includes('£')) {
-        style = 'currency';
-        currency = 'GBP';
-    }
-    else if (format.includes('€')) {
-        style = 'currency';
-        currency = 'EUR';
-    }
-    else if (format.includes('¥')) {
-        style = 'currency';
-        currency = 'JPY';
-    }
-    if (format.includes(',')) {
-        useGrouping = true;
-    }
-    const decimalMatch = format.match(/\d+/);
-    if (decimalMatch) {
-        minimumFractionDigits = parseInt(decimalMatch[0], 10);
-        maximumFractionDigits = minimumFractionDigits;
+    // Parse the format string if it exists
+    if (format) {
+        if (format.includes('$')) {
+            style = 'currency';
+            currency = 'USD';
+        }
+        else if (format.includes('£')) {
+            style = 'currency';
+            currency = 'GBP';
+        }
+        else if (format.includes('€')) {
+            style = 'currency';
+            currency = 'EUR';
+        }
+        else if (format.includes('¥')) {
+            style = 'currency';
+            currency = 'JPY';
+        }
+        if (format.includes(',')) {
+            useGrouping = true;
+        }
+        const decimalMatch = format.match(/\d+/);
+        if (decimalMatch) {
+            minimumFractionDigits = parseInt(decimalMatch[0], 10);
+            maximumFractionDigits = minimumFractionDigits;
+        }
     }
     try {
         return new Intl.NumberFormat(undefined, { style, currency, useGrouping, minimumFractionDigits, maximumFractionDigits }).format(value);
@@ -61713,34 +61784,6 @@ var PageType;
     PageType[PageType["PAGE_MAXITEMS"] = 11] = "PAGE_MAXITEMS";
 })(PageType || (PageType = {}));
 //# sourceMappingURL=types.js.map
-
-/***/ }),
-
-/***/ "tG9h":
-/*!*************************************************************!*\
-  !*** ./lib/webparts/tableViewer/components/renderNumber.js ***!
-  \*************************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderNumber; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableViewer.module.scss */ "NIgM");
-
-
-function renderNumber({ item, field, column, shouldMerge }) {
-    if (shouldMerge) {
-        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
-    }
-    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].numberCell },
-        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
-        item[field].displayValue,
-        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
-}
-
 
 /***/ }),
 
@@ -64223,6 +64266,66 @@ var useUnmount = function (callback) {
 
 /***/ }),
 
+/***/ "wYiv":
+/*!****************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderStack.js ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderStack; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _RenderBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RenderBar */ "mKHb");
+/* harmony import */ var _RenderNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RenderNumber */ "9yNZ");
+/* harmony import */ var _RenderHtml__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RenderHtml */ "0DWH");
+/* harmony import */ var _RenderLink__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RenderLink */ "5ZP+");
+/* harmony import */ var _RenderPersonCard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./RenderPersonCard */ "2Kse");
+/* harmony import */ var _RenderDefault__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./RenderDefault */ "LCmk");
+/* harmony import */ var _RenderMultiChoice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./RenderMultiChoice */ "y7Ml");
+
+// these are the sub cell render methods that are used in the render stack method
+ // Import the renderBar function
+ // Import the renderNumber function
+ // Import the renderHtml function
+ // Import the renderLink function
+ // Import the renderPersonCard function
+ // Import the renderDefault function
+ // Import the renderMultiChoice function
+function renderStack({ item, column, allcolJSON, maxBarValues }) {
+    var _a;
+    return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, (_a = column.fields) === null || _a === void 0 ? void 0 : _a.map((field, fieldIndex) => {
+        const fieldColumn = allcolJSON[field];
+        if (!fieldColumn) {
+            return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, "\u00A0");
+        }
+        const content = (() => {
+            switch (fieldColumn.type) {
+                case 'bar':
+                    return Object(_RenderBar__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({ item, field, column: fieldColumn, maxBarValues });
+                case 'number':
+                    return Object(_RenderNumber__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({ item, field, column: fieldColumn, shouldMerge: false });
+                case 'html':
+                    return Object(_RenderHtml__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])({ item, field });
+                case 'link':
+                    return Object(_RenderLink__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])({ item, field, column: fieldColumn });
+                case 'person':
+                    return Object(_RenderPersonCard__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])({ item, field, column: fieldColumn, shouldMerge: false });
+                case "multiChoice":
+                    return Object(_RenderMultiChoice__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"])({ item, field, column, shouldMerge: false });
+                default:
+                    return Object(_RenderDefault__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])({ item, field, column: fieldColumn, shouldMerge: false });
+            }
+        })();
+        return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: `stack ${field}`, key: fieldIndex }, content));
+    })));
+}
+
+
+/***/ }),
+
 /***/ "wa6a":
 /*!***********************************!*\
   !*** ./lib/helpers/Interfaces.js ***!
@@ -64260,7 +64363,7 @@ const IColumnJSONSchema = zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].object({
     class: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional().nullable(),
     isSortable: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     isMultiline: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
-    total: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
+    showTotal: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     rowMerge: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].boolean().optional().nullable(),
     fields: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].array(zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string()).optional().nullable(),
     prefix: zod__WEBPACK_IMPORTED_MODULE_0__[/* z */ "a"].string().optional().nullable(),
@@ -65401,6 +65504,42 @@ var getStyles = function (props) {
     };
 };
 //# sourceMappingURL=Persona.styles.js.map
+
+/***/ }),
+
+/***/ "y7Ml":
+/*!**********************************************************************************!*\
+  !*** ./lib/webparts/tableViewer/components/RenderFragments/RenderMultiChoice.js ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return renderMultiChoice; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "cDcd");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TableViewer.module.scss */ "NIgM");
+
+
+function renderMultiChoice({ item, field, column, shouldMerge }) {
+    if (shouldMerge) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    const content = item[field].displayValue;
+    if (!content) {
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, "\u00A0");
+    }
+    const rawValue = item[field].rawValue;
+    return column.isMultiline ? (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent }, rawValue.map((entry, index) => (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { key: index },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        entry,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)))))) : (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: _TableViewer_module_scss__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"].tableDataContent },
+        column.prefix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.prefix),
+        content,
+        column.suffix && react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", null, column.suffix)));
+}
+
 
 /***/ }),
 

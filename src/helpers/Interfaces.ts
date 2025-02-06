@@ -30,7 +30,7 @@ const IColumnJSONSchema = z.object({
   class: z.string().optional().nullable(),
   isSortable: z.boolean().optional().nullable(),
   isMultiline: z.boolean().optional().nullable(),
-  total: z.boolean().optional().nullable(),
+  showTotal: z.boolean().optional().nullable(),
   rowMerge: z.boolean().optional().nullable(),
   fields: z.array(z.string()).optional().nullable(),
   prefix: z.string().optional().nullable(),
@@ -68,7 +68,7 @@ export interface IColumnJSON {
     lines?: number | 0;
     icons?: IconSettings ;
     barSettings?: BarSettings;
-    total?: boolean;
+    showTotal?: boolean;
 }
   
 export interface IconSettings {

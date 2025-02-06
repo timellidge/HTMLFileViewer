@@ -8,9 +8,9 @@ import TableViewerHeader from './TableViewerHeader';
 import TableViewerPlaceholder from './TableViewerPlaceholder';
 import TableViewerErrorMessage from './TableViewerErrorMessage';
 import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperCase, getListUrl } from '../../../helpers/Utilities';
-import TableGridRender from './TableGridRender';
-import TabBarRender from './TabsRender/TabBarRender';
-import { IColumnsConfig, ITabData, ITabDataDetail } from '../../../helpers/Interfaces';
+import TableGridRender from './TableElements/TableGridRender';
+import TabBarRender from './TableElements/TabBarRender';
+import { IColumnsConfig, ITabData, ITabDataDetail, IColumnJSON } from '../../../helpers/Interfaces';
 
 export interface IField {
   rawValue: any;
@@ -72,19 +72,41 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   //=================================================================================================================
   // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
   //=================================================================================================================
-  const getFilterValues = (items: any[], columnName: string): ITabDataDetail => {
+  const getFilterValues = (items: any[], columnName: string, column:IColumnJSON): ITabDataDetail => {
     // This gets a list of the unique values in the data structure and indicates how many items have that value, and sets selected to false
+    console.log(">>> GetFilterValues",columnName,column);
     const tabData: ITabDataDetail = {};
     items.forEach((item) => {
       const tabValue = item[columnName];
       if (tabValue) {
-        // If the tabValue exists, increase the count
-        if (tabData[tabValue]) {
-          tabData[tabValue].itemCount++;
+        if (column.type === 'multiChoice') {
+          // If the tabValue is an array, loop through each value in the array
+          tabValue.forEach((value: string) => {
+            if (tabData[value]) {
+              tabData[value].itemCount++;
+            } else {
+              tabData[value] = { itemCount: 1, selected: false };
+            }
+          });
         } else {
-          // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected
-          // This defines the structure and initial content of the tabData object
-          tabData[tabValue] = { itemCount: 1, selected: false };
+          if (column.type === 'person') {
+             tabValue.forEach((value: any) => {
+               if (tabData[value.title]) {
+                 tabData[value.title].itemCount++;
+               } else {
+                 tabData[value.title] = { itemCount: 1, selected: false };
+              }
+             });
+          } else {  
+            // If the tabValue exists, increase the count
+            if (tabData[tabValue]) {
+              tabData[tabValue].itemCount++;
+            } else {
+              // If the tabValue does not exist, create a new entry and the sub fields itemCount and selected
+              // This defines the structure and initial content of the tabData object
+              tabData[tabValue] = { itemCount: 1, selected: false };
+            }
+          }
         }
       }
     });
@@ -143,10 +165,17 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   };
 
   const applyFilter = () => {
+    console.log(">>> ApplyFilter", tabData);
     const selectedKeys = Object.keys(tabData).filter((fieldName) =>
       Object.values(tabData[fieldName] as ITabDataDetail).some((tab) => tab.selected)
     );
+//TODO MAKE THE FILTER WORK ON MULTI ITEM FIELDS AND PEOPLE FIELDS THREE TYPES OF FIELD TO HANDLE
+// Plain old string fields or numbers or dates then attays of people objects
+// Then we have multi select fields which are arrays of strings 
 
+
+
+console.log(">>> Selected Keys", selectedKeys);
     let newFilteredItems: any[];
     if (selectedKeys.length === 0) {
       newFilteredItems = updatedItems;
@@ -156,16 +185,31 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
         const selectedTabs = Object.keys(tabData[fieldKey]).filter(
           (key) => tabData[fieldKey][key].selected
         );
-        console.log("FieldName", fieldKey, "SelectedTabs", selectedTabs);
+        const column = ColumnsJSON[fieldKey]
+        console.log(">>> Search ", fieldKey, " values to search for ", selectedTabs);
         updatedItems.forEach((item: any) => {
-          if (selectedTabs.includes(item[fieldKey].rawValue)) {
-            filteredItemsSet.add(item);
+          const fieldValue = item[fieldKey]
+          // so maybe i need to look at the jsontype to determine this 
+          if (Array.isArray(fieldValue.rawValue)) {
+            // Handle person, multi-select fields
+            console.log(">>> its a person on multi ", fieldValue);
+            if (selectedTabs.includes(fieldValue.displayValue)) {
+              filteredItemsSet.add(item);
+            }
+          } else {
+            // Handle non-person, non-multi-select field
+            console.log(">>> its just ordinary ", fieldValue);
+            if (selectedTabs.includes(fieldValue.rawValue)) {
+              filteredItemsSet.add(item);
+            }
           }
         });
       });
       newFilteredItems = Array.from(filteredItemsSet);
     }
-    // nof if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
+
+
+    // now if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
     if (searchQuery) {
       const filteredItems = newFilteredItems.filter((item) =>
         Object.values(item).some((field) => {
@@ -208,8 +252,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   //=================================================================================================================
   // CSS CONSTS AND STUFF
   //================================================================================================================= 
-    //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
-    const _containerClass = mergeStyles(styles.tableViewer, { marginRight: sidePadding + "px", marginLeft: sidePadding + "px" });
+  //are there any css bits we beed to include here (maybe add this to the css things we added to the webpart) as it want to apply tothe same container 
+  const _containerClass = mergeStyles(styles.tableViewer, { marginRight: sidePadding + "px", marginLeft: sidePadding + "px" });
 
 
   //=================================================================================================================
@@ -225,107 +269,118 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     }
   }, [configured]);
 
-  // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE TABS AND THEN AGAIN TO FORMAT THE DATA
+
+  // AND THEN LOOP THROUGH AGAIN TO FORMAT THE DATA
   useEffect(() => {
-    // Update tabData and updatedItems when items change
+
+    // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE MAX VALUES FOR THE BAR CHARTS 
     const barColumns = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].type === 'bar');
-    console.log("Bar Cols", barColumns);
-    //get the MAX value for the bar chart
     const maxValues: { [key: string]: number } = {};
+
     barColumns.forEach((column) => {
       const maxValue = Math.max(...items.map(item => parseFloat(item[column]) || 0));
       maxValues[column] = maxValue;
     });
     console.log("Max Bar Values", maxValues);
     setMaxBarValues(maxValues);
-   
 
-    // get a list of the fields that are marked as tabs and prepare the data structure for the tabs
-    // the one that shows counts, enumerates values if it is selected and the field it relates to 
+    // GET THE TAB VALUES THIS IS DIFFERENT FOR MULTI SELECT ABD PEOPLE AS THEY NEED ENUMERATING
     const tabs = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].tab === true);
     console.log("TabFields",tabs);
     // get the unique values for each of the tab fields
-    const tabData: ITabData = {};
+    const newtabData: ITabData = {};
     tabs.forEach((field) => {
-      const tabFieldData = getFilterValues(items, field);
+      const tabFieldData = getFilterValues(items, field, ColumnsJSON[field]);
       // assign the tabFieldData to the tabData object WITH the field name as the key
-      tabData[field] = tabFieldData;
+      newtabData[field] = tabFieldData;
     });
     // may issue a warning if more that 15 items are found in a tab field - only because the UI will look a bit odd
-    console.log("ALL Tab data:",tabData);
-    setTabData(tabData);
+    console.log("ALL Tab data:",newtabData);
+    setTabData(newtabData);
 
-// DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
+    // DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
     // Check if all fields in the JSON code are in the data
     const missingFields = Object.keys(ColumnsJSON).filter((key) => !(key in items[0]));
-    if (missingFields.length > 0) { 
+    if (missingFields.length > 0) {   
       console.error("The following fields are missing from the data:", missingFields);
     }
 
 
-
-
-      // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
-      const updateData = async () => {
-        // Prepare the data by identifying if it has a prefix or a suffix or a specific format and then render the data in the table
-        const newTabData = items.map(item => {
-          const newItem = { ...item };
-      
-          Object.keys(item).forEach((key) => {
-            if (ColumnsJSON[key]) {
-              const ColData = ColumnsJSON[key];
-              const format = ColData.format || '';
-              const type = ColData.type || 'string';
-              let rawValue = item[key];
-              let displayValue = rawValue;
-             // let sortValue = rawValue;
+    // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
+    // we also do soem specific things if its people or multi values or links etc
+    const updateData = async () => {
+      const newTabData = items.map(item => {
+        const newItem = { ...item };
     
-                // Format the value based on the type
-                if (type === 'number') {
-                  rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any commas and convert to a number
-                  if (isNaN(rawValue)) { rawValue = 0 }
+        Object.keys(item).forEach((key) => {
+          if (ColumnsJSON[key]) {
+            const ColData = ColumnsJSON[key];
+            const format = ColData.format || '0';
+            const type = ColData.type || 'string';
+            let rawValue = item[key];
+            let displayValue = rawValue;
+            // let sortValue = rawValue;
+  
+              // Format the value based on the type
+              if (type === 'number') {
+                rawValue = parseFloat(rawValue.replace(/,/g, '')); // remove any commas and convert to a number
+                if (isNaN(rawValue)) { 
+                  rawValue = 0;
+                  displayValue = '';
+                } else {
                   displayValue = numberFormat(rawValue, format);
-                } else if (type === 'date') {
-                  rawValue = parseDate(rawValue, 'en-GB');
-                  displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
-                } else if (type === 'singleChoice') {
-                  displayValue = rawValue ? rawValue : '-';
-                } else if (type === 'multiChoice') {
-                  displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
-                } else if (type === 'link') {
-                  // the raw value is the link and the display value is the text to display which is the name of the key +.desc
-                  const tempkey = key + ".desc";
-                  displayValue = item[tempkey];
-                } else if (type === 'person') {
-                  if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
-                    const email = rawValue[0].email || '';
-                    const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
-                    rawValue[0].name = name; // Add the name key to rawValue[0]
-                    displayValue = rawValue[0].title;
-                  } else {
-                    displayValue = '';
-                  }
                 }
-              
-              // clear it if the data is missign so we render nothing
-              if(rawValue === null ){
-                displayValue= "";
-              } 
 
-              newItem[key] = {
-                rawValue: rawValue,
-                displayValue: displayValue,
-                // sortValue: sortValue,
-              };
-            }
-          });
-          return newItem;
+              } else if (type === 'date') {
+                rawValue = parseDate(rawValue, 'en-GB');
+                displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
+
+              } else if (type === 'singleChoice') {
+                displayValue = rawValue ? rawValue : '-';
+
+              } else if (type === 'multiChoice') {
+                displayValue = Array.isArray(rawValue) ? rawValue.join(', ') : rawValue;
+
+              } else if (type === 'link') {
+                // the raw value is the link and the display value is the text to display which is the name of the key +.desc
+                const tempkey = key + ".desc";
+                displayValue = item[tempkey];
+
+              } else if (type === 'person') {
+                if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
+                  displayValue = '';
+                  rawValue.forEach((person: any)  => {
+                    const email = person?.email || '';
+                    const name = toProperCase(email.split('@')[0].replace(/\./g, ' '));
+                    person.name = name; // Add the name key to person
+                    displayValue += `${name}, `;
+                  });
+                  // Remove the trailing comma and space
+                  displayValue = displayValue.slice(0, -2);
+
+                } else {
+                  displayValue = '';
+                }
+              }
+            
+            // clear it if the data is missign so we render nothing
+            if(rawValue === null ){
+              displayValue= "";
+            } 
+
+            newItem[key] = {
+              rawValue: rawValue,
+              displayValue: displayValue,
+            };
+          }
         });
-      
-        setUpdatedItems(newTabData);
-        setFilteredItems(newTabData); // pop in the first lot of items to be displayed
-        console.log(">>> UpdatedItems", newTabData);
-      };
+        return newItem;
+      });
+    
+      setUpdatedItems(newTabData);
+      setFilteredItems(newTabData); // pop in the first lot of items to be displayed
+      console.log(">>> UpdatedItems", newTabData);
+    };
 
     updateData();
   }, [items]);

@@ -14,6 +14,8 @@ declare const styles: {
     headerGrid: string;
     tableHeaderCell: string;
     sortIcon: string;
+    footerGrid: string;
+    tableFooterCell: string;
     tableGrid: string;
     tableCell: string;
     numberCell: string;
@@ -21,6 +23,7 @@ declare const styles: {
     iconCell: string;
     tableDataContent: string;
     highlight: string;
+    personHolder: string;
     error: string;
     workbenchPageContent: string;
 };
