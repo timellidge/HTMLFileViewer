@@ -175,7 +175,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
 
 
 
-console.log(">>> Selected Keys", selectedKeys);
+    //console.log(">>> Selected Keys", selectedKeys);
     let newFilteredItems: any[];
     if (selectedKeys.length === 0) {
       newFilteredItems = updatedItems;
@@ -186,19 +186,19 @@ console.log(">>> Selected Keys", selectedKeys);
           (key) => tabData[fieldKey][key].selected
         );
         const column = ColumnsJSON[fieldKey]
-        console.log(">>> Search ", fieldKey, " values to search for ", selectedTabs);
+        //console.log(">>> Search ", fieldKey, " values to search for ", selectedTabs);
         updatedItems.forEach((item: any) => {
           const fieldValue = item[fieldKey]
           // so maybe i need to look at the jsontype to determine this 
-          if (Array.isArray(fieldValue.rawValue)) {
+          if (column.type === 'person' || column.type ==='multiChoice') {
             // Handle person, multi-select fields
-            console.log(">>> its a person on multi ", fieldValue);
-            if (selectedTabs.includes(fieldValue.displayValue)) {
+            //console.log(">>> its a person on multi ", column.type, fieldValue);
+            if (selectedTabs.some(tab => fieldValue.displayValue.includes(tab))) {
               filteredItemsSet.add(item);
             }
           } else {
             // Handle non-person, non-multi-select field
-            console.log(">>> its just ordinary ", fieldValue);
+            //console.log(">>> its just ordinary ",  column.type, fieldValue);
             if (selectedTabs.includes(fieldValue.rawValue)) {
               filteredItemsSet.add(item);
             }
