@@ -165,17 +165,11 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   };
 
   const applyFilter = () => {
-    console.log(">>> ApplyFilter", tabData);
+    // Filter the items based on the selected tabs
     const selectedKeys = Object.keys(tabData).filter((fieldName) =>
       Object.values(tabData[fieldName] as ITabDataDetail).some((tab) => tab.selected)
     );
-//TODO MAKE THE FILTER WORK ON MULTI ITEM FIELDS AND PEOPLE FIELDS THREE TYPES OF FIELD TO HANDLE
-// Plain old string fields or numbers or dates then attays of people objects
-// Then we have multi select fields which are arrays of strings 
 
-
-
-    //console.log(">>> Selected Keys", selectedKeys);
     let newFilteredItems: any[];
     if (selectedKeys.length === 0) {
       newFilteredItems = updatedItems;
@@ -191,14 +185,10 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
           const fieldValue = item[fieldKey]
           // so maybe i need to look at the jsontype to determine this 
           if (column.type === 'person' || column.type ==='multiChoice') {
-            // Handle person, multi-select fields
-            //console.log(">>> its a person on multi ", column.type, fieldValue);
             if (selectedTabs.some(tab => fieldValue.displayValue.includes(tab))) {
               filteredItemsSet.add(item);
             }
           } else {
-            // Handle non-person, non-multi-select field
-            //console.log(">>> its just ordinary ",  column.type, fieldValue);
             if (selectedTabs.includes(fieldValue.rawValue)) {
               filteredItemsSet.add(item);
             }
@@ -207,7 +197,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       });
       newFilteredItems = Array.from(filteredItemsSet);
     }
-
 
     // now if the state comtains a search filter apply that to the reduced set of items or just return the reduced set :-) 
     if (searchQuery) {
