@@ -120,7 +120,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     applyFilter();
   };
 
-  //split this into two funtions?  one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
+  // two funtions:   one to set the tabs and one to do the filter ? then we can call the filter one from the search? 
   const handleTabChange = (fieldName: string, tab: string) => {
     const updatedTabData = { ...tabData }; // take a copy to work with 
     
@@ -372,7 +372,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     };
 
     updateData();
-  }, [items]);
+  }, [items, ColumnsJSON]);
 
 
   useEffect(() => {
