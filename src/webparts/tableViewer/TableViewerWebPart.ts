@@ -1,4 +1,3 @@
-
 // React Imports
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
@@ -16,8 +15,6 @@ import { IViewInfo } from '@pnp/sp/views';
 
 import '@pnp/sp/fields';
 import '@pnp/sp/views';
-// Fabric UI Imports
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 // Container Component Import
 import { IPropertyPaneConfiguration, IPropertyPanePage, IPropertyPaneSliderProps } from '@microsoft/sp-property-pane';
@@ -53,15 +50,8 @@ export interface ITableViewerWebPartProps {
 }
 export default class TableViewerWebPart extends BaseClientSideWebPart<ITableViewerWebPartProps> {
   //@typescript-eslint/no-unused-vars
- // private shouldRerender = false;
-  private linkFieldOptions: IDropdownOption[];
-
   private themeProvider: ThemeProvider;
-
   private themeVariant: IReadonlyTheme | undefined;
-
-  private propertyPaneControls: IPropertyPanePage[];
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private editorProp: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,7 +64,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
   // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
   // -----------------------------------------------------------------------------------------------------------------------------
-
   private tableConfig: IColumnsConfig = {
     "Edit": {
       "name": "Edit",
@@ -192,7 +181,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
   // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
     console.log("Rendering TableViewerWebPart");
-    console.log("Display Mode:", this.displayMode);
     console.log("Properties:", this.properties);
 
     // Inject the CSS into the document's <style> tag
@@ -201,7 +189,6 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     const element: React.ReactElement<ITableViewerContainerProps> = React.createElement(
       TableViewerContainer,
       {
-      //  key: this.shouldRerender ? 'forceUpdate1' : 'forceUpdate2', // This forces React to re-render
         JSONCode: this.properties.JSONCode,
         webPartCSS: this.properties.webPartCSS,
         siteUrl: this.properties.siteUrl,
@@ -314,12 +301,12 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
       if (!validationResult.success) {
         throw new Error("JSON does not match the IConfigJSON interface");
       } else {
-        // all good so pass it on to the default behaviour
-        super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+        // all good so pass it on to the default behaviour whichh will update the property and render
+        this.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
       }
     } catch (error) {
       alert("JSON is not valid: " + error); // use an alert as we alredy have the error
-      throw new Error("damn"); // throw an error to stop the default behaviour
+      throw new Error("Invalid JSON"); // throw an error to stop the default behaviour
     }
   }
   

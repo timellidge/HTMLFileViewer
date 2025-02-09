@@ -23,10 +23,8 @@ export interface ITableViewerWebPartProps {
     webPartTag: string;
 }
 export default class TableViewerWebPart extends BaseClientSideWebPart<ITableViewerWebPartProps> {
-    private linkFieldOptions;
     private themeProvider;
     private themeVariant;
-    private propertyPaneControls;
     private editorProp;
     private listProp;
     private viewProp;
