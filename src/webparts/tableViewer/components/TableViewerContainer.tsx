@@ -11,6 +11,7 @@ import { parseDate, getItemsUsingRenderListDataAsStream, numberFormat, toProperC
 import TableGridRender from './TableElements/TableGridRender';
 import TabBarRender from './TableElements/TabBarRender';
 import { IColumnsConfig, ITabData, ITabDataDetail, IColumnJSON } from '../../../helpers/Interfaces';
+import { DateTime } from 'luxon';
 
 export interface IField {
   rawValue: any;
@@ -321,7 +322,11 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 }
 
               } else if (type === 'date') {
-                rawValue = parseDate(rawValue, 'en-GB');
+                // sharepoitn helpfully provides a second field for every date that is UTC so we can use that to convert 
+                // to local time independant of the timezone or the user date/time format of the users site
+                const utcField = `${key}.` 
+                const utcDate = item[utcField];
+                rawValue = DateTime.fromISO(utcDate, { zone: 'utc' }).setZone('local');
                 displayValue = rawValue.toFormat(format || 'dd/MM/yyyy'); // Format the DateTime object
 
               } else if (type === 'singleChoice') {
@@ -372,7 +377,7 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     };
 
     updateData();
-  }, [items, ColumnsJSON]);
+  }, [items]);
 
 
   useEffect(() => {

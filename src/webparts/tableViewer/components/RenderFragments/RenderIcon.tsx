@@ -9,6 +9,12 @@ interface IRenderIconProps {
   column: IColumnJSON;
 }
 
+//"icons": {
+//  "3.0 Registered":"edit|#cc0000|2rem",
+//  "4.0 Approved":"globe|#cc0000|2rem",
+//  "5.0 Declined":"user|#cc0000|2rem"
+//}
+
 export default function renderIcon({ item, field, column }: IRenderIconProps) {
   const displayValue = item[field].displayValue;
   const iconData = column.icons?.[displayValue];
