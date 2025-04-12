@@ -69,7 +69,6 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const [maxBarValues, setMaxBarValues] = useState<{ [key: string]: number }>({});
   const [windowDimensions, setWindowDimensions] = useState<{ width: number, height: number }>({ width: window.innerWidth, height: window.innerHeight });
 
-
   //=================================================================================================================
   // ON CLICK EVENTS FOR FILTERING AND SORTING AND SEARCHING AND OTHER FUNCTIONS
   //=================================================================================================================
@@ -246,9 +245,9 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   const _containerClass = mergeStyles(styles.tableViewer, { marginRight: sidePadding + "px", marginLeft: sidePadding + "px" });
 
 
-  //=================================================================================================================
-  // USE EFFECTS TO GET THE DATA 
-  //=================================================================================================================
+  //*=================================================================================================================
+  //* USE EFFECTS TO GET THE DATA 
+  //*=================================================================================================================
   useEffect(() => {
     if (!configured) {
       const ColumnsJSON: IColumnsConfig = JSON.parse(JSONCode);
@@ -259,10 +258,23 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     }
   }, [configured]);
 
-
-  // AND THEN LOOP THROUGH AGAIN TO FORMAT THE DATA
+  
+   //* PICK UP ANY CHANGES IN THE JSONCode STRING AND PARSE IT INTO THE COLUMNSJSON OBJECT
   useEffect(() => {
+    const ColumnsJSON: IColumnsConfig = JSON.parse(JSONCode);
+    setColumnsJSON(ColumnsJSON);
+  }, [JSONCode]);
 
+  //* THIS LOOPS THROUGH THE ITEMS ARRAY AND FORMATS THE DATA READY FOR DISPLAY USING THE RULES IN THE COLUMNSJSON OBJECT
+  useEffect(() => {
+    // Check if the JSONCode and items are valid
+    if (
+      !ColumnsJSON || typeof ColumnsJSON !== 'object' || Object.keys(ColumnsJSON).length === 0 ||
+      !items || !Array.isArray(items) || items.length === 0
+    ) {
+      console.error("ColumnsJSON or items are not valid:", { ColumnsJSON, items });
+      return;
+    }
     // NOW PREPARE IT FOR DISPLAY LOOP THROUGH ONCE TO GET THE MAX VALUES FOR THE BAR CHARTS 
     const barColumns = Object.keys(ColumnsJSON).filter(key => ColumnsJSON[key].type === 'bar');
     const maxValues: { [key: string]: number } = {};
@@ -288,16 +300,17 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
     console.log("ALL Tab data:",newtabData);
     setTabData(newtabData);
 
-    // DATA CROSS CHECK ARE ALL TH E FIELDS IN THE JSON CODE IN THE DATA
-    // Check if all fields in the JSON code are in the data
-    const missingFields = Object.keys(ColumnsJSON).filter((key) => !(key in items[0]));
+    // DATA CROSS CHECK ARE ALL THE FIELDS IN THE JSON CODE IN THE DATA (stack and edit fields are not included as they are synthetic)
+    const interestingFields = Object.keys(ColumnsJSON).filter((key) => 
+      ColumnsJSON[key].type !== 'stack' && ColumnsJSON[key].type !== 'edit'
+    );
+    const missingFields = interestingFields.filter((key) => !(key in items[0]));
     if (missingFields.length > 0) {   
-      console.error("The following fields are missing from the data:", missingFields);
+      alert("The following fields are missing from the data or are not spelled correctly :" + missingFields);
     }
 
-
     // so here we can prepare the data by identifying if it has a prefix or a suffix or a specific format and then we can render the data in the table
-    // we also do soem specific things if its people or multi values or links etc
+    // we also do some specific things if it's people or multi values or links etc
     const updateData = async () => {
       const newTabData = items.map(item => {
         const newItem = { ...item };
@@ -376,22 +389,20 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
       console.log(">>> UpdatedItems", newTabData);
     };
 
+    // Call the updateData function
     updateData();
-  }, [items]);
+  }, [items, ColumnsJSON]);
 
-
+  //* THIS USE EFFECT IS TO HANDLE THE RESIZE OF THE WINDOW AND SET THE HEIGHT OF THE TABLE
   useEffect(() => {
     // Get the width and height of the window on load
     const handleResize = () => {
       setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
     };
-
     // Add event listener for window resize
     window.addEventListener('resize', handleResize);
-
     // Call handleResize to set initial dimensions
     handleResize();
-
     // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('resize', handleResize);

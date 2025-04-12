@@ -51,6 +51,9 @@ web_modules/
 release\assets\*
 *.d.js.map
 
+sharepoint/solution/debug/
+temp/stats/
+
 # Optional npm cache directory
 .npm
 
