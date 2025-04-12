@@ -1,6 +1,6 @@
 import * as React from 'react';
 export interface ITableViewerPlaceholderProps {
-    message: string;
+    message: any;
     onDismiss: () => void;
 }
 declare const TableViewerPlaceholder: React.FunctionComponent<ITableViewerPlaceholderProps>;

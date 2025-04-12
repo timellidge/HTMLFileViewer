@@ -48,6 +48,12 @@ web_modules/
 # TypeScript cache
 *.tsbuildinfo
 
+release\assets\*
+*.d.js.map
+
+sharepoint/solution/debug/
+temp/stats/
+
 # Optional npm cache directory
 .npm
 

@@ -1,7 +1,12 @@
 import * as React from 'react';
 export interface ITableViewerHeaderProps {
-    className?: string;
-    children?: React.ReactNode[];
+    displayMode: any;
+    title: string;
+    updateProperty: (value: string) => void;
+    showTitle: boolean;
+    showFind: boolean;
+    searchQuery: string;
+    handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 declare const TableViewerHeader: React.FunctionComponent<ITableViewerHeaderProps>;
 export default TableViewerHeader;

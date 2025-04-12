@@ -1,16 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "developer": {
-      "name": "CPS",
-      "privacyUrl": "https://www.cps.co.uk",
-      "termsOfUseUrl": "https://www.cps.co.uk",
-      "websiteUrl": "https://www.cps.co.uk",
-      "mpnId": "1164729"
-    },
     "name": "TableViewer",
-    "id": "3344637a-673b-4949-b90a-8285254f9755",
-    "version": "1.0.1.10",
+    "id": "d63c415a-4843-49d9-82fc-b0575098f605",
+    "version": "1.0.5.01",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -28,15 +21,13 @@
       {
         "title": "Table Viewer Table Viewer Feature",
         "description": "The feature that activates Table Viewer from the Table Viewer solution.",
-        "id": "2bd5605f-aeea-4184-b86e-13f5b97a7022",
-        "version": "1.0.1.10",
+        "id": "04eebb40-018f-4be0-8309-ff70ed83b5bc",
+        "version": "1.0.4.14",
         "componentIds": [
-          "2bd5605f-aeea-4184-b86e-13f5b97a7022"
+          "04eebb40-018f-4be0-8309-ff70ed83b5bc"
         ]
       }
     ]
-
-
   },
   "paths": {
     "zippedPackage": "solution/TableViewer.sppkg"

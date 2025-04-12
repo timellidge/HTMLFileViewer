@@ -1,46 +1,187 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
-.scrollContainer {
-    //overflow: "scroll";
-    //-ms-overflow-style: none;
+.tableViewer {
+    .tableViewerHeader{
+        display:grid;
+        grid-template-columns: 3fr 1fr;
+        background-color: #ffffff; 
+        width:100%;
+        height:35px;
+        padding: 3px;
 
-   // &::-webkit-scrollbar {
-       // display: none;
-    //}
+        .searchBox{ 
+            margin: 0px;
+        }
+    }
+
+    .tabBar{
+        background-color: #ffffff; 
+        margin-top:  5px; 
+    }
+
+    .barGrid {
+        display: grid;
+        align-items: center; 
+        grid-template-columns: auto 1fr;
+        grid-template-areas: "prefix bar";
+        text-align: left;
+        position: relative;
+
+        .chartPrefix {
+            grid-area: prefix;
+            padding-right: 5px;
+        }
+
+        .chartBar {
+            grid-area: bar;
+            text-align: right;
+            font-size:larger;
+            padding-top: 2px;
+        }
+
+        .chartLabel {
+            grid-area: bar;
+            box-sizing: border-box;
+            padding-left: 5px;
+            position: relative;
+        }
+    }
+
+    .barCell{
+        display: grid;
+
+        .bar{
+            border-right: 3px solid white;
+            margin: 2px;
+            padding: 2px;
+            text-align: right;
+            position: relative;
+
+            .barLabel{
+                position:absolute;
+            }       
+         }
+    }
+
+    .tableContainer {
+        overflow-y: scroll;
+        background-color: #ff7300;
+        width: 100%;
+        margin:0px;
+    }
+
+    .searchBox{ 
+        margin: 0px;
+    }
+
+    .headerGrid{
+        display:grid;
+        width: 100%;
+        grid-gap: 0px;
+        overflow: hidden;
+
+        .tableHeaderCell{
+            background-color: rgb(250, 250, 250);
+            border-bottom: 1px solid #b4b4b4; /* Border color */
+            display: grid;
+            grid-template-columns: auto 1fr; // Adjust the size of the icon column as needed
+            align-items: center;
+            padding: 2px; // Adjust the padding as needed
+            height : 45px;
+            font-size: 15px;
+            font-weight: 600;
+            box-sizing: border-box;
+            .sortIcon{
+                color: rgb(110, 110, 110);
+                margin-left: 5px;
+                cursor: pointer;
+            }
+            &:hover {
+                background-color: #d4d4d0; /* Highlight color */
+            }
+        }
+    } 
+
+    .footerGrid{
+        display:grid;
+        width: 100%;
+        grid-gap: 0px;
+        overflow: hidden;
+
+        .tableFooterCell{
+            background-color: rgb(250, 250, 250);
+            border-top: 1px solid #b4b4b4; /* Border color */
+            border-bottom: 1px solid #b4b4b4; /* Border color */
+            display: grid;
+            grid-template-columns: auto 1fr; // Adjust the size of the icon column as needed
+            align-items: center;
+            padding: 2px; // Adjust the padding as needed
+            height : 30px;
+            font-size: 12px;
+            font-weight: 500;
+            box-sizing: border-box;
+
+
+        }
+    } 
+       
+    .tableGrid{
+        display:grid;
+        width: 100%;
+        grid-gap: 0px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        .tableCell{
+            background-color: rgb(250, 250, 250);
+            padding:2px;
+            font-size: 12px;
+            font-weight: 400;
+            box-sizing: border-box;
+            border-bottom: 1px solid #dfdfdf; /* Border color */
+
+            .numberCell{
+                text-align: right;
+                padding-right :10px;
+            }
+        }
+
+        .editCell{
+            text-align: center;
+            padding-right :10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: larger;
+            font-weight: 700;
+            padding:4px;
+        }
+        .iconCell{
+            text-align: center;
+            padding-right :10px;
+            width: 100%;
+            font-size: larger;
+            font-weight: 700;
+            padding:4px;
+        }
+
+        // this is only needed as a class when lines > 0 or exists. 
+        .tableDataContent{
+            display: -webkit-box;
+            box-sizing: border-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .highlight{
+            background-color: #eceff3;
+        }
+        .personHolder{
+            margin: 3px 2px;
+        }
+        
+    }
 }
-.ID{
-    border:1px solid yellow;
-}
-.Title{
-    border:1px solid rgb(0, 153, 255);
-}
-.BSADescription{
-    border:1px solid green;
-}
-.singlechoice{
-    border:1px solid #56acd1;
-}
-.multichoice{
-    border:1px solid #ff00f7;
-}
-.BSAColor{
-    border:1px solid rgb(121, 118, 118);
-}
-.BSAStart{
-    border:1px solid #ff7300;
-}
-.BSAEnd{
-    border:1px solid rgb(15, 15, 15);
-}
-.PersonField{
-    border:1px solid rgb(93, 17, 17);
-}
-.Stack{
-    border:1px solid rgb(0, 255, 64);
-}
-// .singlelinecss{
-//     border:1px solid blue;
-// }
+
 .error input {
     &::placeholder {
         color: red !important;
@@ -52,3 +193,9 @@
         color: red !important;
     }
 }
+
+#workbenchPageContent{
+    max-width: 1680px;
+}
+
+

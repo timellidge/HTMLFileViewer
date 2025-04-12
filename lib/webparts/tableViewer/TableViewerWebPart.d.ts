@@ -5,6 +5,7 @@ import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane';
 export interface ITableViewerWebPartProps {
     key: string;
     JSONCode: string;
+    webPartCSS: string;
     siteUrl: string;
     list: string;
     view: string;
@@ -13,24 +14,25 @@ export interface ITableViewerWebPartProps {
     showTitle: boolean;
     showFind: boolean;
     hideErrorEmpty: boolean;
+    tabBehaviour: boolean;
     contentHeight: string;
+    sidePadding: number;
     configured: boolean;
     contextSiteUrl: string;
     contextUser: string;
     webPartTag: string;
 }
 export default class TableViewerWebPart extends BaseClientSideWebPart<ITableViewerWebPartProps> {
-    private shouldRerender;
-    private linkFieldOptions;
     private themeProvider;
     private themeVariant;
-    private propertyPaneControls;
     private editorProp;
     private listProp;
     private viewProp;
     private msProps;
+    private tableConfig;
+    private defaultCSS;
     protected onInit(): Promise<void>;
-    protected onPropertyPaneConfigurationComplete(): void;
+    private injectCSS;
     render(): void;
     protected onDispose(): void;
     private hasAllValues;
@@ -40,8 +42,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
     private onPropertyFieldViewPickerChanged;
     private updateFieldViewPickerValue;
     private onPropertyFieldListPickerChanged;
-    private updateFieldListPickerOptions;
-    protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void;
+    private onPropertyPaneJSONChanged;
     protected loadPropertyPaneResources(): Promise<void>;
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration;
 }

@@ -1,17 +1,33 @@
 /* tslint:disable */
 require("./TableViewer.module.css");
 const styles = {
-  ID: 'ID_2a0432dd',
-  Title: 'Title_2a0432dd',
-  BSADescription: 'BSADescription_2a0432dd',
-  singlechoice: 'singlechoice_2a0432dd',
-  multichoice: 'multichoice_2a0432dd',
-  BSAColor: 'BSAColor_2a0432dd',
-  BSAStart: 'BSAStart_2a0432dd',
-  BSAEnd: 'BSAEnd_2a0432dd',
-  PersonField: 'PersonField_2a0432dd',
-  Stack: 'Stack_2a0432dd',
-  error: 'error_2a0432dd'
+  tableViewer: 'tableViewer_083b2d0f',
+  tableViewerHeader: 'tableViewerHeader_083b2d0f',
+  searchBox: 'searchBox_083b2d0f',
+  tabBar: 'tabBar_083b2d0f',
+  barGrid: 'barGrid_083b2d0f',
+  chartPrefix: 'chartPrefix_083b2d0f',
+  chartBar: 'chartBar_083b2d0f',
+  chartLabel: 'chartLabel_083b2d0f',
+  barCell: 'barCell_083b2d0f',
+  bar: 'bar_083b2d0f',
+  barLabel: 'barLabel_083b2d0f',
+  tableContainer: 'tableContainer_083b2d0f',
+  headerGrid: 'headerGrid_083b2d0f',
+  tableHeaderCell: 'tableHeaderCell_083b2d0f',
+  sortIcon: 'sortIcon_083b2d0f',
+  footerGrid: 'footerGrid_083b2d0f',
+  tableFooterCell: 'tableFooterCell_083b2d0f',
+  tableGrid: 'tableGrid_083b2d0f',
+  tableCell: 'tableCell_083b2d0f',
+  numberCell: 'numberCell_083b2d0f',
+  editCell: 'editCell_083b2d0f',
+  iconCell: 'iconCell_083b2d0f',
+  tableDataContent: 'tableDataContent_083b2d0f',
+  highlight: 'highlight_083b2d0f',
+  personHolder: 'personHolder_083b2d0f',
+  error: 'error_083b2d0f',
+  workbenchPageContent: 'workbenchPageContent_083b2d0f'
 };
 
 export default styles;
