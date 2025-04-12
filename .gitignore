@@ -53,6 +53,12 @@ release\assets\*
 
 sharepoint/solution/debug/
 temp/stats/
+/temp/
+\temp
+/release
+\release
+\solution\
+/solution/
 
 # Optional npm cache directory
 .npm
