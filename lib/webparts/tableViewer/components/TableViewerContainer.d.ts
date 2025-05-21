@@ -20,6 +20,7 @@ export interface ITableViewerContainerProps {
     showFind: boolean;
     tabBehaviour: boolean;
     hideErrorEmpty: boolean;
+    emptyMessage: string;
     themeVariant: IReadonlyTheme | undefined;
     contentHeight: string;
     sidePadding: number;

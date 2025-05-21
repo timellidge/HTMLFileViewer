@@ -39,6 +39,7 @@ export interface ITableViewerWebPartProps {
   showTitle: boolean;
   showFind: boolean;
   hideErrorEmpty:boolean;
+  emptyMessage: string;
   tabBehaviour: boolean;
   contentHeight: string;
   sidePadding: number;
@@ -202,6 +203,7 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
         showTitle: this.properties.showTitle,
         showFind: this.properties.showFind,
         hideErrorEmpty:this.properties.hideErrorEmpty,
+        emptyMessage: this.properties.emptyMessage,
         tabBehaviour: this.properties.tabBehaviour,
         themeVariant: this.themeVariant,
         contentHeight: this.properties.contentHeight,
@@ -428,6 +430,10 @@ export default class TableViewerWebPart extends BaseClientSideWebPart<ITableView
                 this.msProps.PropertyPaneToggle('hideErrorEmpty', {
                   label: 'Hide On Error or Empty',
                   checked: this.properties.hideErrorEmpty,
+                }),
+                this.msProps.PropertyPaneTextField('emptyMessage', {
+                  label: 'Message to show when empty',
+                  value: this.properties.emptyMessage,
                 }),
                 this.msProps.PropertyPaneSlider('sidePadding', {
                   label: 'Set a gutter width (px)',

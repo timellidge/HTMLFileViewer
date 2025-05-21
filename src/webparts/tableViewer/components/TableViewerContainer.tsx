@@ -34,6 +34,7 @@ export interface ITableViewerContainerProps {
   showFind: boolean;
   tabBehaviour: boolean;
   hideErrorEmpty: boolean;
+  emptyMessage: string;
   themeVariant: IReadonlyTheme | undefined;
   contentHeight: string;
   sidePadding: number;
@@ -51,7 +52,7 @@ export interface ITableViewerContainerProps {
 const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> = (props) => {
   // pull out the properties from the props object
   const { displayMode, title, updateProperty, showTitle, showFind, configured, 
-          onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty,
+          onConfigure, JSONCode, webPartCSS, siteUrl, listId, viewXmlCode, hideErrorEmpty, emptyMessage,
           themeVariant, contentHeight, contextSiteUrl, contextUser, sidePadding, webPartTag , tabBehaviour 
     } = props;
 
@@ -414,8 +415,11 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
   //=================================================================================================================
   console.log("Filtered Items",filteredItems);
   return (
-    <div id={webPartTag} className={_containerClass}> 
-      {!configured ? (
+    <div id={webPartTag} className={_containerClass}>
+    {updatedItems.length === 0 && hideErrorEmpty ? (
+      <div id="emptymessage">{emptyMessage}</div> // Render an empty div if we have no data and hideErrorEmpty is true
+    ) : (
+      !configured ? (
         <>
           <div >
             <TableViewerHeader  displayMode={displayMode} title={title} updateProperty={updateProperty} showTitle={showTitle} showFind={showFind} searchQuery={searchQuery} handleSearch={handleSearch}/>
@@ -432,7 +436,8 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
         </>
       ) : (
         <TableViewerPlaceholder displayMode={displayMode} onConfigure={onConfigure} />
-      )}
+      )
+    )}
     </div>
   );
 }
