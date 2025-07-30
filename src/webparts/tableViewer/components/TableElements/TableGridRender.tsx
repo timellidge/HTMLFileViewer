@@ -254,6 +254,10 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                           return renderIcon({ item, field: key, column });
                         case "link":
                           return renderLink({ item, field, column });
+                        case "url":
+                          return renderLink({ item, field, column });
+                        case "sidepanel":
+                          return renderLink({ item, field, column });
                         case "edit":
                           return renderEdit({ item, field: "ID", column, handleIconClick });
                         case "number":

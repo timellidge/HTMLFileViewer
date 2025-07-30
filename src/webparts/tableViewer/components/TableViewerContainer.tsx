@@ -354,6 +354,16 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 const tempkey = key + ".desc";
                 displayValue = item[tempkey];
 
+               } else if (type === 'sidepanel') {
+                // the raw value is the link and the display value is the text to display which is the name of the key +.desc
+                const tempkey = key + ".desc";
+                displayValue = item[tempkey];
+
+              } else if (type === 'url') {
+                // the raw value is the link and the display value is the text to display which is the name of the key +.desc
+                const tempkey = key + ".desc";
+                displayValue = item[tempkey];
+
               } else if (type === 'person') {
                 if (rawValue && typeof rawValue === 'object' && rawValue[0].title) {
                   displayValue = '';
