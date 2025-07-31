@@ -3,7 +3,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     name: z.ZodString;
     width: z.ZodString;
     tab: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
-    type: z.ZodNullable<z.ZodOptional<z.ZodEnum<["person", "stack", "html", "icon", "link", "number", "singleChoice", "multiChoice", "date", "string", "edit", "bar"]>>>;
+    type: z.ZodNullable<z.ZodOptional<z.ZodEnum<["person", "stack", "html", "icon", "link", "number", "singleChoice", "multiChoice", "date", "string", "edit", "bar", "url", "sidepanel"]>>>;
     class: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     isSortable: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     isMultiline: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
@@ -39,7 +39,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         showPercentage?: boolean;
     }>>>;
 }, "strip", z.ZodTypeAny, {
-    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar" | "url" | "sidepanel";
     name?: string;
     width?: string;
     tab?: boolean;
@@ -64,7 +64,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
         showPercentage?: boolean;
     };
 }, {
-    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar";
+    type?: "string" | "number" | "date" | "link" | "icon" | "person" | "stack" | "html" | "singleChoice" | "multiChoice" | "edit" | "bar" | "url" | "sidepanel";
     name?: string;
     width?: string;
     tab?: boolean;
@@ -96,7 +96,7 @@ export interface IColumnJSON {
     name: string;
     width: string;
     tab?: boolean | undefined | null;
-    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singleChoice' | 'multiChoice' | 'date' | 'string' | "edit" | "bar" | undefined | null;
+    type?: 'person' | 'stack' | 'html' | 'icon' | 'link' | 'number' | 'singleChoice' | 'multiChoice' | 'date' | 'string' | "edit" | "bar" | "url" | "sidepanel" | undefined | null;
     class?: string | undefined | null;
     isSortable?: boolean | undefined | null;
     isMultiline?: boolean | undefined | null;

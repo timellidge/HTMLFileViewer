@@ -26,7 +26,7 @@ const IColumnJSONSchema = z.object({
   name: z.string(),
   width: z.string(),
   tab: z.boolean().optional().nullable(),
-  type: z.enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singleChoice', 'multiChoice', 'date', 'string', 'edit', 'bar']).optional().nullable(),
+  type: z.enum(['person', 'stack', 'html', 'icon', 'link', 'number', 'singleChoice', 'multiChoice', 'date', 'string', 'edit', 'bar', 'url', 'sidepanel']).optional().nullable(),
   class: z.string().optional().nullable(),
   isSortable: z.boolean().optional().nullable(),
   isMultiline: z.boolean().optional().nullable(),
