@@ -9,6 +9,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     isMultiline: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     showTotal: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     rowMerge: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
+    newTab: z.ZodNullable<z.ZodOptional<z.ZodBoolean>>;
     fields: z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString, "many">>>;
     prefix: z.ZodNullable<z.ZodOptional<z.ZodString>>;
     suffix: z.ZodNullable<z.ZodOptional<z.ZodString>>;
@@ -48,6 +49,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     isMultiline?: boolean;
     showTotal?: boolean;
     rowMerge?: boolean;
+    newTab?: boolean;
     fields?: string[];
     prefix?: string;
     suffix?: string;
@@ -73,6 +75,7 @@ export declare const testColumnsConfigSchema: z.ZodRecord<z.ZodString, z.ZodObje
     isMultiline?: boolean;
     showTotal?: boolean;
     rowMerge?: boolean;
+    newTab?: boolean;
     fields?: string[];
     prefix?: string;
     suffix?: string;
@@ -105,6 +108,7 @@ export interface IColumnJSON {
     suffix?: string | undefined | null;
     format?: string | undefined | null;
     rowMerge?: boolean | undefined | null;
+    newTab?: string | undefined | null;
     sequence?: number | 99;
     lines?: number | 0;
     icons?: IconSettings;

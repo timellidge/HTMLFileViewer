@@ -32,6 +32,7 @@ const IColumnJSONSchema = z.object({
   isMultiline: z.boolean().optional().nullable(),
   showTotal: z.boolean().optional().nullable(),
   rowMerge: z.boolean().optional().nullable(),
+  newTab: z.boolean().optional().nullable(),
   fields: z.array(z.string()).optional().nullable(),
   prefix: z.string().optional().nullable(),
   suffix: z.string().optional().nullable(),
@@ -64,6 +65,7 @@ export interface IColumnJSON {
     suffix?: string | undefined | null;
     format?: string | undefined | null;
     rowMerge?: boolean | undefined | null;
+    newTab?: string | undefined | null;
     sequence?: number | 99;
     lines?: number | 0;
     icons?: IconSettings ;

@@ -360,39 +360,17 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 displayValue = item[tempkey];
 
               } else if (type === 'url') {
-                  // Extract the filename from the URL, decode it, remove extension, and format camelCase
+                // Extract the filename from the URL, decode it, remove extension, and format camelCase
                 if (rawValue) {
-                  try {
-                    const url = new URL(rawValue);
-                    const pathname = url.pathname;
-                    let filename = pathname.split('/').pop() || rawValue;
-                    
-                    // Decode URL encoded characters (like %20 to spaces)
-                    filename = decodeURIComponent(filename);
-                    
-                    // Remove the file extension
-                    filename = filename.split('.').slice(0, -1).join('.') || filename;
-                    
-                    // Convert camelCase to space-separated words (TeamRecord -> Team Record)
-                    displayValue = filename.replace(/([a-z])([A-Z])/g, '$1 $2');
-                    
-                  } catch {
-                    // If URL parsing fails, fall back to simple string splitting
                     let filename = rawValue.split('/').pop() || rawValue;
-                    
-                    // Decode URL encoded characters
                     try {
-                      filename = decodeURIComponent(filename);
+                      filename = decodeURIComponent(filename);    // Decode URL encoded characters
                     } catch {
                       // If decoding fails, use as is
                     }
-                    
-                    // Remove the file extension
-                    filename = filename.split('.').slice(0, -1).join('.') || filename;
-                    
-                    // Convert camelCase to space-separated words
-                    displayValue = filename.replace(/([a-z])([A-Z])/g, '$1 $2');
-                  }
+                
+                    filename = filename.split('.').slice(0, -1).join('.') || filename;      // Remove the file extension
+                    displayValue = filename.replace(/([a-z])([A-Z])/g, '$1 $2');  // Convert camelCase to space-separated words
                 } else {
                   displayValue = 'link';
                 }

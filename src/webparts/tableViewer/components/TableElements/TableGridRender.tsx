@@ -21,6 +21,7 @@ import renderLink        from '../RenderFragments/RenderLink'; // Import the ren
 import renderHtml        from '../RenderFragments/RenderHtml'; // Import the RenderHTML function
 import renderMultiChoice from '../RenderFragments/RenderMultiChoice'; // Import the renderMultiChoice function
 import renderStack       from '../RenderFragments/RenderStack'; // Import the RenderStack function
+import renderUrl         from '../RenderFragments/RenderUrl'; // Import the RenderUrl function
 
 interface ITableGridRenderProps {
   listUrl: string;  
@@ -255,7 +256,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                         case "link":
                           return renderLink({ item, field, column });
                         case "url":
-                          return renderLink({ item, field, column });
+                          return renderUrl({ item, field, column });
                         case "sidepanel":
                           return renderLink({ item, field, column });
                         case "edit":
