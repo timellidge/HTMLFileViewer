@@ -39,7 +39,7 @@ export default function renderUrl({ item, field, column }: IRenderUrlProps) {
         {iconName && (
           <Icon
             iconName={iconName}
-            title="Edit"
+            title={displayText}
             style={{ color: iconColor, fontSize: iconSize || "1rem" }}
           />
         )}
