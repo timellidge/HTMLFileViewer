@@ -45,7 +45,7 @@
     "scriptResources": {
       "plre-listviewer-webpart": {
         "type": "path",
-        "path": "plre-listviewer-webpart_b9bceab752c98cd69b31.js"
+        "path": "plre-listviewer-webpart_9fb31dc415444ddbde3a.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",

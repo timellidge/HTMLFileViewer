@@ -31,7 +31,7 @@ export default function renderUrl({ item, field, column }: IRenderUrlProps) {
       {column.prefix && <span>{column.prefix}</span>}
       <a href={link}
        {...(column.newTab
-        ? { target: "_blank", rel: "noopener noreferrer" }
+        ? { target: "_blank", rel: "noopener noreferrer", "data-interception": "off" }
         : {})
         }
       >
