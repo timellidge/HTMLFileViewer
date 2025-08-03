@@ -29,7 +29,7 @@ export default function renderDocLink({ item, field, column, handleOpenPDF }: IR
   }
 
   return (
-    <div className={styles.tableDataContent}>
+    <div className={styles.tableDataContent}   onClick={() => handleOpenPDF(link)}>
       {column.prefix && <span>{column.prefix}</span>}
       {iconName === "" && displayText}
       {iconName && (
@@ -37,7 +37,7 @@ export default function renderDocLink({ item, field, column, handleOpenPDF }: IR
           iconName={iconName}
           title={displayText}
           style={{ color: iconColor, fontSize: iconSize || "1rem" }}
-          onClick={() => handleOpenPDF(link)}
+         
         />
       )}
       {column.suffix && <span>{column.suffix}</span>}

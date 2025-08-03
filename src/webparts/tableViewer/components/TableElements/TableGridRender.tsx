@@ -115,6 +115,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
 
   const handleOpenPDF = (itemUrl: string) => {
     // different list types have different edit forms so we need to check the url and adjust accordingly
+    setIsSidePanelOpen(false);
     console.log("", itemUrl);
     setIframeUrl(itemUrl);
     openSidePanel();
@@ -266,7 +267,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                         case "url":
                           return renderUrl({ item, field, column });
                         case "sidepanel":
-                          return renderDocLink({ item, field, column });
+                          return renderDocLink({ item, field, column, handleOpenPDF });
                         case "edit":
                           return renderEdit({ item, field: "ID", column, handleIconClick });
                         case "number":
