@@ -22,6 +22,7 @@ import renderHtml        from '../RenderFragments/RenderHtml'; // Import the Ren
 import renderMultiChoice from '../RenderFragments/RenderMultiChoice'; // Import the renderMultiChoice function
 import renderStack       from '../RenderFragments/RenderStack'; // Import the RenderStack function
 import renderUrl         from '../RenderFragments/RenderUrl'; // Import the RenderUrl function
+import renderDocLink     from '../RenderFragments/RenderDocLink'; // Import the RenderDocLink function
 
 interface ITableGridRenderProps {
   listUrl: string;  
@@ -109,6 +110,13 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
     } else {
       setIframeUrl(`${listUrl}/Forms/EditForm.aspx?ID=${id}`);
     }
+    openSidePanel();
+  };
+
+  const handleOpenPDF = (itemUrl: string) => {
+    // different list types have different edit forms so we need to check the url and adjust accordingly
+    console.log("", itemUrl);
+    setIframeUrl(itemUrl);
     openSidePanel();
   };
 
@@ -258,7 +266,7 @@ const TableGridRender: React.FunctionComponent<ITableGridRenderProps> = ({ listU
                         case "url":
                           return renderUrl({ item, field, column });
                         case "sidepanel":
-                          return renderLink({ item, field, column });
+                          return renderDocLink({ item, field, column });
                         case "edit":
                           return renderEdit({ item, field: "ID", column, handleIconClick });
                         case "number":

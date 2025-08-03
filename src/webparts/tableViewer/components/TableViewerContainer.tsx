@@ -354,10 +354,22 @@ const TableViewerContainer: React.FunctionComponent<ITableViewerContainerProps> 
                 const tempkey = key + ".desc";
                 displayValue = item[tempkey];
 
-               } else if (type === 'sidepanel') {
+              } else if (type === 'sidepanel') {
                 // the raw value is the link and the display value is the text to display which is the name of the key +.desc
-                const tempkey = key + ".desc";
-                displayValue = item[tempkey];
+                // Extract the filename from the URL, decode it, remove extension, and format camelCase
+                if (rawValue) {
+                    let filename = rawValue.split('/').pop() || rawValue;
+                    try {
+                      filename = decodeURIComponent(filename);    // Decode URL encoded characters
+                    } catch {
+                      // If decoding fails, use as is
+                    }
+                
+                    filename = filename.split('.').slice(0, -1).join('.') || filename;      // Remove the file extension
+                    displayValue = filename.replace(/([a-z])([A-Z])/g, '$1 $2');  // Convert camelCase to space-separated words
+                } else {
+                  displayValue = 'link';
+                }
 
               } else if (type === 'url') {
                 // Extract the filename from the URL, decode it, remove extension, and format camelCase
