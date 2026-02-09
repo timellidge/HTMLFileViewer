@@ -176,4 +176,7 @@ obj
 # Styles Generated Code
 *.scss.ts
 
+# Temporary files
+tmpclaude-*
+
 .heft
