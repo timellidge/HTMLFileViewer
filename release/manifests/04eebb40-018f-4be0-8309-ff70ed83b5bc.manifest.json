@@ -1,6 +1,6 @@
 {
   "id": "04eebb40-018f-4be0-8309-ff70ed83b5bc",
-  "alias": "TableViewer-listviewer",
+  "alias": "HtmlFileViewer-webpart",
   "componentType": "WebPart",
   "supportsThemeVariants": true,
   "version": "1.0.0",
@@ -14,15 +14,15 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
       "group": {
-        "default": "Table Viewer Custom"
+        "default": "HTML File Viewer Custom"
       },
       "title": {
-        "default": "Table Viewer"
+        "default": "HTML File Viewer"
       },
       "description": {
-        "default": "The Table Viewer web part is used to query data in SharePoint Lists using View XML based queries and combine that data with a Handlebars template, render the resulting HTML to the page. It included People hover Table, Openign in the side panel and Action Logging"
+        "default": "Displays HTML file content from SharePoint libraries with custom styling support"
       },
-      "officeFabricIconFontName": "TableComputed",
+      "officeFabricIconFontName": "FileHTML",
       "properties": {
         "siteUrl": "",
         "JSONCode": "",
@@ -41,11 +41,11 @@
     "internalModuleBaseUrls": [
       "<!-- PATH TO CDN -->"
     ],
-    "entryModuleId": "plre-listviewer-webpart",
+    "entryModuleId": "htmlfileviewer-webpart",
     "scriptResources": {
-      "plre-listviewer-webpart": {
+      "htmlfileviewer-webpart": {
         "type": "path",
-        "path": "plre-listviewer-webpart.js"
+        "path": "htmlfileviewer-webpart.js"
       },
       "@microsoft/sp-property-pane": {
         "type": "component",

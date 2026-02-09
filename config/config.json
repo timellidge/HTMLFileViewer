@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "plre-listviewer-webpart": {
+    "htmlfileviewer-webpart": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/tableViewer/TableViewerWebPart.js",
-          "manifest": "./src/webparts/tableViewer/TableViewerWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/htmlFileViewer/HtmlFileViewerWebPart.js",
+          "manifest": "./src/webparts/htmlFileViewer/HtmlFileViewerWebPart.manifest.json"
         }
       ]
     }

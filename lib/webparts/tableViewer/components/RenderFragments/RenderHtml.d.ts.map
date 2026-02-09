@@ -1,1 +1,0 @@
-{"version":3,"file":"RenderHtml.d.ts","sourceRoot":"","sources":["../../../../../src/webparts/tableViewer/components/RenderFragments/RenderHtml.tsx"],"names":[],"mappings":"AAEA,UAAU,gBAAgB;IACxB,IAAI,EAAE,GAAG,CAAC;IACV,KAAK,EAAE,MAAM,CAAC;CACf;AAED,MAAM,CAAC,OAAO,UAAU,UAAU,CAAC,EAAE,IAAI,EAAE,KAAK,EAAE,EAAE,gBAAgB,eAGnE"}

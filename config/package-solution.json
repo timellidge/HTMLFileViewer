@@ -1,17 +1,17 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "TableViewer",
+    "name": "HTMLFileViewer",
     "id": "d63c415a-4843-49d9-82fc-b0575098f605",
-    "version": "1.0.5.09",
+    "version": "1.0.0.02",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
       "shortDescription": {
-        "default": "Table Viewer description"
+        "default": "HTML File Viewer web part for SharePoint"
       },
       "longDescription": {
-        "default": "Table Viewer description"
+        "default": "Displays HTML file content from SharePoint libraries with custom styling support"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -19,17 +19,17 @@
     },
     "features": [
       {
-        "title": "Table Viewer Table Viewer Feature",
-        "description": "The feature that activates Table Viewer from the Table Viewer solution.",
-        "id": "04eebb40-018f-4be0-8309-ff70ed83b5bc",
-        "version": "1.0.5.09",
+        "title": "HTML File Viewer Feature",
+        "description": "The feature that activates HTML File Viewer from the HTML File Viewer solution.",
+        "id": "d63c415a-4843-49d9-82fc-b0575098f605",
+        "version": "1.0.0.02",
         "componentIds": [
-          "04eebb40-018f-4be0-8309-ff70ed83b5bc"
+          "d63c415a-4843-49d9-82fc-b0575098f605"
         ]
       }
     ]
   },
   "paths": {
-    "zippedPackage": "solution/TableViewer.sppkg"
+    "zippedPackage": "solution/HTMLFileViewer.sppkg"
   }
 }

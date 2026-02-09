@@ -1,0 +1,126 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.htmlFileViewer {
+    .htmlFileViewerHeader{
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        width: 100%;
+        min-height: 35px;
+        padding: 5px 10px;
+        margin-bottom: 10px;
+    }
+
+    .htmlContentContainer {
+        background-color: #ffffff;
+        padding: 15px;
+        box-sizing: border-box;
+        border: 1px solid #edebe9;
+        border-radius: 2px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        // Basic styling for HTML content
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            color: #323130;
+        }
+
+        p {
+            margin-bottom: 1em;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #0078d4;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+
+            th, td {
+                border: 1px solid #edebe9;
+                padding: 8px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f3f2f1;
+                font-weight: 600;
+            }
+        }
+
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        code {
+            background-color: #f3f2f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        pre {
+            background-color: #f3f2f1;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+
+            code {
+                background-color: transparent;
+                padding: 0;
+            }
+        }
+    }
+
+    .loadingSpinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+        background-color: #ffffff;
+        padding: 20px;
+    }
+
+    .emptyState {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+        background-color: #ffffff;
+        padding: 20px;
+        color: #605e5c;
+        font-style: italic;
+        text-align: center;
+    }
+
+    .idIndicator {
+        font-size: 0.8em;
+        color: #666;
+        margin-bottom: 8px;
+        padding: 4px 8px;
+        background-color: #f3f2f1;
+        border-radius: 3px;
+        display: inline-block;
+    }
+}
+
+// Workbench max width
+#workbenchPageContent{
+    max-width: 1680px;
+}
