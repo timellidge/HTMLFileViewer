@@ -10,8 +10,6 @@ import HtmlFileViewerErrorMessage from './HtmlFileViewerErrorMessage';
 import { Web } from '@pnp/sp/webs';
 import '@pnp/sp/files';
 import '@pnp/sp/webs';
-import '@pnp/sp/lists';
-import '@pnp/sp/folders';
 import * as DOMPurify from 'dompurify';
 
 export interface IHtmlFileViewerContainerProps {
@@ -33,7 +31,6 @@ export interface IHtmlFileViewerContainerProps {
   contextSiteUrl: string;
   contextUser: string;
   webPartTag: string;
-  receivedDocName: string | undefined;
 }
 
 const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerProps> = (props) => {
@@ -41,14 +38,13 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const {
     displayMode, title, updateProperty, showTitle, configured,
     onConfigure, siteUrl, selectedHtmlFile, hideErrorEmpty, emptyMessage,
-    contentHeight, sidePadding, webPartTag, receivedDocName, listId
+    contentHeight, sidePadding, webPartTag
   } = props;
 
   // State variables
   const [htmlContent, setHtmlContent] = useState<string>('');
   const [globalError, setGlobalError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [currentFileUrl, setCurrentFileUrl] = useState<string>('');
 
   // Sanitize HTML content
   const sanitizeHtml = (html: string): string => {
@@ -66,63 +62,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     return clean;
   };
 
-  // Fetch HTML content from SharePoint by document name
-  const fetchHtmlContentByDocName = React.useCallback(async (docName: string) => {
-    if (!docName || !siteUrl) {
-      console.log('Missing required parameters for document name-based fetch');
-      return;
-    }
-
-    setIsLoading(true);
-    setGlobalError(null);
-
-    try {
-      const web = Web(siteUrl);
-      
-      let libraryPath: string;
-      
-      // If we have a selected file, use its path as the base (more efficient)
-      if (selectedHtmlFile) {
-        // Remove the leaf filename from the selected file path
-        const lastSlashIndex = selectedHtmlFile.lastIndexOf('/');
-        libraryPath = selectedHtmlFile.substring(0, lastSlashIndex);
-        console.log('Using path from selected file:', libraryPath);
-      } 
-      // Otherwise, query the list to get the root folder path (fallback)
-      else if (listId) {
-        const list = await web.lists.getById(listId).select('RootFolder/ServerRelativeUrl').expand('RootFolder').get();
-        libraryPath = list.RootFolder.ServerRelativeUrl;
-        console.log('Using path from list query:', libraryPath);
-      } 
-      else {
-        throw new Error('Unable to determine library path - no selected file or list ID provided');
-      }
-      
-      // URL encode the document name and add .html extension
-      const encodedDocName = encodeURIComponent(docName) + '.html';
-      
-      // Construct the full file path
-      const fileUrl = `${libraryPath}/${encodedDocName}`;
-      console.log('Constructed file path:', fileUrl);
-      
-      // Fetch the file content
-      const file = web.getFileByServerRelativePath(fileUrl);
-      const content = await file.getText();
-
-      // Sanitize HTML
-      const cleanHtml = sanitizeHtml(content);
-      setHtmlContent(cleanHtml);
-      setCurrentFileUrl(fileUrl);
-    } catch (error) {
-      console.error('Error fetching HTML by document name:', error);
-      setGlobalError(error as Error);
-      setHtmlContent('');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [siteUrl, listId, selectedHtmlFile]);
-
-  // Fetch HTML content from SharePoint by file path
+  // Fetch HTML content from SharePoint
   const fetchHtmlContent = React.useCallback(async () => {
     if (!selectedHtmlFile || !siteUrl) {
       setHtmlContent('');
@@ -140,7 +80,6 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       // Sanitize HTML
       const cleanHtml = sanitizeHtml(content);
       setHtmlContent(cleanHtml);
-      setCurrentFileUrl(selectedHtmlFile);
     } catch (error) {
       console.error('Error fetching HTML:', error);
       setGlobalError(error as Error);
@@ -149,25 +88,12 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     }
   }, [selectedHtmlFile, siteUrl]);
 
-  // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
+  // Fetch HTML content when selectedHtmlFile changes
   useEffect(() => {
     if (!configured) {
-      // Priority 1: Use received document name if available
-      if (receivedDocName !== undefined && receivedDocName !== null && receivedDocName !== '') {
-        console.log('Using received document name:', receivedDocName);
-        fetchHtmlContentByDocName(receivedDocName);
-      }
-      // Priority 2: Fall back to manually selected file
-      else if (selectedHtmlFile) {
-        console.log('Using manually selected file:', selectedHtmlFile);
-        fetchHtmlContent();
-      }
-      // No content to display
-      else {
-        setHtmlContent('');
-      }
+      fetchHtmlContent();
     }
-  }, [configured, receivedDocName, selectedHtmlFile, fetchHtmlContent, fetchHtmlContentByDocName]);
+  }, [configured, fetchHtmlContent]);
 
   // CSS container class
   const _containerClass = mergeStyles(
@@ -195,22 +121,15 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
               <Spinner size={SpinnerSize.large} label="Loading HTML content..." />
             </div>
           ) : htmlContent ? (
-            <div>
-              {receivedDocName && (
-                <div className={styles.idIndicator}>
-                  Displaying content for document: {receivedDocName}
-                </div>
-              )}
-              <div
-                className={styles.htmlContentContainer}
-                style={{
-                  height: contentHeight,
-                  overflowY: 'auto',
-                  overflowX: 'hidden'
-                }}
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
-              />
-            </div>
+            <div
+              className={styles.htmlContentContainer}
+              style={{
+                height: contentHeight,
+                overflowY: 'auto',
+                overflowX: 'hidden'
+              }}
+              dangerouslySetInnerHTML={{ __html: htmlContent }}
+            />
           ) : (
             <div className={styles.emptyState}>
               {emptyMessage || 'No HTML file selected. Please configure the web part.'}

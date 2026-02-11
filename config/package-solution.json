@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "HTMLFileViewer",
-    "id": "d63c415a-4843-49d9-82fc-b0575098f605",
-    "version": "1.0.0.03",
+    "id": "9aad5bcb-6bf8-4acc-b594-9732ab23f215",
+    "version": "1.0.0.10",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -21,10 +21,10 @@
       {
         "title": "HTML File Viewer Feature",
         "description": "The feature that activates HTML File Viewer from the HTML File Viewer solution.",
-        "id": "d63c415a-4843-49d9-82fc-b0575098f605",
-        "version": "1.0.0.03",
+        "id": "480a0420-29c9-40eb-9e1f-f0217f6b90fe",
+        "version": "1.0.0.10",
         "componentIds": [
-          "d63c415a-4843-49d9-82fc-b0575098f605"
+          "544db594-beba-4311-a1f2-4da849888ce6"
         ]
       }
     ]
