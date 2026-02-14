@@ -1,10 +1,20 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
+// Design tokens
+$color-primary: #0078d4;
+$color-primary-dark: #005a9e;
+$color-text: #323130;
+$color-text-muted: #605e5c;
+$color-border: #edebe9;
+$color-surface: #f3f2f1;
+$color-surface-light: #faf9f8;
+$color-white: #ffffff;
+
 .htmlFileViewer {
     .htmlFileViewerHeader{
         display: flex;
         align-items: center;
-        background-color: #ffffff;
+        background-color: $color-white;
         width: 100%;
         min-height: 35px;
         padding: 5px 10px;
@@ -12,33 +22,74 @@
     }
 
     .htmlContentContainer {
-        background-color: #ffffff;
-        padding: 15px;
+        background-color: $color-white;
         box-sizing: border-box;
-        border: 1px solid #edebe9;
+        border: 1px solid $color-border;
         border-radius: 2px;
-        overflow-y: auto;
-        overflow-x: hidden;
+        display: grid;
+        grid-template-columns: 1fr 50px;
         position: relative;
 
-        .tocBox {
-            float: right;
-            position: sticky;
-            top: 5px;
-            width: 280px;
-            margin-left: 5px;
-            margin-right: 5px;
-            margin-bottom: 20px;
-            background: #faf9f8;
-            border: 1px solid #edebe9;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+        // Scrollable document area
+        .htmlContentScroll {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        // TOC strip (right column)
+        .tocStrip {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 10px;
+            background: transparent;
+            cursor: pointer;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            user-select: none;
+
+            .tocStripInner {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                background: $color-primary;
+                color: $color-white;
+                font-size: 1em;
+                font-weight: 600;
+                padding: 20px 8px;
+                border-radius: 8px 0 0 8px;
+            }
+
+            .tocIcon {
+                font-size: 1em;
+            }
+
+            .tocStripText {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        // Expanded TOC panel — overlays content from the right
+        .tocPanel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-height: 100%;
+            background: $color-surface-light;
+            border-left: 1px solid $color-border;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
 
-            .tocHeader {
-                background: #0078d4;
-                color: #ffffff;
+            .tocPanelHeader {
+                background: $color-primary;
+                color: $color-white;
                 padding: 10px 15px;
                 font-size: 0.85em;
                 font-weight: 600;
@@ -46,11 +97,7 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
-
-                .tocIcon {
-                    font-size: 1em;
-                    flex-shrink: 0;
-                }
+                flex-shrink: 0;
 
                 .tocHeaderText {
                     white-space: nowrap;
@@ -61,66 +108,17 @@
 
             .tocContent {
                 padding: 15px;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-            }
-
-            &.tocCollapsed {
-                width: 35px;
-                
-                .tocHeader {
-                    writing-mode: vertical-rl;
-                    text-orientation: mixed;
-                    padding: 10px 6px;
-                    height: 400px;
-                    flex-direction: row;
-                    align-items: flex-start;
-                    justify-content: flex-start;
-                    font-size: 0.9em;
-                    gap: 4px;
-                    
-                    .tocIcon {
-                        writing-mode: vertical-rl;
-                        transform: none;
-                        margin: 0;
-                        font-size: 1em;
-                    }
-
-                    .tocHeaderText {
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                    }
-                }
-
-                .tocContent {
-                    max-height: 0;
-                    padding: 0 15px;
-                }
-            }
-
-            &.tocExpanded {
-                width: 280px;
-
-                .tocHeader {
-                    writing-mode: horizontal-tb;
-                    height: auto;
-                }
-
-                .tocContent {
-                    max-height: 600px;
-                    overflow-y: auto;
-                }
+                overflow-y: auto;
+                flex: 1;
             }
 
             .tocTitle {
                 margin: 0 0 12px 0;
                 font-size: 0.9em;
                 font-weight: 600;
-                color: #323130;
+                color: $color-text;
                 padding-bottom: 8px;
-                border-bottom: 1px solid #edebe9;
+                border-bottom: 1px solid $color-border;
             }
 
             .tocNav {
@@ -128,23 +126,22 @@
                 flex-direction: column;
 
                 a {
-                    color: #0078d4;
+                    color: $color-primary;
                     text-decoration: none;
                     padding: 6px 0;
                     font-size: 0.85em;
                     line-height: 1.4;
                     display: block;
-                    transition: all 0.2s;
 
                     &:hover {
-                        color: #005a9e;
+                        color: $color-primary-dark;
                         padding-left: 4px;
                     }
 
                     &.tocH1 {
                         font-weight: 600;
                         margin-top: 8px;
-                        
+
                         &:first-child {
                             margin-top: 0;
                         }
@@ -158,16 +155,16 @@
             }
 
             /* Scrollbar styling for TOC */
-            &::-webkit-scrollbar {
+            .tocContent::-webkit-scrollbar {
                 width: 6px;
             }
 
-            &::-webkit-scrollbar-track {
-                background: #f3f2f1;
+            .tocContent::-webkit-scrollbar-track {
+                background: $color-surface;
                 border-radius: 3px;
             }
 
-            &::-webkit-scrollbar-thumb {
+            .tocContent::-webkit-scrollbar-thumb {
                 background: #c8c6c4;
                 border-radius: 3px;
 
@@ -177,15 +174,11 @@
             }
         }
 
-        .htmlContent {
-            // Content will flow around the floated TOC
-        }
-
         // Basic styling for HTML content
         h1, h2, h3, h4, h5, h6 {
             margin-top: 0.5em;
             margin-bottom: 0.5em;
-            color: #323130;
+            color: $color-text;
         }
 
         p {
@@ -194,7 +187,7 @@
         }
 
         a {
-            color: #0078d4;
+            color: $color-primary;
             text-decoration: none;
 
             &:hover {
@@ -208,13 +201,13 @@
             margin: 1em 0;
 
             th, td {
-                border: 1px solid #edebe9;
+                border: 1px solid $color-border;
                 padding: 8px;
                 text-align: left;
             }
 
             th {
-                background-color: #f3f2f1;
+                background-color: $color-surface;
                 font-weight: 600;
             }
         }
@@ -230,14 +223,14 @@
         }
 
         code {
-            background-color: #f3f2f1;
+            background-color: $color-surface;
             padding: 2px 6px;
             border-radius: 3px;
             font-family: 'Courier New', Courier, monospace;
         }
 
         pre {
-            background-color: #f3f2f1;
+            background-color: $color-surface;
             padding: 10px;
             border-radius: 3px;
             overflow-x: auto;
@@ -254,7 +247,7 @@
         justify-content: center;
         align-items: center;
         min-height: 200px;
-        background-color: #ffffff;
+        background-color: $color-white;
         padding: 20px;
     }
 
@@ -263,25 +256,25 @@
         justify-content: center;
         align-items: center;
         min-height: 200px;
-        background-color: #ffffff;
+        background-color: $color-white;
         padding: 20px;
-        color: #605e5c;
+        color: $color-text-muted;
         font-style: italic;
         text-align: center;
     }
 
     .idIndicator {
         font-size: 0.8em;
-        color: #666;
+        color: $color-text-muted;
         margin-bottom: 8px;
         padding: 4px 8px;
-        background-color: #f3f2f1;
+        background-color: $color-surface;
         border-radius: 3px;
         display: inline-block;
     }
 }
 
-// Workbench max width
+// Workbench max width (dev environment only — does not apply in production SharePoint pages)
 #workbenchPageContent{
     max-width: 1680px;
 }

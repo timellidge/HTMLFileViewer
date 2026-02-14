@@ -1,24 +1,26 @@
 /* tslint:disable */
 require("./HtmlFileViewer.module.css");
 const styles = {
-  htmlFileViewer: 'htmlFileViewer_1a852004',
-  htmlFileViewerHeader: 'htmlFileViewerHeader_1a852004',
-  htmlContentContainer: 'htmlContentContainer_1a852004',
-  tocBox: 'tocBox_1a852004',
-  tocHeader: 'tocHeader_1a852004',
-  tocIcon: 'tocIcon_1a852004',
-  tocHeaderText: 'tocHeaderText_1a852004',
-  tocContent: 'tocContent_1a852004',
-  tocCollapsed: 'tocCollapsed_1a852004',
-  tocExpanded: 'tocExpanded_1a852004',
-  tocTitle: 'tocTitle_1a852004',
-  tocNav: 'tocNav_1a852004',
-  tocH1: 'tocH1_1a852004',
-  tocH2: 'tocH2_1a852004',
-  loadingSpinner: 'loadingSpinner_1a852004',
-  emptyState: 'emptyState_1a852004',
-  idIndicator: 'idIndicator_1a852004',
-  workbenchPageContent: 'workbenchPageContent_1a852004'
+  htmlFileViewer: 'htmlFileViewer_f4813355',
+  htmlFileViewerHeader: 'htmlFileViewerHeader_f4813355',
+  htmlContentContainer: 'htmlContentContainer_f4813355',
+  htmlContentScroll: 'htmlContentScroll_f4813355',
+  tocStrip: 'tocStrip_f4813355',
+  tocStripInner: 'tocStripInner_f4813355',
+  tocIcon: 'tocIcon_f4813355',
+  tocStripText: 'tocStripText_f4813355',
+  tocPanel: 'tocPanel_f4813355',
+  tocPanelHeader: 'tocPanelHeader_f4813355',
+  tocHeaderText: 'tocHeaderText_f4813355',
+  tocContent: 'tocContent_f4813355',
+  tocTitle: 'tocTitle_f4813355',
+  tocNav: 'tocNav_f4813355',
+  tocH1: 'tocH1_f4813355',
+  tocH2: 'tocH2_f4813355',
+  loadingSpinner: 'loadingSpinner_f4813355',
+  emptyState: 'emptyState_f4813355',
+  idIndicator: 'idIndicator_f4813355',
+  workbenchPageContent: 'workbenchPageContent_f4813355'
 };
 
 export default styles;

@@ -140,7 +140,8 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     }
 
     // Inject the CSS into the document's <style> tag
-    this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
+    const strippedCSS = this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, '');
+    this.injectCSS(strippedCSS);
 
     const element: React.ReactElement<IHtmlFileViewerContainerProps> = React.createElement(
       HtmlFileViewerContainer,
@@ -157,11 +158,10 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         showTitle: this.properties.showTitle,
         hideErrorEmpty:this.properties.hideErrorEmpty,
         emptyMessage: this.properties.emptyMessage,
-        themeVariant: this.themeVariant,
         contentHeight: this.properties.contentHeight,
         sidePadding: this.properties.sidePadding,
         onConfigure: this.onConfigure,
-        configured: this.isMissingValues([
+        configured: !this.isMissingValues([
           this.properties.siteUrl,
           this.properties.list]),
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
@@ -226,7 +226,6 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         text: item.FileLeafRef
       }));
     } catch (error) {
-      console.error('Error loading HTML files:', error);
       this.htmlFileOptions = [];
     }
 

@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { mergeStyles, Spinner, SpinnerSize, Icon } from '@fluentui/react';
 import styles from './HtmlFileViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import HtmlFileViewerHeader from './HtmlFileViewerHeader';
 import HtmlFileViewerPlaceholder from './HtmlFileViewerPlaceholder';
 import HtmlFileViewerErrorMessage from './HtmlFileViewerErrorMessage';
@@ -39,16 +38,15 @@ const MAX_CONTENT_SIZE = 5 * 1024 * 1024; // 5MB
 
 // --- Pure functions (no dependency on component state) ---
 
-/** Sanitize and process HTML in a single pass: sanitize → extract TOC → serialize */
+/** Sanitize HTML string, extract TOC headings, and add navigation IDs */
 function sanitizeAndProcessHtml(rawHtml: string): { processedHtml: string; toc: ITocItem[]; title: string } {
-  // Parse once into a DOM
+  // Sanitize the raw HTML string first
+  const cleanHtml = DOMPurify.sanitize(rawHtml, SANITIZE_CONFIG);
+
+  // Parse the sanitized HTML to extract TOC and add heading IDs
   const parser = new DOMParser();
-  const doc = parser.parseFromString(rawHtml, 'text/html');
+  const doc = parser.parseFromString(cleanHtml, 'text/html');
 
-  // Sanitize in-place (avoids serialize→re-parse round-trip)
-  DOMPurify.sanitize(doc.body, { ...SANITIZE_CONFIG, IN_PLACE: true, RETURN_DOM: true });
-
-  // Extract TOC from the already-sanitized DOM
   const headings = doc.querySelectorAll('h1, h2');
   const toc: ITocItem[] = [];
   let title = '';
@@ -79,7 +77,7 @@ function sanitizeAndProcessHtml(rawHtml: string): { processedHtml: string; toc: 
     toc.push({ id, text, level });
   });
 
-  // Serialize once — the DOM was already sanitized in-place so this is safe
+  // Only controlled id attributes were added to already-sanitized content
   return {
     processedHtml: doc.body.innerHTML,
     toc,
@@ -98,7 +96,6 @@ export interface IHtmlFileViewerContainerProps {
   showTitle: boolean;
   hideErrorEmpty: boolean;
   emptyMessage: string;
-  themeVariant: IReadonlyTheme | undefined;
   contentHeight: string;
   sidePadding: number;
   configured: boolean;
@@ -128,6 +125,17 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch HTML content from SharePoint
+  // Shared: validate size, sanitize, and update state
+  const processAndSetContent = React.useCallback((content: string): void => {
+    if (content.length > MAX_CONTENT_SIZE) {
+      throw new Error('File too large to display safely');
+    }
+    const { processedHtml, toc, title } = sanitizeAndProcessHtml(content);
+    setHtmlContent(processedHtml);
+    setTocItems(toc);
+    setDocTitle(title);
+  }, []);
+
   const fetchHtmlContent = React.useCallback(async () => {
     if (!selectedHtmlFile || !siteUrl) {
       setHtmlContent('');
@@ -141,23 +149,13 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const web = Web(siteUrl);
       const file = web.getFileByServerRelativePath(selectedHtmlFile);
       const content = await file.getText();
-
-      if (content.length > MAX_CONTENT_SIZE) {
-        throw new Error('File too large to display safely');
-      }
-
-      // Sanitize and process in a single pass
-      const { processedHtml, toc, title } = sanitizeAndProcessHtml(content);
-      setHtmlContent(processedHtml);
-      setTocItems(toc);
-      setDocTitle(title);
+      processAndSetContent(content);
     } catch (error) {
-      console.error('Error fetching HTML:', error);
       setGlobalError(error as Error);
     } finally {
       setIsLoading(false);
     }
-  }, [selectedHtmlFile, siteUrl]);
+  }, [selectedHtmlFile, siteUrl, processAndSetContent]);
 
   // Fetch HTML content from SharePoint by document name
   const fetchHtmlContentByDocName = React.useCallback(async (docName: string) => {
@@ -205,15 +203,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const file = web.getFileByServerRelativePath(fileServerRelativePath);
       const content = await file.getText();
 
-      if (content.length > MAX_CONTENT_SIZE) {
-        throw new Error('File too large to display safely');
-      }
-
-      // Sanitize and process in a single pass
-      const { processedHtml, toc, title } = sanitizeAndProcessHtml(content);
-      setHtmlContent(processedHtml);
-      setTocItems(toc);
-      setDocTitle(title);
+      processAndSetContent(content);
     } catch (error) {
       let errorMessage = `Error loading "${docName}"`;
       
@@ -237,13 +227,13 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     } finally {
       setIsLoading(false);
     }
-  }, [selectedHtmlFile, siteUrl, listId]);
+  }, [selectedHtmlFile, siteUrl, listId, processAndSetContent]);
 
   // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
   useEffect(() => {
     let cancelled = false;
 
-    if (!configured) {
+    if (configured) {
       // Priority 1: Use received document name if available
       if (receivedDocName !== undefined && receivedDocName !== null && receivedDocName !== '') {
         fetchHtmlContentByDocName(receivedDocName).then(() => {
@@ -284,13 +274,6 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     }, TOC_COLLAPSE_DELAY_MS);
   }, []);
 
-  const handleContentMouseLeave = React.useCallback(() => {
-    if (closeTimerRef.current !== null) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-  }, []);
-
   // Cleanup timer on unmount
   useEffect(() => {
     return () => {
@@ -312,7 +295,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   // Render
   return (
     <div id={webPartTag} className={_containerClass}>
-      {!configured ? (
+      {configured ? (
         <>
           <HtmlFileViewerHeader
             displayMode={displayMode}
@@ -334,59 +317,73 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
             <div
               ref={contentRef}
               className={styles.htmlContentContainer}
-              style={{
-                height: contentHeight,
-                overflowY: 'auto',
-                overflowX: 'hidden'
-              }}
+              style={{ height: contentHeight }}
             >
+              <div
+                className={styles.htmlContentScroll}
+                onMouseEnter={handleContentMouseEnter}
+                dangerouslySetInnerHTML={{ __html: htmlContent }}
+              />
               {tocItems.length > 0 && (
-                <div 
-                  className={`${styles.tocBox} ${tocExpanded ? styles.tocExpanded : styles.tocCollapsed}`}
-                  onMouseEnter={handleTocMouseEnter}
-                  onMouseLeave={handleContentMouseLeave}
-                  role="complementary"
-                  aria-label="Table of Contents"
-                >
-                  <div 
-                    className={styles.tocHeader}
+                <>
+                  <div
+                    className={styles.tocStrip}
+                    onMouseEnter={handleTocMouseEnter}
+                    onMouseLeave={handleContentMouseEnter}
                     role="button"
                     tabIndex={0}
                     aria-expanded={tocExpanded}
-                    aria-label={`Table of Contents: ${receivedDocName || docTitle}`}
+                    aria-label={`Open Table of Contents: ${receivedDocName || docTitle}`}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(!tocExpanded); } }}
                   >
-                    {!tocExpanded && <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />}
-                    <span className={styles.tocHeaderText}>
-                      {tocExpanded ? (receivedDocName || docTitle) : `T.O.C. ${receivedDocName || docTitle}`}
-                    </span>
+                    {!tocExpanded && (
+                      <div className={styles.tocStripInner}>
+                        <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />
+                        <span className={styles.tocStripText}>{`T.O.C.${(receivedDocName || docTitle) ? ` ${receivedDocName || docTitle}` : ''}`}</span>
+                      </div>
+                    )}
                   </div>
-                  <div className={styles.tocContent}>
-                    <h3 className={styles.tocTitle}>Contents</h3>
-                    <nav className={styles.tocNav} aria-label="Document sections">
-                      {tocItems.map((item) => (
-                        <a
-                          key={item.id}
-                          href={`#${item.id}`}
-                          className={item.level === 1 ? styles.tocH1 : styles.tocH2}
-                          aria-label={`Navigate to ${item.text}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            contentRef.current?.querySelector(`#${item.id}`)?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                        >
-                          {item.text}
-                        </a>
-                      ))}
-                    </nav>
-                  </div>
-                </div>
+                  {tocExpanded && (
+                    <div
+                      className={styles.tocPanel}
+                      onMouseEnter={handleTocMouseEnter}
+                      onMouseLeave={handleContentMouseEnter}
+                      role="complementary"
+                      aria-label="Table of Contents"
+                    >
+                      <div
+                        className={styles.tocPanelHeader}
+                        onClick={() => setTocExpanded(false)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Close Table of Contents"
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(false); } }}
+                      >
+                        <span className={styles.tocHeaderText}>{receivedDocName || docTitle}</span>
+                      </div>
+                      <div className={styles.tocContent}>
+                        <h3 className={styles.tocTitle}>Contents</h3>
+                        <nav className={styles.tocNav} aria-label="Document sections">
+                          {tocItems.map((item) => (
+                            <a
+                              key={item.id}
+                              href={`#${item.id}`}
+                              className={item.level === 1 ? styles.tocH1 : styles.tocH2}
+                              aria-label={`Navigate to ${item.text}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                contentRef.current?.querySelector(`#${CSS.escape(item.id)}`)?.scrollIntoView({ behavior: 'smooth' });
+                              }}
+                            >
+                              {item.text}
+                            </a>
+                          ))}
+                        </nav>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
-              <div
-                onMouseEnter={handleContentMouseEnter}
-                onMouseLeave={handleContentMouseLeave}
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
-              />
             </div>
           ) : (
             <div className={styles.emptyState}>
