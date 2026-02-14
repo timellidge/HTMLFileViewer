@@ -12,6 +12,81 @@ import '@pnp/sp/files';
 import '@pnp/sp/webs';
 import * as DOMPurify from 'dompurify';
 
+// --- Types ---
+interface ITocItem {
+  id: string;
+  text: string;
+  level: number;
+}
+
+// --- Constants (outside component to avoid recreation per render) ---
+const TOC_COLLAPSE_DELAY_MS = 500;
+
+const SANITIZE_CONFIG: DOMPurify.Config = {
+  ALLOWED_TAGS: [
+    'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'a', 'img', 'div', 'span', 'table', 'tr', 'td', 'th',
+    'thead', 'tbody', 'tfoot', 'section', 'article', 'header', 'footer',
+    'blockquote', 'pre', 'code', 'hr', 'b', 'i', 'small', 'sub', 'sup'
+  ],
+  FORBID_TAGS: ['script', 'style', 'link', 'iframe', 'object', 'embed', 'form'],
+  ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'title', 'target'],
+  FORBID_ATTR: ['style', 'onerror', 'onload', 'onclick', 'onmouseover'],
+  ALLOW_DATA_ATTR: false,
+};
+
+const MAX_CONTENT_SIZE = 5 * 1024 * 1024; // 5MB
+
+// --- Pure functions (no dependency on component state) ---
+
+/** Sanitize and process HTML in a single pass: sanitize → extract TOC → serialize */
+function sanitizeAndProcessHtml(rawHtml: string): { processedHtml: string; toc: ITocItem[]; title: string } {
+  // Parse once into a DOM
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(rawHtml, 'text/html');
+
+  // Sanitize in-place (avoids serialize→re-parse round-trip)
+  DOMPurify.sanitize(doc.body, { ...SANITIZE_CONFIG, IN_PLACE: true, RETURN_DOM: true });
+
+  // Extract TOC from the already-sanitized DOM
+  const headings = doc.querySelectorAll('h1, h2');
+  const toc: ITocItem[] = [];
+  let title = '';
+  let h1Count = 0;
+  let h2Count = 0;
+
+  headings.forEach((heading) => {
+    const text = heading.textContent || '';
+    const level = parseInt(heading.tagName.substring(1), 10);
+    let id = heading.id;
+
+    if (level === 1 && !title) {
+      title = text;
+    }
+
+    if (level === 1) {
+      h1Count++;
+      h2Count = 0;
+    } else {
+      h2Count++;
+    }
+
+    if (!id) {
+      id = level === 1 ? `Index${h1Count}` : `Index${h1Count}_${h2Count}`;
+      heading.id = id;
+    }
+
+    toc.push({ id, text, level });
+  });
+
+  // Serialize once — the DOM was already sanitized in-place so this is safe
+  return {
+    processedHtml: doc.body.innerHTML,
+    toc,
+    title: title || 'Document',
+  };
+}
+
 export interface IHtmlFileViewerContainerProps {
   webPartCSS: string;
   siteUrl: string;
@@ -46,80 +121,11 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const [htmlContent, setHtmlContent] = useState<string>('');
   const [globalError, setGlobalError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [tocItems, setTocItems] = useState<{id: string, text: string, level: number}[]>([]);
+  const [tocItems, setTocItems] = useState<ITocItem[]>([]);
   const [docTitle, setDocTitle] = useState<string>('');
   const [tocExpanded, setTocExpanded] = useState<boolean>(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Constants
-  const TOC_COLLAPSE_DELAY_MS = 500;
-
-  // DOMPurify config: content only — no scripts, styles, or inline style attributes.
-  // The web part's injected CSS (via injectCSS) controls styling.
-  const SANITIZE_CONFIG: DOMPurify.Config = {
-    ALLOWED_TAGS: [
-      'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'ul', 'ol', 'li', 'a', 'img', 'div', 'span', 'table', 'tr', 'td', 'th',
-      'thead', 'tbody', 'tfoot', 'section', 'article', 'header', 'footer',
-      'blockquote', 'pre', 'code', 'hr', 'b', 'i', 'small', 'sub', 'sup'
-    ],
-    FORBID_TAGS: ['script', 'style', 'link', 'iframe', 'object', 'embed', 'form'],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'title', 'target'],
-    FORBID_ATTR: ['style', 'onerror', 'onload', 'onclick', 'onmouseover'],
-    ALLOW_DATA_ATTR: false,
-  };
-
-  // Sanitize HTML content
-  const sanitizeHtml = (html: string): string => {
-    return DOMPurify.sanitize(html, SANITIZE_CONFIG);
-  };
-
-  // Extract TOC items and add IDs to headings
-  const processHtmlForToc = (html: string): {processedHtml: string, toc: {id: string, text: string, level: number}[], title: string} => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const headings = doc.querySelectorAll('h1, h2');
-    const toc: {id: string, text: string, level: number}[] = [];
-    let title = '';
-    let h1Count = 0;
-    let h2Count = 0;
-
-    headings.forEach((heading) => {
-      const text = heading.textContent || '';
-      const level = parseInt(heading.tagName.substring(1));
-      let id = heading.id;
-      
-      // Capture first H1 as document title
-      if (level === 1 && !title) {
-        title = text;
-      }
-      
-      // Track heading counts and generate ID
-      if (level === 1) {
-        h1Count++;
-        h2Count = 0; // Reset H2 count for each new H1
-      } else {
-        h2Count++;
-      }
-
-      // Generate ID if not present
-      if (!id) {
-        id = level === 1 ? `Index${h1Count}` : `Index${h1Count}_${h2Count}`;
-        heading.id = id;
-      }
-
-      toc.push({ id, text, level });
-    });
-
-    // Re-sanitize after DOM manipulation to prevent bypass
-    const processedHtml = DOMPurify.sanitize(doc.body.innerHTML, SANITIZE_CONFIG);
-
-    return {
-      processedHtml,
-      toc,
-      title: title || 'Document'
-    };
-  };
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch HTML content from SharePoint
   const fetchHtmlContent = React.useCallback(async () => {
@@ -136,11 +142,12 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const file = web.getFileByServerRelativePath(selectedHtmlFile);
       const content = await file.getText();
 
-      // Sanitize HTML
-      const cleanHtml = sanitizeHtml(content);
-      
-      // Process for TOC
-      const { processedHtml, toc, title } = processHtmlForToc(cleanHtml);
+      if (content.length > MAX_CONTENT_SIZE) {
+        throw new Error('File too large to display safely');
+      }
+
+      // Sanitize and process in a single pass
+      const { processedHtml, toc, title } = sanitizeAndProcessHtml(content);
       setHtmlContent(processedHtml);
       setTocItems(toc);
       setDocTitle(title);
@@ -155,7 +162,6 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   // Fetch HTML content from SharePoint by document name
   const fetchHtmlContentByDocName = React.useCallback(async (docName: string) => {
     if (!docName || !siteUrl) {
-      console.log('Missing required parameters for document name-based fetch');
       return;
     }
 
@@ -165,19 +171,17 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     let fileServerRelativePath = '';
     
     try {
-      console.log('Fetching content for document name:', docName);
-      
       // Construct the file path using the document name
-      // If we have a selectedHtmlFile path, use it as a base to construct the path
       if (selectedHtmlFile) {
-        // Extract the folder path from selectedHtmlFile
         const lastSlashIndex = selectedHtmlFile.lastIndexOf('/');
         const folderPath = selectedHtmlFile.substring(0, lastSlashIndex + 1);
         fileServerRelativePath = folderPath + docName + '.html';
-        console.log('Constructed path from selectedHtmlFile:', fileServerRelativePath);
+
+        // Validate path stays within the expected folder (prevent traversal)
+        if (!fileServerRelativePath.startsWith(folderPath)) {
+          throw new Error('Invalid document name');
+        }
       } else if (listId) {
-        // Fall back to querying the list if no selectedHtmlFile is available
-        console.log('Querying list for document:', docName);
         // Escape single quotes to prevent OData injection
         const safeDocName = docName.replace(/'/g, "''");
         const web = Web(siteUrl);
@@ -193,7 +197,6 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
         }
         
         fileServerRelativePath = items[0].FileRef;
-        console.log('Found file path from list query:', fileServerRelativePath);
       } else {
         throw new Error('Cannot fetch by document name: no selectedHtmlFile or listId available');
       }
@@ -201,19 +204,17 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const web = Web(siteUrl);
       const file = web.getFileByServerRelativePath(fileServerRelativePath);
       const content = await file.getText();
-      console.log('Successfully fetched content, length:', content.length);
 
-      // Sanitize HTML
-      const cleanHtml = sanitizeHtml(content);
-      
-      // Process for TOC
-      const { processedHtml, toc, title } = processHtmlForToc(cleanHtml);
+      if (content.length > MAX_CONTENT_SIZE) {
+        throw new Error('File too large to display safely');
+      }
+
+      // Sanitize and process in a single pass
+      const { processedHtml, toc, title } = sanitizeAndProcessHtml(content);
       setHtmlContent(processedHtml);
       setTocItems(toc);
       setDocTitle(title);
     } catch (error) {
-      console.error('Error fetching HTML by document name:', error);
-      
       let errorMessage = `Error loading "${docName}"`;
       
       // Check for specific error types
@@ -240,22 +241,28 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
 
   // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
   useEffect(() => {
+    let cancelled = false;
+
     if (!configured) {
       // Priority 1: Use received document name if available
       if (receivedDocName !== undefined && receivedDocName !== null && receivedDocName !== '') {
-        console.log('Using received document name:', receivedDocName);
-        fetchHtmlContentByDocName(receivedDocName);
+        fetchHtmlContentByDocName(receivedDocName).then(() => {
+          if (cancelled) { setHtmlContent(''); }
+        });
       }
       // Priority 2: Fall back to manually selected file
       else if (selectedHtmlFile) {
-        console.log('Using manually selected file:', selectedHtmlFile);
-        fetchHtmlContent();
+        fetchHtmlContent().then(() => {
+          if (cancelled) { setHtmlContent(''); }
+        });
       }
       // No content to display
       else {
         setHtmlContent('');
       }
     }
+
+    return () => { cancelled = true; };
   }, [configured, receivedDocName, selectedHtmlFile, fetchHtmlContent, fetchHtmlContentByDocName]);
 
   // TOC hover handlers
@@ -325,6 +332,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
             />
           ) : htmlContent ? (
             <div
+              ref={contentRef}
               className={styles.htmlContentContainer}
               style={{
                 height: contentHeight,
@@ -364,7 +372,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
                           aria-label={`Navigate to ${item.text}`}
                           onClick={(e) => {
                             e.preventDefault();
-                            document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                            contentRef.current?.querySelector(`#${item.id}`)?.scrollIntoView({ behavior: 'smooth' });
                           }}
                         >
                           {item.text}

@@ -58,6 +58,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   private msProps: typeof import('@microsoft/sp-property-pane') | undefined;
   private htmlFileOptions: IPropertyPaneDropdownOption[] = [];
   private receivedDocName: string | undefined;
+  private _lastInjectedCSS = '';
 
   // -----------------------------------------------------------------------------------------------------------------------------
   // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
@@ -104,39 +105,37 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   }
 
   private injectCSS(css: string): void {
-    // Remove the existing <style> element if it exists
-    if(!this.properties.webPartTag || this.properties.webPartTag === undefined) {
-      console.log("WebPartTag is undefined so nowhere to inject the css");
-    } else { 
-      console.log("settign style for ", this.properties.webPartTag);
-      let style = document.getElementById(this.properties.webPartTag);
-      if (style) {
-        style.parentNode.removeChild(style);
-      }
-    
-      // Create a new <style> element
-      style = document.createElement('style');
-      style.id = this.properties.webPartTag;
-      style.innerHTML = css;
-      document.head.appendChild(style);
+    if (!this.properties.webPartTag) {
+      return;
     }
+
+    // Skip if CSS hasn't changed
+    if (css === this._lastInjectedCSS) {
+      return;
+    }
+    this._lastInjectedCSS = css;
+
+    // Remove the existing <style> element if it exists
+    let style = document.getElementById(this.properties.webPartTag);
+    if (style) {
+      style.parentNode.removeChild(style);
+    }
+
+    // Create a new <style> element — use textContent to prevent HTML injection
+    style = document.createElement('style');
+    style.id = this.properties.webPartTag;
+    style.textContent = css;
+    document.head.appendChild(style);
   }
 
  // -----------------------------------------------------------------------------------------------------------------------------
   // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
   // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
-    console.log("Rendering HtmlFileViewerWebPart");
-    console.log("Properties:", this.properties);
-
     // Get the dynamic document name if available
     try {
       this.receivedDocName = this.properties.docName?.tryGetValue();
-      if (this.receivedDocName !== undefined) {
-        console.log("Received Document Name:", this.receivedDocName);
-      }
     } catch (error) {
-      console.log("No dynamic data received", error);
       this.receivedDocName = undefined;
     }
 
@@ -162,7 +161,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         contentHeight: this.properties.contentHeight,
         sidePadding: this.properties.sidePadding,
         onConfigure: this.onConfigure,
-        configured: this.hasAllValues([
+        configured: this.isMissingValues([
           this.properties.siteUrl,
           this.properties.list]),
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
@@ -181,7 +180,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
-  private hasAllValues = (strings: string[]): boolean => strings.filter((i) => (i === '' || i === null)).length > 0;
+  private isMissingValues = (strings: string[]): boolean => strings.some((i) => !i);
 
   private onConfigure = () => {
     this.context.propertyPane.open();
