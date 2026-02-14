@@ -19,6 +19,167 @@
         border-radius: 2px;
         overflow-y: auto;
         overflow-x: hidden;
+        position: relative;
+
+        .tocBox {
+            float: right;
+            position: sticky;
+            top: 5px;
+            width: 280px;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-bottom: 20px;
+            background: #faf9f8;
+            border: 1px solid #edebe9;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+
+            .tocHeader {
+                background: #0078d4;
+                color: #ffffff;
+                padding: 10px 15px;
+                font-size: 0.85em;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .tocIcon {
+                    font-size: 1em;
+                    flex-shrink: 0;
+                }
+
+                .tocHeaderText {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .tocContent {
+                padding: 15px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+
+            &.tocCollapsed {
+                width: 35px;
+                
+                .tocHeader {
+                    writing-mode: vertical-rl;
+                    text-orientation: mixed;
+                    padding: 10px 6px;
+                    height: 400px;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    font-size: 0.9em;
+                    gap: 4px;
+                    
+                    .tocIcon {
+                        writing-mode: vertical-rl;
+                        transform: none;
+                        margin: 0;
+                        font-size: 1em;
+                    }
+
+                    .tocHeaderText {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+
+                .tocContent {
+                    max-height: 0;
+                    padding: 0 15px;
+                }
+            }
+
+            &.tocExpanded {
+                width: 280px;
+
+                .tocHeader {
+                    writing-mode: horizontal-tb;
+                    height: auto;
+                }
+
+                .tocContent {
+                    max-height: 600px;
+                    overflow-y: auto;
+                }
+            }
+
+            .tocTitle {
+                margin: 0 0 12px 0;
+                font-size: 0.9em;
+                font-weight: 600;
+                color: #323130;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #edebe9;
+            }
+
+            .tocNav {
+                display: flex;
+                flex-direction: column;
+
+                a {
+                    color: #0078d4;
+                    text-decoration: none;
+                    padding: 6px 0;
+                    font-size: 0.85em;
+                    line-height: 1.4;
+                    display: block;
+                    transition: all 0.2s;
+
+                    &:hover {
+                        color: #005a9e;
+                        padding-left: 4px;
+                    }
+
+                    &.tocH1 {
+                        font-weight: 600;
+                        margin-top: 8px;
+                        
+                        &:first-child {
+                            margin-top: 0;
+                        }
+                    }
+
+                    &.tocH2 {
+                        padding-left: 12px;
+                        font-weight: 400;
+                    }
+                }
+            }
+
+            /* Scrollbar styling for TOC */
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #f3f2f1;
+                border-radius: 3px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #c8c6c4;
+                border-radius: 3px;
+
+                &:hover {
+                    background: #a19f9d;
+                }
+            }
+        }
+
+        .htmlContent {
+            // Content will flow around the floated TOC
+        }
 
         // Basic styling for HTML content
         h1, h2, h3, h4, h5, h6 {

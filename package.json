@@ -15,7 +15,7 @@
     "build": "gulp bundle",
     "clean": "gulp clean",
     "package:dev": "gulp clean && gulp bundle && gulp package-solution",
-    "package:prod": "gulp clean && gulp bundle --ship && gulp package-solution --ship",
+    "package:prod": "node scripts/increment-version.js && gulp clean && gulp bundle --ship && gulp package-solution --ship",
     "test": "gulp test"
   },
   "dependencies": {

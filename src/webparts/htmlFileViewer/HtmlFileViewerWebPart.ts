@@ -3,11 +3,14 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp-webpart-base';
 import {
   ThemeProvider,
   ThemeChangedEventArgs,
   IReadonlyTheme,
+} from '@microsoft/sp-component-base';
+import {
+  DynamicProperty,
 } from '@microsoft/sp-component-base';
 // PnP JS Imports
 import { sp } from '@pnp/sp';
@@ -44,19 +47,17 @@ export interface IHtmlFileViewerWebPartProps {
   contextUser: string;
   webPartTag: string;
   selectedHtmlFile: string;
-
+  docName: DynamicProperty<string>;
 }
 export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFileViewerWebPartProps> {
   //@typescript-eslint/no-unused-vars
   private themeProvider: ThemeProvider;
   private themeVariant: IReadonlyTheme | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private editorProp: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private listProp: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private msProps: any;
+  private editorProp: typeof import('@pnp/spfx-property-controls/lib/PropertyFieldCodeEditor') | undefined;
+  private listProp: typeof import('@pnp/spfx-property-controls/lib/PropertyFieldListPicker') | undefined;
+  private msProps: typeof import('@microsoft/sp-property-pane') | undefined;
   private htmlFileOptions: IPropertyPaneDropdownOption[] = [];
+  private receivedDocName: string | undefined;
 
   // -----------------------------------------------------------------------------------------------------------------------------
   // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
@@ -73,8 +74,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   // SPFX type functions
   // -----------------------------------------------------------------------------------------------------------------------------
   protected async onInit(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const spfxContext: any = {
+    const spfxContext = {
       pageContext: this.context.pageContext,
       httpClient: this.context.spHttpClient,
       mode: this.displayMode,
@@ -87,6 +87,17 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     });
 
     this.themeSetup();
+
+    // Initialize dynamic property if not already done
+    if (!this.properties.docName) {
+      this.properties.docName = new DynamicProperty<string>(this.context.dynamicDataProvider);
+    }
+
+    // Set up dynamic data listener (register ONCE here, not in render)
+    this.context.dynamicDataProvider.registerAvailableSourcesChanged(this.render.bind(this));
+
+    // Register property changed handler (register ONCE here, not in render)
+    this.properties.docName.register(this.render.bind(this));
 
     await super.onInit();
     this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
@@ -118,6 +129,17 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     console.log("Rendering HtmlFileViewerWebPart");
     console.log("Properties:", this.properties);
 
+    // Get the dynamic document name if available
+    try {
+      this.receivedDocName = this.properties.docName?.tryGetValue();
+      if (this.receivedDocName !== undefined) {
+        console.log("Received Document Name:", this.receivedDocName);
+      }
+    } catch (error) {
+      console.log("No dynamic data received", error);
+      this.receivedDocName = undefined;
+    }
+
     // Inject the CSS into the document's <style> tag
     this.injectCSS(this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, ''));
 
@@ -146,6 +168,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         contextSiteUrl: this.context.pageContext.web.absoluteUrl,
         contextUser: this.context.pageContext.user.loginName,
         webPartTag: this.properties.webPartTag,
+        receivedDocName: this.receivedDocName,
       },
     );
     ReactDom.render(element, this.domElement);
@@ -177,6 +200,14 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     this.render();
   };
 
+  protected get propertiesMetadata(): IWebPartPropertiesMetadata {
+    return {
+      'docName': {
+        dynamicPropertyType: 'string'
+      }
+    };
+  }
+
   private async loadHtmlFiles(): Promise<void> {
     if (!this.properties.list || !this.properties.siteUrl) {
       this.htmlFileOptions = [];
@@ -191,7 +222,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         .filter("(substringof('.html', FileLeafRef) or substringof('.htm', FileLeafRef))")
         .get();
 
-      this.htmlFileOptions = items.map((item: any) => ({
+      this.htmlFileOptions = items.map((item: { FileRef: string; FileLeafRef: string }) => ({
         key: item.FileRef,
         text: item.FileLeafRef
       }));
