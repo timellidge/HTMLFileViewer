@@ -1,26 +1,26 @@
 /* tslint:disable */
 require("./HtmlFileViewer.module.css");
 const styles = {
-  htmlFileViewer: 'htmlFileViewer_f4813355',
-  htmlFileViewerHeader: 'htmlFileViewerHeader_f4813355',
-  htmlContentContainer: 'htmlContentContainer_f4813355',
-  htmlContentScroll: 'htmlContentScroll_f4813355',
-  tocStrip: 'tocStrip_f4813355',
-  tocStripInner: 'tocStripInner_f4813355',
-  tocIcon: 'tocIcon_f4813355',
-  tocStripText: 'tocStripText_f4813355',
-  tocPanel: 'tocPanel_f4813355',
-  tocPanelHeader: 'tocPanelHeader_f4813355',
-  tocHeaderText: 'tocHeaderText_f4813355',
-  tocContent: 'tocContent_f4813355',
-  tocTitle: 'tocTitle_f4813355',
-  tocNav: 'tocNav_f4813355',
-  tocH1: 'tocH1_f4813355',
-  tocH2: 'tocH2_f4813355',
-  loadingSpinner: 'loadingSpinner_f4813355',
-  emptyState: 'emptyState_f4813355',
-  idIndicator: 'idIndicator_f4813355',
-  workbenchPageContent: 'workbenchPageContent_f4813355'
+  htmlFileViewer: 'htmlFileViewer_d60b26f0',
+  htmlFileViewerHeader: 'htmlFileViewerHeader_d60b26f0',
+  htmlContentContainer: 'htmlContentContainer_d60b26f0',
+  htmlContentScroll: 'htmlContentScroll_d60b26f0',
+  tocStrip: 'tocStrip_d60b26f0',
+  tocStripInner: 'tocStripInner_d60b26f0',
+  tocIcon: 'tocIcon_d60b26f0',
+  tocStripText: 'tocStripText_d60b26f0',
+  tocPanel: 'tocPanel_d60b26f0',
+  tocPanelHeader: 'tocPanelHeader_d60b26f0',
+  tocHeaderText: 'tocHeaderText_d60b26f0',
+  tocContent: 'tocContent_d60b26f0',
+  tocTitle: 'tocTitle_d60b26f0',
+  tocNav: 'tocNav_d60b26f0',
+  tocH1: 'tocH1_d60b26f0',
+  tocH2: 'tocH2_d60b26f0',
+  loadingSpinner: 'loadingSpinner_d60b26f0',
+  emptyState: 'emptyState_d60b26f0',
+  idIndicator: 'idIndicator_d60b26f0',
+  workbenchPageContent: 'workbenchPageContent_d60b26f0'
 };
 
 export default styles;
