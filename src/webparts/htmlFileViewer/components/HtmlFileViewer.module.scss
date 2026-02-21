@@ -35,6 +35,7 @@ $color-white: #ffffff;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 15px;
+            scroll-behavior: smooth;
         }
 
         // TOC strip (right column)
