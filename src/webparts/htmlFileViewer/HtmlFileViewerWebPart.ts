@@ -59,6 +59,8 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   private htmlFileOptions: IPropertyPaneDropdownOption[] = [];
   private receivedDocName: string | undefined;
   private _lastInjectedCSS = '';
+  private _urlStartParam: string | undefined;
+  private _urlParamUsed = false;
 
   // -----------------------------------------------------------------------------------------------------------------------------
   // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
@@ -100,6 +102,14 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     // Register property changed handler (register ONCE here, not in render)
     this.properties.docName.register(this.render.bind(this));
 
+    // Parse URL parameter for deep linking (once per page load)
+    const urlParams = new URLSearchParams(window.location.search);
+    this._urlStartParam = urlParams.get('Start') || undefined;
+    if (this._urlStartParam) {
+      // Decode URI component to handle special characters
+      this._urlStartParam = decodeURIComponent(this._urlStartParam);
+    }
+
     await super.onInit();
     this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
   }
@@ -132,11 +142,17 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
   // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
-    // Get the dynamic document name if available
-    try {
-      this.receivedDocName = this.properties.docName?.tryGetValue();
-    } catch (error) {
-      this.receivedDocName = undefined;
+    // Priority: URL parameter (first load only) > DynamicProperty
+    if (this._urlStartParam && !this._urlParamUsed) {
+      // Use URL param with highest priority (cleared after first successful load)
+      this.receivedDocName = this._urlStartParam;
+    } else {
+      // Fall back to DynamicProperty
+      try {
+        this.receivedDocName = this.properties.docName?.tryGetValue();
+      } catch (error) {
+        this.receivedDocName = undefined;
+      }
     }
 
     // Inject the CSS into the document's <style> tag
@@ -168,10 +184,21 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         contextUser: this.context.pageContext.user.loginName,
         webPartTag: this.properties.webPartTag,
         receivedDocName: this.receivedDocName,
+        onUrlParamLoaded: this.clearUrlParam,
       },
     );
     ReactDom.render(element, this.domElement);
   }
+
+  private clearUrlParam = (): void => {
+    if (this._urlStartParam && !this._urlParamUsed) {
+      this._urlParamUsed = true;
+      // Remove ?Start= parameter from URL without page reload
+      const url = new URL(window.location.href);
+      url.searchParams.delete('Start');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
 
   // -----------------------------------------------------------------------------------------------------------------------------
   // OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS

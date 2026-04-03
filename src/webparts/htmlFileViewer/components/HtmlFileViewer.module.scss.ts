@@ -1,26 +1,26 @@
 /* tslint:disable */
 require("./HtmlFileViewer.module.css");
 const styles = {
-  htmlFileViewer: 'htmlFileViewer_d60b26f0',
-  htmlFileViewerHeader: 'htmlFileViewerHeader_d60b26f0',
-  htmlContentContainer: 'htmlContentContainer_d60b26f0',
-  htmlContentScroll: 'htmlContentScroll_d60b26f0',
-  tocStrip: 'tocStrip_d60b26f0',
-  tocStripInner: 'tocStripInner_d60b26f0',
-  tocIcon: 'tocIcon_d60b26f0',
-  tocStripText: 'tocStripText_d60b26f0',
-  tocPanel: 'tocPanel_d60b26f0',
-  tocPanelHeader: 'tocPanelHeader_d60b26f0',
-  tocHeaderText: 'tocHeaderText_d60b26f0',
-  tocContent: 'tocContent_d60b26f0',
-  tocTitle: 'tocTitle_d60b26f0',
-  tocNav: 'tocNav_d60b26f0',
-  tocH1: 'tocH1_d60b26f0',
-  tocH2: 'tocH2_d60b26f0',
-  loadingSpinner: 'loadingSpinner_d60b26f0',
-  emptyState: 'emptyState_d60b26f0',
-  idIndicator: 'idIndicator_d60b26f0',
-  workbenchPageContent: 'workbenchPageContent_d60b26f0'
+  htmlFileViewer: 'htmlFileViewer_80aee996',
+  htmlFileViewerHeader: 'htmlFileViewerHeader_80aee996',
+  htmlContentContainer: 'htmlContentContainer_80aee996',
+  htmlContentScroll: 'htmlContentScroll_80aee996',
+  tocStrip: 'tocStrip_80aee996',
+  tocStripInner: 'tocStripInner_80aee996',
+  tocIcon: 'tocIcon_80aee996',
+  tocStripText: 'tocStripText_80aee996',
+  tocPanel: 'tocPanel_80aee996',
+  tocPanelHeader: 'tocPanelHeader_80aee996',
+  tocHeaderText: 'tocHeaderText_80aee996',
+  tocContent: 'tocContent_80aee996',
+  tocTitle: 'tocTitle_80aee996',
+  tocNav: 'tocNav_80aee996',
+  tocH1: 'tocH1_80aee996',
+  tocH2: 'tocH2_80aee996',
+  loadingSpinner: 'loadingSpinner_80aee996',
+  emptyState: 'emptyState_80aee996',
+  idIndicator: 'idIndicator_80aee996',
+  workbenchPageContent: 'workbenchPageContent_80aee996'
 };
 
 export default styles;

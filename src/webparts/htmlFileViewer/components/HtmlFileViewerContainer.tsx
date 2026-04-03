@@ -34,7 +34,7 @@ const SANITIZE_CONFIG: DOMPurify.Config = {
   ALLOW_DATA_ATTR: false,
 };
 
-const MAX_CONTENT_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_CONTENT_SIZE = 10 * 1024 * 1024; // 10MB
 
 // --- Pure functions (no dependency on component state) ---
 
@@ -104,6 +104,7 @@ export interface IHtmlFileViewerContainerProps {
   contextUser: string;
   webPartTag: string;
   receivedDocName: string | undefined;
+  onUrlParamLoaded: () => void;
 }
 
 const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerProps> = (props) => {
@@ -111,7 +112,8 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const {
     displayMode, title, updateProperty, showTitle, configured,
     onConfigure, siteUrl, selectedHtmlFile, hideErrorEmpty, emptyMessage,
-    contentHeight, sidePadding, webPartTag, receivedDocName, listId
+    contentHeight, sidePadding, webPartTag, receivedDocName, listId,
+    onUrlParamLoaded
   } = props;
 
   // State variables
@@ -204,6 +206,11 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const content = await file.getText();
 
       processAndSetContent(content);
+      
+      // Notify web part that URL parameter was successfully used
+      if (onUrlParamLoaded) {
+        onUrlParamLoaded();
+      }
     } catch (error) {
       let errorMessage = `Error loading "${docName}"`;
       
@@ -227,7 +234,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     } finally {
       setIsLoading(false);
     }
-  }, [selectedHtmlFile, siteUrl, listId, processAndSetContent]);
+  }, [selectedHtmlFile, siteUrl, listId, processAndSetContent, onUrlParamLoaded]);
 
   // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
   useEffect(() => {

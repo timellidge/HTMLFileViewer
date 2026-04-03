@@ -6,6 +6,7 @@ A SharePoint Framework (SPFx) web part that renders HTML files stored in SharePo
 
 ## Features
 
+- **URL Deep Linking** — Navigate directly to a specific document using a query parameter (e.g., `?Start=MyDoc`) — highest priority source, automatically cleaned from URL after load
 - **Display HTML from SharePoint** — Select an HTML file from any document library and render it inline on a SharePoint page
 - **Dynamic Document Loading** — Receive a document name from another web part (e.g. TableViewer, CardViewer) via SPFx `DynamicProperty` and load the corresponding HTML file automatically
 - **Auto-generated Table of Contents** — Extracts H1/H2 headings and builds a collapsible, sticky TOC sidebar with smooth-scroll navigation
@@ -81,6 +82,32 @@ Upload the `.sppkg` file from `sharepoint/solution/` to your SharePoint App Cata
 
 ---
 
+## URL Deep Linking
+
+Navigate directly to a specific HTML document by adding `?Start=DocumentName` to the page URL.
+
+### Usage
+
+```
+https://yourtenant.sharepoint.com/sites/yoursite/SitePages/YourPage.aspx?Start=UserGuide
+```
+
+This loads `UserGuide.html` from the configured document library.
+
+### Behavior
+
+- **Highest priority** — Overrides both DynamicProperty and property pane selections on initial page load
+- **One-time use** — After successfully loading the document, the `?Start=` parameter is removed from the URL (without page reload)
+- **Error fallback** — If the specified document doesn't exist, shows an error then falls back to the next priority source (DynamicProperty or property pane file)
+- **URL encoding** — Special characters are supported (e.g., `?Start=User%20Guide` for "User Guide.html")
+- **Document name only** — Provide just the filename without extension (`.html` is appended automatically)
+
+### URL Cleanup
+
+After the document loads successfully, the web part automatically removes the query parameter using `window.history.replaceState()`, so refreshing the page won't reload from the URL parameter — it will use the DynamicProperty or property pane file instead.
+
+---
+
 ## Dynamic Property Communication
 
 This web part can receive a document name from another connected web part using SPFx Dynamic Properties.
@@ -96,9 +123,10 @@ This web part can receive a document name from another connected web part using 
 
 | Priority | Source | When used |
 |---|---|---|
-| 1 | `receivedDocName` (from connected web part) | When a dynamic property value is available |
-| 2 | `selectedHtmlFile` (from property pane) | When no dynamic value is received |
-| 3 | Empty state | When neither is available |
+| 1 | `?Start=` URL parameter | On initial page load only, when `?Start=DocumentName` is in the URL |
+| 2 | `receivedDocName` (from connected web part) | When a dynamic property value is available (and no URL param) |
+| 3 | `selectedHtmlFile` (from property pane) | When no URL param or dynamic value is received |
+| 4 | Empty state | When none of the above are available |
 
 ### Connecting web parts
 
