@@ -3,7 +3,7 @@
   "solution": {
     "name": "HTMLFileViewer",
     "id": "9aad5bcb-6bf8-4acc-b594-9732ab23f215",
-    "version": "1.0.0.35",
+    "version": "1.0.0.36",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "metadata": {
@@ -22,7 +22,7 @@
         "title": "HTML File Viewer Feature",
         "description": "The feature that activates HTML File Viewer from the HTML File Viewer solution.",
         "id": "480a0420-29c9-40eb-9e1f-f0217f6b90fe",
-        "version": "1.0.0.35",
+        "version": "1.0.0.36",
         "componentIds": [
           "544db594-beba-4311-a1f2-4da849888ce6"
         ]
