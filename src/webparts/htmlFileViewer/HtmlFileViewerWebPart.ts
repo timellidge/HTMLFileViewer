@@ -106,8 +106,12 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     const urlParams = new URLSearchParams(window.location.search);
     this._urlStartParam = urlParams.get('Start') || undefined;
     if (this._urlStartParam) {
-      // Decode URI component to handle special characters
-      this._urlStartParam = decodeURIComponent(this._urlStartParam);
+      try {
+        // Decode URI component to handle special characters
+        this._urlStartParam = decodeURIComponent(this._urlStartParam);
+      } catch {
+        // Invalid URL encoding - use raw value (will fail gracefully during document lookup)
+      }
     }
 
     await super.onInit();
