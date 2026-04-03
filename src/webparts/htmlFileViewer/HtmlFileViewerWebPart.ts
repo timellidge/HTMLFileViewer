@@ -160,7 +160,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     }
 
     // Inject the CSS into the document's <style> tag
-    const strippedCSS = this.properties.webPartCSS.replace(/<style>/g, '').replace(/<\/style>/g, '');
+    const strippedCSS = (this.properties.webPartCSS || this.defaultCSS).replace(/<style>/g, '').replace(/<\/style>/g, '');
     this.injectCSS(strippedCSS);
 
     const element: React.ReactElement<IHtmlFileViewerContainerProps> = React.createElement(
