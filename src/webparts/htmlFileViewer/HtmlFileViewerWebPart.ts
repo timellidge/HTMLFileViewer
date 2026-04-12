@@ -104,14 +104,9 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
 
     // Parse URL parameter for deep linking (once per page load)
     const urlParams = new URLSearchParams(window.location.search);
-    this._urlStartParam = urlParams.get('Start') || undefined;
+    this._urlStartParam = urlParams.get('startdoc') || undefined;
     if (this._urlStartParam) {
-      try {
-        // Decode URI component to handle special characters
-        this._urlStartParam = decodeURIComponent(this._urlStartParam);
-      } catch {
-        // Invalid URL encoding - use raw value (will fail gracefully during document lookup)
-      }
+      console.log(`[HTMLFileViewer] URL parameter received: "${this._urlStartParam}"`);
     }
 
     await super.onInit();
@@ -197,9 +192,9 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   private clearUrlParam = (): void => {
     if (this._urlStartParam && !this._urlParamUsed) {
       this._urlParamUsed = true;
-      // Remove ?Start= parameter from URL without page reload
+      // Remove ?startdoc= parameter from URL without page reload
       const url = new URL(window.location.href);
-      url.searchParams.delete('Start');
+      url.searchParams.delete('startdoc');
       window.history.replaceState({}, '', url.toString());
     }
   };

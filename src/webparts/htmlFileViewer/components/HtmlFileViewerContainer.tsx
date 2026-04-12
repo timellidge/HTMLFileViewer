@@ -165,6 +165,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       return;
     }
 
+    console.log(`[HTMLFileViewer] Attempting to load document: "${docName}"`);
     setIsLoading(true);
     setGlobalError(null);
 
@@ -206,6 +207,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const content = await file.getText();
 
       processAndSetContent(content);
+      console.log(`[HTMLFileViewer] Successfully loaded document: "${docName}" from ${fileServerRelativePath}`);
       
       // Notify web part that URL parameter was successfully used
       if (onUrlParamLoaded) {
@@ -230,6 +232,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
         }
       }
       
+      console.error(`[HTMLFileViewer] ${errorMessage}`);
       setGlobalError(new Error(errorMessage));
     } finally {
       setIsLoading(false);
