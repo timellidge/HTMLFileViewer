@@ -154,6 +154,11 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       }
     }
 
+    // Normalize: callers may pass either decoded ("My Doc") or %20-encoded ("My%20Doc") form
+    if (this.receivedDocName) {
+      this.receivedDocName = this.receivedDocName.replace(/%20/g, ' ').trim();
+    }
+
     // Inject the CSS into the document's <style> tag
     const strippedCSS = (this.properties.webPartCSS || this.defaultCSS).replace(/<style>/g, '').replace(/<\/style>/g, '');
     this.injectCSS(strippedCSS);
