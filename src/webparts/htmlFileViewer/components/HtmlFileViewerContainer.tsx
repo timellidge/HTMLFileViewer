@@ -176,8 +176,8 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       if (selectedHtmlFile) {
         const lastSlashIndex = selectedHtmlFile.lastIndexOf('/');
         const folderPath = selectedHtmlFile.substring(0, lastSlashIndex + 1);
-        // Encode spaces in the doc name so the server-relative URL is valid
-        fileServerRelativePath = folderPath + docName.replace(/ /g, '%20') + '.html';
+        // Don't encode - getFileByServerRelativePath() handles URL encoding internally
+        fileServerRelativePath = folderPath + docName + '.html';
 
         // Validate path stays within the expected folder (prevent traversal)
         if (!fileServerRelativePath.startsWith(folderPath)) {

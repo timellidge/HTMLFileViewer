@@ -141,17 +141,33 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
   // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
-    // Priority: URL parameter (first load only) > DynamicProperty
-    if (this._urlStartParam && !this._urlParamUsed) {
-      // Use URL param with highest priority (cleared after first successful load)
+    // Document routing priority:
+    //   1. Live DynamicProperty value (user clicking the connected/side web part).
+    //      Once the user actively navigates, that wins over everything.
+    //   2. URL deep-link param (?startdoc=). Used as the INITIAL value before the
+    //      user has clicked anything. _urlStartParam persists in memory for the
+    //      life of the web part instance, so it keeps acting as the fallback even
+    //      after it has been cleaned out of the address bar.
+    //   3. Default selectedHtmlFile (handled inside the React container).
+    // Reading the dynamic value first means a momentary undefined from the data
+    // source falls back to the deep-link, never to the default doc.
+    let dynamicValue: string | undefined;
+    try {
+      dynamicValue = this.properties.docName?.tryGetValue();
+    } catch (error) {
+      dynamicValue = undefined;
+      console.log('[HTMLFileViewer] tryGetValue THREW:', error);
+    }
+    console.log('[HTMLFileViewer] render() dynamicValue =', JSON.stringify(dynamicValue),
+      '| hasDynamicProp =', !!this.properties.docName,
+      '| urlParam =', JSON.stringify(this._urlStartParam));
+
+    if (dynamicValue !== undefined && dynamicValue !== null && dynamicValue !== '') {
+      this.receivedDocName = dynamicValue;
+    } else if (this._urlStartParam) {
       this.receivedDocName = this._urlStartParam;
     } else {
-      // Fall back to DynamicProperty
-      try {
-        this.receivedDocName = this.properties.docName?.tryGetValue();
-      } catch (error) {
-        this.receivedDocName = undefined;
-      }
+      this.receivedDocName = undefined;
     }
 
     // Normalize: callers may pass either decoded ("My Doc") or %20-encoded ("My%20Doc") form
@@ -345,6 +361,17 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
                   options: this.htmlFileOptions,
                   disabled: this.properties.list === '',
                   selectedKey: this.properties.selectedHtmlFile,
+                }),
+                this.msProps.PropertyPaneDynamicFieldSet({
+                  label: 'Document name source',
+                  fields: [
+                    this.msProps.PropertyPaneDynamicField('docName', {
+                      label: 'Document name',
+                    }),
+                  ],
+                  sharedConfiguration: {
+                    depth: this.msProps.DynamicDataSharedDepth.Property,
+                  },
                 }),
                 this.msProps.PropertyPaneToggle('showTitle', {
                   label: 'Show Title',
