@@ -265,14 +265,19 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       const web = Web(this.properties.siteUrl);
       const items = await web.lists.getById(this.properties.list)
         .items
-        .select('FileRef', 'FileLeafRef')
-        .filter("(endswith(tolower(FileLeafRef),'.html') or endswith(tolower(FileLeafRef),'.htm'))")
+        .select('FileRef', 'FileLeafRef', 'FSObjType')
+        .filter('FSObjType eq 0')
         .get();
 
-      this.htmlFileOptions = items.map((item: { FileRef: string; FileLeafRef: string }) => ({
-        key: item.FileRef,
-        text: item.FileLeafRef
-      }));
+      this.htmlFileOptions = items
+        .filter((item: { FileLeafRef: string; FSObjType: number }) => {
+          const name = item.FileLeafRef.toLowerCase();
+          return name.endsWith('.html') || name.endsWith('.htm');
+        })
+        .map((item: { FileRef: string; FileLeafRef: string }) => ({
+          key: item.FileRef,
+          text: item.FileLeafRef
+        }));
     } catch (error) {
       this.htmlFileOptions = [];
     }
