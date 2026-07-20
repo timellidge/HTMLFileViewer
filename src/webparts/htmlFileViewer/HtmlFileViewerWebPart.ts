@@ -257,6 +257,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   private async loadHtmlFiles(): Promise<void> {
     if (!this.properties.list || !this.properties.siteUrl) {
       this.htmlFileOptions = [];
+      this.context.propertyPane.refresh();
       return;
     }
 
@@ -265,7 +266,7 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       const items = await web.lists.getById(this.properties.list)
         .items
         .select('FileRef', 'FileLeafRef')
-        .filter("(substringof('.html', FileLeafRef) or substringof('.htm', FileLeafRef))")
+        .filter("(endswith(tolower(FileLeafRef),'.html') or endswith(tolower(FileLeafRef),'.htm'))")
         .get();
 
       this.htmlFileOptions = items.map((item: { FileRef: string; FileLeafRef: string }) => ({
@@ -287,10 +288,16 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     const oldListValue = this.properties[targetProperty];
     this.onPropertyPaneFieldChanged(targetProperty as string, oldListValue, newValue);
 
-    if (newValue !== '') {
+    if (newValue !== oldValue) {
       this.properties.selectedHtmlFile = '';
       this.loadHtmlFiles();
       this.render();
+    }
+  }
+
+  protected async onPropertyPaneConfigurationStart(): Promise<void> {
+    if (this.properties.list && this.properties.siteUrl) {
+      await this.loadHtmlFiles();
     }
   }
   
