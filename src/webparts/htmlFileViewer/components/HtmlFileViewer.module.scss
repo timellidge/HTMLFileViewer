@@ -27,7 +27,7 @@ $color-white: #ffffff;
         border: 1px solid $color-border;
         border-radius: 2px;
         display: grid;
-        grid-template-columns: 1fr 50px;
+        grid-template-columns: 1fr 55px;
         position: relative;
 
         // Scrollable document area
@@ -41,14 +41,22 @@ $color-white: #ffffff;
         // TOC strip (right column)
         .tocStrip {
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
             padding-top: 10px;
             background: transparent;
-            cursor: pointer;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
             user-select: none;
+
+            .tocStripTab {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                cursor: pointer;
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                width: 50px;
+            }
 
             .tocStripInner {
                 display: flex;
@@ -60,6 +68,8 @@ $color-white: #ffffff;
                 font-weight: 600;
                 padding: 20px 8px;
                 border-radius: 8px 0 0 8px;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .tocIcon {
@@ -70,6 +80,38 @@ $color-white: #ffffff;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+
+            // Action panel (PDF / Share) — sits under the TOC tab inside the strip
+            .tocActionsPanel {
+                width: 50px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 4px;
+                background: $color-surface;
+                border: 1px solid $color-border;
+                border-radius: 8px 0 0 8px;
+                box-sizing: border-box;
+
+                .tocActionButton {
+                    width: 34px;
+                    height: 34px;
+                    min-width: 34px;
+                    padding: 0;
+                    color: $color-primary;
+
+                    &:hover:not(:disabled) {
+                        color: $color-primary-dark;
+                        background-color: $color-surface-light;
+                    }
+
+                    &:disabled {
+                        color: $color-text-muted;
+                        cursor: not-allowed;
+                    }
+                }
             }
         }
 

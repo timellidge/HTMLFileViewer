@@ -10,6 +10,8 @@ A SharePoint Framework (SPFx) web part that renders HTML files stored in SharePo
 - **Display HTML from SharePoint** — Select an HTML file from any document library and render it inline on a SharePoint page
 - **Dynamic Document Loading** — Receive a document name from another web part (e.g. TableViewer, CardViewer) via SPFx `DynamicProperty` and load the corresponding HTML file automatically
 - **Auto-generated Table of Contents** — Extracts H1/H2 headings and builds a collapsible, sticky TOC sidebar with smooth-scroll navigation
+- **PDF Companion Link** — When a PDF with the same base name exists next to the HTML file, an action button opens it in a new tab
+- **Share Link Copy** — Builds the current-page URL with `?startdoc=<DocumentName>` and copies it to the clipboard with a visual confirmation tick
 - **Custom CSS Injection** — Site editors can add custom CSS via the property pane code editor to style the rendered HTML content
 - **Configurable Layout** — Set content height, side padding (gutter), show/hide title, custom empty-state messages
 - **Security Hardened** — All HTML is sanitized through DOMPurify with strict allowlists; no scripts, styles, iframes, or event handlers are rendered
@@ -157,6 +159,26 @@ The TOC is automatically generated from H1 and H2 headings in the rendered HTML.
 | 1st H2 under H1 #2 | `Index2_1` |
 
 If a heading already has an `id` attribute, it is preserved.
+
+---
+
+## Document Actions
+
+A small action panel appears on the right-hand side of the content area whenever a document is loaded.
+
+### Open PDF
+
+If a PDF with the same base file name exists in the same folder as the displayed HTML file (for example, `S03_Procudure_Guidelibes.pdf` next to `S03_Procudure_Guidelibes.html`), a **PDF** button is enabled. Clicking it opens the PDF in a new browser tab. If no matching PDF is found, the button is disabled and greyed out.
+
+### Copy Share Link
+
+The **Share** button constructs the current page URL with the `startdoc` query parameter set to the loaded document name (without the `.html` extension), for example:
+
+```
+https://yourtenant.sharepoint.com/sites/yoursite/SitePages/YourPage.aspx?startdoc=S03_Procudure_Guidelibes
+```
+
+Clicking the button copies this URL to the clipboard. The icon changes to a check mark for two seconds to confirm the copy.
 
 ---
 

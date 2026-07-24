@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { mergeStyles, Spinner, SpinnerSize, Icon } from '@fluentui/react';
+import { mergeStyles, Spinner, SpinnerSize, Icon, ActionButton } from '@fluentui/react';
 import styles from './HtmlFileViewer.module.scss';
 import { DisplayMode } from '@microsoft/sp-core-library';
 import HtmlFileViewerHeader from './HtmlFileViewerHeader';
@@ -16,6 +16,39 @@ interface ITocItem {
   id: string;
   text: string;
   level: number;
+}
+
+interface IDocumentPaths {
+  baseName: string;
+  folderPath: string;
+  pdfPath: string;
+}
+
+const PDF_EXTENSION = '.pdf';
+
+/** Extract folder, base name and sibling PDF path from a server-relative HTML file path */
+function getDocumentPaths(htmlFilePath: string): IDocumentPaths | undefined {
+  const lastSlashIndex = htmlFilePath.lastIndexOf('/');
+  if (lastSlashIndex === -1) {
+    return undefined;
+  }
+
+  const folderPath = htmlFilePath.substring(0, lastSlashIndex + 1);
+  const fileName = htmlFilePath.substring(lastSlashIndex + 1);
+  const baseName = fileName.replace(/\.html?$/i, '');
+
+  if (!baseName) {
+    return undefined;
+  }
+
+  const pdfPath = folderPath + baseName + PDF_EXTENSION;
+
+  // Validate that the derived PDF path stays within the expected folder
+  if (!pdfPath.startsWith(folderPath)) {
+    return undefined;
+  }
+
+  return { baseName, folderPath, pdfPath };
 }
 
 // --- Constants (outside component to avoid recreation per render) ---
@@ -123,7 +156,13 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const [tocItems, setTocItems] = useState<ITocItem[]>([]);
   const [docTitle, setDocTitle] = useState<string>('');
   const [tocExpanded, setTocExpanded] = useState<boolean>(false);
+  const [currentFilePath, setCurrentFilePath] = useState<string>('');
+  const [pdfUrl, setPdfUrl] = useState<string>('');
+  const [pdfExists, setPdfExists] = useState<boolean>(false);
+  const [shareUrl, setShareUrl] = useState<string>('');
+  const [shareCopied, setShareCopied] = useState<boolean>(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shareTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch HTML content from SharePoint
@@ -152,7 +191,9 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const file = web.getFileByServerRelativePath(selectedHtmlFile);
       const content = await file.getText();
       processAndSetContent(content);
+      setCurrentFilePath(selectedHtmlFile);
     } catch (error) {
+      setCurrentFilePath('');
       setGlobalError(error as Error);
     } finally {
       setIsLoading(false);
@@ -208,6 +249,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const content = await file.getText();
 
       processAndSetContent(content);
+      setCurrentFilePath(fileServerRelativePath);
       console.log(`[HTMLFileViewer] Successfully loaded document: "${docName}" from ${fileServerRelativePath}`);
       
       // Notify web part that URL parameter was successfully used
@@ -215,6 +257,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
         onUrlParamLoaded();
       }
     } catch (error) {
+      setCurrentFilePath('');
       let errorMessage = `Error loading "${docName}"`;
       
       // Check for specific error types
@@ -291,8 +334,75 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       if (closeTimerRef.current !== null) {
         clearTimeout(closeTimerRef.current);
       }
+      if (shareTimerRef.current !== null) {
+        clearTimeout(shareTimerRef.current);
+      }
     };
   }, []);
+
+  const handleShareClick = React.useCallback(async () => {
+    if (!shareUrl) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+
+      if (shareTimerRef.current !== null) {
+        clearTimeout(shareTimerRef.current);
+      }
+
+      shareTimerRef.current = setTimeout(() => {
+        setShareCopied(false);
+        shareTimerRef.current = null;
+      }, 2000);
+    } catch {
+      // Ignore clipboard copy failures
+    }
+  }, [shareUrl]);
+
+  // Detect sibling PDF and build share URL when the loaded document changes
+  useEffect(() => {
+    let cancelled = false;
+
+    setPdfExists(false);
+    setPdfUrl('');
+    setShareUrl('');
+
+    if (!currentFilePath || !siteUrl) {
+      return;
+    }
+
+    const paths = getDocumentPaths(currentFilePath);
+    if (!paths) {
+      return;
+    }
+
+    const checkPdfAndBuildShareUrl = async (): Promise<void> => {
+      try {
+        await Web(siteUrl).getFileByServerRelativePath(paths.pdfPath).get();
+        if (!cancelled) {
+          setPdfExists(true);
+          setPdfUrl(new URL(paths.pdfPath, siteUrl).href);
+        }
+      } catch {
+        if (!cancelled) {
+          setPdfExists(false);
+        }
+      }
+
+      if (!cancelled) {
+        const shareLink = new URL(window.location.href);
+        shareLink.searchParams.set('startdoc', paths.baseName);
+        setShareUrl(shareLink.toString());
+      }
+    };
+
+    checkPdfAndBuildShareUrl();
+
+    return () => { cancelled = true; };
+  }, [currentFilePath, siteUrl]);
 
   // CSS container class
   const _containerClass = useMemo(() => mergeStyles(
@@ -337,20 +447,44 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
               />
               {tocItems.length > 0 && (
                 <>
-                  <div
-                    className={styles.tocStrip}
-                    onMouseEnter={handleTocMouseEnter}
-                    onMouseLeave={handleContentMouseEnter}
-                    role="button"
-                    tabIndex={0}
-                    aria-expanded={tocExpanded}
-                    aria-label={`Open Table of Contents: ${receivedDocName || docTitle}`}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(!tocExpanded); } }}
-                  >
-                    {!tocExpanded && (
-                      <div className={styles.tocStripInner}>
-                        <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />
-                        <span className={styles.tocStripText}>{`T.O.C.${(receivedDocName || docTitle) ? ` ${receivedDocName || docTitle}` : ''}`}</span>
+                  <div className={styles.tocStrip}>
+                    <div
+                      className={styles.tocStripTab}
+                      onMouseEnter={handleTocMouseEnter}
+                      onMouseLeave={handleContentMouseEnter}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={tocExpanded}
+                      aria-label={`Open Table of Contents: ${receivedDocName || docTitle}`}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(!tocExpanded); } }}
+                    >
+                      {!tocExpanded && (
+                        <div className={styles.tocStripInner}>
+                          <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />
+                          <span className={styles.tocStripText}>{`T.O.C.${(receivedDocName || docTitle) ? ` ${receivedDocName || docTitle}` : ''}`}</span>
+                        </div>
+                      )}
+                    </div>
+                    {currentFilePath && (
+                      <div className={styles.tocActionsPanel} role="complementary" aria-label="Document actions">
+                        <ActionButton
+                          iconProps={{ iconName: 'PDF' }}
+                          href={pdfExists ? pdfUrl : undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          disabled={!pdfExists}
+                          title={pdfExists ? 'Open PDF in a new tab' : 'No matching PDF found'}
+                          aria-label="Open PDF in a new tab"
+                          className={styles.tocActionButton}
+                        />
+                        <ActionButton
+                          iconProps={{ iconName: shareCopied ? 'CheckMark' : 'Share' }}
+                          onClick={handleShareClick}
+                          disabled={!shareUrl}
+                          title="Copy share link to clipboard"
+                          aria-label="Copy share link to clipboard"
+                          className={styles.tocActionButton}
+                        />
                       </div>
                     )}
                   </div>
