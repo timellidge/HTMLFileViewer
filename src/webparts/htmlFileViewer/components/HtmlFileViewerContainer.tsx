@@ -53,6 +53,7 @@ function getDocumentPaths(htmlFilePath: string): IDocumentPaths | undefined {
 
 // --- Constants (outside component to avoid recreation per render) ---
 const TOC_COLLAPSE_DELAY_MS = 500;
+const WINDOW_TITLE_SEPARATOR = ' | ';
 
 const SANITIZE_CONFIG: DOMPurify.Config = {
   ALLOWED_TAGS: [
@@ -164,6 +165,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shareTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const originalTitleRef = useRef<string>(document.title);
 
   // Fetch HTML content from SharePoint
   // Shared: validate size, sanitize, and update state
@@ -328,6 +330,26 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     }, TOC_COLLAPSE_DELAY_MS);
   }, []);
 
+  // Update browser tab title in read mode when a document is loaded
+  useEffect(() => {
+    if (displayMode !== DisplayMode.Read) {
+      return;
+    }
+
+    const resolvedPaths = currentFilePath ? getDocumentPaths(currentFilePath) : undefined;
+    const activeDocumentName = receivedDocName || resolvedPaths?.baseName || docTitle || '';
+
+    if (activeDocumentName) {
+      document.title = `${activeDocumentName}${WINDOW_TITLE_SEPARATOR}${originalTitleRef.current}`;
+    } else {
+      document.title = originalTitleRef.current;
+    }
+
+    return () => {
+      document.title = originalTitleRef.current;
+    };
+  }, [displayMode, receivedDocName, currentFilePath, docTitle]);
+
   // Cleanup timer on unmount
   useEffect(() => {
     return () => {
@@ -467,16 +489,27 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
                     </div>
                     {currentFilePath && (
                       <div className={styles.tocActionsPanel} role="complementary" aria-label="Document actions">
-                        <ActionButton
-                          iconProps={{ iconName: 'PDF' }}
-                          href={pdfExists ? pdfUrl : undefined}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          disabled={!pdfExists}
-                          title={pdfExists ? 'Open PDF in a new tab' : 'No matching PDF found'}
-                          aria-label="Open PDF in a new tab"
-                          className={styles.tocActionButton}
-                        />
+                        {pdfExists && pdfUrl ? (
+                          <button
+                            type="button"
+                            title="Open PDF in a new tab"
+                            aria-label="Open PDF in a new tab"
+                            className={styles.tocActionButton}
+                            onClick={() => window.open(pdfUrl, '_blank', 'noopener,noreferrer')}
+                          >
+                            <Icon iconName="PDF" className={styles.tocActionIcon} />
+                          </button>
+                        ) : (
+                          <span
+                            className={styles.tocActionDisabled}
+                            title="No matching PDF found"
+                            aria-label="No matching PDF found"
+                            role="button"
+                            aria-disabled="true"
+                          >
+                            <Icon iconName="PDF" className={styles.tocActionIcon} />
+                          </span>
+                        )}
                         <ActionButton
                           iconProps={{ iconName: shareCopied ? 'CheckMark' : 'Share' }}
                           onClick={handleShareClick}

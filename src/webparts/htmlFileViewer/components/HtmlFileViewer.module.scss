@@ -95,22 +95,38 @@ $color-white: #ffffff;
                 border-radius: 8px 0 0 8px;
                 box-sizing: border-box;
 
-                .tocActionButton {
+                .tocActionButton,
+                .tocActionLink,
+                .tocActionDisabled {
                     width: 34px;
                     height: 34px;
                     min-width: 34px;
                     padding: 0;
                     color: $color-primary;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-decoration: none;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                }
 
-                    &:hover:not(:disabled) {
-                        color: $color-primary-dark;
-                        background-color: $color-surface-light;
-                    }
+                .tocActionLink:hover {
+                    color: $color-primary-dark;
+                    background-color: $color-surface-light;
+                }
 
-                    &:disabled {
-                        color: $color-text-muted;
-                        cursor: not-allowed;
-                    }
+                .tocActionDisabled {
+                    color: $color-text-muted;
+                    cursor: not-allowed;
+                }
+
+                .tocActionIcon,
+                .tocActionButton i,
+                .tocActionButton span i {
+                    font-size: 22px !important;
                 }
             }
         }

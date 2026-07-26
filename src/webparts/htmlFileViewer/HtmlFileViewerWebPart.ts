@@ -103,8 +103,15 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     this.properties.docName.register(this.render.bind(this));
 
     // Parse URL parameter for deep linking (once per page load)
+    // Match case-insensitively so ?startdoc= and ?Startdoc= both work
     const urlParams = new URLSearchParams(window.location.search);
-    this._urlStartParam = urlParams.get('startdoc') || undefined;
+    let startDocParam: string | null = null;
+    urlParams.forEach((value, key) => {
+      if (key.toLowerCase() === 'startdoc') {
+        startDocParam = value;
+      }
+    });
+    this._urlStartParam = startDocParam || undefined;
     if (this._urlStartParam) {
       console.log(`[HTMLFileViewer] URL parameter received: "${this._urlStartParam}"`);
     }
@@ -267,6 +274,8 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         .items
         .select('FileRef', 'FileLeafRef', 'FSObjType')
         .filter('FSObjType eq 0')
+        .orderBy('FileLeafRef', true)
+        .top(5000)
         .get();
 
       this.htmlFileOptions = items
