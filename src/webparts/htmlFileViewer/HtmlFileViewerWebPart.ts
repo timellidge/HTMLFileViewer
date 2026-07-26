@@ -150,10 +150,10 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   public render(): void {
     // Document routing priority:
     //   1. URL deep-link param (?startdoc=). Highest priority on initial page load.
-    //      Once the document has loaded successfully, _urlStartParam is cleared
-    //      so it no longer overrides the dynamic property.
+    //      It persists in memory after the address bar is cleaned so the document
+    //      stays loaded while the dynamic property is still initialising.
     //   2. Live DynamicProperty value (user clicking the connected/side web part).
-    //      Takes over after the URL param has been consumed.
+    //      Takes over as soon as a non-empty value is available.
     //   3. Default selectedHtmlFile (handled inside the React container).
     let dynamicValue: string | undefined;
     try {
@@ -166,7 +166,14 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       '| hasDynamicProp =', !!this.properties.docName,
       '| urlParam =', JSON.stringify(this._urlStartParam));
 
-    if (this._urlStartParam) {
+    // Hand over control from URL deep-link to dynamic property once a live dynamic
+    // value arrives. Until then, keep the URL param active so transient empty values
+    // from the still-initialising dynamic source don't clear the document.
+    if (this._urlStartParam && dynamicValue !== undefined && dynamicValue !== null && dynamicValue !== '') {
+      this.clearUrlParam();
+      this._urlStartParam = undefined;
+      this.receivedDocName = dynamicValue;
+    } else if (this._urlStartParam) {
       this.receivedDocName = this._urlStartParam;
     } else if (dynamicValue !== undefined && dynamicValue !== null && dynamicValue !== '') {
       this.receivedDocName = dynamicValue;
@@ -215,14 +222,12 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   }
 
   private clearUrlParam = (): void => {
-    if (this._urlStartParam && !this._urlParamUsed) {
+    if (!this._urlParamUsed) {
       this._urlParamUsed = true;
       // Remove ?startdoc= parameter from URL without page reload
       const url = new URL(window.location.href);
       url.searchParams.delete('startdoc');
       window.history.replaceState({}, '', url.toString());
-      // Clear the in-memory URL param so it no longer overrides dynamic values
-      this._urlStartParam = undefined;
     }
   };
 

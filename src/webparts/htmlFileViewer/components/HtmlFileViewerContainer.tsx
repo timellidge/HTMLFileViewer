@@ -179,38 +179,52 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     setDocTitle(title);
   }, []);
 
-  const fetchHtmlContent = React.useCallback(async () => {
+  const fetchHtmlContent = React.useCallback(async (token: { cancelled: boolean }) => {
     if (!selectedHtmlFile || !siteUrl) {
-      setHtmlContent('');
+      if (!token.cancelled) {
+        setHtmlContent('');
+      }
       return;
     }
 
-    setIsLoading(true);
-    setGlobalError(null);
+    if (!token.cancelled) {
+      setIsLoading(true);
+      setGlobalError(null);
+    }
 
     try {
       const web = Web(siteUrl);
       const file = web.getFileByServerRelativePath(selectedHtmlFile);
       const content = await file.getText();
+      if (token.cancelled) {
+        return;
+      }
       processAndSetContent(content);
       setCurrentFilePath(selectedHtmlFile);
     } catch (error) {
+      if (token.cancelled) {
+        return;
+      }
       setCurrentFilePath('');
       setGlobalError(error as Error);
     } finally {
-      setIsLoading(false);
+      if (!token.cancelled) {
+        setIsLoading(false);
+      }
     }
   }, [selectedHtmlFile, siteUrl, processAndSetContent]);
 
   // Fetch HTML content from SharePoint by document name
-  const fetchHtmlContentByDocName = React.useCallback(async (docName: string) => {
+  const fetchHtmlContentByDocName = React.useCallback(async (docName: string, token: { cancelled: boolean }) => {
     if (!docName || !siteUrl) {
       return;
     }
 
-    console.log(`[HTMLFileViewer] Attempting to load document: "${docName}"`);
-    setIsLoading(true);
-    setGlobalError(null);
+    if (!token.cancelled) {
+      console.log(`[HTMLFileViewer] Attempting to load document: "${docName}"`);
+      setIsLoading(true);
+      setGlobalError(null);
+    }
 
     let fileServerRelativePath = '';
     
@@ -250,6 +264,10 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       const file = web.getFileByServerRelativePath(fileServerRelativePath);
       const content = await file.getText();
 
+      if (token.cancelled) {
+        return;
+      }
+
       processAndSetContent(content);
       setCurrentFilePath(fileServerRelativePath);
       console.log(`[HTMLFileViewer] Successfully loaded document: "${docName}" from ${fileServerRelativePath}`);
@@ -259,6 +277,9 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
         onUrlParamLoaded();
       }
     } catch (error) {
+      if (token.cancelled) {
+        return;
+      }
       setCurrentFilePath('');
       let errorMessage = `Error loading "${docName}"`;
       
@@ -281,26 +302,24 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       console.error(`[HTMLFileViewer] ${errorMessage}`);
       setGlobalError(new Error(errorMessage));
     } finally {
-      setIsLoading(false);
+      if (!token.cancelled) {
+        setIsLoading(false);
+      }
     }
   }, [selectedHtmlFile, siteUrl, listId, processAndSetContent, onUrlParamLoaded]);
 
   // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
   useEffect(() => {
-    let cancelled = false;
+    const token = { cancelled: false };
 
     if (configured) {
       // Priority 1: Use received document name if available
       if (receivedDocName !== undefined && receivedDocName !== null && receivedDocName !== '') {
-        fetchHtmlContentByDocName(receivedDocName).then(() => {
-          if (cancelled) { setHtmlContent(''); }
-        });
+        fetchHtmlContentByDocName(receivedDocName, token);
       }
       // Priority 2: Fall back to manually selected file
       else if (selectedHtmlFile) {
-        fetchHtmlContent().then(() => {
-          if (cancelled) { setHtmlContent(''); }
-        });
+        fetchHtmlContent(token);
       }
       // No content to display
       else {
@@ -308,7 +327,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       }
     }
 
-    return () => { cancelled = true; };
+    return () => { token.cancelled = true; };
   }, [configured, receivedDocName, selectedHtmlFile, fetchHtmlContent, fetchHtmlContentByDocName]);
 
   // TOC hover handlers
