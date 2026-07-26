@@ -149,15 +149,12 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
     // Document routing priority:
-    //   1. Live DynamicProperty value (user clicking the connected/side web part).
-    //      Once the user actively navigates, that wins over everything.
-    //   2. URL deep-link param (?startdoc=). Used as the INITIAL value before the
-    //      user has clicked anything. _urlStartParam persists in memory for the
-    //      life of the web part instance, so it keeps acting as the fallback even
-    //      after it has been cleaned out of the address bar.
+    //   1. URL deep-link param (?startdoc=). Highest priority on initial page load.
+    //      Once the document has loaded successfully, _urlStartParam is cleared
+    //      so it no longer overrides the dynamic property.
+    //   2. Live DynamicProperty value (user clicking the connected/side web part).
+    //      Takes over after the URL param has been consumed.
     //   3. Default selectedHtmlFile (handled inside the React container).
-    // Reading the dynamic value first means a momentary undefined from the data
-    // source falls back to the deep-link, never to the default doc.
     let dynamicValue: string | undefined;
     try {
       dynamicValue = this.properties.docName?.tryGetValue();
@@ -169,10 +166,10 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       '| hasDynamicProp =', !!this.properties.docName,
       '| urlParam =', JSON.stringify(this._urlStartParam));
 
-    if (dynamicValue !== undefined && dynamicValue !== null && dynamicValue !== '') {
-      this.receivedDocName = dynamicValue;
-    } else if (this._urlStartParam) {
+    if (this._urlStartParam) {
       this.receivedDocName = this._urlStartParam;
+    } else if (dynamicValue !== undefined && dynamicValue !== null && dynamicValue !== '') {
+      this.receivedDocName = dynamicValue;
     } else {
       this.receivedDocName = undefined;
     }
@@ -224,6 +221,8 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       const url = new URL(window.location.href);
       url.searchParams.delete('startdoc');
       window.history.replaceState({}, '', url.toString());
+      // Clear the in-memory URL param so it no longer overrides dynamic values
+      this._urlStartParam = undefined;
     }
   };
 
