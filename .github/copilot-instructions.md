@@ -25,7 +25,7 @@ This is an **SPFx 1.18.2** web part (SharePoint Framework) built with **React 17
 | `src/webparts/htmlFileViewer/components/HtmlFileViewerHeader.tsx` | Title bar |
 | `src/webparts/htmlFileViewer/components/HtmlFileViewerPlaceholder.tsx` | Configuration placeholder |
 | `src/webparts/htmlFileViewer/components/HtmlFileViewerErrorMessage.tsx` | Error message bar |
-| `src/helpers/Utilities.ts` | Shared utility functions (validation, CAML, formatting) |
+| `src/helpers/Utilities.ts` | Shared utility functions (site validation) |
 | `src/helpers/Interfaces.ts` | Shared TypeScript interfaces and Zod schemas |
 | `config/package-solution.json` | Solution version and feature config |
 | `scripts/increment-version.js` | Auto-increment version on `npm run package:prod` |

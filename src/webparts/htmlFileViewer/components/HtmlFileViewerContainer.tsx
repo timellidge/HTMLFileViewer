@@ -11,7 +11,6 @@ import '@pnp/sp/files';
 import '@pnp/sp/webs';
 import * as DOMPurify from 'dompurify';
 
-// --- Types ---
 interface ITocItem {
   id: string;
   text: string;
@@ -24,7 +23,47 @@ interface IDocumentPaths {
   pdfPath: string;
 }
 
+interface INormalizedDocumentName {
+  baseName: string;
+  fileName: string;
+  hasExtension: boolean;
+}
+
 const PDF_EXTENSION = '.pdf';
+
+function normalizeDocumentName(docName: string): INormalizedDocumentName {
+  const normalizedName = docName.replace(/%20/gi, ' ').trim();
+  const hasControlCharacter = normalizedName
+    .split('')
+    .some((character) => {
+      const characterCode = character.charCodeAt(0);
+      return characterCode <= 31 || characterCode === 127;
+    });
+
+  if (
+    !normalizedName
+    || hasControlCharacter
+    || /[\\/]/.test(normalizedName)
+    || /%(?:25)*(?:2f|5c)/i.test(normalizedName)
+  ) {
+    throw new Error('Invalid document name');
+  }
+
+  const extensionMatch = normalizedName.match(/\.html?$/i);
+  const baseName = extensionMatch
+    ? normalizedName.substring(0, normalizedName.length - extensionMatch[0].length)
+    : normalizedName;
+
+  if (!baseName) {
+    throw new Error('Invalid document name');
+  }
+
+  return {
+    baseName,
+    fileName: extensionMatch ? normalizedName : `${normalizedName}.html`,
+    hasExtension: extensionMatch !== null,
+  };
+}
 
 /** Extract folder, base name and sibling PDF path from a server-relative HTML file path */
 function getDocumentPaths(htmlFilePath: string): IDocumentPaths | undefined {
@@ -43,15 +82,9 @@ function getDocumentPaths(htmlFilePath: string): IDocumentPaths | undefined {
 
   const pdfPath = folderPath + baseName + PDF_EXTENSION;
 
-  // Validate that the derived PDF path stays within the expected folder
-  if (!pdfPath.startsWith(folderPath)) {
-    return undefined;
-  }
-
   return { baseName, folderPath, pdfPath };
 }
 
-// --- Constants (outside component to avoid recreation per render) ---
 const TOC_COLLAPSE_DELAY_MS = 500;
 const WINDOW_TITLE_SEPARATOR = ' | ';
 
@@ -70,7 +103,21 @@ const SANITIZE_CONFIG: DOMPurify.Config = {
 
 const MAX_CONTENT_SIZE = 10 * 1024 * 1024; // 10MB
 
-// --- Pure functions (no dependency on component state) ---
+/** Map fetch errors to a user-friendly message without exposing raw request internals */
+function getFriendlyErrorMessage(error: unknown, docName: string): string {
+  if (error && typeof error === 'object' && 'status' in error) {
+    const httpError = error as { status: number; statusText?: string };
+    return httpError.status === 404
+      ? `Unable to find "${docName}"`
+      : `Server error (${httpError.status}): ${httpError.statusText || 'Unknown error'}`;
+  }
+  if (error instanceof Error) {
+    return error.message.includes('404') || error.message.includes('does not exist')
+      ? `Unable to find "${docName}"`
+      : `Error loading "${docName}": ${error.message}`;
+  }
+  return `Error loading "${docName}"`;
+}
 
 /** Sanitize HTML string, extract TOC headings, and add navigation IDs */
 function sanitizeAndProcessHtml(rawHtml: string): { processedHtml: string; toc: ITocItem[]; title: string } {
@@ -120,7 +167,6 @@ function sanitizeAndProcessHtml(rawHtml: string): { processedHtml: string; toc: 
 }
 
 export interface IHtmlFileViewerContainerProps {
-  webPartCSS: string;
   siteUrl: string;
   listId: string;
   selectedHtmlFile: string;
@@ -134,8 +180,6 @@ export interface IHtmlFileViewerContainerProps {
   sidePadding: number;
   configured: boolean;
   onConfigure(): void;
-  contextSiteUrl: string;
-  contextUser: string;
   webPartTag: string;
   receivedDocName: string | undefined;
   onUrlParamLoaded: () => void;
@@ -159,16 +203,49 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   const [tocExpanded, setTocExpanded] = useState<boolean>(false);
   const [currentFilePath, setCurrentFilePath] = useState<string>('');
   const [pdfUrl, setPdfUrl] = useState<string>('');
-  const [pdfExists, setPdfExists] = useState<boolean>(false);
   const [shareUrl, setShareUrl] = useState<string>('');
   const [shareCopied, setShareCopied] = useState<boolean>(false);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shareTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const originalTitleRef = useRef<string>(document.title);
+  const isInitialLoadRef = useRef<boolean>(true);
 
-  // Fetch HTML content from SharePoint
-  // Shared: validate size, sanitize, and update state
+  const clearDocumentState = React.useCallback((): void => {
+    setHtmlContent('');
+    setTocItems([]);
+    setDocTitle('');
+    setCurrentFilePath('');
+    setPdfUrl('');
+    setShareUrl('');
+    setShareCopied(false);
+    setTocExpanded(false);
+
+    if (shareTimerRef.current !== null) {
+      clearTimeout(shareTimerRef.current);
+      shareTimerRef.current = null;
+    }
+    if (scrollTimerRef.current !== null) {
+      clearTimeout(scrollTimerRef.current);
+      scrollTimerRef.current = null;
+    }
+  }, []);
+
+  const scrollPageToTop = React.useCallback((): void => {
+    if (scrollTimerRef.current !== null) {
+      clearTimeout(scrollTimerRef.current);
+    }
+
+    scrollTimerRef.current = setTimeout(() => {
+      document
+        .querySelectorAll('[data-automation-id="contentScrollRegion"], .spPageContentTransition, #s4-workspace, main, article')
+        .forEach((element) => element.scrollTo({ top: 0, behavior: 'smooth' }));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollTimerRef.current = null;
+    }, 50);
+  }, []);
+
   const processAndSetContent = React.useCallback((content: string): void => {
     if (content.length > MAX_CONTENT_SIZE) {
       throw new Error('File too large to display safely');
@@ -177,17 +254,24 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     setHtmlContent(processedHtml);
     setTocItems(toc);
     setDocTitle(title);
-  }, []);
+
+    // Scroll the SharePoint page to the top on subsequent loads only
+    if (!isInitialLoadRef.current) {
+      scrollPageToTop();
+    }
+    isInitialLoadRef.current = false;
+  }, [scrollPageToTop]);
 
   const fetchHtmlContent = React.useCallback(async (token: { cancelled: boolean }) => {
     if (!selectedHtmlFile || !siteUrl) {
       if (!token.cancelled) {
-        setHtmlContent('');
+        clearDocumentState();
       }
       return;
     }
 
     if (!token.cancelled) {
+      clearDocumentState();
       setIsLoading(true);
       setGlobalError(null);
     }
@@ -205,14 +289,15 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       if (token.cancelled) {
         return;
       }
-      setCurrentFilePath('');
-      setGlobalError(error as Error);
+      clearDocumentState();
+      const fileName = selectedHtmlFile.substring(selectedHtmlFile.lastIndexOf('/') + 1);
+      setGlobalError(new Error(getFriendlyErrorMessage(error, fileName)));
     } finally {
       if (!token.cancelled) {
         setIsLoading(false);
       }
     }
-  }, [selectedHtmlFile, siteUrl, processAndSetContent]);
+  }, [selectedHtmlFile, siteUrl, processAndSetContent, clearDocumentState]);
 
   // Fetch HTML content from SharePoint by document name
   const fetchHtmlContentByDocName = React.useCallback(async (docName: string, token: { cancelled: boolean }) => {
@@ -221,7 +306,7 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     }
 
     if (!token.cancelled) {
-      console.log(`[HTMLFileViewer] Attempting to load document: "${docName}"`);
+      clearDocumentState();
       setIsLoading(true);
       setGlobalError(null);
     }
@@ -229,25 +314,27 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
     let fileServerRelativePath = '';
     
     try {
+      const normalizedDocument = normalizeDocumentName(docName);
+
       // Construct the file path using the document name
       if (selectedHtmlFile) {
         const lastSlashIndex = selectedHtmlFile.lastIndexOf('/');
         const folderPath = selectedHtmlFile.substring(0, lastSlashIndex + 1);
         // Don't encode - getFileByServerRelativePath() handles URL encoding internally
-        fileServerRelativePath = folderPath + docName + '.html';
-
-        // Validate path stays within the expected folder (prevent traversal)
-        if (!fileServerRelativePath.startsWith(folderPath)) {
-          throw new Error('Invalid document name');
-        }
+        fileServerRelativePath = folderPath + normalizedDocument.fileName;
       } else if (listId) {
         // Escape single quotes to prevent OData injection
-        const safeDocName = docName.replace(/'/g, "''");
+        const fileNames = normalizedDocument.hasExtension
+          ? [normalizedDocument.fileName]
+          : [`${normalizedDocument.baseName}.html`, `${normalizedDocument.baseName}.htm`];
+        const fileFilter = fileNames
+          .map((fileName) => `FileLeafRef eq '${fileName.replace(/'/g, "''")}'`)
+          .join(' or ');
         const web = Web(siteUrl);
         const items = await web.lists.getById(listId)
           .items
           .select('FileRef')
-          .filter(`FileLeafRef eq '${safeDocName}.html' or FileLeafRef eq '${safeDocName}.htm'`)
+          .filter(fileFilter)
           .top(1)
           .get();
         
@@ -270,43 +357,20 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
 
       processAndSetContent(content);
       setCurrentFilePath(fileServerRelativePath);
-      console.log(`[HTMLFileViewer] Successfully loaded document: "${docName}" from ${fileServerRelativePath}`);
       
-      // Notify web part that URL parameter was successfully used
-      if (onUrlParamLoaded) {
-        onUrlParamLoaded();
-      }
+      onUrlParamLoaded();
     } catch (error) {
       if (token.cancelled) {
         return;
       }
-      setCurrentFilePath('');
-      let errorMessage = `Error loading "${docName}"`;
-      
-      // Check for specific error types
-      if (error && typeof error === 'object' && 'status' in error) {
-        const httpError = error as { status: number; statusText?: string };
-        if (httpError.status === 404) {
-          errorMessage = `Unable to find "${docName}" at ${fileServerRelativePath}`;
-        } else {
-          errorMessage = `Server error (${httpError.status}): ${httpError.statusText || 'Unknown error'}`;
-        }
-      } else if (error instanceof Error) {
-        if (error.message.includes('404') || error.message.includes('does not exist')) {
-          errorMessage = `Unable to find "${docName}" at ${fileServerRelativePath}`;
-        } else {
-          errorMessage += `: ${error.message}`;
-        }
-      }
-      
-      console.error(`[HTMLFileViewer] ${errorMessage}`);
-      setGlobalError(new Error(errorMessage));
+      clearDocumentState();
+      setGlobalError(new Error(getFriendlyErrorMessage(error, docName)));
     } finally {
       if (!token.cancelled) {
         setIsLoading(false);
       }
     }
-  }, [selectedHtmlFile, siteUrl, listId, processAndSetContent, onUrlParamLoaded]);
+  }, [selectedHtmlFile, siteUrl, listId, processAndSetContent, onUrlParamLoaded, clearDocumentState]);
 
   // Main effect: Fetch HTML content when receivedDocName or selectedHtmlFile changes
   useEffect(() => {
@@ -323,12 +387,18 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       }
       // No content to display
       else {
-        setHtmlContent('');
+        clearDocumentState();
+        setGlobalError(null);
+        setIsLoading(false);
       }
+    } else {
+      clearDocumentState();
+      setGlobalError(null);
+      setIsLoading(false);
     }
 
     return () => { token.cancelled = true; };
-  }, [configured, receivedDocName, selectedHtmlFile, fetchHtmlContent, fetchHtmlContentByDocName]);
+  }, [configured, receivedDocName, selectedHtmlFile, fetchHtmlContent, fetchHtmlContentByDocName, clearDocumentState]);
 
   // TOC hover handlers
   const handleTocMouseEnter = React.useCallback(() => {
@@ -347,6 +417,20 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       setTocExpanded(false);
       closeTimerRef.current = null;
     }, TOC_COLLAPSE_DELAY_MS);
+  }, []);
+
+  const handleTocKeyDown = React.useCallback((event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setTocExpanded((expanded) => !expanded);
+    }
+  }, []);
+
+  const handleTocCloseKeyDown = React.useCallback((event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setTocExpanded(false);
+    }
   }, []);
 
   // Update browser tab title in read mode when a document is loaded
@@ -378,6 +462,9 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       if (shareTimerRef.current !== null) {
         clearTimeout(shareTimerRef.current);
       }
+      if (scrollTimerRef.current !== null) {
+        clearTimeout(scrollTimerRef.current);
+      }
     };
   }, []);
 
@@ -407,7 +494,6 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
   useEffect(() => {
     let cancelled = false;
 
-    setPdfExists(false);
     setPdfUrl('');
     setShareUrl('');
 
@@ -424,12 +510,11 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
       try {
         await Web(siteUrl).getFileByServerRelativePath(paths.pdfPath).get();
         if (!cancelled) {
-          setPdfExists(true);
           setPdfUrl(new URL(paths.pdfPath, siteUrl).href);
         }
       } catch {
         if (!cancelled) {
-          setPdfExists(false);
+          setPdfUrl('');
         }
       }
 
@@ -487,99 +572,108 @@ const HtmlFileViewerContainer: React.FunctionComponent<IHtmlFileViewerContainerP
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
               {tocItems.length > 0 && (
-                <>
-                  <div className={styles.tocStrip}>
-                    <div
-                      className={styles.tocStripTab}
-                      onMouseEnter={handleTocMouseEnter}
-                      onMouseLeave={handleContentMouseEnter}
-                      role="button"
-                      tabIndex={0}
-                      aria-expanded={tocExpanded}
-                      aria-label={`Open Table of Contents: ${receivedDocName || docTitle}`}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(!tocExpanded); } }}
-                    >
-                      {!tocExpanded && (
-                        <div className={styles.tocStripInner}>
-                          <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />
-                          <span className={styles.tocStripText}>{`T.O.C.${(receivedDocName || docTitle) ? ` ${receivedDocName || docTitle}` : ''}`}</span>
+                <div className={styles.tocRail}>
+                  <div className={styles.tocSticky}>
+                    <div className={styles.tocStrip}>
+                      <div
+                        className={styles.tocStripTab}
+                        onMouseEnter={handleTocMouseEnter}
+                        onMouseLeave={handleContentMouseEnter}
+                        role="button"
+                        tabIndex={0}
+                        aria-expanded={tocExpanded}
+                        aria-label={`Open Table of Contents: ${receivedDocName || docTitle}`}
+                        onKeyDown={handleTocKeyDown}
+                      >
+                        {!tocExpanded && (
+                          <div className={styles.tocStripInner}>
+                            <Icon iconName="BulletedList" className={styles.tocIcon} aria-hidden="true" />
+                            <span className={styles.tocStripText}>{`T.O.C.${(receivedDocName || docTitle) ? ` ${receivedDocName || docTitle}` : ''}`}</span>
+                          </div>
+                        )}
+                      </div>
+                      {currentFilePath && (
+                        <div className={styles.tocActionsPanel} role="complementary" aria-label="Document actions">
+                          {pdfUrl ? (
+                            <button
+                              type="button"
+                              title="Open PDF in a new tab"
+                              aria-label="Open PDF in a new tab"
+                              className={styles.tocActionButton}
+                              onClick={() => window.open(pdfUrl, '_blank', 'noopener,noreferrer')}
+                            >
+                              <Icon iconName="PDF" className={styles.tocActionIcon} />
+                            </button>
+                          ) : (
+                            <span
+                              className={styles.tocActionDisabled}
+                              title="No matching PDF found"
+                              aria-label="No matching PDF found"
+                              role="button"
+                              aria-disabled="true"
+                            >
+                              <Icon iconName="PDF" className={styles.tocActionIcon} />
+                            </span>
+                          )}
+                          <ActionButton
+                            iconProps={{ iconName: shareCopied ? 'CheckMark' : 'Share' }}
+                            onClick={handleShareClick}
+                            disabled={!shareUrl}
+                            title="Copy share link to clipboard"
+                            aria-label="Copy share link to clipboard"
+                            className={styles.tocActionButton}
+                          />
+                          <ActionButton
+                            iconProps={{ iconName: 'Up' }}
+                            onClick={scrollPageToTop}
+                            title="Scroll to top"
+                            aria-label="Scroll to top"
+                            className={styles.tocActionButton}
+                          />
                         </div>
                       )}
                     </div>
-                    {currentFilePath && (
-                      <div className={styles.tocActionsPanel} role="complementary" aria-label="Document actions">
-                        {pdfExists && pdfUrl ? (
-                          <button
-                            type="button"
-                            title="Open PDF in a new tab"
-                            aria-label="Open PDF in a new tab"
-                            className={styles.tocActionButton}
-                            onClick={() => window.open(pdfUrl, '_blank', 'noopener,noreferrer')}
-                          >
-                            <Icon iconName="PDF" className={styles.tocActionIcon} />
-                          </button>
-                        ) : (
-                          <span
-                            className={styles.tocActionDisabled}
-                            title="No matching PDF found"
-                            aria-label="No matching PDF found"
-                            role="button"
-                            aria-disabled="true"
-                          >
-                            <Icon iconName="PDF" className={styles.tocActionIcon} />
-                          </span>
-                        )}
-                        <ActionButton
-                          iconProps={{ iconName: shareCopied ? 'CheckMark' : 'Share' }}
-                          onClick={handleShareClick}
-                          disabled={!shareUrl}
-                          title="Copy share link to clipboard"
-                          aria-label="Copy share link to clipboard"
-                          className={styles.tocActionButton}
-                        />
+                    {tocExpanded && (
+                      <div
+                        className={styles.tocPanel}
+                        onMouseEnter={handleTocMouseEnter}
+                        onMouseLeave={handleContentMouseEnter}
+                        role="complementary"
+                        aria-label="Table of Contents"
+                      >
+                        <div
+                          className={styles.tocPanelHeader}
+                          onClick={() => setTocExpanded(false)}
+                          role="button"
+                          tabIndex={0}
+                          aria-label="Close Table of Contents"
+                          onKeyDown={handleTocCloseKeyDown}
+                        >
+                          <span className={styles.tocHeaderText}>{receivedDocName || docTitle}</span>
+                        </div>
+                        <div className={styles.tocContent}>
+                          <h3 className={styles.tocTitle}>Contents</h3>
+                          <nav className={styles.tocNav} aria-label="Document sections">
+                            {tocItems.map((item) => (
+                              <a
+                                key={item.id}
+                                href={`#${item.id}`}
+                                className={item.level === 1 ? styles.tocH1 : styles.tocH2}
+                                aria-label={`Navigate to ${item.text}`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  contentRef.current?.querySelector(`#${CSS.escape(item.id)}`)?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                              >
+                                {item.text}
+                              </a>
+                            ))}
+                          </nav>
+                        </div>
                       </div>
                     )}
                   </div>
-                  {tocExpanded && (
-                    <div
-                      className={styles.tocPanel}
-                      onMouseEnter={handleTocMouseEnter}
-                      onMouseLeave={handleContentMouseEnter}
-                      role="complementary"
-                      aria-label="Table of Contents"
-                    >
-                      <div
-                        className={styles.tocPanelHeader}
-                        onClick={() => setTocExpanded(false)}
-                        role="button"
-                        tabIndex={0}
-                        aria-label="Close Table of Contents"
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTocExpanded(false); } }}
-                      >
-                        <span className={styles.tocHeaderText}>{receivedDocName || docTitle}</span>
-                      </div>
-                      <div className={styles.tocContent}>
-                        <h3 className={styles.tocTitle}>Contents</h3>
-                        <nav className={styles.tocNav} aria-label="Document sections">
-                          {tocItems.map((item) => (
-                            <a
-                              key={item.id}
-                              href={`#${item.id}`}
-                              className={item.level === 1 ? styles.tocH1 : styles.tocH2}
-                              aria-label={`Navigate to ${item.text}`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                contentRef.current?.querySelector(`#${CSS.escape(item.id)}`)?.scrollIntoView({ behavior: 'smooth' });
-                              }}
-                            >
-                              {item.text}
-                            </a>
-                          ))}
-                        </nav>
-                      </div>
-                    </div>
-                  )}
-                </>
+                </div>
               )}
             </div>
           ) : (

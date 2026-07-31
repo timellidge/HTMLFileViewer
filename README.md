@@ -6,7 +6,7 @@ A SharePoint Framework (SPFx) web part that renders HTML files stored in SharePo
 
 ## Features
 
-- **URL Deep Linking** — Navigate directly to a specific document using a query parameter (e.g., `?startdoc=MyDoc`) — highest priority source, automatically cleaned from URL after load
+- **URL Deep Linking** — Navigate directly to a specific document using a query parameter (e.g., `?startdoc=MyDoc` or `?startdoc=MyDoc.html`) — highest priority source, automatically cleaned from URL after load
 - **Display HTML from SharePoint** — Select an HTML file from any document library and render it inline on a SharePoint page
 - **Dynamic Document Loading** — Receive a document name from another web part (e.g. TableViewer, CardViewer) via SPFx `DynamicProperty` and load the corresponding HTML file automatically
 - **Auto-generated Table of Contents** — Extracts H1/H2 headings and builds a collapsible, sticky TOC sidebar with smooth-scroll navigation
@@ -102,7 +102,7 @@ This loads `UserGuide.html` from the configured document library.
 - **One-time use** — After successfully loading the document, the `?startdoc=` parameter is removed from the URL (without page reload)
 - **Error fallback** — If the specified document doesn't exist, shows an error then falls back to the next priority source (DynamicProperty or property pane file)
 - **URL encoding** — Special characters are supported (e.g., `?startdoc=User%20Guide` for "User Guide.html")
-- **Document name only** — Provide just the filename without extension (`.html` is appended automatically)
+- **Document name compatibility** — Extensionless names are preferred and automatically use `.html`; existing `.html` or `.htm` extensions are also accepted case-insensitively and are never appended twice
 
 ### URL Cleanup
 
@@ -118,7 +118,7 @@ This web part can receive a document name from another connected web part using 
 
 1. A source web part (e.g. TableViewer) publishes a `string` value (the document name)
 2. HTMLFileViewer receives it via the `docName` DynamicProperty
-3. The web part constructs the file path: `{folder of selectedHtmlFile}/{docName}.html`
+3. The web part constructs the file path in the selected file's folder, appending `.html` only when the received name has no `.html` or `.htm` extension
 4. If no `selectedHtmlFile` is configured, it falls back to querying the document library by filename
 
 ### Priority order
@@ -202,10 +202,10 @@ All fetched HTML is processed through DOMPurify with a strict configuration:
 
 - **CSS injection prevention** — Custom CSS is injected via `style.textContent` (not `innerHTML`), preventing HTML injection through CSS property values
 - **OData injection prevention** — Document names used in SharePoint list queries have single quotes escaped (`'` → `''`)
-- **Path traversal prevention** — Constructed file paths are validated to stay within the expected folder
-- **Content size limit** — Files larger than 5MB are rejected before processing
-- **Race condition handling** — Rapid document switching cancels stale fetch results
-- **No data leakage** — No `console.log` calls in production code
+- **Path traversal prevention** — Document names containing path separators, control characters, or encoded path separators are rejected before a SharePoint request is made
+- **Content size limit** — Files larger than 10MB are rejected before processing
+- **Race condition handling** — Rapid document switching ignores stale fetch results and clears content from the previous document
+- **No data leakage** — Production code does not log document names or SharePoint paths to the browser console
 
 ---
 
@@ -274,7 +274,6 @@ scripts/
 | `dompurify` 3.x | HTML sanitization |
 | `@pnp/spfx-property-controls` 3.x | Property pane controls (list picker, code editor) |
 | `@pnp/spfx-controls-react` 2.x | Placeholder component |
-| `luxon` 3.x | Date parsing (shared utilities) |
 
 ---
 

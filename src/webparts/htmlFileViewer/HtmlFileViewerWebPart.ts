@@ -1,18 +1,11 @@
-// React Imports
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp-webpart-base';
 import {
-  ThemeProvider,
-  ThemeChangedEventArgs,
-  IReadonlyTheme,
-} from '@microsoft/sp-component-base';
-import {
   DynamicProperty,
 } from '@microsoft/sp-component-base';
-// PnP JS Imports
 import { sp } from '@pnp/sp';
 import { Web } from '@pnp/sp/webs';
 
@@ -21,10 +14,8 @@ import '@pnp/sp/views';
 import '@pnp/sp/files';
 import '@pnp/sp/lists';
 
-// Container Component Import
 import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption } from '@microsoft/sp-property-pane';
 import HtmlFileViewerContainer, { IHtmlFileViewerContainerProps } from './components/HtmlFileViewerContainer';
-// Utilities Import
 import {
   validateSiteExists,
 } from '../../helpers/Utilities';
@@ -43,16 +34,11 @@ export interface IHtmlFileViewerWebPartProps {
   contentHeight: string;
   sidePadding: number;
   configured: boolean;
-  contextSiteUrl: string;
-  contextUser: string;
   webPartTag: string;
   selectedHtmlFile: string;
   docName: DynamicProperty<string>;
 }
 export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFileViewerWebPartProps> {
-  //@typescript-eslint/no-unused-vars
-  private themeProvider: ThemeProvider;
-  private themeVariant: IReadonlyTheme | undefined;
   private editorProp: typeof import('@pnp/spfx-property-controls/lib/PropertyFieldCodeEditor') | undefined;
   private listProp: typeof import('@pnp/spfx-property-controls/lib/PropertyFieldListPicker') | undefined;
   private msProps: typeof import('@microsoft/sp-property-pane') | undefined;
@@ -61,21 +47,19 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
   private _lastInjectedCSS = '';
   private _urlStartParam: string | undefined;
   private _urlParamUsed = false;
+  private readonly _renderOnDynamicDataChange = (): void => this.render();
 
-  // -----------------------------------------------------------------------------------------------------------------------------
-  // PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES - PROPERTY PANE DEFAULT VALUES
-  // -----------------------------------------------------------------------------------------------------------------------------
-  // icon reference for the icons in the table
-  // https://uifabricicons.azurewebsites.net/
+  private get _styleElementId(): string {
+    return `html-file-viewer-style-${this.instanceId}`;
+  }
+
+  // SCSS module class names are hashed at build time, so match by substring
   private defaultCSS = `<style>
-    .htmlContentContainer{
+    [class*="htmlContentContainer"] {
         font-size: 0.9rem;
     }
 </style>`;
 
-  // -----------------------------------------------------------------------------------------------------------------------------
-  // SPFX type functions
-  // -----------------------------------------------------------------------------------------------------------------------------
   protected async onInit(): Promise<void> {
     const spfxContext = {
       pageContext: this.context.pageContext,
@@ -89,18 +73,12 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       spfxContext: spfxContext,
     });
 
-    this.themeSetup();
-
-    // Initialize dynamic property if not already done
     if (!this.properties.docName) {
       this.properties.docName = new DynamicProperty<string>(this.context.dynamicDataProvider);
     }
 
-    // Set up dynamic data listener (register ONCE here, not in render)
-    this.context.dynamicDataProvider.registerAvailableSourcesChanged(this.render.bind(this));
-
-    // Register property changed handler (register ONCE here, not in render)
-    this.properties.docName.register(this.render.bind(this));
+    this.context.dynamicDataProvider.registerAvailableSourcesChanged(this._renderOnDynamicDataChange);
+    this.properties.docName.register(this._renderOnDynamicDataChange);
 
     // Parse URL parameter for deep linking (once per page load)
     // Match case-insensitively so ?startdoc= and ?Startdoc= both work
@@ -112,9 +90,6 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       }
     });
     this._urlStartParam = startDocParam || undefined;
-    if (this._urlStartParam) {
-      console.log(`[HTMLFileViewer] URL parameter received: "${this._urlStartParam}"`);
-    }
 
     await super.onInit();
     this.properties.webPartCSS =  this.properties.webPartCSS || this.defaultCSS;
@@ -125,28 +100,22 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       return;
     }
 
-    // Skip if CSS hasn't changed
     if (css === this._lastInjectedCSS) {
       return;
     }
     this._lastInjectedCSS = css;
 
-    // Remove the existing <style> element if it exists
-    let style = document.getElementById(this.properties.webPartTag);
+    let style = document.getElementById(this._styleElementId);
     if (style) {
       style.parentNode.removeChild(style);
     }
 
-    // Create a new <style> element — use textContent to prevent HTML injection
     style = document.createElement('style');
-    style.id = this.properties.webPartTag;
+    style.id = this._styleElementId;
     style.textContent = css;
     document.head.appendChild(style);
   }
 
- // -----------------------------------------------------------------------------------------------------------------------------
-  // RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD / RENDER METHOD
-  // -----------------------------------------------------------------------------------------------------------------------------
   public render(): void {
     // Document routing priority:
     //   1. URL deep-link param (?startdoc=). Highest priority on initial page load.
@@ -158,13 +127,9 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
     let dynamicValue: string | undefined;
     try {
       dynamicValue = this.properties.docName?.tryGetValue();
-    } catch (error) {
+    } catch {
       dynamicValue = undefined;
-      console.log('[HTMLFileViewer] tryGetValue THREW:', error);
     }
-    console.log('[HTMLFileViewer] render() dynamicValue =', JSON.stringify(dynamicValue),
-      '| hasDynamicProp =', !!this.properties.docName,
-      '| urlParam =', JSON.stringify(this._urlStartParam));
 
     // Hand over control from URL deep-link to dynamic property once a live dynamic
     // value arrives. Until then, keep the URL param active so transient empty values
@@ -181,19 +146,12 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       this.receivedDocName = undefined;
     }
 
-    // Normalize: callers may pass either decoded ("My Doc") or %20-encoded ("My%20Doc") form
-    if (this.receivedDocName) {
-      this.receivedDocName = this.receivedDocName.replace(/%20/g, ' ').trim();
-    }
-
-    // Inject the CSS into the document's <style> tag
     const strippedCSS = (this.properties.webPartCSS || this.defaultCSS).replace(/<style>/g, '').replace(/<\/style>/g, '');
     this.injectCSS(strippedCSS);
 
     const element: React.ReactElement<IHtmlFileViewerContainerProps> = React.createElement(
       HtmlFileViewerContainer,
       {
-        webPartCSS: this.properties.webPartCSS,
         siteUrl: this.properties.siteUrl,
         listId: this.properties.list,
         selectedHtmlFile: this.properties.selectedHtmlFile,
@@ -211,8 +169,6 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
         configured: !this.isMissingValues([
           this.properties.siteUrl,
           this.properties.list]),
-        contextSiteUrl: this.context.pageContext.web.absoluteUrl,
-        contextUser: this.context.pageContext.user.loginName,
         webPartTag: this.properties.webPartTag,
         receivedDocName: this.receivedDocName,
         onUrlParamLoaded: this.clearUrlParam,
@@ -226,15 +182,21 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
       this._urlParamUsed = true;
       // Remove ?startdoc= parameter from URL without page reload
       const url = new URL(window.location.href);
-      url.searchParams.delete('startdoc');
+      const startDocKeys: string[] = [];
+      url.searchParams.forEach((_value, key) => {
+        if (key.toLowerCase() === 'startdoc') {
+          startDocKeys.push(key);
+        }
+      });
+      startDocKeys.forEach((key) => url.searchParams.delete(key));
       window.history.replaceState({}, '', url.toString());
     }
   };
 
-  // -----------------------------------------------------------------------------------------------------------------------------
-  // OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS / OTHER METHODS
-  // -----------------------------------------------------------------------------------------------------------------------------
   protected onDispose(): void {
+    this.context.dynamicDataProvider.unregisterAvailableSourcesChanged(this._renderOnDynamicDataChange);
+    this.properties.docName?.unregister(this._renderOnDynamicDataChange);
+    document.getElementById(this._styleElementId)?.remove();
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
@@ -242,19 +204,6 @@ export default class HtmlFileViewerWebPart extends BaseClientSideWebPart<IHtmlFi
 
   private onConfigure = () => {
     this.context.propertyPane.open();
-  };
-
-  private themeSetup() {
-    this.themeProvider = this.context.serviceScope.consume(
-      ThemeProvider.serviceKey,
-    );
-    this.themeVariant = this.themeProvider.tryGetTheme();
-    this.themeProvider.themeChangedEvent.add(this, this.handleThemeChangedEvent);
-  }
-
-  private handleThemeChangedEvent = (args: ThemeChangedEventArgs): void => {
-    this.themeVariant = args.theme;
-    this.render();
   };
 
   protected get propertiesMetadata(): IWebPartPropertiesMetadata {
